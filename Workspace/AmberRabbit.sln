@@ -3,18 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AmberRabbit", "AmberRabbit\AmberRabbit.vcxproj", "{C0750B7B-B5DC-4438-8120-04C07257D096}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QuicksandEngine", "QuicksandEngine\QuicksandEngine.vcxproj", "{76F97A8B-C1C5-4294-B716-D3FD3AACB099}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C0750B7B-B5DC-4438-8120-04C07257D096}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C0750B7B-B5DC-4438-8120-04C07257D096}.Debug|Win32.Build.0 = Debug|Win32
-		{C0750B7B-B5DC-4438-8120-04C07257D096}.Release|Win32.ActiveCfg = Release|Win32
-		{C0750B7B-B5DC-4438-8120-04C07257D096}.Release|Win32.Build.0 = Release|Win32
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Debug|Win32.ActiveCfg = Debug|Win32
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Debug|Win32.Build.0 = Debug|Win32
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Debug|x64.ActiveCfg = Debug|x64
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Debug|x64.Build.0 = Debug|x64
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|Win32.ActiveCfg = Release|Win32
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|Win32.Build.0 = Release|Win32
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|x64.ActiveCfg = Release|x64
+		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
