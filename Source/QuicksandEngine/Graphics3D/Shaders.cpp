@@ -283,7 +283,7 @@ GLShaderPtr GLShaderManager::CreateShader(string name, string shad, ShaderType t
 	//log it if it failed
 	if (!output)
 	{
-		std::stringstream ss;
+		stringstream ss;
 		ss << "Shader Compilation Failed: \n" << output.mLog.data();
 		LOG_ERROR(ss.str());
 	}
@@ -332,7 +332,7 @@ GLProgramPtr GLShaderManager::CreateProgram(string name, ShaderNameList shaders)
 
 	if (!out)
 	{
-		std::stringstream ss;
+		stringstream ss;
 		ss << "Program Link Failed: \n" << out.mLog.data();
 		LOG_ERROR(ss.str());
 	}
@@ -365,7 +365,7 @@ GLProgramPtr GLShaderManager::CreateProgram(string name, ShaderSourceList shader
 	for (auto it : shaderSources)
 	{
 		//use the counter global to get a unique name  This is temperary anyway
-		std::string shadName = "SHADER_" + __COUNTER__;
+		string shadName = "SHADER_" + __COUNTER__;
 		shaders.push_back(shadName);
 		CreateShader(shadName, it.second, it.first);
 
@@ -387,7 +387,7 @@ GLProgramPtr GLShaderManager::CreateProgram(string name, ShaderPathList shaderPa
 	for (auto it : shaderPaths)
 	{
 		//use the counter global to get a unique name  This is temperary anyway
-		std::string shadName = "SHADER_" + __COUNTER__;
+		string shadName = "SHADER_" + __COUNTER__;
 		shaders.push_back(shadName);
 		CreateShader(shadName, it.second, it.first, true);
 

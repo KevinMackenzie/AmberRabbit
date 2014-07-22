@@ -1,11 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Math">
-      <UniqueIdentifier>{67b7bcb2-69ed-4d4c-81a9-971d7f7a10ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Memory">
       <UniqueIdentifier>{14e36987-c1ec-4fc8-bb44-31369c087033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{c320d216-2bef-4e9c-8560-c6f19c2ebe13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{b73de1b7-6837-4290-bd87-0d118db0e391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugging">
+      <UniqueIdentifier>{c96036bd-eb90-4466-8366-f3a1e3b850fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{9cd78221-573a-48de-89d3-f9ef5fee379d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics3D">
+      <UniqueIdentifier>{4771e8d4-bdb3-4c78-ada9-edea14498a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainLoop">
+      <UniqueIdentifier>{cfc54498-60d0-4a95-bcc0-2ce245c90d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceCache">
+      <UniqueIdentifier>{2e1f989a-b082-4ee3-b3ff-7735b9a24985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LUAScripting">
+      <UniqueIdentifier>{857fef3b-e328-46dc-92fe-8179ab9f9411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaPlus">
+      <UniqueIdentifier>{5d7703f2-2241-49a9-b4de-4e13cd1530fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventManager">
+      <UniqueIdentifier>{6d293691-a7f8-4d6b-b474-b820a12c43ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Multicore">
+      <UniqueIdentifier>{3e405303-27d8-4d40-884d-26b5b1eacaa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{d401b830-ecc5-4539-b1d6-ac6eb0b61767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseGameLogic">
+      <UniqueIdentifier>{d3182db9-2037-4b9a-ae91-196074c9a7d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{dd8e88ad-de28-485c-9af5-b4e5cb08e509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{567adae6-302f-4a91-b01d-31744de31928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{a5cbd5e5-861c-45df-8823-21183c68e7f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -13,8 +58,308 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Memory\MemPool.hpp">
       <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\QuicksandEngine\Math\Random.hpp">
-      <Filter>Math</Filter>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.hpp">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Debugging\Logging.hpp">
+      <Filter>Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Config\ConfigManager.hpp">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Config\Configuration.hpp">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\Templates.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\ProcessManager.hpp">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\Initialization.hpp">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\Process.hpp">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\ZipFile.hpp">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\ResCache.hpp">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\XmlResource.hpp">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\String.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\Types.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\PrimeSearch.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.hpp">
+      <Filter>LUAScripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.hpp">
+      <Filter>LUAScripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptProcess.hpp">
+      <Filter>LUAScripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptResource.hpp">
+      <Filter>LUAScripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.hpp">
+      <Filter>LUAScripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.hpp">
+      <Filter>LUAScripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaAutoBlock.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaFunction.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper_Object.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper_StackObject.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaLink.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusCD.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusInternal.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateCD.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldebug.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldo.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lfunc.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lgc.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\llex.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\llimits.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmem.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lobject.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lopcodes.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lparser.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstate.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstring.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lua.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\luaconf.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lualib.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.h">
+      <Filter>LuaPlus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.hpp">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\Events.hpp">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\EventManager.hpp">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Multicore\CriticalSection.hpp">
+      <Filter>Multicore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Multicore\RealtimeProcess.hpp">
+      <Filter>Multicore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\Math.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\AmmoPickup.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\AudioComponent.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\BaseScriptComponent.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\HealthPickup.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\PickupInterface.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\RenderComponent.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\RenderComponentInterface.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ScriptComponentInterface.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\TransformComponent.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\Actor.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ActorComponent.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ActorFactory.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\PhysicsComponent.hpp">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Material.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Mesh.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MovementController.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Application\Interfaces.hpp">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.hpp">
+      <Filter>BaseGameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\HumanView.hpp">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\MessageBox.hpp">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\UserInterface.hpp">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Physics\PhysicsDebugDrawer.hpp">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Physics\PhysicsEventListener.hpp">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Physics\Physics.hpp">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Network\Network.hpp">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -22,8 +367,311 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Memory\MemPool.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Math\Random.cpp">
-      <Filter>Math</Filter>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Application\Application.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Debugging\Logging.cpp">
+      <Filter>Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Config\ConfigManager.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Config\Configuration.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\MainLoop\ProcessManager.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\MainLoop\Initialization.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\MainLoop\Process.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\ResourceCache\ZipFile.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\ResourceCache\ResCache.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\ResourceCache\XmlResource.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\String.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\PrimeSearch.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.cpp">
+      <Filter>LUAScripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.cpp">
+      <Filter>LUAScripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptProcess.cpp">
+      <Filter>LUAScripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptResource.cpp">
+      <Filter>LUAScripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.cpp">
+      <Filter>LUAScripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.cpp">
+      <Filter>LUAScripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAddons.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAll.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus_Libs.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState_DumpObject.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.cpp">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\lwstrlib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\popen.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lbaselib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldblib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldebug.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldo.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldump.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lfunc.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lgc.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\linit.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\liolib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\llex.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmathlib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmem.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\loadlib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lobject.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lopcodes.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\loslib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lparser.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstate.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstring.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstrlib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltablib.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lua.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\luac.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\print.c">
+      <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\Events.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\EventManager.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Multicore\RealtimeProcess.cpp">
+      <Filter>Multicore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\Math_Random.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\Math.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\AudioComponent.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\BaseScriptComponent.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\HealthPickup.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\RenderComponent.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\TransformComponent.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\ActorFactory.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\AmmoPickup.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\PhysicsComponent.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Material.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Mesh.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MovementController.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.cpp">
+      <Filter>BaseGameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\UserInterface\MessageBox.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\UserInterface\HumanView.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Physics\Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Physics\PhysicsDebugDrawer.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Physics\PhysicsEventListener.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Network\Network.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.inl">
+      <Filter>LuaPlus</Filter>
+    </None>
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.inl">
+      <Filter>LuaPlus</Filter>
+    </None>
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.inl">
+      <Filter>LuaPlus</Filter>
+    </None>
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.inl">
+      <Filter>LuaPlus</Filter>
+    </None>
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.inl">
+      <Filter>LuaPlus</Filter>
+    </None>
   </ItemGroup>
 </Project>

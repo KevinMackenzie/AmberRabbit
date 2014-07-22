@@ -22,6 +22,8 @@
     <ProjectGuid>{76F97A8B-C1C5-4294-B716-D3FD3AACB099}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>QuicksandEngine</RootNamespace>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,7 +67,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>050628c8</NuGetPackageImportStamp>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$Configuration)\</OutDir>
@@ -147,16 +151,250 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\QuicksandEngine\Math\Random.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\Actor.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ActorComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ActorFactory.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\AmmoPickup.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\AudioComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\BaseScriptComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\HealthPickup.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\PhysicsComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\PickupInterface.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\RenderComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\RenderComponentInterface.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ScriptComponentInterface.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Actor\TransformComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Application\Interfaces.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Config\ConfigManager.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Config\Configuration.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Debugging\Logging.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\EventManager.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\Events.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Material.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Mesh.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MovementController.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaAutoBlock.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaFunction.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper_Object.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper_StackObject.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaLink.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusCD.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusInternal.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateCD.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldebug.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldo.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lfunc.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lgc.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\llex.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\llimits.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmem.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lobject.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lopcodes.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lparser.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstate.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstring.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lua.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\luaconf.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lualib.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptProcess.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptResource.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\Initialization.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\Process.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\ProcessManager.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Memory\MemPool.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Multicore\CriticalSection.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Multicore\RealtimeProcess.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Network\Network.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Physics\Physics.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Physics\PhysicsDebugDrawer.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Physics\PhysicsEventListener.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\ResCache.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\XmlResource.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\ZipFile.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Stdafx.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\HumanView.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\MessageBox.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\UserInterface.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\Math.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\PrimeSearch.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\String.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\Templates.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\Types.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Math\Random.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\Actor.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\ActorFactory.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\AmmoPickup.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\AudioComponent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\BaseScriptComponent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\HealthPickup.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\PhysicsComponent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\RenderComponent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Actor\TransformComponent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Application\Application.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Config\ConfigManager.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Config\Configuration.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Debugging\Logging.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\EventManager.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\Events.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Material.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Mesh.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MovementController.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAddons.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAll.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus_Libs.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState_DumpObject.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\lwstrlib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\popen.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lbaselib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldblib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldebug.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldo.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldump.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lfunc.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lgc.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\linit.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\liolib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\llex.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmathlib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmem.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\loadlib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lobject.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lopcodes.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\loslib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lparser.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstate.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstring.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstrlib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltablib.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lua.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\luac.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\print.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptProcess.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptResource.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\MainLoop\Initialization.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\MainLoop\Process.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\MainLoop\ProcessManager.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Memory\MemPool.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Multicore\RealtimeProcess.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Network\Network.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Physics\Physics.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Physics\PhysicsDebugDrawer.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Physics\PhysicsEventListener.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\ResourceCache\ResCache.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\ResourceCache\XmlResource.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\ResourceCache\ZipFile.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Stdafx.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\UserInterface\HumanView.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\UserInterface\MessageBox.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\Math.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\Math_Random.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\PrimeSearch.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\String.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.inl" />
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.inl" />
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.inl" />
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.inl" />
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.inl" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+    <Import Project="..\packages\glm.0.9.5.4\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.5.4\build\native\glm.targets')" />
+    <Import Project="..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets" Condition="Exists('..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets')" />
+    <Import Project="..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets" Condition="Exists('..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets')" />
+    <Import Project="..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets" Condition="Exists('..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets')" />
+    <Import Project="..\packages\glfw.3.0.4.3\build\native\glfw.targets" Condition="Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" />
+    <Import Project="..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets" Condition="Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" />
+    <Import Project="..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets" Condition="Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" />
+    <Import Project="..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets" Condition="Exists('..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" />
+    <Import Project="..\packages\zlib.1.2.8.6\build\native\zlib.targets" Condition="Exists('..\packages\zlib.1.2.8.6\build\native\zlib.targets')" />
+    <Import Project="..\packages\boost.1.55.0.16\build\native\boost.targets" Condition="Exists('..\packages\boost.1.55.0.16\build\native\boost.targets')" />
+    <Import Project="..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets" Condition="Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" />
+    <Import Project="..\packages\DevIL.1.7.8\build\native\DevIL.targets" Condition="Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\glm.0.9.5.4\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.5.4\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets'))" />
+    <Error Condition="!Exists('..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.3.0.4.3\build\native\glfw.targets'))" />
+    <Error Condition="!Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib.1.2.8.6\build\native\zlib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.1.2.8.6\build\native\zlib.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.55.0.16\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.55.0.16\build\native\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.1.7.8\build\native\DevIL.targets'))" />
+  </Target>
 </Project>
