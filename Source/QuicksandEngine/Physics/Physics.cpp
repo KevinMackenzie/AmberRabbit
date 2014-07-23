@@ -93,17 +93,17 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 // helpers for conversion to and from Bullet's data types
-static btVector3 Vec3_to_btVector3( vec3 const & vec3 )
+static btVector3 vec3_to_btVector3( vec3 const & vec3 )
 {
 	return btVector3( vec3.x, vec3.y, vec3.z );
 }
 
-static vec3 btVector3_to_Vec3( btVector3 const & btvec )
+static vec3 btVector3_to_vec3( btVector3 const & btvec )
 {
 	return vec3( btvec.x(), btvec.y(), btvec.z() );
 }
 
-static btTransform Mat4x4_to_btTransform( mat4 const & mat )
+static btTransform mat4_to_btTransform( mat4 const & mat )
 {
 	// convert from mat4 (GameCode) to btTransform (Bullet)
 	btMatrix3x3 bulletRotation;
@@ -113,7 +113,7 @@ static btTransform Mat4x4_to_btTransform( mat4 const & mat )
 	for ( int row=0; row<3; ++row )
 		for ( int column=0; column<3; ++column )
 			bulletRotation[row][column] = mat.m[column][row]; // note the reversed indexing (row/column vs. column/row)
-			                                                  //  this is because Mat4x4s are row-major matrices and
+			                                                  //  this is because mat4s are row-major matrices and
 			                                                  //  btMatrix3x3 are column-major.  This reversed indexing
 			                                                  //  implicitly transposes (flips along the diagonal) 
 			                                                  //  the matrix when it is copied.
@@ -125,7 +125,7 @@ static btTransform Mat4x4_to_btTransform( mat4 const & mat )
 	return btTransform( bulletRotation, bulletPosition );
 }
 
-static mat4 btTransform_to_Mat4x4( btTransform const & trans )
+static mat4 btTransform_to_mat4( btTransform const & trans )
 {
 	mat4 returnValue = mat4::g_Identity;
 
@@ -138,7 +138,7 @@ static mat4 btTransform_to_Mat4x4( btTransform const & trans )
 		for ( int column=0; column<3; ++column )
 			returnValue.m[row][column] = bulletRotation[column][row]; 
 			          // note the reversed indexing (row/column vs. column/row)
-			          //  this is because Mat4x4s are row-major matrices and
+			          //  this is because mat4s are row-major matrices and
 			          //  btMatrix3x3 are column-major.  This reversed indexing
 			          //  implicitly transposes (flips along the diagonal) 
 			          //  the matrix when it is copied.
@@ -168,10 +168,10 @@ struct ActorMotionState : public btMotionState
 	
 	// btMotionState interface:  Bullet calls these
 	virtual void getWorldTransform( btTransform& worldTrans ) const
-	   { worldTrans = Mat4x4_to_btTransform( m_worldToPositionTransform ); }
+	   { worldTrans = mat4_to_btTransform( m_worldToPositionTransform ); }
 
 	virtual void setWorldTransform( const btTransform& worldTrans )
-	   { m_worldToPositionTransform = btTransform_to_Mat4x4( worldTrans ); }
+	   { m_worldToPositionTransform = btTransform_to_mat4( worldTrans ); }
 };
 
 
@@ -597,7 +597,7 @@ void BulletPhysics::VAddBox(const vec3& dimensions, WeakActorPtr pGameActor, con
         return;  // FUTURE WORK: Add a call to the error log here
 
 	// create the collision body, which specifies the shape of the object
-	btBoxShape * const boxShape = new btBoxShape( Vec3_to_btVector3( dimensions ) );
+	btBoxShape * const boxShape = new btBoxShape( vec3_to_btVector3( dimensions ) );
 	
 	// calculate absolute mass from specificGravity
     float specificGravity = LookupSpecificGravity(densityStr);
@@ -620,7 +620,7 @@ void BulletPhysics::VAddPointCloud(vec3 *verts, int numPoints, WeakActorPtr pGam
 	
 	// add the points to the shape one at a time
 	for ( int ii=0; ii<numPoints; ++ii )
-		shape->addPoint(  Vec3_to_btVector3( verts[ii] ) );
+		shape->addPoint(  vec3_to_btVector3( verts[ii] ) );
 	
 	// approximate absolute mass using bounding box
 	btVector3 aabbMin(0,0,0), aabbMax(0,0,0);
@@ -671,7 +671,7 @@ void BulletPhysics::VCreateTrigger(WeakActorPtr pGameActor, const vec3 &pos, con
         return;  // FUTURE WORK: Add a call to the error log here
 
 	// create the collision body, which specifies the shape of the object
-	btBoxShape * const boxShape = new btBoxShape( Vec3_to_btVector3( vec3(dim,dim,dim) ) );
+	btBoxShape * const boxShape = new btBoxShape( vec3_to_btVector3( vec3(dim,dim,dim) ) );
 	
 	// triggers are immoveable.  0 mass signals this to Bullet.
 	btScalar const mass = 0;
@@ -739,7 +739,7 @@ bool BulletPhysics::VKinematicMove(const mat4 &mat, ActorId aid)
         body->setActivationState(DISABLE_DEACTIVATION);
 
 		// warp the body to the new position
-		body->setWorldTransform( Mat4x4_to_btTransform( mat ) );
+		body->setWorldTransform( mat4_to_btTransform( mat ) );
 		return true;
 	}
 	
@@ -757,7 +757,7 @@ mat4 BulletPhysics::VGetTransform(const ActorId id)
     LOG_ASSERT(pRigidBody);
 
     const btTransform& actorTransform = pRigidBody->getCenterOfMassTransform();
-    return btTransform_to_Mat4x4(actorTransform);
+    return btTransform_to_mat4(actorTransform);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -844,7 +844,7 @@ vec3 BulletPhysics::VGetVelocity(ActorId actorId)
     if (!pRigidBody)
         return vec3();
     btVector3 btVel = pRigidBody->getLinearVelocity();
-    return btVector3_to_Vec3(btVel);
+    return btVector3_to_vec3(btVel);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -854,7 +854,7 @@ void BulletPhysics::VSetVelocity(ActorId actorId, const vec3& vel)
 	LOG_ASSERT(pRigidBody);
 	if (!pRigidBody)
 		return;
-	btVector3 btVel = Vec3_to_btVector3(vel);
+	btVector3 btVel = vec3_to_btVector3(vel);
 	pRigidBody->setLinearVelocity(btVel);
 }
 
@@ -866,7 +866,7 @@ vec3 BulletPhysics::VGetAngularVelocity(ActorId actorId)
     if (!pRigidBody)
         return vec3();
     btVector3 btVel = pRigidBody->getAngularVelocity();
-    return btVector3_to_Vec3(btVel);
+    return btVector3_to_vec3(btVel);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -876,7 +876,7 @@ void BulletPhysics::VSetAngularVelocity(ActorId actorId, const vec3& vel)
     LOG_ASSERT(pRigidBody);
     if (!pRigidBody)
         return;
-    btVector3 btVel = Vec3_to_btVector3(vel);
+    btVector3 btVel = vec3_to_btVector3(vel);
     pRigidBody->setAngularVelocity(btVel);
 }
 
@@ -885,7 +885,7 @@ void BulletPhysics::VTranslate(ActorId actorId, const vec3& vec)
 {
 	btRigidBody * pRigidBody = FindBulletRigidBody(actorId);
 	LOG_ASSERT(pRigidBody);
-	btVector3 btVec = Vec3_to_btVector3(vec);
+	btVector3 btVec = vec3_to_btVector3(vec);
 	pRigidBody->translate(btVec);
 }
 
@@ -1003,10 +1003,10 @@ void BulletPhysics::SendCollisionPairAddEvent( btPersistentManifold const * mani
 		{
 			btManifoldPoint const & point = manifold->getContactPoint( pointIdx );
 		
-			collisionPoints.push_back( btVector3_to_Vec3( point.getPositionWorldOnB() ) );
+			collisionPoints.push_back( btVector3_to_vec3( point.getPositionWorldOnB() ) );
 			
-			sumNormalForce += btVector3_to_Vec3( point.m_combinedRestitution * point.m_normalWorldOnB );
-			sumFrictionForce += btVector3_to_Vec3( point.m_combinedFriction * point.m_lateralFrictionDir1 );
+			sumNormalForce += btVector3_to_vec3( point.m_combinedRestitution * point.m_normalWorldOnB );
+			sumFrictionForce += btVector3_to_vec3( point.m_combinedFriction * point.m_lateralFrictionDir1 );
 		}
 		
 		// send the event for the game

@@ -105,13 +105,17 @@ inline void HandleAccel(vec3 &pos, vec3 &vel, vec3 &accel, float time)
 
 // converts Barycentric coordinates to world coordinates
 // inputs are the 3 verts of the triangle, and the u,v barycentric coordinates
-extern vec3 BarycentricToVec3(vec3 v0, vec3 v1, vec3 v2, float u, float v);
+extern vec3 BarycentricTovec3(vec3 v0, vec3 v1, vec3 v2, float u, float v);
 
 extern bool IntersectTriangle(const vec3& orig, const vec3& dir,
 	vec3& v0, vec3& v1, vec3& v2,
 	FLOAT* t, FLOAT* u, FLOAT* v);
 
-typedef std::list<Vec3> Vec3List;
-typedef std::list<Vec4> Vec4List;
+
+void BuildYawPitchRoll(mat4& m, const float yawRadians, const float pitchRadians, const float rollRadians)
+{
+	m = m * vec4(quat(vec3(yawRadians, pitchRadians, rollRadians)));
+}
+
 
 #endif

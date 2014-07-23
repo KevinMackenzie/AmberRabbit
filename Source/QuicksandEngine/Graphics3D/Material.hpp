@@ -9,6 +9,9 @@ class Material
 {
 	Color m_Diffuse, m_Ambient, m_Specular, m_Emissive;			// This structure stores diffuse, ambient, specular, emissive, and power.
 	float m_Power;
+
+	std::string m_MaterialName;
+	shared_ptr<ResHandle> m_pTexture;
 public:
 	Material();
 	void SetAmbient(const Color &color);
@@ -17,11 +20,18 @@ public:
 	void SetDiffuse(const Color &color);
 	const Color GetDiffuse() { return m_Diffuse; }
 
+	bool HasTexture() { return m_pTexture != nullptr; }
+	shared_ptr<ResHandle> GetTexture() { return m_pTexture; }
+	void SetTexture(shared_ptr<ResHandle> pTex) { m_pTexture = pTex; }
+
 	void SetSpecular(const Color &color, const float power);
 	void GetSpecular(Color &_color, float &_power)
 	{
 		_color = m_Specular; _power = m_Power;
 	}
+
+	void SetName(std::string name) { m_MaterialName = name; }
+	std::string GetName(void) { return m_MaterialName; }
 
 	void SetEmissive(const Color &color);
 	const Color GetEmissive() { return m_Emissive; }
@@ -30,29 +40,31 @@ public:
 	bool HasAlpha() const { return GetAlpha() != fOPAQUE; }
 	float GetAlpha() const { return m_Diffuse.a; }
 
-	void D3DUse9();
+	void GLUse();
 };
 
-/*
+
 // 
 //  class D3DTextureResourceExtraData11				- Chapter 14, page 492
-//
+//	
+#define UNSUPPORTED_IMAGE_FORMAT -1
 class GLTextureResourceExtraData : public IResourceExtraData
 {
 	friend class TextureResourceLoader;
+	friend class DdsResourceLoader;
 
 public:
-	GLTextureResourceExtraData();
-	virtual ~GLTextureResourceExtraData() { SAFE_RELEASE(m_pTexture); SAFE_RELEASE(m_pSamplerLinear); }
+	GLTextureResourceExtraData() : m_Texture(0){}
+	virtual ~GLTextureResourceExtraData(){ glDeleteTextures(1, &m_Texture); };
 	virtual std::string VToString() { return "GLTextureResourceExtraData"; }
 
-	GLuint * const *GetTextureUniformLocation() { return &m_pTexture; }
-	GLint  * const *GetSamplerUniformLocation() { return &m_pSamplerLinear; }
+	GLuint GetTextureUniformLocation() { return m_Texture; }
 
+	//NOTE: all sampling is a config element that is accessed by the renderer
 protected:
-	GLuint *m_pTexture;
-	GLint  *m_pSamplerLinear;
-};*/
+
+	GLuint m_Texture;
+};
 
 
 
@@ -67,6 +79,8 @@ public:
 	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize);
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
 };
+
+
 
 
 #endif

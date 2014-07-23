@@ -1,6 +1,7 @@
 #ifndef QSE_SHADERS_HPP
 #define QSE_SHADERS_HPP
 
+#include "Material.hpp"
 
 enum ShaderType
 {
@@ -9,6 +10,22 @@ enum ShaderType
 	SH_TESS_EVALUATION_SHADER = GL_TESS_EVALUATION_SHADER,
 	SH_GEOMETRY_SHADER = GL_FRAGMENT_SHADER,
 	SH_FRAGMENT_SHADER = GL_FRAGMENT_SHADER
+};
+
+enum ShaderInputType
+{
+	IN_POSITIONS = 0,
+	IN_NORMALS = 1,
+	IN_UVCOORDS = 2,
+};
+
+enum ShaderUniformType
+{
+	IN_M = 4,
+	IN_V = 3,
+	IN_P = 2,
+	IN_MV = 1,
+	IN_MVP = 0
 };
 
 struct GLInfoStruct
@@ -50,6 +67,7 @@ typedef std::vector<GLShaderPtrWeak> ShaderPtrListWeak;
 typedef std::vector<GLProgramPtrWeak> ProgramPtrListWeak;
 
 //TODO: impliment shader caching.  i.e. save shader binaries to the disk
+//TODO: make a "standard" shader that is added to ALL shaders that includes base things such as the core uniforms (MVP) and standard imports/exports
 
 //ONLY make calls to this class, but a note, only the const methods can be called from other threadss
 //NOTE: all strings must be UNIQUE, and there is no checking that they will be, so if they are not, this may go VERY wrong.
@@ -127,10 +145,24 @@ public:
 	void UseProgram(string programName) const;
 	void UseProgram(GLProgramPtr program) const;
 
+	//for setting things up
+
+	void SetProgramInBuffer(GLProgramPtr program, ShaderInputType inType, GLuint bufferId, GLuint vao);
+	void SetProgramInBuffer(GLProgramPtr program, GLuint BufferId, GLuint vao, GLuint location){};//TODO:
+
+
+	void SetProgramUniform(GLProgramPtr program, ShaderUniformType uniformType, mat4 matrix);
+	void SetProgramUniform(GLProgramPtr program, GLuint uniformId, GLuint location){};//TODO:
+
+	void SetProgramMaterial(GLProgramPtr program, Material mat);
+
+	void ResetProgarmAttributes(GLProgramPtr program);
 
 	GLShaderManager(){};
 	~GLShaderManager(){};
 };
+
+#define ShaderManager QuicksandEngine::g_pApp->m_ShaderManager
 
 
 /*

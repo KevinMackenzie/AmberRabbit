@@ -1,8 +1,10 @@
 #include "../Stdafx.hpp"
 #include <math.h>
 #include <vector>
+#include <glm/gtx/intersect.hpp>
 #include <algorithm>
 #include "Math.hpp"
+#include "../Graphics3D/Mesh.hpp"
 
 
 //--------------------------------------------------------------------------------
@@ -616,10 +618,10 @@ float WrapPi(float wrapMe)
 
 float Wrap2Pi(float wrapMe)
 {
-    if (wrapMe > GCC_2PI)
-        wrapMe = fmod(wrapMe, GCC_2PI);
+    if (wrapMe > AR_2PI)
+        wrapMe = fmod(wrapMe, AR_2PI);
     else if (wrapMe < 0)
-        wrapMe = GCC_2PI - fmod(fabs(wrapMe), GCC_2PI);
+        wrapMe = AR_2PI - fmod(fabs(wrapMe), AR_2PI);
     return wrapMe;
 }
 
@@ -643,7 +645,7 @@ vec3 GetVectorFromYRotation(float angleRadians)
 	lookAt.x = cos(angleRadians);
 	lookAt.y = 0;
 	lookAt.z = sin(angleRadians);
-	lookAt.Normalize();  // just in case
+	normalize(lookAt);  // just in case
 	return lookAt;
 }
 
@@ -658,9 +660,6 @@ float GetYRotationFromVector(const vec3& lookAt)
     float angle = (atan2(lookAt.z,-lookAt.x) - atan2(zUnit.z,zUnit.x));
 	return Wrap2Pi(angle);
 }
-
-
-
 
 
 

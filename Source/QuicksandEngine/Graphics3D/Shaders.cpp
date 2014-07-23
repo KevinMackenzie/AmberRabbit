@@ -50,6 +50,7 @@ class GLProgram
 
 	string mProgramName;
 
+	GLuint mUniformBuffId;
 	GLuint mProgramId;
 	std::map<ShaderType, GLShaderPtr > mShaderBuff;
 
@@ -209,6 +210,9 @@ void GLProgram::Init(string programName)
 	//unlike with the shader, this will be created during initialization
 	mProgramId = glCreateProgram();
 	mProgramName = programName;
+
+	//for uniforms
+	glGenBuffers(1, &mUniformBuffId);
 }
 
 void GLProgram::AttachShader(GLShaderPtr shader)
@@ -572,8 +576,44 @@ const GLLinkOutputStruct GLShaderManager::GetProgramLog(GLProgramPtr programPtr)
 	return mLinklogs.find(programPtr->mProgramName)->second;
 }
 
+void GLShaderManager::SetProgramInBuffer(GLProgramPtr program, ShaderInputType inType, GLuint bufferId, GLuint vao)
+{
+	glUseProgram(program->mProgramId);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(bufferId);
+	GLsizei size;
+	switch (inType)
+	{
+	case IN_UVCOORDS:
+		size = 2;
+		break;
+	default:
+		size = 3;
+	}
+	glVertexAttribPointer(inType, size, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void GLShaderManager::SetProgramUniform(GLProgramPtr program, ShaderUniformType uniformType, mat4 matrix)
+{
+	glBindBuffer(GL_UNIFORM_BUFFER, program->mUniformBuffId);
+	glUniformMatrix4fv(uniformType, 1, GL_FALSE, matrix);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void GLShaderManager::SetProgramMaterial(GLProgramPtr program, Material mat)
+{
+	glBindBuffer(GL_UNIFORM_BUFFER, program->mUniformBuffId);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
 
 
+void GLShaderManager::ResetProgarmAttributes(GLProgramPtr program)
+{
+	//TODO:
+}
 
 //for using things
 

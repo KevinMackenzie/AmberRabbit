@@ -1,7 +1,6 @@
 #ifndef QSE_ACTOR_HPP
 #define QSE_ACTOR_HPP
 
-typedef string ActorType;
 
 //---------------------------------------------------------------------------------------------------------------------
 // Actor class
@@ -13,7 +12,6 @@ class Actor
 
 public:
 
-    typedef std::map<ComponentId, StrongActorComponentPtr> ActorComponents;
 
 private:
     ActorId m_id;					// unique id for the actor

@@ -52,6 +52,9 @@
     <Filter Include="Network">
       <UniqueIdentifier>{a5cbd5e5-861c-45df-8823-21183c68e7f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{761c3e86-76ad-40f3-81c1-f9b8de476965}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\QuicksandEngine\Stdafx.hpp" />
@@ -361,6 +364,13 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Network\Network.hpp">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\AI\Pathing.hpp">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Memory\MemoryMacros.hpp">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\QuicksandEngine\Stdafx.cpp" />
@@ -622,9 +632,6 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp">
-      <Filter>Graphics3D</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
@@ -654,6 +661,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\Network\Network.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\AI\Pathing.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp">
+      <Filter>Graphics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.cpp">
+      <Filter>Graphics3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

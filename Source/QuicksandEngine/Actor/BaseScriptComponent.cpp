@@ -211,7 +211,7 @@ LuaPlus::LuaObject BaseScriptComponent::GetPos(void)
 
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_Name));
     if (pTransformComponent)
-        LuaStateManager::Get()->ConvertVec3ToTable(pTransformComponent->GetPosition(), ret);
+        LuaStateManager::Get()->Convertvec3ToTable(pTransformComponent->GetPosition(), ret);
     else
         ret.AssignNil(LuaStateManager::Get()->GetLuaState());
 
@@ -224,7 +224,7 @@ void BaseScriptComponent::SetPos(LuaPlus::LuaObject newPos)
     if (pTransformComponent)
     {
         vec3 pos;
-        LuaStateManager::Get()->ConvertTableToVec3(newPos, pos);
+        LuaStateManager::Get()->ConvertTableTovec3(newPos, pos);
         pTransformComponent->SetPosition(pos);
     }
     else
@@ -240,7 +240,7 @@ LuaPlus::LuaObject BaseScriptComponent::GetLookAt(void) const
 
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_Name));
     if (pTransformComponent)
-        LuaStateManager::Get()->ConvertVec3ToTable(pTransformComponent->GetLookAt(), ret);
+        LuaStateManager::Get()->Convertvec3ToTable(pTransformComponent->GetLookAt(), ret);
     else
         ret.AssignNil(LuaStateManager::Get()->GetLuaState());
 

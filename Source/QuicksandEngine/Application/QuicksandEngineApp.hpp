@@ -91,16 +91,9 @@ public:
 
 	// FUTURE WORK - Seems like this class could be refactored, especailly the renderer !
 
-	enum Renderer
-	{
-		Renderer_Unknown,
-		Renderer_D3D9,
-		Renderer_D3D11
-	};
 
 	shared_ptr<IRenderer> m_Renderer;
-
-	static Renderer GetRendererImpl();
+	GLShaderManager m_ShaderManager;
 
 	//GLFW Specific Stuff
 	GLFWwindow* GLFWWindow(){ return m_pWindow; }

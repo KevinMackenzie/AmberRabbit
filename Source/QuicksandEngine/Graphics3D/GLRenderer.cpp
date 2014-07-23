@@ -10,19 +10,19 @@
 //
 // class D3DRendererAlphaPass9				- not described in the book, see class D3DRendererAlphaPass11 
 //
-class D3DRendererAlphaPass9 : public IRenderState
+class GLRendererAlphaPass : public IRenderState
 {
 protected:
 	mat4 m_oldWorld;
 	DWORD m_oldZWriteEnable;
 
 public:
-	D3DRendererAlphaPass9();
-	~D3DRendererAlphaPass9();
+	GLRendererAlphaPass();
+	~GLRendererAlphaPass();
 	std::string VToString() { return "D3DRenderAlphaPass9"; }
 };
 
-D3DRendererAlphaPass9::D3DRendererAlphaPass9()
+GLRendererAlphaPass::GLRendererAlphaPass()
 {
 	DXUTGetD3D9Device()->GetTransform(D3DTS_WORLD, &m_oldWorld);
 	DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
@@ -33,7 +33,7 @@ D3DRendererAlphaPass9::D3DRendererAlphaPass9()
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
-D3DRendererAlphaPass9::~D3DRendererAlphaPass9()
+GLRendererAlphaPass::~GLRendererAlphaPass()
 {
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_COLORVERTEX, false);
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_ALPHABLENDENABLE, false);

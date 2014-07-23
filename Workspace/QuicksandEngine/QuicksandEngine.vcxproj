@@ -68,7 +68,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>050628c8</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>f04ff451</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Actor\RenderComponentInterface.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Actor\ScriptComponentInterface.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Actor\TransformComponent.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\AI\Pathing.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\Interfaces.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Config\ConfigManager.hpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\Initialization.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\Process.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\MainLoop\ProcessManager.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Memory\MemoryMacros.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Memory\MemPool.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Multicore\CriticalSection.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Multicore\RealtimeProcess.hpp" />
@@ -246,6 +248,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\XmlResource.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\ResourceCache\ZipFile.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Stdafx.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Types.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\HumanView.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\MessageBox.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\UserInterface\UserInterface.hpp" />
@@ -265,6 +268,7 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Actor\PhysicsComponent.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Actor\RenderComponent.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Actor\TransformComponent.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\AI\Pathing.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Application\Application.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Config\ConfigManager.cpp" />
@@ -274,6 +278,7 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\Events.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.cpp" />
@@ -378,6 +383,8 @@
     <Import Project="..\packages\boost.1.55.0.16\build\native\boost.targets" Condition="Exists('..\packages\boost.1.55.0.16\build\native\boost.targets')" />
     <Import Project="..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets" Condition="Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" />
     <Import Project="..\packages\DevIL.1.7.8\build\native\DevIL.targets" Condition="Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" />
+    <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
+    <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -396,5 +403,7 @@
     <Error Condition="!Exists('..\packages\boost.1.55.0.16\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.55.0.16\build\native\boost.targets'))" />
     <Error Condition="!Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets'))" />
     <Error Condition="!Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.1.7.8\build\native\DevIL.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
   </Target>
 </Project>

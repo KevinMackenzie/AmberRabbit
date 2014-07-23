@@ -69,15 +69,29 @@ public:
 #	define QSE_NEW new
 #endif
 
-#define DXUT_AUTOLIB
+#if defined(DEBUG) || defined(_DEBUG)
+#ifndef V
+#define V(x)           { hr = (x); if( FAILED(hr) ) { LOG_ERROR("V Error Thrown"); } }
+#endif
+#ifndef V_RETURN
+#define V_RETURN(x)    { hr = (x); if( FAILED(hr) ) { LOG_ERROR("V_RETURN Error Thrown"); return E_FAIL;  } }
+#endif
+#else
+#ifndef V
+#define V(x)           { hr = (x); }
+#endif
+#ifndef V_RETURN
+#define V_RETURN(x)    { hr = (x); if( FAILED(hr) ) { return hr; } }
+#endif
+#endif
 
 // OpenGL Includes
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <GL/GL.h>
 #include <GL/glew.h>
+#include <GL/GL.h>
 #include <GLFW/glfw3.h>
 #include <IL/il.h>
 
@@ -102,7 +116,6 @@ using fastdelegate::MakeDelegate;
 
 using namespace glm;
 
-typedef vec4 Color;
 
 extern Color g_White;
 extern Color g_Black;
@@ -128,7 +141,6 @@ extern vec3 g_ZAxis;
 extern vec4 g_Up4;
 extern vec4 g_Right4;
 extern vec4 g_Forward4;
-
 
 
 //  AppMsg				- Chapter 9, page 248
@@ -181,17 +193,22 @@ extern const int SCREEN_HEIGHT;
 #define __STR1__(x) __STR2__(x)
 #define __LOC__ __FILE__ "("__STR1__(__LINE__)") : Warning Msg: "
 
-#include "Application\QuicksandEngineApp.hpp"
-#include "Actor\Actor.hpp"
+#include "Application/QuicksandEngineApp.hpp"
+#include "Actor/Actor.hpp"
 #include "Utilities/Math.hpp"
 #include "Graphics3D/Buffer.hpp"
-#include "GameLogic\BaseGameLogic.hpp"
+#include "GameLogic/BaseGameLogic.hpp"
 
 extern INT WINAPI QuicksandEngine(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPWSTR    lpCmdLine,
 	int       nCmdShow);
 
+
+template <class M>
+std::vector<M> ArrToVec(M* arr, size_t size)
+
+#include "Types.hpp"
 
 //clean some older windows macros
 #undef near

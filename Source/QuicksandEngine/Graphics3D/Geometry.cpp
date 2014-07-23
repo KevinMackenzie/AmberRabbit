@@ -235,3 +235,8 @@ bool IntersectTriangle(const vec3& orig, const vec3& dir,
 
 	return TRUE;
 }
+
+void BuildYawPitchRoll(mat4& m, const float yawRadians, const float pitchRadians, const float rollRadians)
+{
+
+}

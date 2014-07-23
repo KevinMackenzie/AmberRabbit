@@ -176,7 +176,7 @@ void Scene::ModifiedRenderComponentDelegate(IEventDataPtr pEventData)
 		return;
 	}
 
-	if (g_pApp->GetGameLogic()->GetState() == BGS_LoadingGameEnvironment)
+	if (QuicksandEngine::g_pApp->GetGameLogic()->GetState() == BGS_LoadingGameEnvironment)
 		return;
 
 	shared_ptr<ISceneNode> pSceneNode = FindActor(actorId);

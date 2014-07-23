@@ -177,7 +177,6 @@ float AngleDiff( float lhs, float rhs );
 vec3 GetVectorFromYRotation(float angleRadians);
 float GetYRotationFromVector(const vec3& lookAt);
 
-
 //This is a set of methods to accompany GLM that I cannot find an sutible presets
 inline void SetPosition(mat4& param, vec3 const &pos)
 {
@@ -251,5 +250,6 @@ inline vec3 GetYawPitchRoll(const mat4& param)
 
 	return (vec3(yaw, pitch, roll));
 }
+
 
 #endif

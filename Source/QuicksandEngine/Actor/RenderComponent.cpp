@@ -388,7 +388,7 @@ shared_ptr<SceneNode> SkyRenderComponent::VCreateSceneNode(void)
 	}
 	else if (GameCodeApp::GetRendererImpl()==GameCodeApp::Renderer_D3D11)
 	{
-		sky = shared_ptr<SkyNode>(QSE_NEW D3DSkyNode11(m_textureResource.c_str() ));
+		sky = shared_ptr<SkyNode>(QSE_NEW GLSkyNode(m_textureResource.c_str() ));
 	}
 	else
 	{

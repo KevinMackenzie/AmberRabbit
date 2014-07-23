@@ -393,7 +393,7 @@ void BaseGameLogic::VChangeState(BaseGameState newState)
 			}
 
 			pServer->AddSocket(new GameServerListenSocket(GET_CONFIG_ELEMENT_S("LISTENER_PORT")));
-			g_pApp->m_pBaseSocketManager = pServer;
+			QuicksandEngine::g_pApp->m_pBaseSocketManager = pServer;
 		}
 	}
 	else if (newState == BGS_LoadingGameEnvironment)
