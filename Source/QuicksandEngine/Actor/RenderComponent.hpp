@@ -82,7 +82,7 @@ protected:
 // Teapots, which are the main characters in the game.  DirectX actually has a function that generates a teapot Mesh
 // so we might as well use it.  We're game programmers, not artists.  ;)
 //---------------------------------------------------------------------------------------------------------------------
-class TeapotRenderComponent : public BaseRenderComponent
+/*class TeapotRenderComponent : public BaseRenderComponent
 {
 public:
 	static const char *g_Name;
@@ -94,7 +94,7 @@ protected:
     // editor stuff
     virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
 };
-
+*/
 
 //---------------------------------------------------------------------------------------------------------------------
 // Grids, which represent the world

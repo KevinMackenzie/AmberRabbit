@@ -34,14 +34,14 @@ protected:
 	LightProperties m_LightProps;
 
 public:
-	LightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const LightProperties &props, const mat4 *t);
+	LightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const LightProperties &props, const glm::mat4 *t);
 };
 
 
 class GLLightNode : public LightNode
 {
 public:
-	GLLightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const LightProperties &lightProps, const mat4 *t)
+	GLLightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const LightProperties &lightProps, const glm::mat4 *t)
 		: LightNode(actorId, renderComponent, lightProps, t) { }
 
 	virtual HRESULT VOnRestore() { return S_OK; };
@@ -61,15 +61,15 @@ class LightManager
 
 protected:
 	Lights					m_Lights;
-	vec4					m_vLightDir[MAXIMUM_LIGHTS_SUPPORTED];
+	glm::vec4					m_vLightDir[MAXIMUM_LIGHTS_SUPPORTED];
 	Color					m_vLightDiffuse[MAXIMUM_LIGHTS_SUPPORTED];
-	vec4					m_vLightAmbient;
+	glm::vec4					m_vLightAmbient;
 public:
 	void CalcLighting(Scene *pScene);
 	void CalcLighting(ConstantBuffer_Lighting* pLighting, SceneNode *pNode);
 	int GetLightCount(const SceneNode *node) { return m_Lights.size(); }
-	const vec4 *GetLightAmbient(const SceneNode *node) { return &m_vLightAmbient; }
-	const vec4 *GetLightDirection(const SceneNode *node) { return m_vLightDir; }
+	const glm::vec4 *GetLightAmbient(const SceneNode *node) { return &m_vLightAmbient; }
+	const glm::vec4 *GetLightDirection(const SceneNode *node) { return m_vLightDir; }
 	const Color *GetLightDiffuse(const SceneNode *node) { return m_vLightDiffuse; }
 };
 

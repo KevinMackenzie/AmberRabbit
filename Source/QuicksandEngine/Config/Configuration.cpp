@@ -1,7 +1,7 @@
 #include "../Stdafx.hpp"
 #include "Configuration.hpp"
 
-string Configuration::GetConfigElement(string key)
+string Configuration::GetElement(string key)
 {
 	ConfigIterator it = mConfigOptions.find(key);
 	if (it != mConfigOptions.end())

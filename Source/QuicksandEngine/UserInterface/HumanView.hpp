@@ -11,7 +11,7 @@
 
 class HumanView : public IGameView
 {
-	friend class GameCodeApp;
+	friend class QuicksandEngineApp;
 
 protected:
 	GameViewId m_ViewId;
@@ -69,7 +69,7 @@ public:
 	ProcessManager* GetProcessManager() { return m_pProcessManager; }
 
 	//Camera adjustments.
-	virtual void VSetCameraOffset(const vec4 & camOffset );
+	virtual void VSetCameraOffset(const glm::vec4 & camOffset );
 
 	// Added post press
 	shared_ptr<ScreenElementScene> m_pScene;			

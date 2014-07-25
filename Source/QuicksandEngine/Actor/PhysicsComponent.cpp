@@ -17,9 +17,9 @@ const char *PhysicsComponent::g_Name = "PhysicsComponent";
 
 PhysicsComponent::PhysicsComponent(void)
 {
-    m_RigidBodyLocation = vec3(0.f,0.f,0.f);
-	m_RigidBodyOrientation = vec3(0.f,0.f,0.f);
-	m_RigidBodyScale = vec3(1.f,1.f,1.f);
+    m_RigidBodyLocation = glm::vec3(0.f,0.f,0.f);
+	m_RigidBodyOrientation = glm::vec3(0.f,0.f,0.f);
+	m_RigidBodyScale = glm::vec3(1.f,1.f,1.f);
 
     m_acceleration = 0;
     m_angularAcceleration = 0;
@@ -145,7 +145,7 @@ void PhysicsComponent::VUpdate(int deltaMs)
     }
 
     // get the direction the object is facing
-    mat4 transform = pTransformComponent->GetTransform();
+    glm::mat4 transform = pTransformComponent->GetTransform();
 
 	if (m_acceleration != 0)
     {
@@ -156,10 +156,10 @@ void PhysicsComponent::VUpdate(int deltaMs)
         // Get the current velocity vector and convert to a scalar.  The velocity vector is a combination of 
         // the direction this actor is going in and the speed of the actor.  The scalar is just the speed 
         // component.
-        vec3 velocity(m_pGamePhysics->VGetVelocity(m_pOwner->GetId()));
+        glm::vec3 velocity(m_pGamePhysics->VGetVelocity(m_pOwner->GetId()));
 		float velocityScalar = length(velocity);
 
-		vec3 direction(GetDirection(transform));
+		glm::vec3 direction(GetDirection(transform));
 		m_pGamePhysics->VApplyForce(direction, accelerationToApplyThisFrame, m_pOwner->GetId());
 
         // logging
@@ -199,7 +199,7 @@ void PhysicsComponent::BuildRigidBodyTransform(XMLElement* pTransformElement)
 		x = std::stod(pPositionElement->Attribute("x"));
 		y = std::stod(pPositionElement->Attribute("y"));
 		z = std::stod(pPositionElement->Attribute("z"));
-		m_RigidBodyLocation = vec3(x, y, z);
+		m_RigidBodyLocation = glm::vec3(x, y, z);
     }
 
     XMLElement* pOrientationElement = pTransformElement->FirstChildElement("Orientation");
@@ -211,7 +211,7 @@ void PhysicsComponent::BuildRigidBodyTransform(XMLElement* pTransformElement)
 		yaw   = std::stod(pOrientationElement->Attribute("yaw"));
 		pitch = std::stod(pOrientationElement->Attribute("pitch"));
 		roll  = std::stod(pOrientationElement->Attribute("roll"));
-        m_RigidBodyOrientation = vec3((float)DEGREES_TO_RADIANS(yaw), (float)DEGREES_TO_RADIANS(pitch), (float)DEGREES_TO_RADIANS(roll));
+        m_RigidBodyOrientation = glm::vec3((float)DEGREES_TO_RADIANS(yaw), (float)DEGREES_TO_RADIANS(pitch), (float)DEGREES_TO_RADIANS(roll));
     }
 
     XMLElement* pScaleElement = pTransformElement->FirstChildElement("Scale");
@@ -223,21 +223,21 @@ void PhysicsComponent::BuildRigidBodyTransform(XMLElement* pTransformElement)
 		x = std::stod(pScaleElement->Attribute("x"));
 		y = std::stod(pScaleElement->Attribute("y"));
 		z = std::stod(pScaleElement->Attribute("z"));
-        m_RigidBodyScale = vec3((float)x, (float)y, (float)z);
+        m_RigidBodyScale = glm::vec3((float)x, (float)y, (float)z);
     }
 }
 
-void PhysicsComponent::ApplyForce(const vec3& direction, float forceNewtons)
+void PhysicsComponent::ApplyForce(const glm::vec3& direction, float forceNewtons)
 {
     m_pGamePhysics->VApplyForce(direction, forceNewtons, m_pOwner->GetId());
 }
 
-void PhysicsComponent::ApplyTorque(const vec3& direction, float forceNewtons)
+void PhysicsComponent::ApplyTorque(const glm::vec3& direction, float forceNewtons)
 {
     m_pGamePhysics->VApplyTorque(direction, forceNewtons, m_pOwner->GetId());
 }
 
-bool PhysicsComponent::KinematicMove(const mat4 &transform)
+bool PhysicsComponent::KinematicMove(const glm::mat4 &transform)
 {
 	return m_pGamePhysics->VKinematicMove(transform, m_pOwner->GetId());
 }
@@ -262,12 +262,12 @@ void PhysicsComponent::RemoveAngularAcceleration(void)
     m_angularAcceleration = 0;
 }
 
-vec3 PhysicsComponent::GetVelocity(void)
+glm::vec3 PhysicsComponent::GetVelocity(void)
 {
     return m_pGamePhysics->VGetVelocity(m_pOwner->GetId());
 }
 
-void PhysicsComponent::SetVelocity(const vec3& velocity)
+void PhysicsComponent::SetVelocity(const glm::vec3& velocity)
 {
     m_pGamePhysics->VSetVelocity(m_pOwner->GetId(), velocity);
 }
@@ -277,10 +277,10 @@ void PhysicsComponent::RotateY(float angleRadians)
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_Name));
     if (pTransformComponent)
     {
-        mat4 transform = pTransformComponent->GetTransform();
-		vec3 position = GetPosition(transform);
+        glm::mat4 transform = pTransformComponent->GetTransform();
+		glm::vec3 position = GetPosition(transform);
 
-        mat4 rotateY;
+        glm::mat4 rotateY;
         rotateY = rotate(rotateY, angleRadians, g_YAxis);
 		::SetPosition(rotateY, position);
 
@@ -295,8 +295,8 @@ void PhysicsComponent::SetPosition(float x, float y, float z)
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_Name));
     if (pTransformComponent)
     {
-        mat4 transform = pTransformComponent->GetTransform();
-        vec3 position = vec3(x, y, z);
+        glm::mat4 transform = pTransformComponent->GetTransform();
+        glm::vec3 position = glm::vec3(x, y, z);
         ::SetPosition(transform, position);
 
         KinematicMove(transform);

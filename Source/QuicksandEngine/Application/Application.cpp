@@ -28,9 +28,10 @@ INT WINAPI GameCode4(HINSTANCE hInstance,
 
 	// [rez] Initialize the logging system as the very first thing you ever do!
 	// [mrmike] LOL after the memory system flags are set, that is!
-	Logger::Init("logging.xml");
+	AwLogging::Init();
 
-	g_pApp->m_Options.Init("PlayerOptions.xml", lpCmdLine);
+	//g_pApp->m_Options.Init("PlayerOptions.xml", lpCmdLine);
+	QuicksandEngine::g_pApp->mConfigManager.AddConfigElements("PlayerOptions.xml");
 
 	// Set the callback functions. These functions allow the sample framework to notify
 	// the application about device changes, user input, and windows messages.  The 
@@ -41,39 +42,45 @@ INT WINAPI GameCode4(HINSTANCE hInstance,
 	// device created/destroyed callbacks then the sample framework won't be able to 
 	// recreate your device resources.
 
-	DXUTSetCallbackMsgProc(GameCodeApp::MsgProc);
-	DXUTSetCallbackFrameMove(GameCodeApp::OnUpdateGame);
-	DXUTSetCallbackDeviceChanging(GameCodeApp::ModifyDeviceSettings);
+	glfwSetErrorCallback(QuicksandEngineApp::GLFWErrorFunc);
+	if (!glfwInit())
+	{
+		LOG_ERROR("Glfw Initialization Failed!");
+	}
 
+	//DXUTSetCallbackMsgProc(GameCodeApp::MsgProc);
+	//DXUTSetCallbackFrameMove(GameCodeApp::OnUpdateGame);
+	//DXUTSetCallbackDeviceChanging(GameCodeApp::ModifyDeviceSettings);
+
+	/*
 	if (g_pApp->m_Options.m_Renderer == "Direct3D 9")
 	{
-		DXUTSetCallbackD3D9DeviceAcceptable(GameCodeApp::IsD3D9DeviceAcceptable);
-		DXUTSetCallbackD3D9DeviceCreated(GameCodeApp::OnD3D9CreateDevice);
-		DXUTSetCallbackD3D9DeviceReset(GameCodeApp::OnD3D9ResetDevice);
-		DXUTSetCallbackD3D9DeviceLost(GameCodeApp::OnD3D9LostDevice);
-		DXUTSetCallbackD3D9DeviceDestroyed(GameCodeApp::OnD3D9DestroyDevice);
-		DXUTSetCallbackD3D9FrameRender(GameCodeApp::OnD3D9FrameRender);
+	DXUTSetCallbackD3D9DeviceAcceptable(GameCodeApp::IsD3D9DeviceAcceptable);
+	DXUTSetCallbackD3D9DeviceCreated(GameCodeApp::OnD3D9CreateDevice);
+	DXUTSetCallbackD3D9DeviceReset(GameCodeApp::OnD3D9ResetDevice);
+	DXUTSetCallbackD3D9DeviceLost(GameCodeApp::OnD3D9LostDevice);
+	DXUTSetCallbackD3D9DeviceDestroyed(GameCodeApp::OnD3D9DestroyDevice);
+	DXUTSetCallbackD3D9FrameRender(GameCodeApp::OnD3D9FrameRender);
 	}
 	else if (g_pApp->m_Options.m_Renderer == "Direct3D 11")
 	{
-		DXUTSetCallbackD3D11DeviceAcceptable(GameCodeApp::IsD3D11DeviceAcceptable);
-		DXUTSetCallbackD3D11DeviceCreated(GameCodeApp::OnD3D11CreateDevice);
-		DXUTSetCallbackD3D11SwapChainResized(GameCodeApp::OnD3D11ResizedSwapChain);
-		DXUTSetCallbackD3D11SwapChainReleasing(GameCodeApp::OnD3D11ReleasingSwapChain);
-		DXUTSetCallbackD3D11DeviceDestroyed(GameCodeApp::OnD3D11DestroyDevice);
-		DXUTSetCallbackD3D11FrameRender(GameCodeApp::OnD3D11FrameRender);
+	DXUTSetCallbackD3D11DeviceAcceptable(GameCodeApp::IsD3D11DeviceAcceptable);
+	DXUTSetCallbackD3D11DeviceCreated(GameCodeApp::OnD3D11CreateDevice);
+	DXUTSetCallbackD3D11SwapChainResized(GameCodeApp::OnD3D11ResizedSwapChain);
+	DXUTSetCallbackD3D11SwapChainReleasing(GameCodeApp::OnD3D11ReleasingSwapChain);
+	DXUTSetCallbackD3D11DeviceDestroyed(GameCodeApp::OnD3D11DestroyDevice);
+	DXUTSetCallbackD3D11FrameRender(GameCodeApp::OnD3D11FrameRender);
 	}
 	else
 	{
-		LOG_ASSERT(0 && "Unknown renderer specified in game options.");
-		return false;
-	}
+	LOG_ASSERT(0 && "Unknown renderer specified in game options.");
+	return false;
+	}*/
 
-	// Show the cursor and clip it when in full screen
-	DXUTSetCursorSettings(true, true);
+
 
 	// Perform application initialization
-	if (!g_pApp->InitInstance(hInstance, lpCmdLine, 0, g_pApp->m_Options.m_ScreenSize.x, g_pApp->m_Options.m_ScreenSize.y))
+	if (!QuicksandEngine::g_pApp->InitInstance(hInstance, lpCmdLine, 0, GET_CONFIG_ELEMENT_S("WINDOW_XPOS"), GET_CONFIG_ELEMENT_S("WINDOW_YPOS")))
 	{
 		// [rez] Note: Fix memory leaks if we hit this branch.  Also, print an error.
 		return FALSE;
@@ -83,12 +90,66 @@ INT WINAPI GameCode4(HINSTANCE hInstance,
 	// dispatching render calls. The sample framework will call your FrameMove 
 	// and FrameRender callback when there is idle time between handling window messages.
 
-	DXUTMainLoop();
-	DXUTShutdown();
+	WNDCLASSEX wcex;
+
+	wcex.cbSize = sizeof(WNDCLASSEX);
+
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc = QuicksandEngineApp::MsgProc;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = hInstance;
+
+	return RegisterClassEx(&wcex);
+
+	int currentTime = glfwGetTime();
+	MSG msg;
+	while (QuicksandEngine::g_pApp->IsRunning())
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
+		{
+			if (msg.message == WM_CLOSE)
+			{
+				QuicksandEngine::g_pApp->SetQuitting(true);
+				GetMessage(&msg, NULL, 0, 0);
+				break;
+			}
+			else
+			{
+				// Default processing
+				if (GetMessage(&msg, NULL, NULL, NULL))
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
+
+			}
+		}
+		else
+		{
+			// Update the game views, but nothing else!
+			// Remember this is a modal screen.
+			int timeNow = glfwGetTime();
+			int deltaMilliseconds = timeNow - currentTime;
+
+			currentTime = timeNow;
+
+			QuicksandEngine::g_pApp->OnUpdateGame(timeNow, deltaMilliseconds);
+			QuicksandEngine::g_pApp->GLFrameRender(timeNow, deltaMilliseconds);
+			
+		}
+	}
+	//DXUTMainLoop();
+	//DXUTShutdown();
+
+	
+
+	glfwDestroyWindow(QuicksandEngine::g_pApp->GLFWWindow());
+	glfwTerminate();
 
 	// [rez] Destroy the logging system at the last possible moment
-	Logger::Destroy();
+	AwLogging::Destroy();
 
-	return g_pApp->GetExitCode();
+	return QuicksandEngine::g_pApp->GetExitCode();
 }
 

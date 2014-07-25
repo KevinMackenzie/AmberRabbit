@@ -114,8 +114,7 @@ using fastdelegate::MakeDelegate;
 #include "Utilities/Templates.hpp"
 #include "Graphics3D/Geometry.hpp"
 
-using namespace glm;
-
+typedef glm::vec4 Color;
 
 extern Color g_White;
 extern Color g_Black;
@@ -129,18 +128,18 @@ extern Color g_Gray25;
 extern Color g_Gray65;
 extern Color g_Transparent;
 
-extern vec3 g_Up;
-extern vec3 g_Right;
-extern vec3 g_Forward;
+extern glm::vec3 g_Up;
+extern glm::vec3 g_Right;
+extern glm::vec3 g_Forward;
 
 //this assums that while looking down the negative ZAxis, X is positive to the right, and Y is positive 
-extern vec3 g_XAxis;
-extern vec3 g_YAxis;
-extern vec3 g_ZAxis;
+extern glm::vec3 g_XAxis;
+extern glm::vec3 g_YAxis;
+extern glm::vec3 g_ZAxis;
 
-extern vec4 g_Up4;
-extern vec4 g_Right4;
-extern vec4 g_Forward4;
+extern glm::vec4 g_Up4;
+extern glm::vec4 g_Right4;
+extern glm::vec4 g_Forward4;
 
 
 //  AppMsg				- Chapter 9, page 248

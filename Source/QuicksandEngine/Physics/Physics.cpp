@@ -49,30 +49,30 @@ public:
 
 	// Initialization of Physics Objects
 	virtual void VAddSphere(float radius, WeakActorPtr gameActor, const std::string& densityStr, const std::string& physicsMaterial) { }
-	virtual void VAddBox(const vec3& dimensions, WeakActorPtr gameActor,const std::string& densityStr, const std::string& physicsMaterial) { }
-	virtual void VAddPointCloud(vec3 *verts, int numPoints, WeakActorPtr gameActor, const std::string& densityStr, const std::string& physicsMaterial) { }
+	virtual void VAddBox(const glm::vec3& dimensions, WeakActorPtr gameActor,const std::string& densityStr, const std::string& physicsMaterial) { }
+	virtual void VAddPointCloud(glm::vec3 *verts, int numPoints, WeakActorPtr gameActor, const std::string& densityStr, const std::string& physicsMaterial) { }
 	virtual void VRemoveActor(ActorId id) { }
 
 	// Debugging
 	virtual void VRenderDiagnostics() { }
 
 	// Physics world modifiers
-	virtual void VCreateTrigger(WeakActorPtr pGameActor, const vec3 &pos, const float dim) { }
-	virtual void VApplyForce(const vec3 &dir, float newtons, ActorId aid) { }
-	virtual void VApplyTorque(const vec3 &dir, float newtons, ActorId aid) { }
-	virtual bool VKinematicMove(const mat4 &mat, ActorId aid) { return true; }
+	virtual void VCreateTrigger(WeakActorPtr pGameActor, const glm::vec3 &pos, const float dim) { }
+	virtual void VApplyForce(const glm::vec3 &dir, float newtons, ActorId aid) { }
+	virtual void VApplyTorque(const glm::vec3 &dir, float newtons, ActorId aid) { }
+	virtual bool VKinematicMove(const glm::mat4 &mat, ActorId aid) { return true; }
 
 	// Physics actor states
 	virtual void VRotateY(ActorId actorId, float angleRadians, float time) { }
 	virtual float VGetOrientationY(ActorId actorId) { return 0.0f; }
 	virtual void VStopActor(ActorId actorId) { }
-    virtual vec3 VGetVelocity(ActorId actorId) { return vec3(); }
-    virtual void VSetVelocity(ActorId actorId, const vec3& vel) { }
-    virtual vec3 VGetAngularVelocity(ActorId actorId) { return vec3(); }
-    virtual void VSetAngularVelocity(ActorId actorId, const vec3& vel) { }
-	virtual void VTranslate(ActorId actorId, const vec3& vec) { }
-	virtual void VSetTransform(const ActorId id, const mat4& mat) { }
-    virtual mat4 VGetTransform(const ActorId id) { return mat4::g_Identity; }
+    virtual glm::vec3 VGetVelocity(ActorId actorId) { return glm::vec3(); }
+    virtual void VSetVelocity(ActorId actorId, const glm::vec3& vel) { }
+    virtual glm::vec3 VGetAngularVelocity(ActorId actorId) { return glm::vec3(); }
+    virtual void VSetAngularVelocity(ActorId actorId, const glm::vec3& vel) { }
+	virtual void VTranslate(ActorId actorId, const glm::vec3& vec) { }
+	virtual void VSetTransform(const ActorId id, const glm::mat4& mat) { }
+    virtual glm::mat4 VGetTransform(const ActorId id) { return glm::mat4::g_Identity; }
 };
 
 #ifndef DISABLE_PHYSICS
@@ -93,19 +93,19 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 // helpers for conversion to and from Bullet's data types
-static btVector3 vec3_to_btVector3( vec3 const & vec3 )
+static btVector3 vec3_to_btVector3( glm::vec3 const & glm::vec3 )
 {
-	return btVector3( vec3.x, vec3.y, vec3.z );
+	return btVector3( glm::vec3.x, glm::vec3.y, glm::vec3.z );
 }
 
-static vec3 btVector3_to_vec3( btVector3 const & btvec )
+static glm::vec3 btVector3_to_vec3( btVector3 const & btvec )
 {
-	return vec3( btvec.x(), btvec.y(), btvec.z() );
+	return glm::vec3( btvec.x(), btvec.y(), btvec.z() );
 }
 
-static btTransform mat4_to_btTransform( mat4 const & mat )
+static btTransform mat4_to_btTransform( glm::mat4 const & mat )
 {
-	// convert from mat4 (GameCode) to btTransform (Bullet)
+	// convert from glm::mat4 (GameCode) to btTransform (Bullet)
 	btMatrix3x3 bulletRotation;
 	btVector3 bulletPosition;
 	
@@ -125,11 +125,11 @@ static btTransform mat4_to_btTransform( mat4 const & mat )
 	return btTransform( bulletRotation, bulletPosition );
 }
 
-static mat4 btTransform_to_mat4( btTransform const & trans )
+static glm::mat4 btTransform_to_mat4( btTransform const & trans )
 {
-	mat4 returnValue = mat4::g_Identity;
+	glm::mat4 returnValue = glm::mat4::g_Identity;
 
-	// convert from btTransform (Bullet) to mat4 (GameCode)
+	// convert from btTransform (Bullet) to glm::mat4 (GameCode)
 	btMatrix3x3 const & bulletRotation = trans.getBasis();
 	btVector3 const & bulletPosition = trans.getOrigin();
 	
@@ -161,9 +161,9 @@ static mat4 btTransform_to_mat4( btTransform const & trans )
 //
 struct ActorMotionState : public btMotionState
 {
-	mat4 m_worldToPositionTransform;
+	glm::mat4 m_worldToPositionTransform;
 	
-	ActorMotionState( mat4 const & startingTransform )
+	ActorMotionState( glm::mat4 const & startingTransform )
 	  : m_worldToPositionTransform( startingTransform ) { }
 	
 	// btMotionState interface:  Bullet calls these
@@ -250,31 +250,31 @@ public:
 
 	// Initialization of Physics Objects
 	virtual void VAddSphere(float radius, WeakActorPtr pGameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
-	virtual void VAddBox(const vec3& dimensions, WeakActorPtr pGameActor,  const std::string& densityStr, const std::string& physicsMaterial) override;
-	virtual void VAddPointCloud(vec3 *verts, int numPoints, WeakActorPtr pGameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
+	virtual void VAddBox(const glm::vec3& dimensions, WeakActorPtr pGameActor,  const std::string& densityStr, const std::string& physicsMaterial) override;
+	virtual void VAddPointCloud(glm::vec3 *verts, int numPoints, WeakActorPtr pGameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
 	virtual void VRemoveActor(ActorId id) override;
 
 	// Debugging
 	virtual void VRenderDiagnostics() override;
 
 	// Physics world modifiers
-	virtual void VCreateTrigger(WeakActorPtr pGameActor, const vec3 &pos, const float dim) override;
-	virtual void VApplyForce(const vec3 &dir, float newtons, ActorId aid) override;
-	virtual void VApplyTorque(const vec3 &dir, float newtons, ActorId aid) override;
-	virtual bool VKinematicMove(const mat4 &mat, ActorId aid) override;
+	virtual void VCreateTrigger(WeakActorPtr pGameActor, const glm::vec3 &pos, const float dim) override;
+	virtual void VApplyForce(const glm::vec3 &dir, float newtons, ActorId aid) override;
+	virtual void VApplyTorque(const glm::vec3 &dir, float newtons, ActorId aid) override;
+	virtual bool VKinematicMove(const glm::mat4 &mat, ActorId aid) override;
 	
 	virtual void VRotateY(ActorId actorId, float angleRadians, float time);
 	virtual float VGetOrientationY(ActorId actorId);
 	virtual void VStopActor(ActorId actorId);
-    virtual vec3 VGetVelocity(ActorId actorId);
-    virtual void VSetVelocity(ActorId actorId, const vec3& vel);
-    virtual vec3 VGetAngularVelocity(ActorId actorId);
-    virtual void VSetAngularVelocity(ActorId actorId, const vec3& vel);
-	virtual void VTranslate(ActorId actorId, const vec3& vec);
+    virtual glm::vec3 VGetVelocity(ActorId actorId);
+    virtual void VSetVelocity(ActorId actorId, const glm::vec3& vel);
+    virtual glm::vec3 VGetAngularVelocity(ActorId actorId);
+    virtual void VSetAngularVelocity(ActorId actorId, const glm::vec3& vel);
+	virtual void VTranslate(ActorId actorId, const glm::vec3& vec);
 
-    virtual void VSetTransform(const ActorId id, const mat4& mat);
+    virtual void VSetTransform(const ActorId id, const glm::mat4& mat);
 
-	virtual mat4 VGetTransform(const ActorId id);
+	virtual glm::mat4 VGetTransform(const ActorId id);
 };
 
 
@@ -464,7 +464,7 @@ void BulletPhysics::AddShape(StrongActorPtr pGameActor, btCollisionShape* shape,
 		shape->calculateLocalInertia( mass, localInertia );
 
 
-	mat4 transform = mat4::g_Identity;
+	glm::mat4 transform = glm::mat4::g_Identity;
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pGameActor->GetComponent<TransformComponent>(TransformComponent::g_Name));
 	LOG_ASSERT(pTransformComponent);
     if (pTransformComponent)
@@ -590,7 +590,7 @@ void BulletPhysics::VAddSphere(float const radius, WeakActorPtr pGameActor, cons
 /////////////////////////////////////////////////////////////////////////////
 // BulletPhysics::VAddBox
 //
-void BulletPhysics::VAddBox(const vec3& dimensions, WeakActorPtr pGameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void BulletPhysics::VAddBox(const glm::vec3& dimensions, WeakActorPtr pGameActor, const std::string& densityStr, const std::string& physicsMaterial)
 {
     StrongActorPtr pStrongActor = MakeStrongPtr(pGameActor);
     if (!pStrongActor)
@@ -610,7 +610,7 @@ void BulletPhysics::VAddBox(const vec3& dimensions, WeakActorPtr pGameActor, con
 /////////////////////////////////////////////////////////////////////////////
 // BulletPhysics::VAddPointCloud				- Chapter 17, page 601
 //
-void BulletPhysics::VAddPointCloud(vec3 *verts, int numPoints, WeakActorPtr pGameActor, /*const mat4& initialTransform,*/ const std::string& densityStr, const std::string& physicsMaterial)
+void BulletPhysics::VAddPointCloud(glm::vec3 *verts, int numPoints, WeakActorPtr pGameActor, /*const glm::mat4& initialTransform,*/ const std::string& densityStr, const std::string& physicsMaterial)
 {
     StrongActorPtr pStrongActor = MakeStrongPtr(pGameActor);
     if (!pStrongActor)
@@ -664,20 +664,20 @@ void BulletPhysics::VRenderDiagnostics()
 //
 // FUTURE WORK: Mike create a trigger actor archetype that can be instantiated in the editor!!!!!
 //
-void BulletPhysics::VCreateTrigger(WeakActorPtr pGameActor, const vec3 &pos, const float dim)
+void BulletPhysics::VCreateTrigger(WeakActorPtr pGameActor, const glm::vec3 &pos, const float dim)
 {
     StrongActorPtr pStrongActor = MakeStrongPtr(pGameActor);
     if (!pStrongActor)
         return;  // FUTURE WORK: Add a call to the error log here
 
 	// create the collision body, which specifies the shape of the object
-	btBoxShape * const boxShape = new btBoxShape( vec3_to_btVector3( vec3(dim,dim,dim) ) );
+	btBoxShape * const boxShape = new btBoxShape( vec3_to_btVector3( glm::vec3(dim,dim,dim) ) );
 	
 	// triggers are immoveable.  0 mass signals this to Bullet.
 	btScalar const mass = 0;
 
 	// set the initial position of the body from the actor
-	mat4 triggerTrans = mat4::g_Identity;
+	glm::mat4 triggerTrans = glm::mat4::g_Identity;
 	triggerTrans.SetPosition( pos );
 	ActorMotionState * const myMotionState = QSE_NEW ActorMotionState( triggerTrans );
 	
@@ -696,7 +696,7 @@ void BulletPhysics::VCreateTrigger(WeakActorPtr pGameActor, const vec3 &pos, con
 /////////////////////////////////////////////////////////////////////////////
 // BulletPhysics::VApplyForce					- Chapter 17, page 603
 //
-void BulletPhysics::VApplyForce(const vec3 &dir, float newtons, ActorId aid)
+void BulletPhysics::VApplyForce(const glm::vec3 &dir, float newtons, ActorId aid)
 {
 	if ( btRigidBody * const body = FindBulletRigidBody( aid ) )
 	{
@@ -713,7 +713,7 @@ void BulletPhysics::VApplyForce(const vec3 &dir, float newtons, ActorId aid)
 /////////////////////////////////////////////////////////////////////////////
 // BulletPhysics::VApplyTorque					- Chapter 17, page 603
 //
-void BulletPhysics::VApplyTorque(const vec3 &dir, float magnitude, ActorId aid)
+void BulletPhysics::VApplyTorque(const glm::vec3 &dir, float magnitude, ActorId aid)
 {
 	if ( btRigidBody * const body = FindBulletRigidBody( aid ) )
 	{
@@ -732,7 +732,7 @@ void BulletPhysics::VApplyTorque(const vec3 &dir, float magnitude, ActorId aid)
 //
 //    Forces a phyics object to a new location/orientation
 //
-bool BulletPhysics::VKinematicMove(const mat4 &mat, ActorId aid)
+bool BulletPhysics::VKinematicMove(const glm::mat4 &mat, ActorId aid)
 {
 	if ( btRigidBody * const body = FindBulletRigidBody( aid ) )
 	{
@@ -751,7 +751,7 @@ bool BulletPhysics::VKinematicMove(const mat4 &mat, ActorId aid)
 //
 //   Returns the current transform of the phyics object
 //
-mat4 BulletPhysics::VGetTransform(const ActorId id)
+glm::mat4 BulletPhysics::VGetTransform(const ActorId id)
 {
     btRigidBody * pRigidBody = FindBulletRigidBody(id);
     LOG_ASSERT(pRigidBody);
@@ -765,7 +765,7 @@ mat4 BulletPhysics::VGetTransform(const ActorId id)
 //
 //   Sets the current transform of the phyics object
 //
-void BulletPhysics::VSetTransform(ActorId actorId, const mat4& mat)
+void BulletPhysics::VSetTransform(ActorId actorId, const glm::mat4& mat)
 {
     VKinematicMove(mat, actorId);
 }
@@ -831,24 +831,24 @@ float BulletPhysics::VGetOrientationY(ActorId actorId)
 //
 void BulletPhysics::VStopActor(ActorId actorId)
 {
-   VSetVelocity(actorId, vec3(0.f, 0.f, 0.f));
+   VSetVelocity(actorId, glm::vec3(0.f, 0.f, 0.f));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // BulletPhysics::VGetVelocity					- Chapter 17, page 604
 //
-vec3 BulletPhysics::VGetVelocity(ActorId actorId)
+glm::vec3 BulletPhysics::VGetVelocity(ActorId actorId)
 {
     btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
     LOG_ASSERT(pRigidBody);
     if (!pRigidBody)
-        return vec3();
+        return glm::vec3();
     btVector3 btVel = pRigidBody->getLinearVelocity();
     return btVector3_to_vec3(btVel);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void BulletPhysics::VSetVelocity(ActorId actorId, const vec3& vel)
+void BulletPhysics::VSetVelocity(ActorId actorId, const glm::vec3& vel)
 {
 	btRigidBody * pRigidBody = FindBulletRigidBody(actorId);
 	LOG_ASSERT(pRigidBody);
@@ -859,18 +859,18 @@ void BulletPhysics::VSetVelocity(ActorId actorId, const vec3& vel)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-vec3 BulletPhysics::VGetAngularVelocity(ActorId actorId)
+glm::vec3 BulletPhysics::VGetAngularVelocity(ActorId actorId)
 {
     btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
     LOG_ASSERT(pRigidBody);
     if (!pRigidBody)
-        return vec3();
+        return glm::vec3();
     btVector3 btVel = pRigidBody->getAngularVelocity();
     return btVector3_to_vec3(btVel);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void BulletPhysics::VSetAngularVelocity(ActorId actorId, const vec3& vel)
+void BulletPhysics::VSetAngularVelocity(ActorId actorId, const glm::vec3& vel)
 {
     btRigidBody * pRigidBody = FindBulletRigidBody(actorId);
     LOG_ASSERT(pRigidBody);
@@ -881,7 +881,7 @@ void BulletPhysics::VSetAngularVelocity(ActorId actorId, const vec3& vel)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void BulletPhysics::VTranslate(ActorId actorId, const vec3& vec)
+void BulletPhysics::VTranslate(ActorId actorId, const glm::vec3& vec)
 {
 	btRigidBody * pRigidBody = FindBulletRigidBody(actorId);
 	LOG_ASSERT(pRigidBody);
@@ -996,8 +996,8 @@ void BulletPhysics::SendCollisionPairAddEvent( btPersistentManifold const * mani
 		
 		// this pair of colliding objects is new.  send a collision-begun event
 		Vec3List collisionPoints;
-		vec3 sumNormalForce;
-		vec3 sumFrictionForce;
+		glm::vec3 sumNormalForce;
+		glm::vec3 sumFrictionForce;
 		
 		for ( int pointIdx = 0; pointIdx < manifold->getNumContacts(); ++pointIdx )
 		{

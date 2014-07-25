@@ -36,7 +36,7 @@ SceneNodeProperties::SceneNodeProperties(void)
 //
 // SceneNodeProperties::Transform			- Chapter 16, page 528
 //
-void SceneNodeProperties::Transform(mat4 *toWorld, mat4 *fromWorld) const
+void SceneNodeProperties::Transform(glm::mat4 *toWorld, glm::mat4 *fromWorld) const
 {
 	if (toWorld)
 		*toWorld = m_ToWorld;
@@ -50,7 +50,7 @@ void SceneNodeProperties::Transform(mat4 *toWorld, mat4 *fromWorld) const
 // SceneNode Implementation
 ////////////////////////////////////////////////////
 
-SceneNode::SceneNode(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, RenderPass renderPass, const mat4 *to, const mat4 *from)
+SceneNode::SceneNode(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, RenderPass renderPass, const glm::mat4 *to, const glm::mat4 *from)
 {
 	m_pParent = NULL;
 	m_Props.m_ActorId = actorId;
@@ -116,7 +116,7 @@ HRESULT SceneNode::VOnLostDevice(Scene *pScene)
 //
 // SceneNode::VSetTransform					- Chapter 16, page 531
 //
-void SceneNode::VSetTransform(const mat4 *toWorld, const mat4 *fromWorld)
+void SceneNode::VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWorld)
 {
 	m_Props.m_ToWorld = *toWorld;
 	if (!fromWorld)
@@ -168,12 +168,12 @@ bool SceneNode::VIsVisible(Scene *pScene) const
 	// transform the location of this node into the camera space 
 	// of the camera attached to the scene
 
-	mat4 toWorld, fromWorld;
+	glm::mat4 toWorld, fromWorld;
 	pScene->GetCamera()->VGet()->Transform(&toWorld, &fromWorld);
 
-	vec3 pos = GetWorldPosition();
+	glm::vec3 pos = GetWorldPosition();
 
-	vec3 fromWorldPos = Xform(fromWorld, pos);
+	glm::vec3 fromWorldPos = Xform(fromWorld, pos);
 
 	Frustum const &frustum = pScene->GetCamera()->GetFrustum();
 
@@ -187,9 +187,9 @@ bool SceneNode::VIsVisible(Scene *pScene) const
 //   This was added post press to respect any SceneNode ancestors - you have to add all 
 //   their positions together to get the world position of any SceneNode.
 //
-const vec3 SceneNode::GetWorldPosition() const
+const glm::vec3 SceneNode::GetWorldPosition() const
 {
-	vec3 pos = GetPosition();
+	glm::vec3 pos = GetPosition();
 	if (m_pParent)
 	{
 		pos += m_pParent->GetWorldPosition();
@@ -251,11 +251,11 @@ HRESULT SceneNode::VRenderChildren(Scene *pScene)
 					asn->m_pNode = *i;
 					asn->m_Concat = pScene->GetTopMatrix();
 
-					vec4 worldPos(::GetPosition(asn->m_Concat), 1.0f /*TODO: is this correct*/);
+					glm::vec4 worldPos(::GetPosition(asn->m_Concat), 1.0f /*TODO: is this correct*/);
 
-					mat4 fromWorld = pScene->GetCamera()->VGet()->FromWorld();
+					glm::mat4 fromWorld = pScene->GetCamera()->VGet()->FromWorld();
 
-					vec4 screenPos = vec4(Xform(fromWorld, vec3(worldPos)), 1.0f/*TODO: same as above*/);
+					glm::vec4 screenPos = glm::vec4(Xform(fromWorld, glm::vec3(worldPos)), 1.0f/*TODO: same as above*/);
 
 					asn->m_ScreenZ = screenPos.z;
 
@@ -290,13 +290,13 @@ bool SceneNode::VAddChild(shared_ptr<ISceneNode> ikid)
 	kid->m_pParent = this;					// [mrmike] Post-press fix - the parent was never set!
 
 	// The radius of the sphere should be fixed right here
-	vec3 kidPos = ::GetPosition(kid->VGet()->ToWorld());
+	glm::vec3 kidPos = ::GetPosition(kid->VGet()->ToWorld());
 
 	// [mrmike] - Post-press fix. This was not correct! subtracting the parents's position from the kidPos
 	//            created a HUGE radius, depending on the location of the parent, which could be anywhere
 	//            in the game world.
 
-	//vec3 dir = kidPos - m_Props.ToWorld().GetPosition();
+	//glm::vec3 dir = kidPos - m_Props.ToWorld().GetPosition();
 	//float newRadius = dir.Length() + kid->VGet()->Radius();
 
 	float newRadius = length(kidPos) + kid->VGet()->Radius();
@@ -367,20 +367,20 @@ void SceneNode::SetAlpha(float alpha)
 // RootNode::RootNode					- Chapter 16, page 545
 //
 RootNode::RootNode()
-	: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_0, &mat4())
+	: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_0, &glm::mat4())
 {
 	m_Children.reserve(RenderPass_Last);
 
-	shared_ptr<SceneNode> staticGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Static, &mat4()));
+	shared_ptr<SceneNode> staticGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Static, &glm::mat4()));
 	m_Children.push_back(staticGroup);	// RenderPass_Static = 0
 
-	shared_ptr<SceneNode> actorGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Actor, &mat4()));
+	shared_ptr<SceneNode> actorGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Actor, &glm::mat4()));
 	m_Children.push_back(actorGroup);	// RenderPass_Actor = 1
 
-	shared_ptr<SceneNode> skyGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &mat4()));
+	shared_ptr<SceneNode> skyGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &glm::mat4()));
 	m_Children.push_back(skyGroup);	// RenderPass_Sky = 2
 
-	shared_ptr<SceneNode> invisibleGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_NotRendered, &mat4()));
+	shared_ptr<SceneNode> invisibleGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_NotRendered, &glm::mat4()));
 	m_Children.push_back(invisibleGroup);	// RenderPass_NotRendered = 3
 }
 
@@ -496,10 +496,10 @@ HRESULT CameraNode::SetViewTransform(Scene *pScene)
 	//rigidly attached right behind the target
 	if (m_pTarget)
 	{
-		mat4 mat = m_pTarget->VGet()->ToWorld();
-		vec4 at = m_CamOffsetVector;
-		vec4 atWorld = Xform(mat,at);
-		vec3 pos = ::GetPosition(mat) + vec3(atWorld);
+		glm::mat4 mat = m_pTarget->VGet()->ToWorld();
+		glm::vec4 at = m_CamOffsetVector;
+		glm::vec4 atWorld = Xform(mat,at);
+		glm::vec3 pos = ::GetPosition(mat) + glm::vec3(atWorld);
 		::SetPosition(mat, pos);
 		VSetTransform(&mat);
 	}
@@ -515,11 +515,11 @@ HRESULT CameraNode::SetViewTransform(Scene *pScene)
 //
 //    Returns the concatenation of the world and view projection, which is generally sent into vertex shaders
 //
-mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
+glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 {
-	mat4 world = pScene->GetTopMatrix();
-	mat4 view = VGet()->FromWorld();
-	mat4 worldView = world * view;
+	glm::mat4 world = pScene->GetTopMatrix();
+	glm::mat4 view = VGet()->FromWorld();
+	glm::mat4 worldView = world * view;
 	return worldView * m_Projection;
 }
 
@@ -540,7 +540,7 @@ mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 // D3DGrid9::D3DGrid9						- 3rd Edition, Chapter 13, page 448
 //
 /*
-D3DGrid9::D3DGrid9(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const mat4* pMatrix)
+D3DGrid9::D3DGrid9(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
 	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
 {
 	m_bTextureHasAlpha = false;
@@ -613,7 +613,7 @@ HRESULT D3DGrid9::VOnRestore(Scene *pScene)
 			// the XZ plane.
 			float x = (float)i - (squares / 2.0f);
 			float y = (float)j - (squares / 2.0f);
-			vert->position = (x * vec3(1.f, 0.f, 0.f)) + (y * vec3(0.f, 0.f, 1.f));
+			vert->position = (x * glm::vec3(1.f, 0.f, 0.f)) + (y * glm::vec3(0.f, 0.f, 1.f));
 			vert->color = m_Props.GetMaterial().GetDiffuse();
 
 			// The texture coordinates are set to x,y to make the
@@ -751,7 +751,7 @@ HRESULT D3DGrid9::VPick(Scene *pScene, RayCast *pRayCast)
 
 /*
 
-GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const mat4* pMatrix)
+GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
 	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
 {
 	m_bTextureHasAlpha = false;
@@ -810,8 +810,8 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 			// the XZ plane.
 			float x = (float)i - (squares / 2.0f);
 			float y = (float)j - (squares / 2.0f);
-			vert->Pos = vec3(x, 0.f, y);
-			vert->Normal = vec3(0.0f, 1.0f, 0.0f);
+			vert->Pos = glm::vec3(x, 0.f, y);
+			vert->Normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
 			// The texture coordinates are set to x,y to make the
 			// texture tile along with units - 1.0, 2.0, 3.0, etc.
@@ -917,7 +917,7 @@ HRESULT GLGrid::VRender(Scene *pScene)
 // ArrowNode Implementation - added post press
 ////////////////////////////////////////////////////
 /*
-ArrowNode::ArrowNode(std::string name, WeakBaseRenderComponentPtr renderComponent, const float length, const mat4 *t, const Color &diffuseColor)
+ArrowNode::ArrowNode(std::string name, WeakBaseRenderComponentPtr renderComponent, const float length, const glm::mat4 *t, const Color &diffuseColor)
 	: SceneNode(INVALID_ACTOR_ID, renderComponent, RenderPass_0, t)
 {
 	D3DXCreateCylinder(DXUTGetD3D9Device(), 0.1f * length, 0.0f, 0.3f * length, 16, 1, &m_cone, NULL);
@@ -998,32 +998,32 @@ TestObject::~TestObject()
 // TestObject::g_CubeVerts
 //        - Chapter 14, page 495
 
-vec3 TestObject::g_CubeVerts[] =
+glm::vec3 TestObject::g_CubeVerts[] =
 {
-	vec3(0.5, 0.5, -0.5),		// Vertex 0.
-	vec3(-0.5, 0.5, -0.5),		// Vertex 1.
-	vec3(-0.5, 0.5, 0.5),  		// And so on.
-	vec3(0.5, 0.5, 0.5),
-	vec3(0.5, -0.5, -0.5),
-	vec3(-0.5, -0.5, -0.5),
-	vec3(-0.5, -0.5, 0.5),
-	vec3(0.5, -0.5, 0.5)
+	glm::vec3(0.5, 0.5, -0.5),		// Vertex 0.
+	glm::vec3(-0.5, 0.5, -0.5),		// Vertex 1.
+	glm::vec3(-0.5, 0.5, 0.5),  		// And so on.
+	glm::vec3(0.5, 0.5, 0.5),
+	glm::vec3(0.5, -0.5, -0.5),
+	glm::vec3(-0.5, -0.5, -0.5),
+	glm::vec3(-0.5, -0.5, 0.5),
+	glm::vec3(0.5, -0.5, 0.5)
 };
 
 
 // TestObject::g_SquashedCubeVerts
 //        - 3rd Edition, Chapter 14, page 495
 
-vec3 TestObject::g_SquashedCubeVerts[] =
+glm::vec3 TestObject::g_SquashedCubeVerts[] =
 {
-	vec3(0.5f, 0.5f, -0.25f),		// Vertex 0.
-	vec3(-0.5f, 0.5f, -0.25f),		// Vertex 1.
-	vec3(-0.5f, 0.5f, 0.5f),			// And so on.
-	vec3(0.75f, 0.5f, 0.5f),
-	vec3(0.75f, -0.5f, -0.5f),
-	vec3(-0.5f, -0.5f, -0.5f),
-	vec3(-0.5f, -0.3f, 0.5f),
-	vec3(0.5f, -0.3f, 0.5f)
+	glm::vec3(0.5f, 0.5f, -0.25f),		// Vertex 0.
+	glm::vec3(-0.5f, 0.5f, -0.25f),		// Vertex 1.
+	glm::vec3(-0.5f, 0.5f, 0.5f),			// And so on.
+	glm::vec3(0.75f, 0.5f, 0.5f),
+	glm::vec3(0.75f, -0.5f, -0.5f),
+	glm::vec3(-0.5f, -0.5f, -0.5f),
+	glm::vec3(-0.5f, -0.3f, 0.5f),
+	glm::vec3(0.5f, -0.3f, 0.5f)
 };
 
 
@@ -1054,8 +1054,8 @@ HRESULT TestObject::VOnRestore(Scene *pScene)
 	// Call the base class's restore
 	SceneNode::VOnRestore(pScene);
 
-	vec3 center;
-	vec3 *verts = m_squashed ? g_SquashedCubeVerts : g_CubeVerts;
+	glm::vec3 center;
+	glm::vec3 *verts = m_squashed ? g_SquashedCubeVerts : g_CubeVerts;
 	float radius;
 	HRESULT hr = D3DXComputeBoundingSphere(
 		static_cast<D3DXVECTOR3*>(verts), 8,
@@ -1101,10 +1101,10 @@ HRESULT TestObject::VOnRestore(Scene *pScene)
 		(v + 2)->diffuse = colors[face / 2];
 		(v + 2)->specular = colors[face / 2];
 
-		vec3 a = v->position - (v + 1)->position;
-		vec3 b = (v + 2)->position - (v + 1)->position;
+		glm::vec3 a = v->position - (v + 1)->position;
+		glm::vec3 b = (v + 2)->position - (v + 1)->position;
 
-		vec3 cross = a.Cross(b);
+		glm::vec3 cross = a.Cross(b);
 		cross /= cross.Length();
 		v->normal = cross;
 		(v + 1)->normal = cross;

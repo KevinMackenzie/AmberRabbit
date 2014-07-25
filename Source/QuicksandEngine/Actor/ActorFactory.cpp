@@ -36,7 +36,7 @@ ActorFactory::ActorFactory(void)
     m_componentFactory.Register<BaseScriptComponent>(ActorComponent::GetIdFromName(BaseScriptComponent::g_Name));
 }
 
-StrongActorPtr ActorFactory::CreateActor(const char* actorResource, XMLElement *overrides, const mat4 *pInitialTransform, const ActorId serversActorId)
+StrongActorPtr ActorFactory::CreateActor(const char* actorResource, XMLElement *overrides, const glm::mat4 *pInitialTransform, const ActorId serversActorId)
 {
     // Grab the root XML node
     XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(actorResource);

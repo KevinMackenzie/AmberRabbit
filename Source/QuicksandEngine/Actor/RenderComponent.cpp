@@ -140,39 +140,19 @@ shared_ptr<SceneNode> SphereRenderComponent::VCreateSceneNode(void)
     }
 
 	WeakBaseRenderComponentPtr wbrcp(this);
-	if (GameCodeApp::GetRendererImpl()==GameCodeApp::Renderer_D3D9)
-	{
-		// create the sphere Mesh
-		ID3DXMesh* pSphereMesh;
-
-		D3DXCreateSphere(DXUTGetD3D9Device(), m_radius, m_segments, m_segments, &pSphereMesh, NULL);
-
-		shared_ptr<SceneNode> sphere(QSE_NEW D3DShaderMeshNode9(m_pOwner->GetId(), wbrcp, pSphereMesh, "Effects\\GameCode4.fx", RenderPass_Actor, &pTransformComponent->GetTransform()));
-    
-		SAFE_RELEASE(pSphereMesh);
-	    return sphere;
-	}
-	else if (GameCodeApp::GetRendererImpl()==GameCodeApp::Renderer_D3D11)
-	{
-		shared_ptr<SceneNode> sphere(QSE_NEW D3DShaderMeshNode11(m_pOwner->GetId(), wbrcp, "art\\sphere.sdkmesh", RenderPass_Actor, &pTransformComponent->GetTransform()));
-		return sphere;
-	}
-	else
-	{
-		LOG_ASSERT(0 && "Unknown Renderer Implementation in SphereRenderComponent::VCreateSceneNode");
-		return shared_ptr<SceneNode>(NULL);
-	}
+	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.sdkmesh", RenderPass_Actor, &pTransformComponent->GetTransform()));
+	return sphere;
 }
 
 void SphereRenderComponent::VCreateInheritedXmlElements(XMLElement* pBaseElement)
 {
-    XMLElement* pMesh = QSE_NEW XMLElement("Sphere");
+    XMLElement* pMesh = pBaseElement->ToDocument()->NewElement("Sphere");
 	pMesh->SetAttribute("radius", ToStr(m_radius).c_str());
     pMesh->SetAttribute("segments", ToStr(m_segments).c_str());
     pBaseElement->LinkEndChild(pBaseElement);
 }
 
-
+/*
 //---------------------------------------------------------------------------------------------------------------------
 // TeapotRenderComponent
 //---------------------------------------------------------------------------------------------------------------------
@@ -187,21 +167,16 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
 		switch (GameCodeApp::GetRendererImpl())
 		{
 			case GameCodeApp::Renderer_D3D9: 
-				return shared_ptr<SceneNode>(QSE_NEW D3DTeapotMeshNode9(m_pOwner->GetId(), weakThis, "Effects\\GameCode4.fx", RenderPass_Actor, &pTransformComponent->GetTransform()));
+				return shared_ptr<SceneNode>(QSE_NEW GLTeapod(m_pOwner->GetId(), weakThis, "Effects\\GameCode4.fx", RenderPass_Actor, &pTransformComponent->GetTransform()));
 
 			case GameCodeApp::Renderer_D3D11: 
 			{
-				mat4 rot90;
+				glm::mat4 rot90;
 				rot90.BuildRotationY(-AR_PI/2.0f);
 				shared_ptr<SceneNode> parent(QSE_NEW SceneNode(m_pOwner->GetId(), weakThis, RenderPass_Actor, &pTransformComponent->GetTransform()));
 				shared_ptr<SceneNode> teapot(QSE_NEW D3DTeapotMeshNode11(INVALID_ACTOR_ID, weakThis, RenderPass_Actor, &rot90));
 				parent->VAddChild(teapot);
 				return parent;
-			}
-								 
-			default:
-				GCC_ERROR("Unknown Renderer Implementation in TeapotRenderComponent");
-		}
     }
 
     return shared_ptr<SceneNode>();
@@ -210,7 +185,7 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
 void TeapotRenderComponent::VCreateInheritedXmlElements(XMLElement *)
 {
 }
-
+*/
 
 //---------------------------------------------------------------------------------------------------------------------
 // GridRenderComponent
@@ -245,17 +220,7 @@ shared_ptr<SceneNode> GridRenderComponent::VCreateSceneNode(void)
     {
 		WeakBaseRenderComponentPtr weakThis(this);
 
-		switch (GameCodeApp::GetRendererImpl())
-		{
-			case GameCodeApp::Renderer_D3D9: 
-				return shared_ptr<SceneNode>(QSE_NEW D3DGrid9(m_pOwner->GetId(), weakThis, &(pTransformComponent->GetTransform())));  
-
-			case GameCodeApp::Renderer_D3D11: 
-				return shared_ptr<SceneNode>(QSE_NEW D3DGrid11(m_pOwner->GetId(), weakThis, &(pTransformComponent->GetTransform())));  
-								 
-			default:
-				GCC_ERROR("Unknown Renderer Implementation in GridRenderComponent");
-		}
+		return shared_ptr<SceneNode>(QSE_NEW GLGrid(m_pOwner->GetId(), weakThis, &(pTransformComponent->GetTransform())));  
     }
 
     return shared_ptr<SceneNode>();
@@ -263,13 +228,13 @@ shared_ptr<SceneNode> GridRenderComponent::VCreateSceneNode(void)
 
 void GridRenderComponent::VCreateInheritedXmlElements(XMLElement *pBaseElement)
 {
-    XMLElement* pTextureNode = QSE_NEW XMLElement("Texture");
-    TiXmlText* pTextureText = QSE_NEW TiXmlText(m_textureResource.c_str());
+    XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
+	XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
     pTextureNode->LinkEndChild(pTextureText);
     pBaseElement->LinkEndChild(pTextureNode);
 
-    XMLElement* pDivisionNode = QSE_NEW XMLElement("Division");
-    TiXmlText* pDivisionText = QSE_NEW TiXmlText(ToStr(m_squares).c_str());
+	XMLElement* pDivisionNode = pBaseElement->ToDocument()->NewElement("Division");
+	XMLText* pDivisionText = pDivisionNode->ToDocument()->NewText(ToStr(m_squares).c_str());
     pDivisionNode->LinkEndChild(pDivisionText);
     pBaseElement->LinkEndChild(pDivisionNode);
 }
@@ -292,13 +257,13 @@ bool LightRenderComponent::VDelegateInit(XMLElement* pData)
     if (pAttenuationNode)
 	{
 		double temp;
-		pAttenuationNode->Attribute("const", &temp);
+		temp = std::stod(pAttenuationNode->Attribute("const"));
 		m_Props.m_Attenuation[0] = (float) temp;
 
-		pAttenuationNode->Attribute("linear", &temp);
+		temp = std::stod(pAttenuationNode->Attribute("linear"));
 		m_Props.m_Attenuation[1] = (float) temp;
 
-		pAttenuationNode->Attribute("exp", &temp);
+		temp = std::stod(pAttenuationNode->Attribute("exp"));
 		m_Props.m_Attenuation[2] = (float) temp;
 	}
 
@@ -306,13 +271,13 @@ bool LightRenderComponent::VDelegateInit(XMLElement* pData)
 	pShapeNode = pLight->FirstChildElement("Shape");
     if (pShapeNode)
 	{
-		pShapeNode->Attribute("range", &temp);
+		temp = std::stod(pShapeNode->Attribute("range"));
 		m_Props.m_Range = (float) temp;
-		pShapeNode->Attribute("falloff", &temp);
+		temp = std::stod(pShapeNode->Attribute("falloff"));
 		m_Props.m_Falloff = (float) temp;
-		pShapeNode->Attribute("theta", &temp);		
+		temp = std::stod(pShapeNode->Attribute("theta"));		
 		m_Props.m_Theta = (float) temp;
-		pShapeNode->Attribute("phi", &temp);
+		temp = std::stod(pShapeNode->Attribute("phi"));
 		m_Props.m_Phi = (float) temp;	
 	}
     return true;
@@ -325,34 +290,24 @@ shared_ptr<SceneNode> LightRenderComponent::VCreateSceneNode(void)
     {
 		WeakBaseRenderComponentPtr weakThis(this);
 
-		switch (GameCodeApp::GetRendererImpl())
-		{
-			case GameCodeApp::Renderer_D3D9: 
-				return shared_ptr<SceneNode>(QSE_NEW D3DLightNode9(m_pOwner->GetId(), weakThis, m_Props, &(pTransformComponent->GetTransform())));  
-
-			case GameCodeApp::Renderer_D3D11: 
-				return shared_ptr<SceneNode>(QSE_NEW D3DLightNode11(m_pOwner->GetId(), weakThis, m_Props, &(pTransformComponent->GetTransform())));  
-								 
-			default:
-				LOG_ASSERT(0 && "Unknown Renderer Implementation in GridRenderComponent");
-		}
+		return shared_ptr<SceneNode>(QSE_NEW GLLightNode(m_pOwner->GetId(), weakThis, m_Props, &(pTransformComponent->GetTransform())));  
 	}
     return shared_ptr<SceneNode>();
 }
 
 void LightRenderComponent::VCreateInheritedXmlElements(XMLElement *pBaseElement)
 {
-    XMLElement* pSceneNode = QSE_NEW XMLElement("Light");
+    XMLElement* pSceneNode = pBaseElement->ToDocument()->NewElement("Light");
 
     // attenuation
-    XMLElement* pAttenuation = QSE_NEW XMLElement("Attenuation");
+    XMLElement* pAttenuation = pSceneNode->ToDocument()->NewElement("Attenuation");
     pAttenuation->SetAttribute("const", ToStr(m_Props.m_Attenuation[0]).c_str());
     pAttenuation->SetAttribute("linear", ToStr(m_Props.m_Attenuation[1]).c_str());
     pAttenuation->SetAttribute("exp", ToStr(m_Props.m_Attenuation[2]).c_str());
     pSceneNode->LinkEndChild(pAttenuation);
 
     // shape
-    XMLElement* pShape = QSE_NEW XMLElement("Shape");
+    XMLElement* pShape = pSceneNode->ToDocument()->NewElement("Shape");
     pShape->SetAttribute("range", ToStr(m_Props.m_Range).c_str());
     pShape->SetAttribute("falloff", ToStr(m_Props.m_Falloff).c_str());
     pShape->SetAttribute("theta", ToStr(m_Props.m_Theta).c_str());
@@ -381,26 +336,13 @@ bool SkyRenderComponent::VDelegateInit(XMLElement* pData)
 
 shared_ptr<SceneNode> SkyRenderComponent::VCreateSceneNode(void)
 {
-    shared_ptr<SkyNode> sky;
-	if (GameCodeApp::GetRendererImpl()==GameCodeApp::Renderer_D3D9)
-	{
-		sky = shared_ptr<SkyNode>(QSE_NEW D3DSkyNode9(m_textureResource.c_str() ));
-	}
-	else if (GameCodeApp::GetRendererImpl()==GameCodeApp::Renderer_D3D11)
-	{
-		sky = shared_ptr<SkyNode>(QSE_NEW GLSkyNode(m_textureResource.c_str() ));
-	}
-	else
-	{
-		GCC_ERROR("Unknown Renderer Implementation in VLoadGameDelegate");
-	}
-	return sky;
+	return shared_ptr<SkyNode>(QSE_NEW GLSkyNode(m_textureResource.c_str() ));
 }
 
 void SkyRenderComponent::VCreateInheritedXmlElements(XMLElement *pBaseElement)
 {
-    XMLElement* pTextureNode = QSE_NEW XMLElement("Texture");
-    TiXmlText* pTextureText = QSE_NEW TiXmlText(m_textureResource.c_str());
+    XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
+    XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
     pTextureNode->LinkEndChild(pTextureText);
     pBaseElement->LinkEndChild(pTextureNode);
 }

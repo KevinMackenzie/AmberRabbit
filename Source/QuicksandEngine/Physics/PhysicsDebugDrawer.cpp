@@ -184,7 +184,7 @@ void BulletDebugDrawer::drawLine(const btVector3& from, const btVector3& to, con
 	shared_ptr<Scene> pScene = g_pApp->GetHumanView()->m_pScene;
 	shared_ptr<IRenderer> pRenderer = pScene->GetRenderer();
 
-	vec3 vec3From, vec3To;
+	glm::vec3 vec3From, vec3To;
 	vec3From.x = from.x();
 	vec3From.y = from.y();
 	vec3From.z = from.z();

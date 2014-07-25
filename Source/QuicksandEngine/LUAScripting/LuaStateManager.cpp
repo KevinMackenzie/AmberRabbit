@@ -160,7 +160,7 @@ LuaPlus::LuaObject LuaStateManager::CreatePath(const char* pathString, bool toIg
     return context;
 }
 
-void LuaStateManager::Convertvec3ToTable(const vec3& vec, LuaPlus::LuaObject& outLuaTable) const
+void LuaStateManager::Convertvec3ToTable(const glm::vec3& vec, LuaPlus::LuaObject& outLuaTable) const
 {
     outLuaTable.AssignNewTable(GetLuaState());
     outLuaTable.SetNumber("x", vec.x);
@@ -169,7 +169,7 @@ void LuaStateManager::Convertvec3ToTable(const vec3& vec, LuaPlus::LuaObject& ou
 }
 
 
-void LuaStateManager::ConvertTableTovec3(const LuaPlus::LuaObject& luaTable, vec3& outvec3) const
+void LuaStateManager::ConvertTableTovec3(const LuaPlus::LuaObject& luaTable, glm::vec3& outvec3) const
 {
     LuaPlus::LuaObject temp;
 

@@ -1,7 +1,7 @@
 #ifndef AW_CONFIGMANAGER_HPP
 #define AW_CONFIGMANAGER_HPP
 #include "Configuration.hpp"
-#include "../TinyXml/tinyxml2.h"
+#include <tinyxml2.h>
 
 //this loads configuration from an xml, and puts it into the global config 
 //NOTE:LOADING ELEMENTS MUST ONLY BE CALLED BY MAIN THREAD
@@ -29,12 +29,14 @@ public:
 	//explicitly typed helper functions
 	string GetElementStr(string key);
 
+	void ModifyElement(string key, string element);
+
 	//these functions ARE MUTABLE 
 
 	char GetElementc(string key);//THIS IS THE NUMBER (0-255)
 	unsigned char GetElementuc(string key);
 	short GetElements(string key);
-	unsigned short GElementus(string key);
+	unsigned short GetElementus(string key);
 	int GetElementi(string key);
 	unsigned int GetElementui(string key);
 	long GetElementl(string key);
@@ -68,7 +70,7 @@ public:
 #define GET_CONFIG_ELEMENT_D(key)	QuicksandEngine::g_pApp->mConfigManager.GetElementd(key)
 #define GET_CONFIG_ELEMENT_LD(key)	QuicksandEngine::g_pApp->mConfigManager.GetElementld(key)
 
-
+#define MODIFY_CONFIG_ELEMENT(key, value) QuicksandEngine::g_pApp->mConfigManager.ModifyElement(key, value);
 
 
 #define GET_STRING(key) QuicksandEngine::g_pApp->mStringsManager.GetElementStr(key)

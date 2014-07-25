@@ -45,7 +45,7 @@ private:
     float GetYOrientationRadians(void) const;
 	void RotateY(float angleRadians);
 	void SetPosition(float x, float y, float z);
-	void LookAt(vec3 target);
+	void LookAt(glm::vec3 target);
     void Stop(void);
 };
 

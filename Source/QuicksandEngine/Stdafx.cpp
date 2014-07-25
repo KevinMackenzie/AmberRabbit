@@ -15,17 +15,17 @@ Color g_Transparent(1.0f, 0.0f, 1.0f, fTRANSPARENT);
 // Note! If you change these direction vectors around to suit yourself
 // Make sure you change it so it retains a left handed
 // coordinate system 
-vec3 g_Right(1.0f, 0.0f, 0.0f);
-vec3 g_Up(0.0f, 1.0f, 0.0f);
-vec3 g_Forward(0.0f, 0.0f, 1.0f);
+glm::vec3 g_Right(1.0f, 0.0f, 0.0f);
+glm::vec3 g_Up(0.0f, 1.0f, 0.0f);
+glm::vec3 g_Forward(0.0f, 0.0f, 1.0f);
 
-vec3 g_XAxis(1.0f, 0.0f, 0.0f);
-vec3 g_YAxis(0.0f, 1.0f, 0.0f);
-vec3 g_ZAxis(0.0f, 0.0f, 1.0f);
+glm::vec3 g_XAxis(1.0f, 0.0f, 0.0f);
+glm::vec3 g_YAxis(0.0f, 1.0f, 0.0f);
+glm::vec3 g_ZAxis(0.0f, 0.0f, 1.0f);
 
-vec4 g_Up4(g_Up.x, g_Up.y, g_Up.z, 0.0f);
-vec4 g_Right4(g_Right.x, g_Right.y, g_Right.z, 0.0f);
-vec4 g_Forward4(g_Forward.x, g_Forward.y, g_Forward.z, 0.0f);
+glm::vec4 g_Up4(g_Up.x, g_Up.y, g_Up.z, 0.0f);
+glm::vec4 g_Right4(g_Right.x, g_Right.y, g_Right.z, 0.0f);
+glm::vec4 g_Forward4(g_Forward.x, g_Forward.y, g_Forward.z, 0.0f);
 
 const float fOPAQUE = 1.0f;
 const int iOPAQUE = 1;

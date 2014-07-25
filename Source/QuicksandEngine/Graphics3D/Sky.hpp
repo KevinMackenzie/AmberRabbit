@@ -50,13 +50,8 @@ protected:
 
 	shared_ptr<ResHandle>       m_pTexture;
 
-	GLuint                      m_VAO;
-	GLIndexArray                m_IndexBufferData;
-	GLIndexBuffer				m_IndexBuffer;
-	Vec3Array                   m_VertexBufferData;
-	GLVertexBuffer              m_VertexBuffer;
-	Vec2Array                   m_TextureVertBufferData;
-	GLVertexBuffer              m_TextureVertBuffer;
+	GLVertexArrayPtr            m_pVertexArray;
+	GLUniformBufferPtr			m_pUniformBuffer;
 
 	GLProgramPtr				m_pShaderProgram;
 };

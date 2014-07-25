@@ -54,7 +54,7 @@ class SceneNodeProperties
 protected:
 	ActorId                 m_ActorId;
 	string					m_Name;
-	mat4					m_ToWorld, m_FromWorld;
+	glm::mat4					m_ToWorld, m_FromWorld;
 	float					m_Radius;
 	RenderPass				m_RenderPass;
 	Material				m_Material;
@@ -68,9 +68,9 @@ protected:
 public:
 	SceneNodeProperties(void);
 	const ActorId &ActorId() const { return m_ActorId; }
-	mat4 const &ToWorld() const { return m_ToWorld; }
-	mat4 const &FromWorld() const { return m_FromWorld; }
-	void Transform(mat4 *toWorld, mat4 *fromWorld) const;
+	glm::mat4 const &ToWorld() const { return m_ToWorld; }
+	glm::mat4 const &FromWorld() const { return m_FromWorld; }
+	void Transform(glm::mat4 *toWorld, glm::mat4 *fromWorld) const;
 
 	const char * Name() const { return m_Name.c_str(); }
 
@@ -118,13 +118,13 @@ protected:
 	WeakBaseRenderComponentPtr	m_RenderComponent;
 
 public:
-	SceneNode(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, RenderPass renderPass, const mat4 *to, const mat4 *from = NULL);
+	SceneNode(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, RenderPass renderPass, const glm::mat4 *to, const glm::mat4 *from = NULL);
 
 	virtual ~SceneNode();
 
 	virtual const SceneNodeProperties* const VGet() const { return &m_Props; }
 
-	virtual void VSetTransform(const mat4 *toWorld, const mat4 *fromWorld = NULL);
+	virtual void VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWorld = NULL);
 
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VOnUpdate(Scene *, DWORD const elapsedMs);
@@ -143,12 +143,12 @@ public:
 	void SetAlpha(float alpha);
 	float GetAlpha() const { return m_Props.Alpha(); }
 
-	vec3 GetPosition() const { return ::GetPosition(m_Props.m_ToWorld); }
-	void SetPosition(const vec3 &pos) { ::SetPosition(m_Props.m_ToWorld, pos); }
+	glm::vec3 GetPosition() const { return ::GetPosition(m_Props.m_ToWorld); }
+	void SetPosition(const glm::vec3 &pos) { ::SetPosition(m_Props.m_ToWorld, pos); }
 
-	const vec3 GetWorldPosition() const;					// [mrmike] added post-press to respect ancestor's position 
+	const glm::vec3 GetWorldPosition() const;					// [mrmike] added post-press to respect ancestor's position 
 
-	vec3 GetDirection() const { return ::GetDirection(m_Props.m_ToWorld); }
+	glm::vec3 GetDirection() const { return ::GetDirection(m_Props.m_ToWorld); }
 
 	void SetRadius(const float radius) { m_Props.m_Radius = radius; }
 	void SetMaterial(const Material &mat) { m_Props.m_Material = mat; }
@@ -168,7 +168,7 @@ public:
 	D3DSceneNode9(const ActorId actorId,
 		WeakBaseRenderComponentPtr renderComponent,
 		RenderPass renderPass,
-		const mat4 *t)
+		const glm::mat4 *t)
 		: SceneNode(actorId, renderComponent, renderPass, t) { }
 
 	virtual HRESULT VRender(Scene *pScene);
@@ -193,7 +193,7 @@ public:
 struct AlphaSceneNode
 {
 	shared_ptr<ISceneNode> m_pNode;
-	mat4 m_Concat;
+	glm::mat4 m_Concat;
 	float m_ScreenZ;
 
 	// For the STL sort...
@@ -258,7 +258,7 @@ public:
 class CameraNode : public SceneNode
 {
 public:
-	CameraNode(mat4 const *t, Frustum const &frustum)
+	CameraNode(glm::mat4 const *t, Frustum const &frustum)
 		: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_0, t),
 		m_Frustum(frustum),
 		m_bActive(true),
@@ -280,13 +280,13 @@ public:
 	void ClearTarget() { m_pTarget = shared_ptr<SceneNode>(); }
 	shared_ptr<SceneNode> GetTarget() { return m_pTarget; }
 
-	mat4 GetWorldViewProjection(Scene *pScene);
+	glm::mat4 GetWorldViewProjection(Scene *pScene);
 	HRESULT SetViewTransform(Scene *pScene);
 
-	mat4 GetProjection() { return m_Projection; }
-	mat4 GetView() { return m_View; }
+	glm::mat4 GetProjection() { return m_Projection; }
+	glm::mat4 GetView() { return m_View; }
 
-	void SetCameraOffset(const vec4 & cameraOffset)
+	void SetCameraOffset(const glm::vec4 & cameraOffset)
 	{
 		m_CamOffsetVector = cameraOffset;
 	}
@@ -294,12 +294,12 @@ public:
 protected:
 
 	Frustum			m_Frustum;
-	mat4			m_Projection;
-	mat4			m_View;
+	glm::mat4			m_Projection;
+	glm::mat4			m_View;
 	bool			m_bActive;
 	bool			m_DebugCamera;
 	shared_ptr<SceneNode> m_pTarget;
-	vec4			m_CamOffsetVector;	//Direction of camera relative to target.
+	glm::vec4			m_CamOffsetVector;	//Direction of camera relative to target.
 };
 
 
@@ -311,15 +311,14 @@ protected:
 
 	//    int                     m_squares;
 
-	GLVertexBuffer                m_IndexBuffer;
-	GLIndexBuffer                 m_VertexBuffer;
+	GLVertexArrayPtr			  m_VertexArray;
 
 	GLProgramPtr				  m_Program;
 
 public:
 	bool					m_bTextureHasAlpha;
 
-	GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, /* const string& name, const char* textureResource, int squares, const Color &diffuseColor, */ const mat4* pMatrix);
+	GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, /* const string& name, const char* textureResource, int squares, const Color &diffuseColor, */ const glm::mat4* pMatrix);
 	virtual ~GLGrid();
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VRender(Scene *pScene);
@@ -346,11 +345,11 @@ class ArrowNode : public SceneNode
 protected:
 	 *m_shaft;
 	ID3DXMesh *m_cone;
-	mat4 m_coneTrans;
-	mat4 m_shaftTrans;
+	glm::mat4 m_coneTrans;
+	glm::mat4 m_shaftTrans;
 
 public:
-	ArrowNode(string name, WeakBaseRenderComponentPtr renderComponent, const float length, const mat4 *t, const Color &color);
+	ArrowNode(string name, WeakBaseRenderComponentPtr renderComponent, const float length, const glm::mat4 *t, const Color &color);
 
 	virtual ~ArrowNode() { SAFE_RELEASE(m_shaft); SAFE_RELEASE(m_cone); }
 	virtual HRESULT VRender(Scene *pScene);
@@ -392,8 +391,8 @@ public:
 	//	TriangleIterator *CreateTriangleIterator();
 
 	static WORD g_TestObjectIndices[][3];
-	static vec3 g_CubeVerts[];
-	static vec3 g_SquashedCubeVerts[];
+	static glm::vec3 g_CubeVerts[];
+	static glm::vec3 g_SquashedCubeVerts[];
 };
 */
 

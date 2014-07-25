@@ -22,9 +22,9 @@ class SceneNode;
 class MovementController : public IPointerHandler, public IKeyboardHandler
 {
 protected:
-	mat4  m_matFromWorld;
-	mat4  m_matToWorld;
-	mat4  m_matPosition;
+	glm::mat4  m_matFromWorld;
+	glm::mat4  m_matToWorld;
+	glm::mat4  m_matPosition;
 
 	Point					m_lastMousePos;
 	bool					m_bKey[256];			// Which keys are up and down
@@ -59,8 +59,8 @@ public:
 	bool VOnKeyDown(const BYTE c) { m_bKey[c] = true; return true; }
 	bool VOnKeyUp(const BYTE c) { m_bKey[c] = false; return true; }
 
-	const mat4 *GetToWorld() { return &m_matToWorld; }
-	const mat4 *GetFromWorld() { return &m_matFromWorld; }
+	const glm::mat4 *GetToWorld() { return &m_matToWorld; }
+	const glm::mat4 *GetFromWorld() { return &m_matFromWorld; }
 };
 
 

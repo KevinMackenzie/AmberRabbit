@@ -132,7 +132,7 @@ public:
 class EvtData_Move_Actor : public BaseEventData
 {
     ActorId m_id;
-    mat4 m_matrix;
+    glm::mat4 m_matrix;
 
 public:
 	static const EventType sk_EventType;
@@ -147,7 +147,7 @@ public:
         m_id = INVALID_ACTOR_ID;
     }
 
-	EvtData_Move_Actor(ActorId id, const mat4& matrix)
+	EvtData_Move_Actor(ActorId id, const glm::mat4& matrix)
         : m_id(id), m_matrix(matrix)
 	{
         //
@@ -192,7 +192,7 @@ public:
         return m_id;
     }
 
-	const mat4& GetMatrix(void) const
+	const glm::mat4& GetMatrix(void) const
     {
         return m_matrix;
     }
@@ -709,7 +709,7 @@ class EvtData_Request_New_Actor : public BaseEventData
 {
     string m_actorResource;
 	bool m_hasInitialTransform;
-	mat4 m_initialTransform;
+	glm::mat4 m_initialTransform;
 	ActorId m_serverActorId;
     GameViewId m_viewId;
 
@@ -720,12 +720,12 @@ public:
 	{
 		m_actorResource = "";
 		m_hasInitialTransform = false;
-		m_initialTransform = mat4();
+		m_initialTransform = glm::mat4();
 		m_serverActorId = -1;
 		m_viewId = gc_InvalidGameViewId;
 	}
 
-	explicit EvtData_Request_New_Actor(const string &actorResource, const mat4 *initialTransform = NULL, const ActorId serverActorId = INVALID_ACTOR_ID, const GameViewId viewId = gc_InvalidGameViewId)
+	explicit EvtData_Request_New_Actor(const string &actorResource, const glm::mat4 *initialTransform = NULL, const ActorId serverActorId = INVALID_ACTOR_ID, const GameViewId viewId = gc_InvalidGameViewId)
     {
         m_actorResource = actorResource;
 		if (initialTransform)
@@ -789,7 +789,7 @@ public:
     virtual const char* GetName(void) const { return "EvtData_Request_New_Actor";  }
 
     const string &GetActorResource(void) const { return m_actorResource;  }
-	const mat4 *GetInitialTransform(void) const { return (m_hasInitialTransform) ? &m_initialTransform : NULL; }
+	const glm::mat4 *GetInitialTransform(void) const { return (m_hasInitialTransform) ? &m_initialTransform : NULL; }
 	const ActorId GetServerActorId(void) const 	{ return m_serverActorId; }
     GameViewId GetViewId(void) const { return m_viewId; }
 };

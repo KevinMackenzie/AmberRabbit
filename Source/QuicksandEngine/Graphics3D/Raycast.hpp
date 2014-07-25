@@ -15,21 +15,21 @@ public:
 	FLOAT m_fBary1, m_fBary2;		// Barycentric coordinates of the intersection
 	FLOAT m_tu, m_tv;               // texture coords of intersection
 	ActorId m_actorId;				// Which actor was intersected if there was one
-	vec3 m_worldLoc;				// world location of intersection
-	vec3 m_actorLoc;				// actor local coordinates of intersection
-	vec3 m_normal;					// normal of intersection
+	glm::vec3 m_worldLoc;				// world location of intersection
+	glm::vec3 m_actorLoc;				// actor local coordinates of intersection
+	glm::vec3 m_normal;					// normal of intersection
 
 	bool const operator <(Intersection const &other) { return m_fDist < other.m_fDist; }
 };
 
 template <class T>
-void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, FLOAT u, FLOAT v, ActorId actorId, char32_t* pIndices, T* pVertices, const mat4 &matWorld);
+void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, FLOAT u, FLOAT v, ActorId actorId, char32_t* pIndices, T* pVertices, const glm::mat4 &matWorld);
 
 
 typedef std::vector<Intersection> IntersectionArray;
 
 //the distance between rayPos and rayDir MUST be of unit length and the mesh MUST have indexes, AND must be divisible by three
-bool RayIntersect(GLMeshBarebones mesh, vec3 rayPos, vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, DWORD *pCountOfHits = nullptr);
+bool RayIntersect(GLMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, DWORD *pCountOfHits = nullptr);
 
 
 
@@ -48,8 +48,8 @@ public:
 	bool m_bAllHits;				// Whether to just get the first "hit" or all "hits"
 	Point m_Point;
 
-	vec3 m_vPickRayDir;
-	vec3 m_vPickRayOrig;
+	glm::vec3 m_vPickRayDir;
+	glm::vec3 m_vPickRayOrig;
 
 	IntersectionArray m_IntersectionArray;
 

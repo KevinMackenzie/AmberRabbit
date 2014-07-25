@@ -8,7 +8,7 @@
 #include "SceneNode.hpp"
 
 template <class T>
-void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, FLOAT u, FLOAT v, ActorId actorId, WORD* pIndices, T* pVertices, const mat4 &matWorld)
+void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, FLOAT u, FLOAT v, ActorId actorId, WORD* pIndices, T* pVertices, const glm::mat4 &matWorld)
 {
 	intersection.m_dwFace = faceIndex;
 	intersection.m_fDist = dist;
@@ -29,13 +29,13 @@ void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, F
 	intersection.m_tu = v0->tu + intersection.m_fBary1 * dtu1 + intersection.m_fBary2 * dtu2;
 	intersection.m_tv = v0->tv + intersection.m_fBary1 * dtv1 + intersection.m_fBary2 * dtv2;
 
-	vec3 a = v0->position - v1->position;
-	vec3 b = v2->position - v1->position;
+	glm::vec3 a = v0->position - v1->position;
+	glm::vec3 b = v2->position - v1->position;
 
-	vec3 crss = glm::cross(a, b);
+	glm::vec3 crss = glm::cross(a, b);
 	crss /= length(cross);
 
-	vec3 actorLoc = BarycentricTovec3(v0->position, v1->position, v2->position, intersection.m_fBary1, intersection.m_fBary2);
+	glm::vec3 actorLoc = BarycentricTovec3(v0->position, v1->position, v2->position, intersection.m_fBary1, intersection.m_fBary2);
 	intersection.m_actorLoc = actorLoc;
 	intersection.m_worldLoc = matWorld.Xform(actorLoc);
 	intersection.m_actorId = actorId;
@@ -63,19 +63,19 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLMeshBarebones *pMesh)
 
 
 	// Get the inverse view matrix
-	const mat4 matView = pScene->GetCamera()->GetView();
-	const mat4 matWorld = pScene->GetTopMatrix();
-	const mat4 proj = pScene->GetCamera()->GetProjection();
+	const glm::mat4 matView = pScene->GetCamera()->GetView();
+	const glm::mat4 matWorld = pScene->GetTopMatrix();
+	const glm::mat4 proj = pScene->GetCamera()->GetProjection();
 
 	// Compute the vector of the Pick ray in screen space
-	vec3 v;
+	glm::vec3 v;
 	v.x = (((2.0f * m_Point.x) / QuicksandEngine::g_pApp->GetScreenSize().x) - 1) / proj[1][1];
 	v.y = -(((2.0f * m_Point.y) / QuicksandEngine::g_pApp->GetScreenSize().y) - 1) / proj[2][2];
 	v.z = 1.0f;
 
 
-	mat4 mWorldView = matWorld * matView;
-	mat4 m = inverse(mWorldView);
+	glm::mat4 mWorldView = matWorld * matView;
+	glm::mat4 m = inverse(mWorldView);
 	
 
 	// Transform the screen space Pick ray into 3D space
@@ -163,19 +163,19 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, Vec3Array pVB, GLIndexArra
 
 
 	// Get the inverse view matrix
-	const mat4 matView = pScene->GetCamera()->GetView();
-	const mat4 matWorld = pScene->GetTopMatrix();
-	const mat4 proj = pScene->GetCamera()->GetProjection();
+	const glm::mat4 matView = pScene->GetCamera()->GetView();
+	const glm::mat4 matWorld = pScene->GetTopMatrix();
+	const glm::mat4 proj = pScene->GetCamera()->GetProjection();
 
 	// Compute the vector of the Pick ray in screen space
-	vec3 v;
+	glm::vec3 v;
 	v.x = (((2.0f * m_Point.x) / QuicksandEngine::g_pApp->GetScreenSize().x) - 1) / proj[1][1];
 	v.y = -(((2.0f * m_Point.y) / QuicksandEngine::g_pApp->GetScreenSize().y) - 1) / proj[2][2];
 	v.z = 1.0f;
 
 
-	mat4 mWorldView = matWorld * matView;
-	mat4 m;
+	glm::mat4 mWorldView = matWorld * matView;
+	glm::mat4 m;
 	m = inverse(mWorldView);
 
 	// Transform the screen space Pick ray into 3D space
@@ -190,9 +190,9 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, Vec3Array pVB, GLIndexArra
 	FLOAT fDist;
 	for (DWORD i = 0; i < pIB.size(); i++)
 	{
-		vec3 v0 = pVB[pIB[3 * i + 0]];
-		vec3 v1 = pVB[pIB[3 * i + 1]];
-		vec3 v2 = pVB[pIB[3 * i + 2]];
+		glm::vec3 v0 = pVB[pIB[3 * i + 0]];
+		glm::vec3 v1 = pVB[pIB[3 * i + 1]];
+		glm::vec3 v2 = pVB[pIB[3 * i + 2]];
 
 		// Check if the Pick ray passes through this point
 		if (IntersectTriangle(m_vPickRayOrig, m_vPickRayDir, v0, v1, v2,
@@ -233,13 +233,13 @@ void RayCast::Sort()
 
 
 
-bool RayIntersect(GLMeshBarebones mesh, vec3 rayPos, vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits, DWORD *pCountOfHits)
+bool RayIntersect(GLMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits, DWORD *pCountOfHits)
 {
 	bool hasSucceeded = false;
 	bool hasSucceeded1 = false;
 	for (unsigned int i = 0; i < mesh.mVertexArray.size() && hasSucceeded == false; i += 3)
 	{
-		vec3 baryTmp;
+		glm::vec3 baryTmp;
 		if (intersectRayTriangle(rayPos, rayDir, mesh.mVertexArray[mesh.mIndexArray[i]], mesh.mVertexArray[mesh.mIndexArray[i + 1]], mesh.mVertexArray[mesh.mIndexArray[i + 2]], baryTmp))
 		{
 			//only collect the other data from the first hit

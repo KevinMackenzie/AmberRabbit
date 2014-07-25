@@ -223,7 +223,7 @@ void BaseScriptComponent::SetPos(LuaPlus::LuaObject newPos)
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_Name));
     if (pTransformComponent)
     {
-        vec3 pos;
+        glm::vec3 pos;
         LuaStateManager::Get()->ConvertTableTovec3(newPos, pos);
         pTransformComponent->SetPosition(pos);
     }

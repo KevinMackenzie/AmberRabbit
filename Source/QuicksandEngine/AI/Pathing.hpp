@@ -29,12 +29,12 @@ const float PATHING_DEFAULT_ARC_WEIGHT = 1.0f;
 class PathingNode
 {
 	float m_tolerance;
-	vec3 m_pos;
+	glm::vec3 m_pos;
 	PathingArcList m_arcs;
 	
 public:
-	explicit PathingNode(const vec3& pos, float tolerance = PATHING_DEFAULT_NODE_TOLERANCE) : m_pos(pos) { m_tolerance = tolerance; }
-	const vec3& GetPos(void) const { return m_pos; }
+	explicit PathingNode(const glm::vec3& pos, float tolerance = PATHING_DEFAULT_NODE_TOLERANCE) : m_pos(pos) { m_tolerance = tolerance; }
+	const glm::vec3& GetPos(void) const { return m_pos; }
 	float GetTolerance(void) const { return m_tolerance; }
 	void AddArc(PathingArc* pArc);
 	void GetNeighbors(PathingNodeList& outNeighbors);
@@ -78,8 +78,8 @@ public:
 	PathPlan(void) { m_index = m_path.end(); }
 	
 	void ResetPath(void) { m_index = m_path.begin(); }
-	const vec3& GetCurrentNodePosition(void) const { LOG_ASSERT(m_index != m_path.end()); return (*m_index)->GetPos(); }
-	bool CheckForNextNode(const vec3& pos);
+	const glm::vec3& GetCurrentNodePosition(void) const { LOG_ASSERT(m_index != m_path.end()); return (*m_index)->GetPos(); }
+	bool CheckForNextNode(const glm::vec3& pos);
 	bool CheckForEnd(void);
 	
 private:
@@ -164,12 +164,12 @@ public:
 	~PathingGraph(void) { DestroyGraph(); }
 	void DestroyGraph(void);
 	
-	PathingNode* FindClosestNode(const vec3& pos);
-	PathingNode* FindFurthestNode(const vec3& pos);
+	PathingNode* FindClosestNode(const glm::vec3& pos);
+	PathingNode* FindFurthestNode(const glm::vec3& pos);
 	PathingNode* FindRandomNode(void);
-	PathPlan* FindPath(const vec3& startPoint, const vec3& endPoint);
-	PathPlan* FindPath(const vec3& startPoint, PathingNode* pGoalNode);
-	PathPlan* FindPath(PathingNode* pStartNode, const vec3& endPoint);
+	PathPlan* FindPath(const glm::vec3& startPoint, const glm::vec3& endPoint);
+	PathPlan* FindPath(const glm::vec3& startPoint, PathingNode* pGoalNode);
+	PathPlan* FindPath(PathingNode* pStartNode, const glm::vec3& endPoint);
 	PathPlan* FindPath(PathingNode* pStartNode, PathingNode* pGoalNode);
 	
 	// debug functions

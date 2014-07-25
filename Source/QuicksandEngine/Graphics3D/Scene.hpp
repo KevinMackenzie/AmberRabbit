@@ -40,7 +40,7 @@ protected:
 	shared_ptr<CameraNode> 	m_Camera;
 	shared_ptr<IRenderer>	m_Renderer;
 
-	GLMatrixStack    		*m_MatrixStack;
+	shared_ptr<GLMatrixStack> m_MatrixStack;
 	AlphaSceneNodes 		m_AlphaSceneNodes;
 	SceneActorMap 			m_ActorMap;
 
@@ -70,14 +70,14 @@ public:
 	const shared_ptr<CameraNode> GetCamera() const { return m_Camera; }
 
 
-	void PushAndSetMatrix(const mat4 &toWorld)
+	void PushAndSetMatrix(const glm::mat4 &toWorld)
 	{
 		// Note this code carefully!!!!! It is COMPLETELY different
 		// from some DirectX 9 documentation out there....
 		// Scene::PushAndSetMatrix - Chapter 16, page 541
 
 		m_MatrixStack->Push(toWorld);
-		mat4 mat = GetTopMatrix();
+		glm::mat4 mat = GetTopMatrix();
 		m_Renderer->VSetWorldTransform(&mat);
 	}
 
@@ -85,11 +85,11 @@ public:
 	{
 		// Scene::PopMatrix - Chapter 16, page 541
 		m_MatrixStack->Pop();
-		mat4 mat = GetTopMatrix();
+		glm::mat4 mat = GetTopMatrix();
 		m_Renderer->VSetWorldTransform(&mat);
 	}
 
-	const mat4 GetTopMatrix()
+	const glm::mat4 GetTopMatrix()
 	{
 		return m_MatrixStack->Top();
 	}

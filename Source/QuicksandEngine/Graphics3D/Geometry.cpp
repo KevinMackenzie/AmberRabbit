@@ -16,17 +16,17 @@ const DWORD D3D9Vertex_ColoredTextured::FVF = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3D
 const DWORD D3D9Vertex_Colored::FVF = (D3DFVF_XYZ | D3DFVF_DIFFUSE);
 const DWORD D3D9Vertex_UnlitTextured::FVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
 
-const mat4 mat4::g_Identity(D3DXMATRIX(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+const glm::mat4 glm::mat4::g_Identity(D3DXMATRIX(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
 const Quaternion Quaternion::g_Identity(D3DXQUATERNION(0, 0, 0, 1));*/
 
-bool Plane::Inside(const vec3 &point) const
+bool Plane::Inside(const glm::vec3 &point) const
 {
 	// Inside the plane is defined as the direction the normal is facing
 	float result = PlaneDotCoord(*this, point);
 	return (result >= 0.0f);
 }
 
-bool Plane::Inside(const vec3 &point, const float radius) const
+bool Plane::Inside(const glm::vec3 &point, const float radius) const
 {
 	float fDistance;	// calculate our distances to each of the planes
 
@@ -52,7 +52,7 @@ Frustum::Frustum()
 //
 // Frustum::Inside					- Chapter 14, page 477
 //
-bool Frustum::Inside(const vec3 &point) const
+bool Frustum::Inside(const glm::vec3 &point) const
 {
 	for (int i = 0; i<NumPlanes; ++i)
 	{
@@ -67,7 +67,7 @@ bool Frustum::Inside(const vec3 &point) const
 //
 // Frustum::Inside					- Chapter 14, page 477
 //
-bool Frustum::Inside(const vec3 &point, const float radius) const
+bool Frustum::Inside(const glm::vec3 &point, const float radius) const
 {
 	for (int i = 0; i < NumPlanes; ++i)
 	{
@@ -90,10 +90,10 @@ void Frustum::Init(const float fov, const float aspect, const float nearClip, co
 	m_Far = farClip;
 
 	float tanFovOver2 = (float)tan(m_Fov / 2.0f);
-	vec3 nearRight = (m_Near * tanFovOver2) * m_Aspect * g_Right;
-	vec3 farRight = (m_Far * tanFovOver2) * m_Aspect * g_Right;
-	vec3 nearUp = (m_Near * tanFovOver2) * g_Up;
-	vec3 farUp = (m_Far * tanFovOver2)  * g_Up;
+	glm::vec3 nearRight = (m_Near * tanFovOver2) * m_Aspect * g_Right;
+	glm::vec3 farRight = (m_Far * tanFovOver2) * m_Aspect * g_Right;
+	glm::vec3 nearUp = (m_Near * tanFovOver2) * g_Up;
+	glm::vec3 farUp = (m_Far * tanFovOver2)  * g_Up;
 
 	// points start in the upper right and go around clockwise
 	m_NearClip[0] = (m_Near * g_Forward) - nearRight + nearUp;
@@ -109,7 +109,7 @@ void Frustum::Init(const float fov, const float aspect, const float nearClip, co
 	// now we have all eight points. Time to construct 6 planes.
 	// the normals point away from you if you use counter clockwise verts.
 
-	vec3 origin(0.0f, 0.0f, 0.0f);
+	glm::vec3 origin(0.0f, 0.0f, 0.0f);
 	m_Planes[Near].Init(m_NearClip[2], m_NearClip[1], m_NearClip[0]);
 	m_Planes[Far].Init(m_FarClip[0], m_FarClip[1], m_FarClip[2]);
 	m_Planes[Right].Init(m_FarClip[2], m_FarClip[1], origin);
@@ -172,10 +172,10 @@ void Frustum::Render()
 }
 
 
-vec3 BarycentricTovec3(vec3 v0, vec3 v1, vec3 v2, float u, float v)
+glm::vec3 BarycentricTovec3(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, float u, float v)
 {
 	//V1 + U(V2 - V1) + V(V3 - V1).
-	vec3 result = v0 + u * (v1 - v0) + v * (v2 - v0);
+	glm::vec3 result = v0 + u * (v1 - v0) + v * (v2 - v0);
 	return result;
 }
 
@@ -185,21 +185,21 @@ vec3 BarycentricTovec3(vec3 v0, vec3 v1, vec3 v2, float u, float v)
 // function returns TRUE and the interpolated texture coordinates if the ray intersects 
 // the triangle
 //--------------------------------------------------------------------------------------
-bool IntersectTriangle(const vec3& orig, const vec3& dir,
-	vec3& v0, vec3& v1, vec3& v2,
+bool IntersectTriangle(const glm::vec3& orig, const glm::vec3& dir,
+	glm::vec3& v0, glm::vec3& v1, glm::vec3& v2,
 	GLfloat* t, GLfloat* u, GLfloat* v)
 {
 	// Find vectors for two edges sharing vert0
-	vec3 edge1 = v1 - v0;
-	vec3 edge2 = v2 - v0;
+	glm::vec3 edge1 = v1 - v0;
+	glm::vec3 edge2 = v2 - v0;
 
 	// Begin calculating determinant - also used to calculate U parameter
-	vec3 pvec = cross(dir, edge2);
+	glm::vec3 pvec = cross(dir, edge2);
 
 	// If determinant is near zero, ray lies in plane of triangle
 	GLfloat det = dot(edge1, pvec);
 
-	vec3 tvec;
+	glm::vec3 tvec;
 	if (det > 0)
 	{
 		tvec = orig - v0;
@@ -219,7 +219,7 @@ bool IntersectTriangle(const vec3& orig, const vec3& dir,
 		return FALSE;
 
 	// Prepare to test V parameter
-	vec3 qvec = cross(tvec, edge1);
+	glm::vec3 qvec = cross(tvec, edge1);
 
 	// Calculate V parameter and test bounds
 	*v = dot(dir, qvec);
@@ -234,9 +234,4 @@ bool IntersectTriangle(const vec3& orig, const vec3& dir,
 	*v *= fInvDet;
 
 	return TRUE;
-}
-
-void BuildYawPitchRoll(mat4& m, const float yawRadians, const float pitchRadians, const float rollRadians)
-{
-
 }

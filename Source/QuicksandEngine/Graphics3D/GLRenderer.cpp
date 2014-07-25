@@ -8,70 +8,86 @@
 
 
 //
-// class D3DRendererAlphaPass9				- not described in the book, see class D3DRendererAlphaPass11 
+// class D3DRendererAlphaPass9				- not described in the book, see class GLRenderPass 
 //
 class GLRendererAlphaPass : public IRenderState
 {
 protected:
-	mat4 m_oldWorld;
+	GLMatrixStack m_oldWorld;
 	DWORD m_oldZWriteEnable;
 
 public:
 	GLRendererAlphaPass();
 	~GLRendererAlphaPass();
-	std::string VToString() { return "D3DRenderAlphaPass9"; }
+	std::string VToString() { return "GLRendererAlphaPass"; }
 };
 
 GLRendererAlphaPass::GLRendererAlphaPass()
 {
-	DXUTGetD3D9Device()->GetTransform(D3DTS_WORLD, &m_oldWorld);
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
+	m_oldWorld = BufferManager.GetMatrixStackState();
+	//DXUTGetD3D9Device()->GetTransform(D3DTS_WORLD, &m_oldWorld);
+	//DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
+	
+	//TODO: is this correct?
+	glDisable(GL_DEPTH_BUFFER_BIT);
 
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 GLRendererAlphaPass::~GLRendererAlphaPass()
 {
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_COLORVERTEX, false);
+	/*DXUTGetD3D9Device()->SetRenderState(D3DRS_COLORVERTEX, false);
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, m_oldZWriteEnable);
-	DXUTGetD3D9Device()->SetTransform(D3DTS_WORLD, &m_oldWorld);
+	DXUTGetD3D9Device()->SetTransform(D3DTS_WORLD, &m_oldWorld);*/
+
+	BufferManager.SetMatrixStackOverride(m_oldWorld);
+	glEnable(GL_DEPTH_BUFFER_BIT);
 }
 
 
 //
 // class D3DRendererAlphaPass911			- Chapter 16, page 543
 //
-class D3DRendererAlphaPass11 : public IRenderState
+class GLRenderPass : public IRenderState
 {
 protected:
-	ID3D11BlendState* m_pOldBlendState;
+	//ID3D11BlendState* m_pOldBlendState;
 	FLOAT m_OldBlendFactor[4];
 	UINT m_OldSampleMask;
 
-	ID3D11BlendState* m_pCurrentBlendState;
+	//ID3D11BlendState* m_pCurrentBlendState;
 
 public:
-	D3DRendererAlphaPass11();
-	~D3DRendererAlphaPass11();
-	std::string VToString() { return "D3DRendererAlphaPass11"; }
+	GLRenderPass();
+	~GLRenderPass();
+	std::string VToString() { return "GLRenderPass"; }
 };
 
 //
-// D3DRendererAlphaPass11::D3DRendererAlphaPass11			- Chapter 16, page 544
+// GLRenderPass::GLRenderPass			- Chapter 16, page 544
 //
-D3DRendererAlphaPass11::D3DRendererAlphaPass11()
+GLRenderPass::GLRenderPass()
 {
-	DXUTGetD3D11DeviceContext()->OMGetBlendState(&m_pOldBlendState, m_OldBlendFactor, &m_OldSampleMask);
-	m_pCurrentBlendState = NULL;
+	
+	//DXUTGetD3D11DeviceContext()->OMGetBlendState(&m_pOldBlendState, m_OldBlendFactor, &m_OldSampleMask);
+	//m_pCurrentBlendState = NULL;
 
-	D3D11_BLEND_DESC BlendState;
-	ZeroMemory(&BlendState, sizeof(D3D11_BLEND_DESC));
+	//D3D11_BLEND_DESC BlendState;
+	//ZeroMemory(&BlendState, sizeof(D3D11_BLEND_DESC));
 
-	BlendState.AlphaToCoverageEnable = false;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_BLEND_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_BLEND_EQUATION_RGB);
+	
+
+	/*BlendState.AlphaToCoverageEnable = false;
 	BlendState.IndependentBlendEnable = false;
 	BlendState.RenderTarget[0].BlendEnable = TRUE;
 	BlendState.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -80,27 +96,27 @@ D3DRendererAlphaPass11::D3DRendererAlphaPass11()
 	BlendState.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
 	BlendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 	BlendState.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	BlendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	BlendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;*/
 
-	DXUTGetD3D11Device()->CreateBlendState(&BlendState, &m_pCurrentBlendState);
-	DXUTGetD3D11DeviceContext()->OMSetBlendState(m_pCurrentBlendState, 0, 0xffffffff);
+	//DXUTGetD3D11Device()->CreateBlendState(&BlendState, &m_pCurrentBlendState);
+	//DXUTGetD3D11DeviceContext()->OMSetBlendState(m_pCurrentBlendState, 0, 0xffffffff);
 }
 
 //
-// D3DRendererAlphaPass11::~D3DRendererAlphaPass11			- Chapter 16, page 544
+// GLRenderPass::~GLRenderPass			- Chapter 16, page 544
 //
-D3DRendererAlphaPass11::~D3DRendererAlphaPass11()
+GLRenderPass::~GLRenderPass()
 {
-	DXUTGetD3D11DeviceContext()->OMSetBlendState(m_pOldBlendState, m_OldBlendFactor, m_OldSampleMask);
-	SAFE_RELEASE(m_pCurrentBlendState);
-	SAFE_RELEASE(m_pOldBlendState);
+	//DXUTGetD3D11DeviceContext()->OMSetBlendState(m_pOldBlendState, m_OldBlendFactor, m_OldSampleMask);
+	/*SAFE_RELEASE(m_pCurrentBlendState);
+	SAFE_RELEASE(m_pOldBlendState);*/
 }
 
-
+/*
 //
-// class D3DRendererSkyBoxPass9					- not described in the book - see D3DRendererSkyBoxPass11 
+// class GLRenderSkyBoxPass			(was 9)		- not described in the book - see GLRenderSkyBox 
 //
-class D3DRendererSkyBoxPass9 : public IRenderState
+class GLRenderSkyBoxPass : public IRenderState
 {
 protected:
 	DWORD m_oldZWriteEnable;
@@ -108,76 +124,88 @@ protected:
 	DWORD m_oldCullMode;
 
 public:
-	D3DRendererSkyBoxPass9();
-	~D3DRendererSkyBoxPass9();
-	std::string VToString() { return "D3DRendererSkyboxPass9"; }
+	GLRenderSkyBoxPass();
+	~GLRenderSkyBoxPass();
+	std::string VToString() { return "GLRenderSkyBoxPass"; }
 };
 
-D3DRendererSkyBoxPass9::D3DRendererSkyBoxPass9()
+GLRenderSkyBoxPass::GLRenderSkyBoxPass()
 {
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &m_oldLightMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_CULLMODE, &m_oldCullMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	//DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
+	//DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &m_oldLightMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
+	//DXUTGetD3D9Device()->GetRenderState(D3DRS_CULLMODE, &m_oldCullMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
+	glDisable(GL_DEPTH_BUFFER_BIT);
 }
 
 
-D3DRendererSkyBoxPass9::~D3DRendererSkyBoxPass9()
+GLRenderSkyBoxPass::~GLRenderSkyBoxPass()
 {
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, m_oldLightMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, m_oldCullMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, m_oldZWriteEnable);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, m_oldLightMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, m_oldCullMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, m_oldZWriteEnable);
+
+	glEnable(GL_DEPTH_BUFFER_BIT);
 }
 
 
-
+*/
 
 
 //
-// class D3DRendererSkyBoxPass11							- Chapter 16, page 548
+// class GLRenderSkyBox							- Chapter 16, page 548
 //
-class D3DRendererSkyBoxPass11 : public IRenderState
+class GLRenderSkyBox : public IRenderState
 {
 protected:
-	ID3D11DepthStencilState* m_pOldDepthStencilState;
-	ID3D11DepthStencilState* m_pSkyboxDepthStencilState;
+	//ID3D11DepthStencilState* m_pOldDepthStencilState;
+	//ID3D11DepthStencilState* m_pSkyboxDepthStencilState;
 
 public:
-	D3DRendererSkyBoxPass11();
-	~D3DRendererSkyBoxPass11();
-	std::string VToString() { return "D3DRendererSkyBoxPass11"; }
+	GLRenderSkyBox();
+	~GLRenderSkyBox();
+	std::string VToString() { return "GLRenderSkyBox"; }
 };
 
 //
-// D3DRendererSkyBoxPass11::D3DRendererSkyBoxPass11()		- Chapter 16, page 548
+// GLRenderSkyBox::GLRenderSkyBox()		- Chapter 16, page 548
 //
-D3DRendererSkyBoxPass11::D3DRendererSkyBoxPass11()
+GLRenderSkyBox::GLRenderSkyBox()
 {
 	// Depth stencil state
-	D3D11_DEPTH_STENCIL_DESC DSDesc;
+	/*D3D11_DEPTH_STENCIL_DESC DSDesc;
 	ZeroMemory(&DSDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 	DSDesc.DepthEnable = TRUE;
 	DSDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	DSDesc.DepthFunc = D3D11_COMPARISON_LESS;
 	DSDesc.StencilEnable = FALSE;
 	DXUTGetD3D11Device()->CreateDepthStencilState(&DSDesc, &m_pSkyboxDepthStencilState);
-	DXUT_SetDebugName(m_pSkyboxDepthStencilState, "SkyboxDepthStencil");
+	DXUT_SetDebugName(m_pSkyboxDepthStencilState, "SkyboxDepthStencil");*/
 
+	glEnable(GL_DEPTH_BUFFER_BIT);
+	glDepthFunc(GL_LESS);
+	glDisable(GL_STENCIL);
+	
+	/*
 	UINT StencilRef;
 	DXUTGetD3D11DeviceContext()->OMGetDepthStencilState(&m_pOldDepthStencilState, &StencilRef);
-	DXUTGetD3D11DeviceContext()->OMSetDepthStencilState(m_pSkyboxDepthStencilState, 0);
+	DXUTGetD3D11DeviceContext()->OMSetDepthStencilState(m_pSkyboxDepthStencilState, 0);*/
 }
 
 //
-// D3DRendererSkyBoxPass11::~D3DRendererSkyBoxPass11()		- Chapter 16, page 548
+// GLRenderSkyBox::~GLRenderSkyBox()		- Chapter 16, page 548
 //
-D3DRendererSkyBoxPass11::~D3DRendererSkyBoxPass11()
+GLRenderSkyBox::~GLRenderSkyBox()
 {
-	DXUTGetD3D11DeviceContext()->OMSetDepthStencilState(m_pOldDepthStencilState, 0);
-	SAFE_RELEASE(m_pOldDepthStencilState);
-	SAFE_RELEASE(m_pSkyboxDepthStencilState);
+	//DXUTGetD3D11DeviceContext()->OMSetDepthStencilState(m_pOldDepthStencilState, 0);
+	//SAFE_RELEASE(m_pOldDepthStencilState);
+	//SAFE_RELEASE(m_pSkyboxDepthStencilState);
+
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_STENCIL);
 }
 
 
@@ -189,7 +217,7 @@ D3DRendererSkyBoxPass11::~D3DRendererSkyBoxPass11()
 //    some of the calls to get the game engine to run
 //    under DX9.
 ////////////////////////////////////////////////////
-
+/*
 bool D3DRenderer9::VPreRender()
 {
 	// Clear the render target and the zbuffer 
@@ -237,7 +265,7 @@ shared_ptr<IRenderState> D3DRenderer9::VPrepareAlphaPass()
 
 shared_ptr<IRenderState> D3DRenderer9::VPrepareSkyBoxPass()
 {
-	return shared_ptr<IRenderState>(QSE_NEW D3DRendererSkyBoxPass9());
+	return shared_ptr<IRenderState>(QSE_NEW GLRenderSkyBoxPass());
 }
 
 
@@ -269,7 +297,7 @@ void D3DRenderer9::VCalcLighting(Lights *lights, int maximumLights)
 }
 
 
-void D3DRenderer9::VDrawLine(const vec3& from, const vec3& to, const Color& color)
+void D3DRenderer9::VDrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color)
 {
 	DWORD oldLightingState;
 	DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &oldLightingState);
@@ -290,12 +318,12 @@ void D3DRenderer9::VDrawLine(const vec3& from, const vec3& to, const Color& colo
 	// restore original lighting state
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, oldLightingState);
 }
+*/
 
 
-
-HRESULT D3DLineDrawer11::OnRestore()
+HRESULT GLLineDrawer::OnRestore()
 {
-	D3D11_BUFFER_DESC bd;
+	/*D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DYNAMIC;
 	bd.ByteWidth = sizeof(D3D11Vertex_PositionColored) * 2;
@@ -308,93 +336,113 @@ HRESULT D3DLineDrawer11::OnRestore()
 
 	V_RETURN(DXUTGetD3D11Device()->CreateBuffer(&bd, &InitData, &m_pVertexBuffer));
 
-	shared_ptr<Scene> pScene = g_pApp->GetHumanView()->m_pScene;
+	shared_ptr<Scene> pScene = QuicksandEngine::g_pApp->GetHumanView()->m_pScene;
 
-	V_RETURN(m_LineDrawerShader.OnRestore(&(*pScene)));
+	V_RETURN(m_LineDrawerShader.OnRestore(&(*pScene)));*/
 
 	return S_OK;
 }
 
 
 
-void D3DLineDrawer11::DrawLine(const vec3& from, const vec3& to, const Color& color)
+void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color)
 {
 	HRESULT hr;
 
-	shared_ptr<Scene> pScene = g_pApp->GetHumanView()->m_pScene;
+	shared_ptr<Scene> pScene = QuicksandEngine::g_pApp->GetHumanView()->m_pScene;
 	shared_ptr<IRenderer> pRenderer = pScene->GetRenderer();
 
-	if (FAILED(m_LineDrawerShader.SetupRender(&(*pScene))))
-		return;
 
-	m_LineDrawerShader.SetDiffuse("art\\grid.dds", color);
+	//if (FAILED(m_LineDrawerShader.SetupRender(&(*pScene))))
+	//	return;
+
+	//m_LineDrawerShader.SetDiffuse("art\\grid.dds", color);
 
 	// Set vertex buffer
-	UINT stride = sizeof(vec3);
+	/*UINT stride = sizeof(glm::vec3);
 	UINT offset = 0;
 
 	D3D11_MAPPED_SUBRESOURCE MappedResource;
 	V(DXUTGetD3D11DeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource));
 
-	vec3 * pVerts = (vec3*)MappedResource.pData;
+	glm::vec3 * pVerts = (glm::vec3*)MappedResource.pData;
 	pVerts[0] = from;
 	pVerts[1] = to;
-	DXUTGetD3D11DeviceContext()->Unmap(m_pVertexBuffer, 0);
+	DXUTGetD3D11DeviceContext()->Unmap(m_pVertexBuffer, 0);*/
 
-	DXUTGetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	GLVAOData data = BufferManager.MapVertexArray(m_pVertexBuffer);
+	data.mPositions->resize(2);
+	(*data.mPositions)[0] = from;
+	(*data.mPositions)[1] = to;
+	BufferManager.UnMapVertexArray(m_pVertexBuffer);
+
+	//DXUTGetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+
+	ShaderManager.UseProgram(m_LineDrawerShader);
 
 	// Set primitive topology
-	DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	//DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-	DXUTGetD3D11DeviceContext()->Draw(2, 0);
+	BufferManager.DrawVertexArray(m_pVertexBuffer, GL_LINES);
+
+	//DXUTGetD3D11DeviceContext()->Draw(2, 0);
 }
 
 
 
 ////////////////////////////////////////////////////
-// D3DRenderer11 Implementation
+// GLRenderer Implementation
 //
 //    Not described in the book - but it abstracts 
 //    some of the calls to get the game engine to run
 //    under DX11.
 ////////////////////////////////////////////////////
 
-HRESULT D3DRenderer11::VOnRestore()
+HRESULT GLRenderer::VOnRestore()
 {
 	HRESULT hr;
-	V_RETURN(D3DRenderer::VOnRestore());
-	SAFE_DELETE(D3DRenderer::g_pTextHelper);
-	D3DRenderer::g_pTextHelper = QSE_NEW CDXUTTextHelper(DXUTGetD3D11Device(), DXUTGetD3D11DeviceContext(), &g_DialogResourceManager, 15);
+	V_RETURN(GLRenderer_Base::VOnRestore());
+	//SAFE_DELETE(GLRenderer_Base::g_pTextHelper);
+	//D3DRenderer::g_pTextHelper = QSE_NEW CDXUTTextHelper(DXUTGetD3D11Device(), DXUTGetD3D11DeviceContext(), &g_DialogResourceManager, 15);
 
 	return S_OK;
 }
 
 
-bool D3DRenderer11::VPreRender()
+bool GLRenderer::VPreRender()
 {
-	if (DXUTGetD3D11DeviceContext() && DXUTGetD3D11RenderTargetView())
-	{
-		DXUTGetD3D11DeviceContext()->ClearRenderTargetView(DXUTGetD3D11RenderTargetView(), m_backgroundColor);
 
-		//
-		// Clear the depth buffer to 1.0 (max depth)
-		//
-		DXUTGetD3D11DeviceContext()->ClearDepthStencilView(DXUTGetD3D11DepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-	}
+	//DXUTGetD3D11DeviceContext()->ClearRenderTargetView(DXUTGetD3D11RenderTargetView(), m_backgroundColor);
+
+	int* width, *height, *x, *y;
+	glfwGetWindowSize(QuicksandEngine::g_pApp->GLFWWindow(), width, height);
+	glfwGetWindowPos(QuicksandEngine::g_pApp->GLFWWindow(), x, y);
+
+	glViewport(*x, *y, *width, *height);
+
+	//
+	// Clear the depth buffer to 1.0 (max depth)
+	//
+	//DXUTGetD3D11DeviceContext()->ClearDepthStencilView(DXUTGetD3D11DepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	glClearDepth(1.0f);
+	glClearBufferfv(GL_COLOR, 0, m_backgroundColor);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	return true;
 }
 
-bool D3DRenderer11::VPostRender(void)
+bool GLRenderer::VPostRender(void)
 {
 	return true;
 }
 
-
+/*
 
 //--------------------------------------------------------------------------------------
 // Helper for compiling shaders with D3DX11
 //--------------------------------------------------------------------------------------
-HRESULT D3DRenderer11::CompileShader(LPCSTR pSrcData, SIZE_T SrcDataLen, LPCSTR pFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+HRESULT GLRenderer::CompileShader(LPCSTR pSrcData, SIZE_T SrcDataLen, LPCSTR pFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
 
@@ -423,7 +471,7 @@ HRESULT D3DRenderer11::CompileShader(LPCSTR pSrcData, SIZE_T SrcDataLen, LPCSTR 
 }
 
 
-HRESULT D3DRenderer11::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+HRESULT GLRenderer::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
 
@@ -450,13 +498,13 @@ HRESULT D3DRenderer11::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPo
 
 	return S_OK;
 }
+*/
 
-
-void D3DRenderer11::VDrawLine(const vec3& from, const vec3& to, const Color& color)
+void GLRenderer::VDrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color)
 {
 	if (!m_pLineDrawer)
 	{
-		m_pLineDrawer = QSE_NEW D3DLineDrawer11();
+		m_pLineDrawer = QSE_NEW GLLineDrawer();
 		m_pLineDrawer->OnRestore();
 
 
@@ -467,15 +515,15 @@ void D3DRenderer11::VDrawLine(const vec3& from, const vec3& to, const Color& col
 
 
 
-shared_ptr<IRenderState> D3DRenderer11::VPrepareAlphaPass()
+shared_ptr<IRenderState> GLRenderer::VPrepareAlphaPass()
 {
-	return shared_ptr<IRenderState>(QSE_NEW D3DRendererAlphaPass11());
+	return shared_ptr<IRenderState>(QSE_NEW GLRenderPass());
 }
 
 
-shared_ptr<IRenderState> D3DRenderer11::VPrepareSkyBoxPass()
+shared_ptr<IRenderState> GLRenderer::VPrepareSkyBoxPass()
 {
-	return shared_ptr<IRenderState>(QSE_NEW D3DRendererSkyBoxPass11());
+	return shared_ptr<IRenderState>(QSE_NEW GLRenderSkyBox());
 }
 
 

@@ -5,8 +5,9 @@
 #include "Geometry.hpp"
 #include "../ResourceCache/ResCache.hpp"
 #include "SceneNode.hpp"
+#include "Buffer.hpp"
 
-/**/
+/*
 struct GLMeshData
 {
 	Vec3Array mVertexArray;
@@ -38,57 +39,55 @@ struct GLMeshHandles
 //NOTE: THIS IS DESIGNED TO ONLY LOAD ONE OBJECT, NOT a whole scene
 //there will be a seperate loader for generating a whole tree MAYBE
 
-class GL3dsMeshResourceExtraData : public IResourceExtraData
+class GLObjMeshResourceExtraData : public IResourceExtraData
 {
-	friend class _3dsMeshResourceLoader;
+	friend class ObjMeshResourceLoader;
 
 public:
-	GL3dsMeshResourceExtraData(){};
-	virtual ~GL3dsMeshResourceExtraData(){}
-	virtual std::string VToString() { return "GL3dsResourceExtraData"; }
+	GLObjMeshResourceExtraData(){};
+	virtual ~GLObjMeshResourceExtraData(){}
+	virtual std::string VToString() { return "GLobjResourceExtraData"; }
 
 protected:
 
-	GLMeshHandles mData;
-	GLMeshData    mMemData;
-
-	Material mMaterial;
+	GLVertexArrayPtr mData;
+	GLUniformBufferPtr mUniforms;
 };
 
-class _3dsMeshResourceLoader : public IResourceLoader
+class ObjMeshResourceLoader : public IResourceLoader
 {
 public:
 	virtual bool VUseRawFile() { return false; }
 	virtual bool VDiscardRawBufferAfterLoad() { return false; }
 	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize);
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
-	virtual std::string VGetPattern() { return "*.mesh.3ds"; }
+	virtual std::string VGetPattern() { return "*.obj"; }
 };
 
 //////////////////////////////////////////////////////////////////////////////////
 
 /*
 //this recursively loads 
-class GL3dsSceneResourceExtraData : public IResourceExtraData
+class GLobjSceneResourceExtraData : public IResourceExtraData
 {
-	friend class _3dsSceneResourceLoader;
+	friend class _objSceneResourceLoader;
 
 public:
-	GL3dsSceneResourceExtraData(){};
-	virtual ~GL3dsSceneResourceExtraData(){}
-	virtual std::string VToString() { return "GL3dsSceneResourceExtraData"; }
+	GLobjSceneResourceExtraData(){};
+	virtual ~GLobjSceneResourceExtraData(){}
+	virtual std::string VToString() { return "GLobjSceneResourceExtraData"; }
 
 	//store a list of meshExtra data
-	GL3dsMeshResourceExtraData m_Nodes;
+	GLObjMeshResourceExtraData m_Nodes;
 };*/
-
+/*
 struct GLMeshBarebones
 {
 	Vec3Array mVertexArray;
 	GLIndexArray mIndexArray;
 
 	GLMeshBarebones(GLMeshData mesh) : mVertexArray(mesh.mVertexArray), mIndexArray(mesh.mIndexArray){}
-};
+};*/
 
 
 class GLMeshNode : public SceneNode
@@ -98,7 +97,7 @@ public:
 		WeakBaseRenderComponentPtr renderComponent,
 		std::string FileName,
 		RenderPass renderPass,
-		const mat4 *t);
+		const glm::mat4 *t);
 
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VOnLostDevice(Scene *pScene) { return S_OK; }

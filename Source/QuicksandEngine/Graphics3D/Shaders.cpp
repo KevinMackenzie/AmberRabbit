@@ -595,7 +595,7 @@ void GLShaderManager::SetProgramInBuffer(GLProgramPtr program, ShaderInputType i
 	glUseProgram(0);
 }
 
-void GLShaderManager::SetProgramUniform(GLProgramPtr program, ShaderUniformType uniformType, mat4 matrix)
+void GLShaderManager::SetProgramUniform(GLProgramPtr program, ShaderUniformType uniformType, glm::mat4 matrix)
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, program->mUniformBuffId);
 	glUniformMatrix4fv(uniformType, 1, GL_FALSE, matrix);
@@ -627,4 +627,3 @@ void GLShaderManager::UseProgram(GLProgramPtr program) const
 {
 	glUseProgram(program->mProgramId);
 }
-

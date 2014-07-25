@@ -320,7 +320,7 @@ string ToStr(bool val)
     return (string( (val == true ? "true" : "false") ));
 }
 
-string ToStr(const vec3& vec)
+string ToStr(const glm::vec3& vec)
 {
     return string("(" + ToStr(vec.x) + "," + ToStr(vec.y) + "," + ToStr(vec.z) + ")");
 }

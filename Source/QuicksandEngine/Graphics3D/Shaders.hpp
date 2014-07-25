@@ -145,13 +145,14 @@ public:
 	void UseProgram(string programName) const;
 	void UseProgram(GLProgramPtr program) const;
 
+
 	//for setting things up
 
 	void SetProgramInBuffer(GLProgramPtr program, ShaderInputType inType, GLuint bufferId, GLuint vao);
 	void SetProgramInBuffer(GLProgramPtr program, GLuint BufferId, GLuint vao, GLuint location){};//TODO:
 
 
-	void SetProgramUniform(GLProgramPtr program, ShaderUniformType uniformType, mat4 matrix);
+	void SetProgramUniform(GLProgramPtr program, ShaderUniformType uniformType, glm::mat4 matrix);
 	void SetProgramUniform(GLProgramPtr program, GLuint uniformId, GLuint location){};//TODO:
 
 	void SetProgramMaterial(GLProgramPtr program, Material mat);
@@ -162,7 +163,7 @@ public:
 	~GLShaderManager(){};
 };
 
-#define ShaderManager QuicksandEngine::g_pApp->m_ShaderManager
+#define ShaderManager static_pointer_cast<GLRenderer>(QuicksandEngine::g_pApp->m_Renderer)->mShaderManager
 
 
 /*

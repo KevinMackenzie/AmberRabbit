@@ -21,7 +21,7 @@ MovementController::MovementController(shared_ptr<SceneNode> object, float initi
 	m_maxSpeed = 30.0f;			// 30 meters per second
 	m_currentSpeed = 0.0f;
 
-	vec3 pos = GetPosition(m_matToWorld);
+	glm::vec3 pos = GetPosition(m_matToWorld);
 
 	m_matPosition = translate(m_matPosition, pos);
 
@@ -101,7 +101,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 	//	// This code is a cheat to position the camera exactly in a given
 	//	// spot so I can take screen shots!
 
-	//	mat4 camTranslate;
+	//	glm::mat4 camTranslate;
 	//	D3DXMatrixTranslation(&m_matPosition, 8.847f, 7.055f, 11.618f);
 
 	//	m_fTargetYaw = m_fYaw += -64.35f;
@@ -109,7 +109,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 
 	//	// Calculate the new rotation matrix from the camera
 	//	// yaw and pitch.
-	//	mat4 matRot;
+	//	glm::mat4 matRot;
 	//	D3DXMatrixRotationYawPitchRoll(&matRot, DEGREES_TO_RADIANS(m_fYaw), DEGREES_TO_RADIANS(m_fPitch), 0);
 
 	//	// Create the new object-to-world matrix, and the
@@ -122,15 +122,15 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 	//}
 
 	bool bTranslating = false;
-	vec4 atWorld(0, 0, 0, 0);
-	vec4 rightWorld(0, 0, 0, 0);
-	vec4 upWorld(0, 0, 0, 0);
+	glm::vec4 atWorld(0, 0, 0, 0);
+	glm::vec4 rightWorld(0, 0, 0, 0);
+	glm::vec4 upWorld(0, 0, 0, 0);
 
 	if (m_bKey['W'] || m_bKey['S'])
 	{
 		// In D3D, the "look at" default is always
 		// the positive Z axis.
-		vec4 at = g_Forward4;
+		glm::vec4 at = g_Forward4;
 		if (m_bKey['S'])
 			at *= -1;
 
@@ -145,7 +145,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 	{
 		// In D3D, the "right" default is always
 		// the positive X axis.
-		vec4 right = g_Right4;
+		glm::vec4 right = g_Right4;
 		if (m_bKey['A'])
 			right *= -1;
 
@@ -160,7 +160,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 	{
 		// In D3D, the "up" default is always
 		// the positive Y axis.
-		vec4 up = g_Right4;
+		glm::vec4 up = g_Right4;
 		if (!m_bKey[' '])
 			up *= -1;
 
@@ -180,7 +180,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 
 		// Calculate the new rotation matrix from the camera
 		// yaw and pitch.
-		mat4 matRot;
+		glm::mat4 matRot;
 		BuildYawPitchRoll(matRot, DEGREES_TO_RADIANS(-m_fYaw), DEGREES_TO_RADIANS(m_fPitch), 0);
 
 		// Create the new object-to-world matrix, and the
@@ -195,7 +195,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 	{
 		float elapsedTime = (float)deltaMilliseconds / 1000.0f;
 
-		vec3 direction = vec3(atWorld + rightWorld + upWorld);
+		glm::vec3 direction = glm::vec3(atWorld + rightWorld + upWorld);
 		direction = normalize(direction);
 
 		// Ramp the acceleration by the elapsed time.
@@ -206,7 +206,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 
 		direction *= m_currentSpeed;
 
-		vec3 pos = GetPosition(m_matPosition) + direction;
+		glm::vec3 pos = GetPosition(m_matPosition) + direction;
 		SetPosition(m_matPosition,pos);
 		SetPosition(m_matToWorld, pos);
 

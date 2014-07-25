@@ -5,10 +5,10 @@
 #include "Interfaces.hpp"
 #include "../Utilities/Types.hpp"
 
-#include "../Mainloop/Initialization.h"
-#include "../GameCode4/BaseGameLogic.h"
-#include "../Graphics3D/SceneNodes.h"
-#include "../UserInterface/UserInterface.h"
+#include "../Mainloop/Initialization.hpp"
+#include "../GameLogic/BaseGameLogic.hpp"
+#include "../Graphics3D/SceneNode.hpp"
+#include "../UserInterface/UserInterface.hpp"
 
 class FontHandler;
 class BaseUI;
@@ -37,6 +37,7 @@ protected:
 	bool m_bIsEditorRunning;				// true if the game editor is running
 
 	GLFWwindow *m_pWindow; //this is the window
+	HCURSOR m_pCursor;
 
 public:
 
@@ -69,7 +70,7 @@ public:
 	HINSTANCE GetInstance() { return m_hInstance; }
 	virtual bool InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWND hWnd = NULL, int screenWidth = SCREEN_WIDTH, int screenHeight = SCREEN_HEIGHT);
 
-	static LRESULT CALLBACK MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void *pUserContext);
+	static LRESULT CALLBACK MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	bool HasModalDialog() { return m_HasModalDialog != 0; }
 	void ForceModalExit() { PostMessage(GetHwnd(), g_MsgEndModal, 0, g_QuitNoPrompt); }
 
@@ -93,10 +94,13 @@ public:
 
 
 	shared_ptr<IRenderer> m_Renderer;
-	GLShaderManager m_ShaderManager;
 
 	//GLFW Specific Stuff
 	GLFWwindow* GLFWWindow(){ return m_pWindow; }
+
+	static void GLFWErrorFunc(int error, const char* description);
+
+	void GLFrameRender(double fTime, double elapsedTime);
 
 	//OpenGL Specific Stuff
 
@@ -117,8 +121,10 @@ public:
 	static void CALLBACK OnD3D11DestroyDevice(void* pUserContext);
 	static void CALLBACK OnD3D11FrameRender(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pd3dImmediateContext, double fTime, float fElapsedTime, void* pUserContext);
 
-	static bool CALLBACK ModifyDeviceSettings(DXUTDeviceSettings* pDeviceSettings, void* pUserContext);
-	static void CALLBACK OnUpdateGame(double fTime, float fElapsedTime, void *pUserContext);*/
+	static bool CALLBACK ModifyDeviceSettings(DXUTDeviceSettings* pDeviceSettings, void* pUserContext);*/
+	
+	
+	static void OnUpdateGame(double fTime, float fElapsedTime);
 
 
 	// GameCode Specific Stuff
@@ -152,7 +158,7 @@ public:
 
 	// Main loop processing
 	void AbortGame() { m_bQuitting = true; }
-	int GetExitCode() { return (); }
+	int GetExitCode() { return 0;/*for now*/ }
 	bool IsRunning() { return m_bIsRunning; }
 	void SetQuitting(bool quitting) { m_bQuitting = quitting; }
 

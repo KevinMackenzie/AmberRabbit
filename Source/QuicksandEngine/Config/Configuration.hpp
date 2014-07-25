@@ -21,7 +21,7 @@ public:
 	//some useful helper methods for geting configuration options
 	//ALL of them will throw an exception in the case of an invalid config key
 
-	string GetConfigElement(string key);
+	string GetElement(string key);
 	
 };
 

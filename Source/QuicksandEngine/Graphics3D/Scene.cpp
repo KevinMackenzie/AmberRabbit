@@ -26,6 +26,8 @@ Scene::Scene(shared_ptr<IRenderer> renderer)
 	m_Renderer = renderer;
 	m_LightManager = QSE_NEW LightManager;
 
+	BufferManager.m_pMatrixStack = m_MatrixStack;
+
 	// [mrmike] - event delegates were added post-press
 	IEventManager* pEventMgr = IEventManager::Get();
 	pEventMgr->VAddListener(MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
@@ -198,7 +200,7 @@ void Scene::MoveActorDelegate(IEventDataPtr pEventData)
 	shared_ptr<EvtData_Move_Actor> pCastEventData = static_pointer_cast<EvtData_Move_Actor>(pEventData);
 
 	ActorId id = pCastEventData->GetId();
-	mat4 transform = pCastEventData->GetMatrix();
+	glm::mat4 transform = pCastEventData->GetMatrix();
 
 	shared_ptr<ISceneNode> pNode = FindActor(id);
 	if (pNode)

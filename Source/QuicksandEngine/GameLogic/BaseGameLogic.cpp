@@ -211,7 +211,7 @@ void BaseGameLogic::VSetProxy()
 }
 
 
-StrongActorPtr BaseGameLogic::VCreateActor(const std::string &actorResource, XMLElement* overrides, const mat4* initialTransform, const ActorId serversActorId)
+StrongActorPtr BaseGameLogic::VCreateActor(const std::string &actorResource, XMLElement* overrides, const glm::mat4* initialTransform, const ActorId serversActorId)
 {
 	LOG_ASSERT(m_pActorFactory);
 	if (!m_bProxy && serversActorId != INVALID_ACTOR_ID)

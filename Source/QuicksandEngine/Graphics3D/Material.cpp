@@ -94,13 +94,12 @@ shared_ptr<IResourceLoader> CreatePNGResourceLoader()
 
 
 GLTextureResourceExtraData::GLTextureResourceExtraData()
-	: m_Texture(NULL)
+	: m_pTexture(nullptr)
 {
 }
 
 GLTextureResourceExtraData::~GLTextureResourceExtraData()
 {
-	glDeleteTextures(1, &m_Texture);
 }
 
 ILenum GetTextureType(std::string pattern)
@@ -151,9 +150,9 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 	unsigned int texHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 
 	int bytesPerPixel = ilGetInteger(IL_IMAGE_BPP);
-	if (bytesPerPixel != 3)
+	if (!(bytesPerPixel == 3 || bytesPerPixel == 4))
 	{
-		LOG_ERROR("Loading image failed. Must be 24 bits/pixels.");
+		LOG_ERROR("Loading image failed. Must be 24/32 bits/pixels.");
 		return false;
 	}
 
@@ -173,14 +172,13 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 	//NO, there will be ONE... ONE sampler that is in the renderer
 
 	//make this openGL
-	glGenTextures(1, &extra->m_Texture);
-	glBindTexture(GL_TEXTURE_2D, extra->m_Texture);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, texWidth, texHeight);
+	extra->m_pTexture = BufferManager.CreateTextureBuffer();
+	BufferManager.BufferTexture(extra->m_pTexture, texWidth  * texHeight * 4 * sizeof(unsigned char), data);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 
-	handle->SetExtra(shared_ptr<GLTextureResourceExtraData>(extra));
+	handle->SetExtra(extra);
 	return true;
 }
 
@@ -189,9 +187,13 @@ bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 	shared_ptr<GLTextureResourceExtraData> extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
 	//GLI only does .dds's
 
+	//make a special exception for .dds's, let them load themselves 
+
+	GLuint texId;
 	gli::texture2D Texture(gli::load_dds_memory(rawData, rawSize));
 	assert(!Texture.empty());
-	glBindTexture(GL_TEXTURE_2D, extra->m_Texture);
+	glGenTextures(1, &texId);
+	glBindTexture(GL_TEXTURE_2D, texId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, GLint(Texture.levels() - 1));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED);
@@ -234,6 +236,7 @@ bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	extra->m_pTexture = BufferManager.CreateTexture(texId);
 	handle->SetExtra(extra);
 	return true;
 }

@@ -11,12 +11,12 @@ bool TransformComponent::VInit(XMLElement* pData)
 	// [mrmike] - this was changed post-press - because changes to the TransformComponents can come in partial definitions,
 	//            such as from the editor, its better to grab the current values rather than clear them out.
     
-	vec3 yawPitchRoll = GetYawPitchRoll(m_transform);
+	glm::vec3 yawPitchRoll = GetYawPitchRoll(m_transform);
 	yawPitchRoll.x = RADIANS_TO_DEGREES(yawPitchRoll.x);
 	yawPitchRoll.y = RADIANS_TO_DEGREES(yawPitchRoll.y);
 	yawPitchRoll.z = RADIANS_TO_DEGREES(yawPitchRoll.z);
 
-	vec3 position = ::GetPosition(m_transform);
+	glm::vec3 position = ::GetPosition(m_transform);
 
     XMLElement* pPositionElement = pData->FirstChildElement("Position");
     if (pPositionElement)
@@ -27,7 +27,7 @@ bool TransformComponent::VInit(XMLElement* pData)
 		x = std::stod(pPositionElement->Attribute("x"));
 		y = std::stod(pPositionElement->Attribute("y"));
 		z = std::stod(pPositionElement->Attribute("z"));
-        position = vec3(x, y, z);
+        position = glm::vec3(x, y, z);
     }
 
     XMLElement* pOrientationElement = pData->FirstChildElement("YawPitchRoll");
@@ -39,14 +39,14 @@ bool TransformComponent::VInit(XMLElement* pData)
 		yaw = std::stod(pOrientationElement->Attribute("yaw"));
 		pitch = std::stod(pOrientationElement->Attribute("pitch"));
 		roll = std::stod(pOrientationElement->Attribute("roll"));
-		yawPitchRoll = vec3(yaw, pitch, roll);
+		yawPitchRoll = glm::vec3(yaw, pitch, roll);
 	}
 
-	mat4 translation = translate(translation, position);
+	glm::mat4 translation = translate(translation, position);
 
-	mat4 rotation;
-	quat tmpQuat = quat(vec3((float)DEGREES_TO_RADIANS(yawPitchRoll.x), (float)DEGREES_TO_RADIANS(yawPitchRoll.y), (float)DEGREES_TO_RADIANS(yawPitchRoll.z)));
-	rotation = rotate(rotation, tmpQuat.w, vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
+	glm::mat4 rotation;
+	quat tmpQuat = quat(glm::vec3((float)DEGREES_TO_RADIANS(yawPitchRoll.x), (float)DEGREES_TO_RADIANS(yawPitchRoll.y), (float)DEGREES_TO_RADIANS(yawPitchRoll.z)));
+	rotation = rotate(rotation, tmpQuat.w, glm::vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
 
 	/**
 	// This is not supported yet.
@@ -60,7 +60,7 @@ bool TransformComponent::VInit(XMLElement* pData)
         pLookAtElement->Attribute("y", &y);
         pLookAtElement->Attribute("z", &z);
 
-		vec3 lookAt((float)x, (float)y, (float)z);
+		glm::vec3 lookAt((float)x, (float)y, (float)z);
 		rotation.BuildRotationLookAt(translation.GetPosition(), lookAt, g_Up);
     }
 
@@ -73,7 +73,7 @@ bool TransformComponent::VInit(XMLElement* pData)
         pScaleElement->Attribute("x", &x);
         pScaleElement->Attribute("y", &y);
         pScaleElement->Attribute("z", &z);
-        m_scale = vec3((float)x, (float)y, (float)z);
+        m_scale = glm::vec3((float)x, (float)y, (float)z);
     }
 	**/
 
@@ -88,7 +88,7 @@ XMLElement* TransformComponent::VGenerateXml(XMLDocument* pDoc)
 
     // initial transform -> position
 	XMLElement* pPosition = pDoc->NewElement("Position");
-    vec3 pos(::GetPosition(m_transform));
+    glm::vec3 pos(::GetPosition(m_transform));
     pPosition->SetAttribute("x", ToStr(pos.x).c_str());
     pPosition->SetAttribute("y", ToStr(pos.y).c_str());
     pPosition->SetAttribute("z", ToStr(pos.z).c_str());
@@ -96,7 +96,7 @@ XMLElement* TransformComponent::VGenerateXml(XMLDocument* pDoc)
 
     // initial transform -> LookAt
 	XMLElement* pDirection = pDoc->NewElement("YawPitchRoll");
-	vec3 orient(GetYawPitchRoll(m_transform));
+	glm::vec3 orient(GetYawPitchRoll(m_transform));
 	orient.x = RADIANS_TO_DEGREES(orient.x);
 	orient.y = RADIANS_TO_DEGREES(orient.y);
 	orient.z = RADIANS_TO_DEGREES(orient.z);

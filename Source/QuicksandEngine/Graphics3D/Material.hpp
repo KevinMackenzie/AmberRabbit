@@ -54,16 +54,16 @@ class GLTextureResourceExtraData : public IResourceExtraData
 	friend class DdsResourceLoader;
 
 public:
-	GLTextureResourceExtraData() : m_Texture(0){}
-	virtual ~GLTextureResourceExtraData(){ glDeleteTextures(1, &m_Texture); };
+	GLTextureResourceExtraData();
+	virtual ~GLTextureResourceExtraData();
 	virtual std::string VToString() { return "GLTextureResourceExtraData"; }
 
-	GLuint GetTextureUniformLocation() { return m_Texture; }
+	GLTexturePtr GetTexture() { return m_pTexture; }
 
 	//NOTE: all sampling is a config element that is accessed by the renderer
 protected:
 
-	GLuint m_Texture;
+	GLTexturePtr m_pTexture;
 };
 
 

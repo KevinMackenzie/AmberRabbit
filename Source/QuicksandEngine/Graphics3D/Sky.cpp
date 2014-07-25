@@ -17,7 +17,7 @@
 // SkyNode::SkyNode						- Chapter 16, page 554
 //
 SkyNode::SkyNode(const char *pTextureBaseName)
-	: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &mat4())
+	: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &glm::mat4())
 	, m_bActive(true)
 {
 	m_textureBaseName = pTextureBaseName;
@@ -28,9 +28,9 @@ SkyNode::SkyNode(const char *pTextureBaseName)
 //
 HRESULT SkyNode::VPreRender(Scene *pScene)
 {
-	vec3 cameraPos = m_camera->VGet()->ToWorld().GetPosition();
-	mat4 mat = m_Props.ToWorld();
-	SetPosition(mat,cameraPos);
+	glm::vec3 cameraPos = ::GetPosition(m_camera->VGet()->ToWorld());
+	glm::mat4 mat = m_Props.ToWorld();
+	::SetPosition(mat,cameraPos);
 	VSetTransform(&mat);
 
 	return SceneNode::VPreRender(pScene);
@@ -46,9 +46,6 @@ HRESULT SkyNode::VPreRender(Scene *pScene)
 GLSkyNode::GLSkyNode(const char *pTextureBaseName)
 	: SkyNode(pTextureBaseName)
 {
-	m_IndexBuffer = 0;
-	m_VertexBuffer = 0;
-	m_TextureVertBuffer = 0;
 }
 
 //
@@ -56,9 +53,6 @@ GLSkyNode::GLSkyNode(const char *pTextureBaseName)
 //
 GLSkyNode::~GLSkyNode()
 {
-	glDeleteBuffers(1, &m_IndexBuffer);
-	glDeleteBuffers(1, &m_VertexBuffer);
-	glDeleteBuffers(1, &m_TextureVertBuffer);
 }
 
 
@@ -74,8 +68,8 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	m_camera = pScene->GetCamera();
 
 	//TODO: onRestore for shader classes
-	V_RETURN(m_pShaderProgram.OnRestore(pScene));
-	V_RETURN(m_PixelShader.OnRestore(pScene));
+	/*V_RETURN(m_pShaderProgram.OnRestore(pScene));
+	V_RETURN(m_PixelShader.OnRestore(pScene));*/
 
 	m_numVerts = 20;
 
@@ -97,55 +91,61 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	Color skyVertColor = g_White;
 	float dim = 50.0f;
 
-	m_VertexBufferData.resize(4); m_TextureVertBufferData.resize(4);
-	m_VertexBufferData[0] = vec3(dim, dim, dim);   m_TextureVertBufferData[0] = vec2(1.0f, 0.0f);
-	m_VertexBufferData[1] = vec3(-dim, dim, dim);  m_TextureVertBufferData[1] = vec2(0.0f, 0.0f);
-	m_VertexBufferData[2] = vec3(dim, -dim, dim);  m_TextureVertBufferData[2] = vec2(1.0f, 1.0f);
-	m_VertexBufferData[3] = vec3(-dim, -dim, dim); m_TextureVertBufferData[3] = vec2(0.0f, 1.0f);
+	GLVAOData data = BufferManager.MapVertexArray(m_pVertexArray);
 
-	vec3 triangle[3];
-	triangle[0] = vec3(0.f, 0.f, 0.f);
-	triangle[1] = vec3(5.f, 0.f, 0.f);
-	triangle[2] = vec3(5.f, 5.f, 0.f);
+	data.mPositions->resize(4); data.mUVCoords->resize(4);
+	(*data.mPositions)[0] = glm::vec3(dim, dim, dim);   (*data.mUVCoords)[0] = glm::vec2(1.0f, 0.0f);
+	(*data.mPositions)[1] = glm::vec3(-dim, dim, dim);  (*data.mUVCoords)[1] = glm::vec2(0.0f, 0.0f);
+	(*data.mPositions)[2] = glm::vec3(dim, -dim, dim);  (*data.mUVCoords)[2] = glm::vec2(1.0f, 1.0f);
+	(*data.mPositions)[3] = glm::vec3(-dim, -dim, dim); (*data.mUVCoords)[3] = glm::vec2(0.0f, 1.0f);
 
-	vec3 edge1 = triangle[1] - triangle[0];
-	vec3 edge2 = triangle[2] - triangle[0];
+	glm::vec3 triangle[3];
+	triangle[0] = glm::vec3(0.f, 0.f, 0.f);
+	triangle[1] = glm::vec3(5.f, 0.f, 0.f);
+	triangle[2] = glm::vec3(5.f, 5.f, 0.f);
 
-	vec3 normal;
-	normal = cross(edge1,edge2);
-	normal.Normalize();
+	glm::vec3 edge1 = triangle[1] - triangle[0];
+	glm::vec3 edge2 = triangle[2] - triangle[0];
 
-	mat4 rotY;
-	rotY.BuildRotationY(AR_PI / 2.0f);
-	mat4 rotX;
-	rotX.BuildRotationX(-AR_PI / 2.0f);
+	glm::vec3 normal;
+	normal = glm::cross(edge1,edge2);
+	normal = glm::normalize(normal);
 
+	glm::mat4 rotY;
+	rotY = BuildRotationY(AR_PI / 2.0f);
+	glm::mat4 rotX;
+	rotX = BuildRotationX(-AR_PI / 2.0f);
+	
 	m_sides = 5;
 
+	//glm::vec3 skyVerts[4] = {};
+	data.mPositions->resize(m_sides * 4);
 	for (DWORD side = 0; side < m_sides; side++)
 	{
 		for (DWORD v = 0; v < 4; v++)
 		{
-			vec4 temp;
+			DWORD sv = (side * 4) + v;
+
+			glm::vec3 temp;
 			if (side < m_sides - 1)
 			{
-				temp = Xform(rotY,vec3(skyVerts[v].Pos));
+				temp = Xform(rotY,(*data.mPositions)[sv]);
 			}
 			else
 			{
-				skyVerts[0].Uv = vec2(1.0f, 1.0f);
-				skyVerts[1].Uv = vec2(1.0f, 1.0f);
-				skyVerts[2].Uv = vec2(1.0f, 1.0f);
-				skyVerts[3].Uv = vec2(1.0f, 1.0f);
+				(*data.mUVCoords)[sv]     = glm::vec2(1.0f, 1.0f);
+				(*data.mUVCoords)[sv + 1] = glm::vec2(1.0f, 1.0f);
+				(*data.mUVCoords)[sv + 2] = glm::vec2(1.0f, 1.0f);
+				(*data.mUVCoords)[sv + 3] = glm::vec2(1.0f, 1.0f);
 
-				temp = Xform(rotX, vec3(skyVerts[v].Pos));
+				temp = Xform(rotX, (*data.mPositions)[sv]);
 			}
-			skyVerts[v].Pos = vec3(temp);
+			(*data.mPositions)[sv] = temp;
 		}
-		memcpy(&pVertices[side * 4], skyVerts, sizeof(skyVerts));
+		//memcpy(&pVertices[side * 4], skyVerts, sizeof(skyVerts));
 	}
 
-	//TODO: start here
+	/*
 	//create the buffers
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
@@ -163,7 +163,8 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	glBindBuffer(GL_VERTEX_ARRAY, m_TextureVertBuffer);
 	glBufferStorage(GL_VERTEX_ARRAY, m_TextureVertBufferData.size() * 2 * sizeof(GLfloat), m_TextureVertBufferData.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_VERTEX_ARRAY, 0);
-
+	*/	
+	
 	// Loop through the grid squares and calc the values
 	// of each index. Each grid square has two triangles:
 	//
@@ -188,13 +189,16 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 		current += 6;
 	}
 
-	m_IndexBufferData = ArrToVec(pIndices, m_sides * 2 * 3);
-
+	(*data.mIndicies) = ArrToVec(pIndices, m_sides * 2 * 3);
+	
 	//now the indicies
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
 	glBufferStorage(GL_ELEMENT_ARRAY_BUFFER, m_sides * 2 * 3 * sizeof(GLfloat), m_IndexBufferData.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	SAFE_DELETE_ARRAY(pIndices);
+	SAFE_DELETE_ARRAY(pIndices);*/
+
+
+	BufferManager.UnMapVertexArray(m_pVertexArray);
 
 
 	return S_OK;
@@ -208,11 +212,11 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 	HRESULT hr;
 
 	//TODO:
-	V_RETURN(m_VertexShader.SetupRender(pScene, this));
-	V_RETURN(m_PixelShader.SetupRender(pScene, this));
+	//V_RETURN(m_VertexShader.SetupRender(pScene, this));
+	//V_RETURN(m_PixelShader.SetupRender(pScene, this));
 
 	// Set vertex buffer
-	UINT stride = sizeof(D3D11Vertex_UnlitTextured);
+	/*UINT stride = sizeof(D3D11Vertex_UnlitTextured);
 	UINT offset = 0;
 	DXUTGetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
@@ -221,7 +225,7 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 
 	// Set primitive topology
 	DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+	*/
 	for (DWORD side = 0; side < m_sides; side++)
 	{
 		// FUTURTE WORK: A good optimization would be to transform the camera's
@@ -237,10 +241,18 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 		name += suffix[side];
 		****/
 
+		//TODO: set this up correctly AND WITH TEXTURES
+		MatrixTransformBlock block(pScene->GetTopMatrix(), m_camera->GetView, m_camera->GetProjection());
+		BufferManager.ModifyUniformMatrix(m_pUniformBuffer, block);
+		ShaderManager.UseProgram(m_pShaderProgram);
+		BufferManager.DrawVertexArray(m_pVertexArray);
+		BufferManager.ResetBufferBindings();
+
+		/*
 		std::string name = GetTextureName(side);
 		m_PixelShader.SetTexture(name.c_str());
 
-		DXUTGetD3D11DeviceContext()->DrawIndexed(6, side * 6, 0);
+		DXUTGetD3D11DeviceContext()->DrawIndexed(6, side * 6, 0);*/
 	}
 	return S_OK;
 }

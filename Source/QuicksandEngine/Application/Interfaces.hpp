@@ -88,13 +88,13 @@ class IGameLogic
 {
 public:
 	virtual WeakActorPtr VGetActor(const ActorId id)=0;
-    virtual StrongActorPtr VCreateActor(const std::string &actorResource, XMLElement *overrides, const mat4 *initialTransform=NULL, const ActorId serversActorId=INVALID_ACTOR_ID)=0;
+    virtual StrongActorPtr VCreateActor(const std::string &actorResource, XMLElement *overrides, const glm::mat4 *initialTransform=NULL, const ActorId serversActorId=INVALID_ACTOR_ID)=0;
     virtual void VDestroyActor(const ActorId actorId)=0;
 	virtual bool VLoadGame(const char* levelResource)=0;
 	virtual void VSetProxy()=0;				
 	virtual void VOnUpdate(float time, float elapsedTime)=0;
 	virtual void VChangeState(enum BaseGameState newState)=0;
-	virtual void VMoveActor(const ActorId id, mat4 const &mat)=0;
+	virtual void VMoveActor(const ActorId id, glm::mat4 const &mat)=0;
 	virtual shared_ptr<IGamePhysics> VGetGamePhysics(void) = 0;
 };
 
@@ -268,12 +268,12 @@ public:
 	virtual bool VPreRender()=0;
 	virtual bool VPostRender()=0;
 	virtual void VCalcLighting(Lights *lights, int maximumLights)=0;
-	virtual void VSetWorldTransform(const mat4 *m)=0;
-	virtual void VSetViewTransform(const mat4 *m)=0;
-	virtual void VSetProjectionTransform(const mat4 *m)=0;
+	virtual void VSetWorldTransform(const glm::mat4 *m)=0;
+	virtual void VSetViewTransform(const glm::mat4 *m)=0;
+	virtual void VSetProjectionTransform(const glm::mat4 *m)=0;
 	virtual shared_ptr<IRenderState> VPrepareAlphaPass()=0;
 	virtual shared_ptr<IRenderState> VPrepareSkyBoxPass()=0;
-	virtual void VDrawLine(const vec3& from,const vec3& to,const Color& color)=0;
+	virtual void VDrawLine(const glm::vec3& from,const glm::vec3& to,const Color& color)=0;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -287,7 +287,7 @@ class ISceneNode
 public:
 	virtual const SceneNodeProperties * const VGet() const=0;
 
-	virtual void VSetTransform(const mat4 *toWorld, const mat4 *fromWorld=NULL)=0;
+	virtual void VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWorld=NULL)=0;
 
 	virtual HRESULT VOnUpdate(Scene *pScene, DWORD const elapsedMs)=0;
 	virtual HRESULT VOnRestore(Scene *pScene)=0;
@@ -325,32 +325,32 @@ public:
 	virtual void VOnUpdate( float deltaSeconds ) = 0; 
 
 	// Initialization of Physics Objects
-	virtual void VAddSphere(float radius, WeakActorPtr actor, /*const mat4& initialTransform, */const std::string& densityStr, const std::string& physicsMaterial)=0;
-	virtual void VAddBox(const vec3& dimensions, WeakActorPtr gameActor, /*const mat4& initialTransform, */ const std::string& densityStr, const std::string& physicsMaterial) = 0;
-	virtual void VAddPointCloud(vec3 *verts, int numPoints, WeakActorPtr gameActor, /*const mat4& initialTransform, */ const std::string& densityStr, const std::string& physicsMaterial)=0;
+	virtual void VAddSphere(float radius, WeakActorPtr actor, /*const glm::mat4& initialTransform, */const std::string& densityStr, const std::string& physicsMaterial)=0;
+	virtual void VAddBox(const glm::vec3& dimensions, WeakActorPtr gameActor, /*const glm::mat4& initialTransform, */ const std::string& densityStr, const std::string& physicsMaterial) = 0;
+	virtual void VAddPointCloud(glm::vec3 *verts, int numPoints, WeakActorPtr gameActor, /*const glm::mat4& initialTransform, */ const std::string& densityStr, const std::string& physicsMaterial)=0;
 	virtual void VRemoveActor(ActorId id)=0;
 
 	// Debugging
 	virtual void VRenderDiagnostics() = 0;
 
 	// Physics world modifiers
-	virtual void VCreateTrigger(WeakActorPtr pGameActor, const vec3 &pos, const float dim)=0;
-	virtual void VApplyForce(const vec3 &dir, float newtons, ActorId aid)=0;
-	virtual void VApplyTorque(const vec3 &dir, float newtons, ActorId aid)=0;
-	virtual bool VKinematicMove(const mat4 &mat, ActorId aid)=0;
+	virtual void VCreateTrigger(WeakActorPtr pGameActor, const glm::vec3 &pos, const float dim)=0;
+	virtual void VApplyForce(const glm::vec3 &dir, float newtons, ActorId aid)=0;
+	virtual void VApplyTorque(const glm::vec3 &dir, float newtons, ActorId aid)=0;
+	virtual bool VKinematicMove(const glm::mat4 &mat, ActorId aid)=0;
 	
 	// Physics actor states
 	virtual void VRotateY(ActorId actorId, float angleRadians, float time) = 0;
 	virtual float VGetOrientationY(ActorId actorId) = 0;
 	virtual void VStopActor(ActorId actorId) = 0;
-    virtual vec3 VGetVelocity(ActorId actorId) = 0;
-	virtual void VSetVelocity(ActorId actorId, const vec3& vel) = 0;
-    virtual vec3 VGetAngularVelocity(ActorId actorId) = 0;
-    virtual void VSetAngularVelocity(ActorId actorId, const vec3& vel) = 0;
-	virtual void VTranslate(ActorId actorId, const vec3& vec) = 0;
+    virtual glm::vec3 VGetVelocity(ActorId actorId) = 0;
+	virtual void VSetVelocity(ActorId actorId, const glm::vec3& vel) = 0;
+    virtual glm::vec3 VGetAngularVelocity(ActorId actorId) = 0;
+    virtual void VSetAngularVelocity(ActorId actorId, const glm::vec3& vel) = 0;
+	virtual void VTranslate(ActorId actorId, const glm::vec3& vec) = 0;
 
-    virtual void VSetTransform(const ActorId id, const mat4& mat) = 0;
-    virtual mat4 VGetTransform(const ActorId id) = 0;
+    virtual void VSetTransform(const ActorId id, const glm::mat4& mat) = 0;
+    virtual glm::mat4 VGetTransform(const ActorId id) = 0;
 
 	virtual ~IGamePhysics() { };
 };

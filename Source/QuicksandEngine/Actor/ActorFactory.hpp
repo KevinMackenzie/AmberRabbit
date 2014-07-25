@@ -15,7 +15,7 @@ protected:
 public:
     ActorFactory(void);
 
-    StrongActorPtr CreateActor(const char* actorResource, XMLElement* overrides, const mat4* initialTransform, const ActorId serversActorId);
+    StrongActorPtr CreateActor(const char* actorResource, XMLElement* overrides, const glm::mat4* initialTransform, const ActorId serversActorId);
 	void ModifyActor(StrongActorPtr pActor, XMLElement* overrides);
 
 //protected:

@@ -4,7 +4,7 @@
 #include "../Actor/RenderComponent.hpp"
 
 
-LightNode::LightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const LightProperties &props, const mat4 *t)
+LightNode::LightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const LightProperties &props, const glm::mat4 *t)
 	: SceneNode(actorId, renderComponent, RenderPass_NotRendered, t)
 {
 	m_LightProps = props;
@@ -38,11 +38,11 @@ void LightManager::CalcLighting(Scene *pScene)
 		{
 			// Light 0 is the only one we use for ambient lighting. The rest are ignored in the simple shaders used for GameCode4.
 			Color ambient = light->VGet()->GetMaterial().GetAmbient();
-			m_vLightAmbient = vec4(ambient.r, ambient.g, ambient.b, 1.0f);
+			m_vLightAmbient = glm::vec4(ambient.r, ambient.g, ambient.b, 1.0f);
 		}
 
-		vec3 lightDir = light->GetDirection();
-		m_vLightDir[count] = vec4(lightDir.x, lightDir.y, lightDir.z, 1.0f);
+		glm::vec3 lightDir = light->GetDirection();
+		m_vLightDir[count] = glm::vec4(lightDir.x, lightDir.y, lightDir.z, 1.0f);
 		m_vLightDiffuse[count] = light->VGet()->GetMaterial().GetDiffuse();
 	}
 }
@@ -54,8 +54,8 @@ void LightManager::CalcLighting(ConstantBuffer_Lighting* pLighting, SceneNode *p
 	if (count)
 	{
 		pLighting->m_vLightAmbient = *GetLightAmbient(pNode);
-		memcpy(pLighting->m_vLightDir, GetLightDirection(pNode), sizeof(vec4) * count);
-		memcpy(pLighting->m_vLightDiffuse, GetLightDiffuse(pNode), sizeof(vec4) * count);
+		memcpy(pLighting->m_vLightDir, GetLightDirection(pNode), sizeof(glm::vec4) * count);
+		memcpy(pLighting->m_vLightDiffuse, GetLightDiffuse(pNode), sizeof(glm::vec4) * count);
 		pLighting->m_nNumLights = count;
 	}
 }

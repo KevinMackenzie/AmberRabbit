@@ -582,7 +582,7 @@ float Interpolate(float normalizedValue, float begin, float end)
 //
 // void MapYDeadZone								- Chapter 9, page 258
 //
-void MapYDeadZone(vec3 &input, float deadZone)
+void MapYDeadZone(glm::vec3 &input, float deadZone)
 {
 	if (deadZone>=1.0f)
 		return;
@@ -638,9 +638,9 @@ float AngleDiff( float lhs, float rhs )
 // the Y component of the returned vector will always be 0.  This function is used by the AI system which doesn't
 // care about orientation along any other axis.
 //-------------------------------------------------------------------------------------------------------------------
-vec3 GetVectorFromYRotation(float angleRadians)
+glm::vec3 GetVectorFromYRotation(float angleRadians)
 {
-	vec3 lookAt;
+	glm::vec3 lookAt;
 	WrapPi(angleRadians);
 	lookAt.x = cos(angleRadians);
 	lookAt.y = 0;
@@ -654,9 +654,9 @@ vec3 GetVectorFromYRotation(float angleRadians)
 // axis so the Y component of the look-at vector is ignored.  This function is used by the AI system which doesn't
 // care about orientation along any other axis.
 //-------------------------------------------------------------------------------------------------------------------
-float GetYRotationFromVector(const vec3& lookAt)
+float GetYRotationFromVector(const glm::vec3& lookAt)
 {
-	vec3 zUnit(0.f,0.f,1.f);  // 0 orientation means staring down the positive Z axis
+	glm::vec3 zUnit(0.f,0.f,1.f);  // 0 orientation means staring down the positive Z axis
     float angle = (atan2(lookAt.z,-lookAt.x) - atan2(zUnit.z,zUnit.x));
 	return Wrap2Pi(angle);
 }

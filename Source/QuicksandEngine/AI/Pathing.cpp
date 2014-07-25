@@ -28,7 +28,7 @@ float PathingNode::GetCostFromNode(PathingNode* pFromNode)
 	LOG_ASSERT(pFromNode);
 	PathingArc* pArc = FindArc(pFromNode);
 	LOG_ASSERT(pArc);
-	vec3 diff = pFromNode->GetPos() - m_pos;
+	glm::vec3 diff = pFromNode->GetPos() - m_pos;
 	return pArc->GetWeight() * length(diff);
 }
 
@@ -72,12 +72,12 @@ PathingNode* PathingArc::GetNeighbor(PathingNode* pMe)
 //--------------------------------------------------------------------------------------------------------
 // PathPlan
 //--------------------------------------------------------------------------------------------------------
-bool PathPlan::CheckForNextNode(const vec3& pos)
+bool PathPlan::CheckForNextNode(const glm::vec3& pos)
 {
 	if (m_index == m_path.end())
 		return false;
 
-	vec3 diff = pos - (*m_index)->GetPos();
+	glm::vec3 diff = pos - (*m_index)->GetPos();
 	
 	// DEBUG dump target orientation
 	//wchar_t str[64];  // I'm sure this is overkill
@@ -138,7 +138,7 @@ void PathPlanNode::UpdateHeuristics(void)
 		m_goal = 0;
 
 	// heuristic (h)
-	vec3 diff = m_pPathingNode->GetPos() - m_pGoalNode->GetPos();
+	glm::vec3 diff = m_pPathingNode->GetPos() - m_pGoalNode->GetPos();
 	m_heuristic = length(diff);
 
 	// cost to goal (f)
@@ -375,7 +375,7 @@ void PathingGraph::DestroyGraph(void)
 	m_arcs.clear();
 }
 
-PathingNode* PathingGraph::FindClosestNode(const vec3& pos)
+PathingNode* PathingGraph::FindClosestNode(const glm::vec3& pos)
 {
 	// This is a simple brute-force O(n) algorithm that could be made a LOT faster by utilizing
 	// spatial partitioning, like an octree (or quadtree for flat worlds) or something similar.
@@ -384,7 +384,7 @@ PathingNode* PathingGraph::FindClosestNode(const vec3& pos)
 	for (PathingNodeVec::iterator it = m_nodes.begin(); it != m_nodes.end(); ++it)
 	{
 		PathingNode* pNode = *it;
-		vec3 diff = pos - pNode->GetPos();
+		glm::vec3 diff = pos - pNode->GetPos();
 		if (::length(diff) < length)
 		{
 			pClosestNode = pNode;
@@ -395,7 +395,7 @@ PathingNode* PathingGraph::FindClosestNode(const vec3& pos)
 	return pClosestNode;
 }
 
-PathingNode* PathingGraph::FindFurthestNode(const vec3& pos)
+PathingNode* PathingGraph::FindFurthestNode(const glm::vec3& pos)
 {
 	// This is a simple brute-force O(n) algorithm that could be made a LOT faster by utilizing
 	// spatial partitioning, like an octree (or quadtree for flat worlds) or something similar.
@@ -404,7 +404,7 @@ PathingNode* PathingGraph::FindFurthestNode(const vec3& pos)
 	for (PathingNodeVec::iterator it = m_nodes.begin(); it != m_nodes.end(); ++it)
 	{
 		PathingNode* pNode = *it;
-		vec3 diff = pos - pNode->GetPos();
+		glm::vec3 diff = pos - pNode->GetPos();
 		if (::length(diff) > length)
 		{
 			pFurthestNode = pNode;
@@ -442,7 +442,7 @@ PathingNode* PathingGraph::FindRandomNode(void)
 	}
 }
 
-PathPlan* PathingGraph::FindPath(const vec3& startPoint, const vec3& endPoint)
+PathPlan* PathingGraph::FindPath(const glm::vec3& startPoint, const glm::vec3& endPoint)
 {
 	// Find the closest nodes to the start and end points.  There really should be some ray-casting 
 	// to ensure that we can actually make it to the closest node, but this is good enough for now.
@@ -451,13 +451,13 @@ PathPlan* PathingGraph::FindPath(const vec3& startPoint, const vec3& endPoint)
 	return FindPath(pStart,pGoal);
 }
 
-PathPlan* PathingGraph::FindPath(const vec3& startPoint, PathingNode* pGoalNode)
+PathPlan* PathingGraph::FindPath(const glm::vec3& startPoint, PathingNode* pGoalNode)
 {
 	PathingNode* pStart = FindClosestNode(startPoint);
 	return FindPath(pStart,pGoalNode);
 }
 
-PathPlan* PathingGraph::FindPath(PathingNode* pStartNode, const vec3& endPoint)
+PathPlan* PathingGraph::FindPath(PathingNode* pStartNode, const glm::vec3& endPoint)
 {
 	PathingNode* pGoal = FindClosestNode(endPoint);
 	return FindPath(pStartNode,pGoal);
@@ -487,7 +487,7 @@ void PathingGraph::BuildTestGraph(void)
 		for (float z = -45.0f; z < 45.0f; z += 10.0f)
 		{
 			// add the new node
-			PathingNode* pNode = new PathingNode(vec3(x,0,z));
+			PathingNode* pNode = new PathingNode(glm::vec3(x,0,z));
 			m_nodes.push_back(pNode);
 			
 			// link it to the previous node

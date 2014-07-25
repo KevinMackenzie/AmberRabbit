@@ -79,7 +79,7 @@ public:
 	static void AttachScriptProcess(LuaPlus::LuaObject scriptProcess);
 
     // math
-    static float GetYRotationFromvector(LuaPlus::LuaObject vec3);
+    static float GetYRotationFromvector(LuaPlus::LuaObject glm::vec3);
     static float WrapPi(float wrapMe);
     static LuaPlus::LuaObject GetvectorFromRotation(float angleRadians);
 
@@ -324,12 +324,12 @@ int InternalScriptExports::CreateActor(const char* actorArchetype, LuaPlus::LuaO
 		return INVALID_ACTOR_ID;
 	}
 
-	vec3 pos(luaPosition["x"].GetFloat(), luaPosition["y"].GetFloat(), luaPosition["z"].GetFloat());
-	vec3 ypr(luaYawPitchRoll["x"].GetFloat(), luaYawPitchRoll["y"].GetFloat(), luaYawPitchRoll["z"].GetFloat());
+	glm::vec3 pos(luaPosition["x"].GetFloat(), luaPosition["y"].GetFloat(), luaPosition["z"].GetFloat());
+	glm::vec3 ypr(luaYawPitchRoll["x"].GetFloat(), luaYawPitchRoll["y"].GetFloat(), luaYawPitchRoll["z"].GetFloat());
 
-	mat4 initialTransform;
+	glm::mat4 initialTransform;
 	quat tmpQuat = quat(ypr);
-	initialTransform = rotate(initialTransform, tmpQuat.w, vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
+	initialTransform = rotate(initialTransform, tmpQuat.w, glm::vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
 	initialTransform = translate(initialTransform, pos);
 
 	XMLElement *overloads = NULL;
@@ -357,7 +357,7 @@ float InternalScriptExports::GetYRotationFromvector(LuaPlus::LuaObject _vec3)
 {
 	if (_vec3.IsTable())
     {
-		vec3 lookAtt(_vec3["x"].GetFloat(), _vec3["y"].GetFloat(), _vec3["z"].GetFloat());
+		glm::vec3 lookAtt(_vec3["x"].GetFloat(), _vec3["y"].GetFloat(), _vec3["z"].GetFloat());
 		return ::GetYRotationFromVector(lookAtt);
     }
 
@@ -369,7 +369,7 @@ float InternalScriptExports::GetYRotationFromvector(LuaPlus::LuaObject _vec3)
 
 LuaPlus::LuaObject InternalScriptExports::GetvectorFromRotation(float angleRadians)
 {
-	vec3 result = ::GetVectorFromYRotation(angleRadians);
+	glm::vec3 result = ::GetVectorFromYRotation(angleRadians);
     LuaPlus::LuaObject luaResult;
     luaResult.AssignNewTable(LuaStateManager::Get()->GetLuaState());
     luaResult.SetNumber("x", result.x);
@@ -403,7 +403,7 @@ void InternalScriptExports::ApplyForce(LuaPlus::LuaObject normalDirLua, float fo
 {
     if (normalDirLua.IsTable())
     {
-        vec3 normalDir(normalDirLua["x"].GetFloat(), normalDirLua["y"].GetFloat(), normalDirLua["z"].GetFloat());
+        glm::vec3 normalDir(normalDirLua["x"].GetFloat(), normalDirLua["y"].GetFloat(), normalDirLua["z"].GetFloat());
 		QuicksandEngine::g_pApp->m_pGame->VGetGamePhysics()->VApplyForce(normalDir, force, actorId);
 		return;
     }
@@ -414,7 +414,7 @@ void InternalScriptExports::ApplyTorque(LuaPlus::LuaObject axisLua, float force,
 {
     if (axisLua.IsTable())
     {
-        vec3 axis(axisLua["x"].GetFloat(), axisLua["y"].GetFloat(), axisLua["z"].GetFloat());
+        glm::vec3 axis(axisLua["x"].GetFloat(), axisLua["y"].GetFloat(), axisLua["z"].GetFloat());
 		QuicksandEngine::g_pApp->m_pGame->VGetGamePhysics()->VApplyTorque(axis, force, actorId);
 		return;
     }

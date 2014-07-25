@@ -174,11 +174,11 @@ bool Intersect(const Rect &rect, const Point &center, double const radius);
 float WrapPi(float wrapMe);  // wraps angle so it's between -PI and PI
 float Wrap2Pi(float wrapMe);  // wraps angle so it's between 0 and 2PI
 float AngleDiff( float lhs, float rhs );
-vec3 GetVectorFromYRotation(float angleRadians);
-float GetYRotationFromVector(const vec3& lookAt);
+glm::vec3 GetVectorFromYRotation(float angleRadians);
+float GetYRotationFromVector(const glm::vec3& lookAt);
 
 //This is a set of methods to accompany GLM that I cannot find an sutible presets
-inline void SetPosition(mat4& param, vec3 const &pos)
+inline void SetPosition(glm::mat4& param, glm::vec3 const &pos)
 {
 	param[3][0] = pos.x;
 	param[3][1] = pos.y;
@@ -186,49 +186,49 @@ inline void SetPosition(mat4& param, vec3 const &pos)
 	param[3][3] = 1.0f;
 }
 
-inline vec3 Xform(const mat4& param, vec3 &v)
+inline glm::vec3 Xform(const glm::mat4& param, glm::vec3 &v)
 {
-	return vec3(vec4(v, 1.0f) * param);
+	return glm::vec3(glm::vec4(v, 1.0f) * param);
 }
 
-inline vec4 Xform(const mat4& param, vec4 &v)
+inline glm::vec4 Xform(const glm::mat4& param, glm::vec4 &v)
 {
-	return vec4(vec4(v) * param);
+	return glm::vec4(glm::vec4(v) * param);
 }
 
-inline vec3 GetPosition(const mat4& param)
+inline glm::vec3 GetPosition(const glm::mat4& param)
 {
-	return vec3(param[3][0], param[3][1], param[3][2]);
+	return glm::vec3(param[3][0], param[3][1], param[3][2]);
 }
 
-inline vec3 GetDirection(const mat4& param)
+inline glm::vec3 GetDirection(const glm::mat4& param)
 {
 	// Note - the following code can be used to double check the vector construction above.
-	mat4 justRot = param;
-	SetPosition(justRot, vec3());
-	vec3 forward = Xform(justRot, g_Forward);
+	glm::mat4 justRot = param;
+	SetPosition(justRot, glm::vec3());
+	glm::vec3 forward = Xform(justRot, g_Forward);
 	return forward;
 }
 
-inline vec3 GetRight(const mat4& param)
+inline glm::vec3 GetRight(const glm::mat4& param)
 {
 	// Note - the following code can be used to double check the vector construction above.
-	mat4 justRot = param;
-	SetPosition(justRot, vec3());
-	vec3 right = Xform(justRot, g_Right);
+	glm::mat4 justRot = param;
+	SetPosition(justRot, glm::vec3());
+	glm::vec3 right = Xform(justRot, g_Right);
 	return right;
 }
 
-inline vec3 GetUp(const mat4& param)
+inline glm::vec3 GetUp(const glm::mat4& param)
 {
 	// Note - the following code can be used to double check the vector construction above.
-	mat4 justRot = param;
-	SetPosition(justRot, vec3());
-	vec3 up = Xform(justRot, g_Up);
+	glm::mat4 justRot = param;
+	SetPosition(justRot, glm::vec3());
+	glm::vec3 up = Xform(justRot, g_Up);
 	return up;
 }
 
-inline vec3 GetYawPitchRoll(const mat4& param)
+inline glm::vec3 GetYawPitchRoll(const glm::mat4& param)
 {
 	float yaw, pitch, roll;
 
@@ -248,7 +248,7 @@ inline vec3 GetYawPitchRoll(const mat4& param)
 		yaw = 0.0;
 	}
 
-	return (vec3(yaw, pitch, roll));
+	return (glm::vec3(yaw, pitch, roll));
 }
 
 

@@ -1,13 +1,13 @@
 #include "../Stdafx.hpp"
 #include "MatrixStack.hpp"
 
-void GLMatrixStack::Push(const mat4& matrix)
+void GLMatrixStack::Push(const glm::mat4& matrix)
 {
 	if (mStack.size() != 0)
 	{
 		//if there are already things on the stack, instead of multiplying through EVERY TIME TOP IS CALLED, make it more efficient 
 		//so the top is ALWAYS a concatination
-		mat4 transformed = matrix * Top();
+		glm::mat4 transformed = matrix * Top();
 
 		mStack.push(transformed);
 	}
@@ -22,7 +22,7 @@ void GLMatrixStack::Pop(void)
 	mStack.pop();
 }
 
-const mat4& GLMatrixStack::Top(void)
+const glm::mat4& GLMatrixStack::Top(void)
 {
 	return mStack.top();
 }

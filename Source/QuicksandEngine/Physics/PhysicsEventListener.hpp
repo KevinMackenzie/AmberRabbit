@@ -102,8 +102,8 @@ class EvtData_PhysCollision : public ScriptEvent
 {
 	ActorId m_ActorA;
     ActorId m_ActorB;
-	vec3 m_SumNormalForce;
-    vec3 m_SumFrictionForce;
+	glm::vec3 m_SumNormalForce;
+    glm::vec3 m_SumFrictionForce;
     Vec3List m_CollisionPoints;
 
 public:
@@ -118,14 +118,14 @@ public:
 	{
 		m_ActorA = INVALID_ACTOR_ID;
 		m_ActorB = INVALID_ACTOR_ID;
-		m_SumNormalForce = vec3(0.0f, 0.0f, 0.0f);
-		m_SumFrictionForce = vec3(0.0f, 0.0f, 0.0f);
+		m_SumNormalForce = glm::vec3(0.0f, 0.0f, 0.0f);
+		m_SumFrictionForce = glm::vec3(0.0f, 0.0f, 0.0f);
 	}
 
 	explicit EvtData_PhysCollision(ActorId actorA,
 								ActorId actorB,
-								vec3 sumNormalForce,
-								vec3 sumFrictionForce,
+								glm::vec3 sumNormalForce,
+								glm::vec3 sumFrictionForce,
 								Vec3List collisionPoints )
 		: m_ActorA(actorA),
 		m_ActorB(actorB),
@@ -154,12 +154,12 @@ public:
         return m_ActorB;
     }
 
-    const vec3& GetSumNormalForce(void) const
+    const glm::vec3& GetSumNormalForce(void) const
     {
         return m_SumNormalForce;
     }
 
-    const vec3& GetSumFrictionForce(void) const
+    const glm::vec3& GetSumFrictionForce(void) const
     {
         return m_SumFrictionForce;
     }

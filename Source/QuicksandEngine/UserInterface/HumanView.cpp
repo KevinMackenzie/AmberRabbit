@@ -42,7 +42,7 @@ HumanView::HumanView(shared_ptr<IRenderer> renderer)
 
 		Frustum frustum;
 		frustum.Init(AR_PI/4.0f, 1.0f, 1.0f, 100.0f);
-		m_pCamera.reset(QSE_NEW CameraNode(&mat4::g_Identity, frustum));
+		m_pCamera.reset(QSE_NEW CameraNode(&glm::mat4::g_Identity, frustum));
 		LOG_ASSERT(m_pScene && m_pCamera && _T("Out of memory"));
 
 		m_pScene->VAddChild(INVALID_ACTOR_ID, m_pCamera);
@@ -324,7 +324,7 @@ void HumanView::VRemoveElement(shared_ptr<IScreenElement> pElement)
 //
 //   Sets a camera offset, useful for making a 1st person or 3rd person game
 //
-void HumanView::VSetCameraOffset(const vec4 & camOffset )
+void HumanView::VSetCameraOffset(const glm::vec4 & camOffset )
 {
 	LOG_ASSERT(m_pCamera);
 	if (m_pCamera)
@@ -483,8 +483,8 @@ void HumanView::Console::Render( )
 	}
 
 	GLRenderer_Base::g_pTextHelper->Begin();
-	const vec4 white( 1.0f, 1.0f, 1.0f, 1.0f );
-	const vec4 black( 0.0f, 0.0f, 0.0f, 1.0f );
+	const glm::vec4 white( 1.0f, 1.0f, 1.0f, 1.0f );
+	const glm::vec4 black( 0.0f, 0.0f, 0.0f, 1.0f );
 	RECT inputTextRect, outputTextRect, shadowRect;
 
 	//Display the console text at screen top, below the other text displayed.
