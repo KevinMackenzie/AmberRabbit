@@ -7,7 +7,7 @@
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 
-// Note: Light color is stored in the Material structure, which is already present in all SceneNodes.
+// Note: Light color is stored in the GLUFMaterial structure, which is already present in all SceneNodes.
 
 //
 // struct LightProperties				- Chapter 16, page 551

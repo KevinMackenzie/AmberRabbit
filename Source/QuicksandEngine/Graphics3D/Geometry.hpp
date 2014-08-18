@@ -19,7 +19,7 @@ public:
 	glm::vec3 normal;
 	GLfloat distance;
 
-	inline void Normalize();
+	inline void normalize();
 
 	// normal faces away from you if you send in verts in counter clockwise order....
 	inline void Init(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2);
@@ -27,24 +27,24 @@ public:
 	bool Inside(const glm::vec3 &point) const;
 };
 
-inline void Plane::Normalize()
+inline void Plane::normalize()
 {
 	float mag;
-	mag = glm::sqrt(dot(normal,normal));
+	mag = glm::sqrt(glm::dot(normal,normal));
 	normal /= mag;
 	distance /= mag;
 }
 
 inline void Plane::Init(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2)
 {
-	normal = cross(p1 - p0, p2 - p0);
-	distance = dot(normal, p0);
-	Normalize();
+	normal = glm::cross(p1 - p0, p2 - p0);
+	distance = glm::dot(normal, p0);
+	normalize();
 }
 
 inline GLfloat PlaneDotCoord(const Plane &plane, const glm::vec3 &vec)
 {
-	return dot(plane.normal, vec) + plane.distance;
+	return glm::dot(plane.normal, vec) + plane.distance;
 }
 
 

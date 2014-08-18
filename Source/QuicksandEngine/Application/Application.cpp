@@ -1,8 +1,21 @@
 #include "../Stdafx.hpp"
 
+#pragma comment(lib, "BulletCollision_debug.lib")
+#pragma comment(lib, "BulletDynamics_debug.lib")
+#pragma comment(lib, "BulletSoftBody_debug.lib")
+#pragma comment(lib, "BulletSoftBodyDX11Solvers_debug.lib")
+#pragma comment(lib, "ConvexDecomposition_debug.lib")
+#pragma comment(lib, "effects11.lib")
+#pragma comment(lib, "HACD_debug.lib")
+#pragma comment(lib, "LinearMath_debug.lib")
+#pragma comment(lib, "OpenGLSupport_debug.lib")
 
+void glufErrorMethod(const char* message, const char* funcName, const char* sourceFile, unsigned int lineNum)
+{
 
-INT WINAPI GameCode4(HINSTANCE hInstance,
+}
+
+INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPWSTR    lpCmdLine,
 	int       nCmdShow)
@@ -42,10 +55,11 @@ INT WINAPI GameCode4(HINSTANCE hInstance,
 	// device created/destroyed callbacks then the sample framework won't be able to 
 	// recreate your device resources.
 
-	glfwSetErrorCallback(QuicksandEngineApp::GLFWErrorFunc);
-	if (!glfwInit())
+	
+	GLUFRegisterErrorMethod(glufErrorMethod);
+	if (!GLUFInit())
 	{
-		LOG_ERROR("Glfw Initialization Failed!");
+		return false;
 	}
 
 	//DXUTSetCallbackMsgProc(GameCodeApp::MsgProc);

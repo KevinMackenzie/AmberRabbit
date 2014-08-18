@@ -525,7 +525,7 @@ bool BaseSocketManager::Init()
 		return true;
 	else
 	{
-		GCC_ERROR("WSAStartup failure!");
+		LOG_ERROR("WSAStartup failure!");
 		return false;
 	}
 }
@@ -905,7 +905,7 @@ void RemoteEventSocket::VHandleInput()
 				}
 
 				default:
-					GCC_ERROR("Unknown message type.");
+					LOG_ERROR("Unknown message type.");
 			}
 		}
 		else if (!strcmp(packet->VGetType(), TextPacket::g_Type))
@@ -934,7 +934,7 @@ void RemoteEventSocket::CreateEvent(std::istrstream &in)
     }
     else
     {
-        GCC_ERROR("ERROR Unknown event type from remote: 0x" + ToStr(eventType, 16));
+        LOG_ERROR("ERROR Unknown event type from remote: 0x" + ToStr(eventType, 16));
     }
 }
 

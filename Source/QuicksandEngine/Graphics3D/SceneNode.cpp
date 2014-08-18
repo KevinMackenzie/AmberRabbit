@@ -1104,7 +1104,7 @@ HRESULT TestObject::VOnRestore(Scene *pScene)
 		glm::vec3 a = v->position - (v + 1)->position;
 		glm::vec3 b = (v + 2)->position - (v + 1)->position;
 
-		glm::vec3 cross = a.Cross(b);
+		glm::vec3 cross = a.glm::cross(b);
 		cross /= cross.Length();
 		v->normal = cross;
 		(v + 1)->normal = cross;

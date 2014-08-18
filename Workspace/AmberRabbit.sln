@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8B9805
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ObjGLUF", "ObjGLUF\ObjGLUF.vcxproj", "{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -28,6 +30,14 @@ Global
 		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|Win32.Build.0 = Release|Win32
 		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|x64.ActiveCfg = Release|x64
 		{76F97A8B-C1C5-4294-B716-D3FD3AACB099}.Release|x64.Build.0 = Release|x64
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Debug|Win32.ActiveCfg = Debug|Win32
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Debug|Win32.Build.0 = Debug|Win32
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Debug|x64.ActiveCfg = Debug|x64
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Debug|x64.Build.0 = Debug|x64
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Release|Win32.ActiveCfg = Release|Win32
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Release|Win32.Build.0 = Release|Win32
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Release|x64.ActiveCfg = Release|x64
+		{06DDD1C2-D673-4A97-ABA7-C5C1DD72C875}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -41,16 +41,6 @@
 class Actor;
 class ActorComponent;
 
-typedef unsigned int ActorId;
-typedef unsigned int ComponentId;
-
-const ActorId INVALID_ACTOR_ID = 0;
-const ComponentId INVALID_COMPONENT_ID = 0;
-
-typedef shared_ptr<Actor> StrongActorPtr;
-typedef weak_ptr<Actor> WeakActorPtr;
-typedef shared_ptr<ActorComponent> StrongActorComponentPtr;
-typedef weak_ptr<ActorComponent> WeakActorComponentPtr;
 
 template<class T>
 struct SortBy_SharedPtr_Content
@@ -75,7 +65,7 @@ public:
 	virtual bool VIsVisible() const = 0;
 	virtual void VSetVisible(bool visible) = 0;
 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg )=0;
+	virtual LRESULT VOnMsgProc( AppMsg msg )=0;
 
 	virtual ~IScreenElement() { };
 	virtual bool const operator <(IScreenElement const &other) { return VGetZOrder() < other.VGetZOrder(); }

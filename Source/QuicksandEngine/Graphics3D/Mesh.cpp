@@ -8,6 +8,7 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "Material.hpp"
 
 #include <IL/ilut.h>
 
@@ -47,7 +48,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 	const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_SortByPType, "");
 	
 	//create the vertex array pointer (empty)
-	extraData->mData = BufferManager.CreateVertexArray(0, nullptr, nullptr, nullptr, nullptr, 0);
+	extraData->mData = GLUFBUFFERMANAGER.CreateVertexArray();
 
 	if (scene->HasMeshes() == true && scene->HasMaterials() == true)
 	{
@@ -57,7 +58,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 		}
 		if (scene->mNumMaterials > 1)
 		{
-			LOG_WARNING("Loaded File with more than one Material, Skipping all other materials");
+			LOG_WARNING("Loaded File with more than one GLUFMaterial, Skipping all other materials");
 		}
 
 		aiMesh* pMesh = scene->mMeshes[0];
@@ -66,18 +67,18 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 			LOG_ERROR("Loading mesh without required components");
 		}
 
-		unsigned int *faceArray;
-		faceArray = (unsigned int *)malloc(sizeof(unsigned int) * pMesh->mNumFaces * 3);
+		GLushort *faceArray;
+		faceArray = (GLushort *)malloc(sizeof(GLushort) * pMesh->mNumFaces * 3);
 		unsigned int faceIndex = 0;
 
-		for (unsigned int t = 0; t < pMesh->mNumFaces; ++t) {
+		for (GLushort t = 0; t < pMesh->mNumFaces; ++t) {
 			const aiFace* face = &pMesh->mFaces[t];
 
-			memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(unsigned int));
+			memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(GLushort));
 			faceIndex += 3;
 		}
 
-		GLVAOData dat = BufferManager.MapVertexArray(extraData->mData);
+		GLUFVAOData dat = GLUFBUFFERMANAGER.MapVertexArray(extraData->mData);
 
 		//get the data into the memory
 		for (unsigned int i = 0; i < pMesh->mNumVertices; ++i)
@@ -87,9 +88,9 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 			dat.mUVCoords->push_back(Aivec3ToVec2(pMesh->mTextureCoords[0][i]));
 		}
 
-		*dat.mIndicies = ArrToVec<unsigned int>(faceArray, pMesh->mNumFaces*3);
+		*dat.mIndicies = ArrToVec<GLushort>(faceArray, pMesh->mNumFaces*3);
 		
-		BufferManager.UnMapVertexArray(extraData->mData);
+		GLUFBUFFERMANAGER.UnMapVertexArray(extraData->mData);
 
 		//now put it in openGL,  (its already there this is gone)
 		/*
@@ -132,7 +133,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 
 		//now load the material (singular)
 		aiMaterial* pMat = scene->mMaterials[0];
-		Material mat;
+		GLUFMaterial mat;
 
 		//load the file name of the texture if it exists
 		aiString texPath;
@@ -142,7 +143,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 			//load the texture from the file
 			Resource resource(texPath.C_Str());
 			shared_ptr<ResHandle> pResourceHandle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);
-			mat.SetTexture(pResourceHandle);
+			mat.SetTexture(static_pointer_cast<GLTextureResourceExtraData>(pResourceHandle->GetExtra())->GetTexture());
 		}
 
 		aiColor4D tempColor;
@@ -169,7 +170,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 			mat.SetSpecular(AiColorToColor(tempColor), power);
 
 		//now load the material into the uniform buffer
-		BufferManager.ModifyUniformMaterial(extraData->mUniforms, mat);
+		GLUFBUFFERMANAGER.ModifyUniformMaterial(extraData->mUniforms, mat);
 
 		delete scene;
 		return true;

@@ -194,10 +194,10 @@ bool IntersectTriangle(const glm::vec3& orig, const glm::vec3& dir,
 	glm::vec3 edge2 = v2 - v0;
 
 	// Begin calculating determinant - also used to calculate U parameter
-	glm::vec3 pvec = cross(dir, edge2);
+	glm::vec3 pvec = glm::cross(dir, edge2);
 
 	// If determinant is near zero, ray lies in plane of triangle
-	GLfloat det = dot(edge1, pvec);
+	GLfloat det = glm::dot(edge1, pvec);
 
 	glm::vec3 tvec;
 	if (det > 0)
@@ -214,20 +214,20 @@ bool IntersectTriangle(const glm::vec3& orig, const glm::vec3& dir,
 		return FALSE;
 
 	// Calculate U parameter and test bounds
-	*u = dot(tvec, pvec);
+	*u = glm::dot(tvec, pvec);
 	if (*u < 0.0f || *u > det)
 		return FALSE;
 
 	// Prepare to test V parameter
-	glm::vec3 qvec = cross(tvec, edge1);
+	glm::vec3 qvec = glm::cross(tvec, edge1);
 
 	// Calculate V parameter and test bounds
-	*v = dot(dir, qvec);
+	*v = glm::dot(dir, qvec);
 	if (*v < 0.0f || *u + *v > det)
 		return FALSE;
 
 	// Calculate t, scale parameters, ray intersects triangle
-	*t = dot(edge2, qvec);
+	*t = glm::dot(edge2, qvec);
 	GLfloat fInvDet = 1.0f / det;
 	*t *= fInvDet;
 	*u *= fInvDet;

@@ -26,7 +26,7 @@ Scene::Scene(shared_ptr<IRenderer> renderer)
 	m_Renderer = renderer;
 	m_LightManager = QSE_NEW LightManager;
 
-	BufferManager.m_pMatrixStack = m_MatrixStack;
+	GLUFBUFFERMANAGER.m_pMatrixStack = m_MatrixStack;
 
 	// [mrmike] - event delegates were added post-press
 	IEventManager* pEventMgr = IEventManager::Get();

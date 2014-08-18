@@ -18,11 +18,11 @@ bool StringsManager::AddConfigElements(string pathToXml)
 
 	file.close();
 
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile(pathToXml.c_str());
+	gConfig.pDoc = new XMLDocument();
+	gConfig.pDoc->LoadFile(pathToXml.c_str());
 	//TODO: make username/password a config element but secure it in a good way
 
-	tinyxml2::XMLElement *root = doc.FirstChildElement("ROOT");//this is manditory
+	tinyxml2::XMLElement *root = gConfig.pDoc->FirstChildElement("ROOT");//this is manditory
 	
 	//now loop through all of the iterators
 	//this is a map, so to MYSQL->PORT will be MYSQL_PORT and so forth

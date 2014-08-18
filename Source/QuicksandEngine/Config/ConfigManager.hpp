@@ -18,6 +18,8 @@ class StringsManager
 public:
 	StringsManager(){}
 
+	XMLDocument* GetDocument(){ return gConfig.pDoc; }
+
 	//the three below functions are NOT MUTABLE IN ANY WAY
 
 	//how to add elements

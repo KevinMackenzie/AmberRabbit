@@ -42,7 +42,7 @@ HumanView::HumanView(shared_ptr<IRenderer> renderer)
 
 		Frustum frustum;
 		frustum.Init(AR_PI/4.0f, 1.0f, 1.0f, 100.0f);
-		m_pCamera.reset(QSE_NEW CameraNode(&glm::mat4::g_Identity, frustum));
+		m_pCamera.reset(QSE_NEW CameraNode(&glm::mat4(), frustum));
 		LOG_ASSERT(m_pScene && m_pCamera && _T("Out of memory"));
 
 		m_pScene->VAddChild(INVALID_ACTOR_ID, m_pCamera);

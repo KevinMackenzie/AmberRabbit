@@ -2,7 +2,7 @@
 #define AW_LOGGING_HPP
 
 #include <fstream>
-#include "../CritSec/CriticalSection.hpp"
+#include "../Multicore/CriticalSection.hpp"
 
 namespace AwLogging
 {

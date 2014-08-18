@@ -5,7 +5,6 @@
 #include "Geometry.hpp"
 #include "../ResourceCache/ResCache.hpp"
 #include "SceneNode.hpp"
-#include "Buffer.hpp"
 
 /*
 struct GLMeshData
@@ -24,7 +23,7 @@ struct GLMeshHandles
 	GLuint mUVArray;
 	GLuint mIndexArray;
 
-	Material mMaterial;
+	GLUFMaterial mMaterial;
 	//todo: support bones and animation
 
 	GLuint* operator*()
@@ -50,8 +49,8 @@ public:
 
 protected:
 
-	GLVertexArrayPtr mData;
-	GLUniformBufferPtr mUniforms;
+	GLUFVertexArrayPtr mData;
+	GLUFUniformBufferPtr mUniforms;
 };
 
 class ObjMeshResourceLoader : public IResourceLoader
@@ -107,7 +106,7 @@ public:
 protected:
 	shared_ptr<ResHandle> m_Data;
 
-	GLProgramPtr m_ShadingProgram;
+	GLUFProgramPtr m_ShadingProgram;
 
 	float CalcBoundingSphere();
 };

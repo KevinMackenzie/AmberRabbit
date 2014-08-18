@@ -13,7 +13,7 @@
 class GLRendererAlphaPass : public IRenderState
 {
 protected:
-	GLMatrixStack m_oldWorld;
+	GLUFMatrixStack m_oldWorld;
 	DWORD m_oldZWriteEnable;
 
 public:
@@ -24,7 +24,7 @@ public:
 
 GLRendererAlphaPass::GLRendererAlphaPass()
 {
-	m_oldWorld = BufferManager.GetMatrixStackState();
+	m_oldWorld = GLUFBUFFERMANAGER.GetMatrixStackState();
 	//DXUTGetD3D9Device()->GetTransform(D3DTS_WORLD, &m_oldWorld);
 	//DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
@@ -47,7 +47,7 @@ GLRendererAlphaPass::~GLRendererAlphaPass()
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, m_oldZWriteEnable);
 	DXUTGetD3D9Device()->SetTransform(D3DTS_WORLD, &m_oldWorld);*/
 
-	BufferManager.SetMatrixStackOverride(m_oldWorld);
+	GLUFBUFFERMANAGER.SetMatrixStackOverride(m_oldWorld);
 	glEnable(GL_DEPTH_BUFFER_BIT);
 }
 
@@ -370,11 +370,11 @@ void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Co
 	pVerts[1] = to;
 	DXUTGetD3D11DeviceContext()->Unmap(m_pVertexBuffer, 0);*/
 
-	GLVAOData data = BufferManager.MapVertexArray(m_pVertexBuffer);
+	GLVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_pVertexBuffer);
 	data.mPositions->resize(2);
 	(*data.mPositions)[0] = from;
 	(*data.mPositions)[1] = to;
-	BufferManager.UnMapVertexArray(m_pVertexBuffer);
+	GLUFBUFFERMANAGER.UnMapVertexArray(m_pVertexBuffer);
 
 	//DXUTGetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
@@ -383,7 +383,7 @@ void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Co
 	// Set primitive topology
 	//DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-	BufferManager.DrawVertexArray(m_pVertexBuffer, GL_LINES);
+	GLUFBUFFERMANAGER.DrawVertexArray(m_pVertexBuffer, GL_LINES);
 
 	//DXUTGetD3D11DeviceContext()->Draw(2, 0);
 }
@@ -403,7 +403,7 @@ HRESULT GLRenderer::VOnRestore()
 	HRESULT hr;
 	V_RETURN(GLRenderer_Base::VOnRestore());
 	//SAFE_DELETE(GLRenderer_Base::g_pTextHelper);
-	//D3DRenderer::g_pTextHelper = QSE_NEW CDXUTTextHelper(DXUTGetD3D11Device(), DXUTGetD3D11DeviceContext(), &g_DialogResourceManager, 15);
+	//GLRenderer_Base::g_pTextHelper = QSE_NEW CGLUTTextHelper(&g_DialogResourceManager, 15);
 
 	return S_OK;
 }

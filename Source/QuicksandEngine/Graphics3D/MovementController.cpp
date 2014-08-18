@@ -196,7 +196,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 		float elapsedTime = (float)deltaMilliseconds / 1000.0f;
 
 		glm::vec3 direction = glm::vec3(atWorld + rightWorld + upWorld);
-		direction = normalize(direction);
+		direction = glm::normalize(direction);
 
 		// Ramp the acceleration by the elapsed time.
 		float numberOfSeconds = 5.f;

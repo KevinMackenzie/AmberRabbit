@@ -1,47 +1,7 @@
-//========================================================================
-// PhysicsDebugDrawer.cpp - implements a physics debug drawer in DX9 
-//
-// Part of the GameCode4 Application
-//
-// GameCode4 is the sample application that encapsulates much of the source code
-// discussed in "Game Coding Complete - 4th Edition" by Mike McShaffry and David
-// "Rez" Graham, published by Charles River Media. 
-// ISBN-10: 1133776574 | ISBN-13: 978-1133776574
-//
-// If this source code has found it's way to you, and you think it has helped you
-// in any way, do the authors a favor and buy a new copy of the book - there are 
-// detailed explanations in it that compliment this code well. Buy a copy at Amazon.com
-// by clicking here: 
-//    http://www.amazon.com/gp/product/1133776574/ref=olp_product_details?ie=UTF8&me=&seller=
-//
-// There's a companion web site at http://www.mcshaffry.com/GameCode/
-// 
-// The source code is managed and maintained through Google Code: 
-//    http://code.google.com/p/gamecode4/
-//
-// (c) Copyright 2012 Michael L. McShaffry and David Graham
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser GPL v3
-// as published by the Free Software Foundation.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 
-// http://www.gnu.org/licenses/lgpl-3.0.txt for more details.
-//
-// You should have received a copy of the GNU Lesser GPL v3
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-//
-//========================================================================
-
-
-
 #include "../Stdafx.hpp"
 
-#include "PhysicsDebugDrawer.h"
-#include "../UserInterface/HumanView.h"
+#include "PhysicsDebugDrawer.hpp"
+#include "../UserInterface/HumanView.hpp"
 
 void BulletDebugDrawer::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
 {
@@ -56,7 +16,7 @@ void BulletDebugDrawer::drawContactPoint(const btVector3& PointOnB, const btVect
 
 void BulletDebugDrawer::reportErrorWarning(const char* warningString)
 {
-    GCC_WARNING(warningString);
+    LOG_WARNING(warningString);
 }
 
 void BulletDebugDrawer::draw3dText(const btVector3& location, const char* textString)
@@ -76,7 +36,7 @@ int BulletDebugDrawer::getDebugMode() const
 
 void BulletDebugDrawer::ReadOptions()
 {
-	TiXmlDocument *optionsDoc = g_pApp->m_Options.m_pDoc;
+	XMLDocument *optionsDoc = QuicksandEngine::g_pApp->mConfigManager.GetDocument();
 	XMLElement *pRoot = optionsDoc->RootElement();
     if (!pRoot)
 		return;
@@ -181,7 +141,7 @@ void BulletDebugDrawer::ReadOptions()
 
 void BulletDebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& lineColor)
 {
-	shared_ptr<Scene> pScene = g_pApp->GetHumanView()->m_pScene;
+	shared_ptr<Scene> pScene = QuicksandEngine::g_pApp->GetHumanView()->m_pScene;
 	shared_ptr<IRenderer> pRenderer = pScene->GetRenderer();
 
 	glm::vec3 vec3From, vec3To;
@@ -193,7 +153,7 @@ void BulletDebugDrawer::drawLine(const btVector3& from, const btVector3& to, con
 	vec3To.y = to.y();
 	vec3To.z = to.z();
 
-	Color color = D3DCOLOR_XRGB( BYTE(255*lineColor.x()), BYTE(255*lineColor.y()), BYTE(255*lineColor.z()) );
+	Color color = Color( BYTE(255*lineColor.x()), BYTE(255*lineColor.y()), BYTE(255*lineColor.z()), 1.0f );
 
 	pRenderer->VDrawLine(vec3From, vec3To, color);
 

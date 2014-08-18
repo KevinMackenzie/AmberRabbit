@@ -68,27 +68,35 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>f04ff451</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>fd54e30e</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
+    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
+    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
+    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
+    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,6 +105,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,6 +176,10 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\AI\Pathing.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\Interfaces.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\Audio.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SoundProcess.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SoundResource.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Config\ConfigManager.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Config\Configuration.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Debugging\Logging.hpp" />
@@ -174,18 +187,15 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\EventManager\Events.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.hpp" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Material.hpp" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Mesh.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MovementController.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.hpp" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaAutoBlock.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.h" />
@@ -271,6 +281,10 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\AI\Pathing.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Application\Application.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\Audio.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SoundProcess.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SoundResource.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Config\ConfigManager.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Config\Configuration.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Debugging\Logging.cpp" />
@@ -278,18 +292,15 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\EventManagerImpl.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\EventManager\Events.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Geometry.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Material.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Mesh.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MovementController.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp" />
@@ -368,6 +379,11 @@
     <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.inl" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObjGLUF\ObjGLUF.vcxproj">
+      <Project>{06ddd1c2-d673-4a97-aba7-c5c1dd72c875}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -385,6 +401,8 @@
     <Import Project="..\packages\DevIL.1.7.8\build\native\DevIL.targets" Condition="Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" />
     <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
     <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
+    <Import Project="..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets" Condition="Exists('..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" />
+    <Import Project="..\packages\libogg.1.3.0.1\build\native\libogg.targets" Condition="Exists('..\packages\libogg.1.3.0.1\build\native\libogg.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -405,5 +423,7 @@
     <Error Condition="!Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.1.7.8\build\native\DevIL.targets'))" />
     <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />
     <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
+    <Error Condition="!Exists('..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\libogg.1.3.0.1\build\native\libogg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libogg.1.3.0.1\build\native\libogg.targets'))" />
   </Target>
 </Project>

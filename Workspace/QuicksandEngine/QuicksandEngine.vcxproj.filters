@@ -55,6 +55,9 @@
     <Filter Include="AI">
       <UniqueIdentifier>{761c3e86-76ad-40f3-81c1-f9b8de476965}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{a0338440-b831-483b-84b0-d115c543f3d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\QuicksandEngine\Stdafx.hpp" />
@@ -322,19 +325,10 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.hpp">
       <Filter>Graphics3D</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.hpp">
-      <Filter>Graphics3D</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.hpp">
       <Filter>Graphics3D</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.hpp">
-      <Filter>Graphics3D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.hpp">
-      <Filter>Graphics3D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.hpp">
       <Filter>Graphics3D</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\Interfaces.hpp">
@@ -371,6 +365,18 @@
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\QuicksandEngine\Types.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SoundProcess.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SoundResource.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\Audio.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\QuicksandEngine\Stdafx.cpp" />
@@ -629,16 +635,10 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Shaders.cpp">
-      <Filter>Graphics3D</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\GLRenderer.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Lights.cpp">
-      <Filter>Graphics3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\MatrixStack.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\GameLogic\BaseGameLogic.cpp">
@@ -668,8 +668,17 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Buffer.cpp">
-      <Filter>Graphics3D</Filter>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SoundProcess.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SoundResource.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\Audio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

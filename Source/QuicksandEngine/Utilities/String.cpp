@@ -1,7 +1,7 @@
 #include "../Stdafx.hpp"
 #include "String.hpp"
 
-using string;
+using std::string;
 
 // Remove all leading whitespace
 void TrimLeft(std::wstring &s)

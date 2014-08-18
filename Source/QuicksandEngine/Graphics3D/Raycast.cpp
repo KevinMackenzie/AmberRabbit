@@ -32,7 +32,7 @@ void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, F
 	glm::vec3 a = v0->position - v1->position;
 	glm::vec3 b = v2->position - v1->position;
 
-	glm::vec3 crss = glm::cross(a, b);
+	glm::vec3 crss = glm::glm::cross(a, b);
 	crss /= length(cross);
 
 	glm::vec3 actorLoc = BarycentricTovec3(v0->position, v1->position, v2->position, intersection.m_fBary1, intersection.m_fBary2);

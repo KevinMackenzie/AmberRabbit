@@ -1,7 +1,9 @@
 #ifndef QSE_GLRENDERER_HPP
 #define QSE_GLRENDERER_HPP
 
-#include "Shaders.hpp"
+#include "../../ObjGLUF/GLUFGui.h"
+//#include "../UserInterface/GLGui.hpp"
+//#include "Shaders.hpp"
 
 //
 // struct ConstantBuffer_Matrices				- Chapter X, page Y
@@ -50,11 +52,11 @@ class GLRenderer_Base : public IRenderer
 public:
 	//TODO: make my own dialog manager and text helper
 	// You should leave this global - it does wacky things otherwise.
-	//static CDXUTDialogResourceManager g_DialogResourceManager;
-	//static CDXUTTextHelper* g_pTextHelper;
+	static GLUFDialogResourceManager g_DialogResourceManager;
+	static GLUFTextHelper* g_pTextHelper;
 
 	virtual HRESULT VOnRestore() { return S_OK; }
-	virtual void VShutdown() { /*SAFE_DELETE(g_pTextHelper);*/ }
+	virtual void VShutdown() { SAFE_DELETE(g_pTextHelper); }
 };
 
 
@@ -105,8 +107,8 @@ public:
 	HRESULT OnRestore();
 
 protected:
-	GLProgramPtr        		  m_LineDrawerShader;
-	GLVertexArrayPtr              m_pVertexBuffer;
+	GLUFProgramPtr        		  m_LineDrawerShader;
+	GLUFVertexArrayPtr            m_pVertexBuffer;
 };
 
 
@@ -139,8 +141,8 @@ public:
 	virtual shared_ptr<IRenderState> VPrepareAlphaPass();
 	virtual shared_ptr<IRenderState> VPrepareSkyBoxPass();
 
-	GLShaderManager mShaderManager;//this should NEVER have to be copied
-	GLBufferManager mBufferManager;
+	//GLShaderManager mShaderManager;//this should NEVER have to be copied
+	//GLBufferManager mBufferManager;
 
 protected:
 	float								m_backgroundColor[4];

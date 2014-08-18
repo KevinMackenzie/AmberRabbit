@@ -6,10 +6,10 @@
 
 
 ////////////////////////////////////////////////////
-// class Material						- Chapter 14, page 486
+// class GLUFMaterial						- Chapter 14, page 486
 ////////////////////////////////////////////////////
-
-Material::Material()
+/*
+GLUFMaterial::GLUFMaterial()
 {
 	m_Diffuse = g_White;
 	m_Ambient = Color(0.10f, 0.10f, 0.10f, 1.0f);
@@ -17,36 +17,36 @@ Material::Material()
 	m_Emissive = g_Black;
 }
 
-void Material::SetAmbient(const Color &color)
+void GLUFMaterial::SetAmbient(const Color &color)
 {
 	m_Ambient = color;
 }
 
-void Material::SetDiffuse(const Color &color)
+void GLUFMaterial::SetDiffuse(const Color &color)
 {
 	m_Diffuse = color;
 }
 
-void Material::SetSpecular(const Color &color, const float power)
+void GLUFMaterial::SetSpecular(const Color &color, const float power)
 {
 	m_Specular = color;
 	m_Power = power;
 }
 
-void Material::SetEmissive(const Color &color)
+void GLUFMaterial::SetEmissive(const Color &color)
 {
 	m_Emissive = color;
 }
 
-void Material::SetAlpha(float alpha)
+void GLUFMaterial::SetAlpha(float alpha)
 {
 	m_Diffuse.a = alpha;
 }
 
-void Material::GLUse()
+void GLUFMaterial::GLUse()
 {
 	//TODO;
-}
+}*/
 
 
 //
@@ -172,8 +172,8 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 	//NO, there will be ONE... ONE sampler that is in the renderer
 
 	//make this openGL
-	extra->m_pTexture = BufferManager.CreateTextureBuffer();
-	BufferManager.BufferTexture(extra->m_pTexture, texWidth  * texHeight * 4 * sizeof(unsigned char), data);
+	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTextureBuffer();
+	GLUFBUFFERMANAGER.BufferTexture(extra->m_pTexture, texWidth  * texHeight * 4 * sizeof(unsigned char), data);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
@@ -236,7 +236,7 @@ bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	extra->m_pTexture = BufferManager.CreateTexture(texId);
+	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTexture(texId);
 	handle->SetExtra(extra);
 	return true;
 }

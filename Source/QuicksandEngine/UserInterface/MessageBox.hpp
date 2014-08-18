@@ -7,15 +7,15 @@
 //
 // class MessageBox - Chapter 10, page 286
 //
-class MessageBox : public BaseUI
+class GLMessageBox : public BaseUI
 {
 protected:
-	CDXUTDialog m_UI;             // DirectX dialog
+	GLUFDialog m_UI;             // ObjGLUF dialog
 	int m_ButtonId;
 
 public:
-	MessageBox(std::wstring msg, std::wstring title, int buttonFlags=MB_OK);
-	~MessageBox();
+	GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags = MB_OK);
+	~GLMessageBox();
 
 	// IScreenElement Implementation
 	virtual HRESULT VOnRestore();
@@ -23,8 +23,8 @@ public:
 	virtual int VGetZOrder() const { return 99; }
 	virtual void VSetZOrder(int const zOrder) { }
 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
-	static void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext );
+	virtual LRESULT  VOnMsgProc( AppMsg msg );
+	static void  OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
 	static int Ask(MessageBox_Questions question);
 
 };

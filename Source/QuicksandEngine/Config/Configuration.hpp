@@ -12,6 +12,8 @@ typedef  std::map<string, string>::iterator ConfigIterator;
 class Configuration
 {
 	std::map<string, string> mConfigOptions;
+	XMLDocument* pDoc;
+
 	friend class StringsManager;
 
 	Configuration(){};

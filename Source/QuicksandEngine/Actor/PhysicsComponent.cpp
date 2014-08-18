@@ -81,7 +81,7 @@ XMLElement* PhysicsComponent::VGenerateXml(XMLDocument* pDoc)
     pBaseElement->LinkEndChild(pDensity);
 
     // material
-	XMLElement* pMaterial = pDoc->NewElement("Material");
+	XMLElement* pMaterial = pDoc->NewElement("GLUFMaterial");
 	XMLText* pMaterialText = pDoc->NewText(m_material.c_str());
     pMaterial->LinkEndChild(pMaterialText);
     pBaseElement->LinkEndChild(pMaterial);

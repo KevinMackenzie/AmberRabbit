@@ -8,26 +8,26 @@
 //
 // class MessageBox::OnGUIEvent					- Chapter 10, page 292 & 296
 //
-void CALLBACK MessageBox::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext )
+void GLMessageBox::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
 {
-	PostMessage(g_pApp->GetHwnd(), g_MsgEndModal, 0, nControlID);
+	PostMessage(QuicksandEngine::g_pApp->GetHwnd(), g_MsgEndModal, 0, nControlID);
 }
 
 //
 // class MessageBox::MessageBox					- Chapter 10, page 287
 //
-MessageBox::MessageBox(std::wstring msg, std::wstring title, int buttonFlags)
+GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags)
 {
 	// Initialize dialogs
-	m_UI.Init( &D3DRenderer::g_DialogResourceManager );
+	m_UI.Init( &GLRenderer::g_DialogResourceManager );
     m_UI.SetCallback( OnGUIEvent ); 
 
 	// Find the dimensions of the message
- 	RECT rc;
-	SetRect( &rc, 0,0,0,0);
-	m_UI.CalcTextRect( msg.c_str(), m_UI.GetDefaultElement(DXUT_CONTROL_STATIC,0), &rc );
-    int msgWidth = rc.right - rc.left;
-    int msgHeight = rc.bottom - rc.top;
+ 	GLUFRect rc;
+	GLUFSetRect( rc, 0.0f,0.0f,0.0f,0.0f);
+	m_UI.CalcTextRect( msg, m_UI.GetDefaultElement(GLUF_CONTROL_STATIC,0), rc );
+    float msgWidth = rc.right - rc.left;
+	float msgHeight = rc.bottom - rc.top;
 
 	int numButtons = 2;
 	if ( (buttonFlags == MB_ABORTRETRYIGNORE) ||
@@ -41,30 +41,30 @@ MessageBox::MessageBox(std::wstring msg, std::wstring title, int buttonFlags)
 		numButtons = 1;
 	}
 
-	int btnWidth = (int)((float) QuicksandEngine::g_pApp->GetScreenSize().x * 0.15f);
-	int btnHeight = (int)((float)QuicksandEngine::g_pApp->GetScreenSize().y * 0.037f);
-	int border = (int)((float)QuicksandEngine::g_pApp->GetScreenSize().x * 0.043f);
+	float btnWidth = ((float)QuicksandEngine::g_pApp->GetScreenSize().x * 0.15f);
+	float btnHeight = ((float)QuicksandEngine::g_pApp->GetScreenSize().y * 0.037f);
+	float border = ((float)QuicksandEngine::g_pApp->GetScreenSize().x * 0.043f);
 
-	m_Width = std::max(msgWidth + 2 * border, btnWidth + 2 * border);
+	m_Width = std::max(msgWidth + 2.0f * border, btnWidth + 2 * border);
 	m_Height = msgHeight + (numButtons * (btnHeight+border) ) + (2 * border);
 
-	m_PosX = (g_pApp->GetScreenSize().x - m_Width)/2;
-	m_PosY = (g_pApp->GetScreenSize().y - m_Height)/2;
-	m_UI.SetLocation( m_PosX, m_PosY );
+	m_PosX = (1.0f - m_Width) / 2;
+	m_PosY = (1.0f - m_Height) / 2;
+	m_UI.SetLocation(m_PosX, m_PosY);
 
 	m_UI.SetSize( m_Width, m_Height );
 	//m_UI.SetBackgroundColors(g_Gray40);
 
-	D3DCOLOR red = D3DCOLOR_ARGB(0xc0,0xff,0x00,0x00);
+	Color red = Color(255,0,0,200);
 	m_UI.SetBackgroundColors(red);
 
-	int iY = border; 
-	int iX = (m_Width - msgWidth) / 2; 
+	float fY = border; 
+	float fX = (m_Width - msgWidth) / 2; 
 
-	m_UI.AddStatic( 0, msg.c_str(), iX, iY, msgWidth, msgHeight);
+	m_UI.AddStatic( 0, msg.c_str(), fX, fY, msgWidth, msgHeight);
 
-	iX = (m_Width - btnWidth) / 2;
-	iY = m_Height - btnHeight - border;
+	fX = (m_Width - btnWidth) / 2;
+	fY = m_Height - btnHeight - border;
 
 	buttonFlags &= 0xF;
 	if ( (buttonFlags == MB_ABORTRETRYIGNORE) ||
@@ -73,43 +73,43 @@ MessageBox::MessageBox(std::wstring msg, std::wstring title, int buttonFlags)
 	{
 		// The message box contains three push buttons: Cancel, Try Again, Continue. 
 		// This is the new standard over Abort,Retry,Ignore
-		m_UI.AddButton( IDCONTINUE, g_pApp->GetString(_T("IDS_CONTINUE")).c_str(), iX, iY - (2*border), btnWidth, btnHeight );
-		m_UI.AddButton( IDTRYAGAIN, g_pApp->GetString(_T("IDS_TRYAGAIN")).c_str(), iX, iY - border, btnWidth, btnHeight );
-		m_UI.AddButton( IDCANCEL, g_pApp->GetString(_T("IDS_CANCEL")).c_str(), iX, iY, btnWidth, btnHeight );
+		m_UI.AddButton(IDCONTINUE, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTINUE")).c_str(), fX, fY - (2 * border), btnWidth, btnHeight);
+		m_UI.AddButton(IDTRYAGAIN, QuicksandEngine::g_pApp->GetString(_T("IDS_TRYAGAIN")).c_str(), fX, fY - border, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), fX, fY, btnWidth, btnHeight);
 	}
 	else if (buttonFlags == MB_OKCANCEL)
 	{
 		//The message box contains two push buttons: OK and Cancel.
-		m_UI.AddButton( IDOK, g_pApp->GetString(_T("IDS_OK")).c_str(), iX, iY - border, btnWidth, btnHeight );
-		m_UI.AddButton( IDCANCEL, g_pApp->GetString(_T("IDS_CANCEL")).c_str(), iX, iY, btnWidth, btnHeight );
+		m_UI.AddButton(IDOK, QuicksandEngine::g_pApp->GetString(_T("IDS_OK")).c_str(), fX, fY - border, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), fX, fY, btnWidth, btnHeight);
 	}
 	else if (buttonFlags == MB_RETRYCANCEL)
 	{
 		//The message box contains two push buttons: Retry and Cancel.
-		m_UI.AddButton( IDRETRY, g_pApp->GetString(_T("IDS_RETRY")).c_str(), iX, iY - border, btnWidth, btnHeight );
-		m_UI.AddButton( IDCANCEL, g_pApp->GetString(_T("IDS_CANCEL")).c_str(), iX, iY, btnWidth, btnHeight );
+		m_UI.AddButton(IDRETRY, QuicksandEngine::g_pApp->GetString(_T("IDS_RETRY")).c_str(), fX, fY - border, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), fX, fY, btnWidth, btnHeight);
 	}
 	else if (buttonFlags == MB_YESNO)
 	{
 		//The message box contains two push buttons: Yes and No.
-		m_UI.AddButton( IDYES, g_pApp->GetString(_T("IDS_YES")).c_str(), iX, iY - border, btnWidth, btnHeight, 0x59 );
-		m_UI.AddButton( IDNO, g_pApp->GetString(_T("IDS_NO")).c_str(), iX, iY, btnWidth, btnHeight, 0x4E );
+		m_UI.AddButton(IDYES, QuicksandEngine::g_pApp->GetString(_T("IDS_YES")).c_str(), fX, fY - border, btnWidth, btnHeight, 0x59);
+		m_UI.AddButton(IDNO, QuicksandEngine::g_pApp->GetString(_T("IDS_NO")).c_str(), fX, fY, btnWidth, btnHeight, 0x4E);
 	}
 	else if (buttonFlags == MB_YESNOCANCEL)
 	{
 		//The message box contains three push buttons: Yes, No, and Cancel.
-		m_UI.AddButton( IDYES, g_pApp->GetString(_T("IDS_YES")).c_str(), iX, iY - (2*border), btnWidth, btnHeight );
-		m_UI.AddButton( IDNO, g_pApp->GetString(_T("IDS_NO")).c_str(), iX, iY - border, btnWidth, btnHeight );
-		m_UI.AddButton( IDCANCEL, g_pApp->GetString(_T("IDS_CANCEL")).c_str(), iX, iY, btnWidth, btnHeight );
+		m_UI.AddButton(IDYES, QuicksandEngine::g_pApp->GetString(_T("IDS_YES")).c_str(), fX, fY - (2 * border), btnWidth, btnHeight);
+		m_UI.AddButton(IDNO, QuicksandEngine::g_pApp->GetString(_T("IDS_NO")).c_str(), fX, fY - border, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), fX, fY, btnWidth, btnHeight);
 	}
 	else //if (buttonFlags & MB_OK)
 	{
         // The message box contains one push button: OK. This is the default.
-		m_UI.AddButton( IDOK, g_pApp->GetString(_T("IDS_OK")).c_str(), iX, iY, btnWidth, btnHeight );
+		m_UI.AddButton(IDOK, QuicksandEngine::g_pApp->GetString(_T("IDS_OK")).c_str(), fX, fY, btnWidth, btnHeight);
 	}
 }
 
-MessageBox::~MessageBox()
+GLMessageBox::~GLMessageBox()
 {
 	LOG_ASSERT(1);
 }
@@ -118,7 +118,7 @@ MessageBox::~MessageBox()
 //
 // class MessageBox::VOnRestore					- Chapter 10, page 291
 //
-HRESULT MessageBox::VOnRestore()
+HRESULT GLMessageBox::VOnRestore()
 {
     m_UI.SetLocation( m_PosX, m_PosY );
     m_UI.SetSize( m_Width, m_Height );
@@ -129,7 +129,7 @@ HRESULT MessageBox::VOnRestore()
 //
 // class MessageBox::VOnRender					- Chapter 10, page 291
 //
-HRESULT MessageBox::VOnRender(double fTime, float fElapsedTime)
+HRESULT GLMessageBox::VOnRender(double fTime, float fElapsedTime)
 {
 	HRESULT hr;
 	V( m_UI.OnRender( fElapsedTime ) );
@@ -140,12 +140,12 @@ HRESULT MessageBox::VOnRender(double fTime, float fElapsedTime)
 //
 // class MessageBox::VOnMsgProc					- Chapter 10, page 292
 //
-LRESULT CALLBACK MessageBox::VOnMsgProc( AppMsg msg )
+LRESULT GLMessageBox::VOnMsgProc(AppMsg msg)
 {
-    return m_UI.MsgProc( msg.m_hWnd, msg.m_uMsg, msg.m_wParam, msg.m_lParam );
+    return m_UI.MsgProc(msg.m_Event, msg.param1, msg.param2, msg.param3, msg.param4);
 }
 
-int MessageBox::Ask(MessageBox_Questions question)
+int GLMessageBox::Ask(MessageBox_Questions question)
 {
 	std::wstring msg;
 	std::wstring title;
@@ -156,16 +156,16 @@ int MessageBox::Ask(MessageBox_Questions question)
 	{
 		case QUESTION_WHERES_THE_CD:
 		{
-			msg = g_pApp->GetString(_T("IDS_QUESTION_WHERES_THE_CD"));
-			title = g_pApp->GetString(_T("IDS_ALERT"));
+			msg = QuicksandEngine::g_pApp->GetString(_T("IDS_QUESTION_WHERES_THE_CD"));
+			title = QuicksandEngine::g_pApp->GetString(_T("IDS_ALERT"));
 			buttonFlags = MB_RETRYCANCEL|MB_ICONEXCLAMATION;
 			defaultAnswer = IDCANCEL;
 			break;
 		}
 		case QUESTION_QUIT_GAME:
 		{
-			msg = g_pApp->GetString(_T("IDS_QUESTION_QUIT_GAME"));
-			title = g_pApp->GetString(_T("IDS_QUESTION"));
+			msg = QuicksandEngine::g_pApp->GetString(_T("IDS_QUESTION_QUIT_GAME"));
+			title = QuicksandEngine::g_pApp->GetString(_T("IDS_QUESTION"));
 			buttonFlags = MB_YESNO|MB_ICONQUESTION;
 			defaultAnswer = IDNO;
 			break;
@@ -175,16 +175,17 @@ int MessageBox::Ask(MessageBox_Questions question)
 			return IDCANCEL;
 	}
 
-	if (g_pApp && g_pApp->IsRunning())
+	if (QuicksandEngine::g_pApp && QuicksandEngine::g_pApp->IsRunning())
 	{
 		ShowCursor(true);
-		shared_ptr<MessageBox> pMessageBox(new MessageBox(msg, title, buttonFlags));
-		int result = g_pApp->Modal(pMessageBox, defaultAnswer);
+		shared_ptr<GLMessageBox> pMessageBox(new GLMessageBox(msg, title, buttonFlags));
+		int result = QuicksandEngine::g_pApp->Modal(pMessageBox, defaultAnswer);
 		ShowCursor(false);
 		return result;
 	}
 
-	return ::MessageBox(g_pApp ? g_pApp->GetHwnd() : NULL, msg.c_str(), title.c_str(), buttonFlags);
+	//todo: cross platform?
+	return ::MessageBox(QuicksandEngine::g_pApp ? QuicksandEngine::g_pApp->GetHwnd() : NULL, msg.c_str(), title.c_str(), buttonFlags);
 }
 
 

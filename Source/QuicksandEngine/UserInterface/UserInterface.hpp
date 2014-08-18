@@ -38,12 +38,12 @@ class BaseUI;
 class BaseUI : public IScreenElement
 {
 protected:
-	int					m_PosX, m_PosY;
-	int					m_Width, m_Height;
+	float					m_PosX, m_PosY;
+	float					m_Width, m_Height;
 	optional<int>		m_Result;
 	bool				m_bIsVisible;
 public:
-	BaseUI() { m_bIsVisible = true; m_PosX = m_PosY = 0; m_Width = 100; m_Height = 100; }
+	BaseUI() { m_bIsVisible = true; m_PosX = m_PosY = 0.0f; m_Width = 0.1f; m_Height = 0.1f; }
 	virtual void VOnUpdate(int) { };
 	virtual HRESULT VOnLostDevice() { return S_OK; }
 	virtual bool VIsVisible() const { return m_bIsVisible; }
@@ -75,7 +75,7 @@ public:
 	virtual void VSetZOrder(int const zOrder) { }
 
 	// Don't handle any messages
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg ) { return 0; }
+	virtual LRESULT VOnMsgProc( AppMsg msg ) { return 0; }
 
 	virtual bool VIsVisible() const { return true; }
 	virtual void VSetVisible(bool visible) { }

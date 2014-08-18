@@ -1,6 +1,8 @@
 #include "../Stdafx.hpp"
+
 #include "QuicksandEngineApp.hpp"
 
+#include "../Physics/PhysicsEventListener.hpp"
 #include "../MainLoop/Initialization.hpp"
 //#include "../Debugging/MiniDump.hpp"
 #include "../GameLogic/BaseGameLogic.hpp"
@@ -198,6 +200,9 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	}
 
 	glfwMakeContextCurrent(m_pWindow);
+	
+	if (!GLUFInitOpenGLExtentions())
+		return false;
 
 	/*if (hWnd == NULL)
 	{
@@ -367,11 +372,12 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 	// Always allow dialog resource manager calls to handle global messages
 	// so GUI state is updated correctly
 	//TODO:
-	//*pbNoFurtherProcessing = GLRenderer::g_DialogResourceManager.MsgProc(hWnd, message, wParam, lParam);
-	bool *pbNoFurtherProcessing = new bool(true);
+	
+	bool *pbNoFurtherProcessing = new bool;
+	*pbNoFurtherProcessing = GLRenderer::g_DialogResourceManager.MsgProc(hWnd, message, wParam, lParam);
 	if (*pbNoFurtherProcessing)
 		return 0;
-
+	
 	LRESULT result = 0;
 
 	switch (message)
@@ -478,9 +484,9 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 		WARNING!!!!! You MIGHT think you need this, but if you use the DirectX
 		Framework the DefWindowProc is called for you....
 
-		default:
+		default:*/
 		return DefWindowProc(hWnd, message, wParam, lParam);
-
+		/*
 		***********************/
 	}
 

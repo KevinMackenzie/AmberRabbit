@@ -4,7 +4,6 @@
 
 #include "Geometry.hpp"
 #include "SceneNode.hpp"
-#include "MatrixStack.hpp"
 #include "../EventManager/EventManager.hpp"
 
 // Forward declarations
@@ -40,7 +39,7 @@ protected:
 	shared_ptr<CameraNode> 	m_Camera;
 	shared_ptr<IRenderer>	m_Renderer;
 
-	shared_ptr<GLMatrixStack> m_MatrixStack;
+	shared_ptr<GLUFMatrixStack> m_MatrixStack;
 	AlphaSceneNodes 		m_AlphaSceneNodes;
 	SceneActorMap 			m_ActorMap;
 

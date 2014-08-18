@@ -1,5 +1,5 @@
 #ifndef QSE_RANDOM_HPP
-#define QSE_RANDOM_HPp
+#define QSE_RANDOM_HPP
 
 
 //========================================================================

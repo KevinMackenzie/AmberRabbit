@@ -72,20 +72,20 @@ public:
     virtual void VSetAngularVelocity(ActorId actorId, const glm::vec3& vel) { }
 	virtual void VTranslate(ActorId actorId, const glm::vec3& vec) { }
 	virtual void VSetTransform(const ActorId id, const glm::mat4& mat) { }
-    virtual glm::mat4 VGetTransform(const ActorId id) { return glm::mat4::g_Identity; }
+    virtual glm::mat4 VGetTransform(const ActorId id) { return glm::mat4(); }
 };
 
 #ifndef DISABLE_PHYSICS
 
 
-#include "../Graphics3D/Geometry.h"
-#include "../EventManager/Events.h"
+#include "../Graphics3D/Geometry.hpp"
+#include "../EventManager/Events.hpp"
 
-#include "PhysicsDebugDrawer.h"
-#include "PhysicsEventListener.h"
+#include "PhysicsDebugDrawer.hpp"
+#include "PhysicsEventListener.hpp"
 
-#include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
+#include "../../BulletPhysics/btBulletDynamicsCommon.h"
+#include "../../BulletPhysics/btBulletCollisionCommon.h"
 
 #include <set>
 #include <iterator>
@@ -93,9 +93,9 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 // helpers for conversion to and from Bullet's data types
-static btVector3 vec3_to_btVector3( glm::vec3 const & glm::vec3 )
+static btVector3 vec3_to_btVector3( glm::vec3 const & vec )
 {
-	return btVector3( glm::vec3.x, glm::vec3.y, glm::vec3.z );
+	return btVector3(vec.x, vec.y, vec.z);
 }
 
 static glm::vec3 btVector3_to_vec3( btVector3 const & btvec )
@@ -112,7 +112,7 @@ static btTransform mat4_to_btTransform( glm::mat4 const & mat )
 	// copy rotation matrix
 	for ( int row=0; row<3; ++row )
 		for ( int column=0; column<3; ++column )
-			bulletRotation[row][column] = mat.m[column][row]; // note the reversed indexing (row/column vs. column/row)
+			bulletRotation[row][column] = mat[column][row]; // note the reversed indexing (row/column vs. column/row)
 			                                                  //  this is because mat4s are row-major matrices and
 			                                                  //  btMatrix3x3 are column-major.  This reversed indexing
 			                                                  //  implicitly transposes (flips along the diagonal) 
@@ -120,14 +120,14 @@ static btTransform mat4_to_btTransform( glm::mat4 const & mat )
 	
 	// copy position
 	for ( int column=0; column<3; ++column )
-		bulletPosition[column] = mat.m[3][column];
+		bulletPosition[column] = mat[3][column];
 		
 	return btTransform( bulletRotation, bulletPosition );
 }
 
 static glm::mat4 btTransform_to_mat4( btTransform const & trans )
 {
-	glm::mat4 returnValue = glm::mat4::g_Identity;
+	glm::mat4 returnValue = glm::mat4();
 
 	// convert from btTransform (Bullet) to glm::mat4 (GameCode)
 	btMatrix3x3 const & bulletRotation = trans.getBasis();
@@ -136,7 +136,7 @@ static glm::mat4 btTransform_to_mat4( btTransform const & trans )
 	// copy rotation matrix
 	for ( int row=0; row<3; ++row )
 		for ( int column=0; column<3; ++column )
-			returnValue.m[row][column] = bulletRotation[column][row]; 
+			returnValue[row][column] = bulletRotation[column][row]; 
 			          // note the reversed indexing (row/column vs. column/row)
 			          //  this is because mat4s are row-major matrices and
 			          //  btMatrix3x3 are column-major.  This reversed indexing
@@ -145,7 +145,7 @@ static glm::mat4 btTransform_to_mat4( btTransform const & trans )
 	
 	// copy position
 	for ( int column=0; column<3; ++column )
-		returnValue.m[3][column] = bulletPosition[column];
+		returnValue[3][column] = bulletPosition[column];
 		
 	return returnValue;
 }
@@ -332,8 +332,8 @@ void BulletPhysics::LoadXml()
     {
         double restitution = 0;
         double friction = 0;
-        pNode->Attribute("restitution", &restitution);
-        pNode->Attribute("friction", &friction);
+        restitution = std::stod(pNode->Attribute("restitution"));
+        friction = std::stod(pNode->Attribute("friction"));
         m_materialTable.insert(std::make_pair(pNode->Value(), MaterialData((float)restitution, (float)friction)));
     }
 
@@ -380,7 +380,7 @@ bool BulletPhysics::VInitialize()
 	if(!m_collisionConfiguration || !m_dispatcher || !m_broadphase ||
 			  !m_solver || !m_dynamicsWorld || !m_debugDrawer)
 	{
-		GCC_ERROR("BulletPhysics::VInitialize failed!");
+		LOG_ERROR("BulletPhysics::VInitialize failed!");
 		return false;
 	}
 
@@ -427,7 +427,7 @@ void BulletPhysics::VSyncVisibleScene()
 		ActorMotionState const * const actorMotionState = static_cast<ActorMotionState*>(it->second->getMotionState());
 		LOG_ASSERT( actorMotionState );
 		
-		StrongActorPtr pGameActor = MakeStrongPtr(g_pApp->m_pGame->VGetActor(id));
+		StrongActorPtr pGameActor = MakeStrongPtr(QuicksandEngine::g_pApp->m_pGame->VGetActor(id));
 		if (pGameActor && actorMotionState)
 		{
             shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pGameActor->GetComponent<TransformComponent>(TransformComponent::g_Name));
@@ -464,7 +464,7 @@ void BulletPhysics::AddShape(StrongActorPtr pGameActor, btCollisionShape* shape,
 		shape->calculateLocalInertia( mass, localInertia );
 
 
-	glm::mat4 transform = glm::mat4::g_Identity;
+	glm::mat4 transform = glm::mat4();
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pGameActor->GetComponent<TransformComponent>(TransformComponent::g_Name));
 	LOG_ASSERT(pTransformComponent);
     if (pTransformComponent)
@@ -677,8 +677,8 @@ void BulletPhysics::VCreateTrigger(WeakActorPtr pGameActor, const glm::vec3 &pos
 	btScalar const mass = 0;
 
 	// set the initial position of the body from the actor
-	glm::mat4 triggerTrans = glm::mat4::g_Identity;
-	triggerTrans.SetPosition( pos );
+	glm::mat4 triggerTrans = glm::mat4();
+	SetPosition(triggerTrans, pos );
 	ActorMotionState * const myMotionState = QSE_NEW ActorMotionState( triggerTrans );
 	
 	btRigidBody::btRigidBodyConstructionInfo rbInfo( mass, myMotionState, boxShape, btVector3(0,0,0) );
@@ -818,9 +818,9 @@ float BulletPhysics::VGetOrientationY(ActorId actorId)
 
 	else
 	{
-		btVector3 cross = startingVec.cross(endingVec);
+		btVector3 cross = startingVec.glm::cross(endingVec);
 		float sign = cross.getY() > 0 ? 1.0f : -1.0f;
-		return (acosf(startingVec.dot(endingVec) / endingVecLength) * sign);
+		return (acosf(startingVec.glm::dot(endingVec) / endingVecLength) * sign);
 	}
 
 	return FLT_MAX;  // fail...

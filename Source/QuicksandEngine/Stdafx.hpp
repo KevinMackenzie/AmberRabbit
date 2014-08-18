@@ -5,6 +5,7 @@
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
 // Windows Header Files:
+#ifdef _WIN32
 
 #define NOMINMAX
 #include <windows.h>
@@ -17,6 +18,7 @@
 #undef _VS2005_
 #endif
 
+#endif
 // [rez] I am saddened that Visual Studio 2010 doesn't support the new C++0x final keyword.  It does support 
 // the override keyword as well as a special Microsoft-specific sealed keyword.  The override keyword works 
 // exactly as the C++0x spec says it does and the sealed keyword acts like the C++0x final keyword.  I toyed 
@@ -85,6 +87,12 @@ public:
 #endif
 #endif
 
+//ObjGLUF Include
+#define SUPPRESS_RADIAN_ERROR
+#define SUPPRESS_UTF8_ERROR
+#include "../ObjGLUF/ObjGLUF.h"
+#include "../ObjGLUF/GLUFGui.h"
+
 // OpenGL Includes
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -94,6 +102,7 @@ public:
 #include <GL/GL.h>
 #include <GLFW/glfw3.h>
 #include <IL/il.h>
+
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
@@ -114,7 +123,10 @@ using fastdelegate::MakeDelegate;
 #include "Utilities/Templates.hpp"
 #include "Graphics3D/Geometry.hpp"
 
-typedef glm::vec4 Color;
+#include "Types.hpp"
+#include "Utilities/Types.hpp"
+
+//typedef glm::u8vec4 Color;
 
 extern Color g_White;
 extern Color g_Black;
@@ -146,10 +158,8 @@ extern glm::vec4 g_Forward4;
 
 struct AppMsg
 {
-	HWND m_hWnd;
-	UINT m_uMsg;
-	WPARAM m_wParam;
-	LPARAM m_lParam;
+	GLUF_MESSAGE_TYPE m_Event;
+	int param1, param2, param3, param4;
 };
 
 
@@ -195,19 +205,18 @@ extern const int SCREEN_HEIGHT;
 #include "Application/QuicksandEngineApp.hpp"
 #include "Actor/Actor.hpp"
 #include "Utilities/Math.hpp"
-#include "Graphics3D/Buffer.hpp"
+//#include "Graphics3D/Buffer.hpp"
 #include "GameLogic/BaseGameLogic.hpp"
 
-extern INT WINAPI QuicksandEngine(HINSTANCE hInstance,
+extern INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPWSTR    lpCmdLine,
 	int       nCmdShow);
 
 
 template <class M>
-std::vector<M> ArrToVec(M* arr, size_t size)
+std::vector<M> ArrToVec(M* arr, size_t size);
 
-#include "Types.hpp"
 
 //clean some older windows macros
 #undef near

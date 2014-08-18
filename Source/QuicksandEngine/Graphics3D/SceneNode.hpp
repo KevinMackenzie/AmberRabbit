@@ -5,7 +5,7 @@
 
 #include "Geometry.hpp"
 #include "Material.hpp"
-#include "Shaders.hpp"
+//#include "Shaders.hpp"
 
 // Forward declarations
 class SceneNode;
@@ -57,10 +57,10 @@ protected:
 	glm::mat4					m_ToWorld, m_FromWorld;
 	float					m_Radius;
 	RenderPass				m_RenderPass;
-	Material				m_Material;
+	GLUFMaterial				m_Material;
 	AlphaType				m_AlphaType;
 
-	void SetAlpha(const float alpha)
+	void SetAlpha(glm::u8 alpha)
 	{
 		m_AlphaType = AlphaMaterial; m_Material.SetAlpha(alpha);
 	}
@@ -81,7 +81,7 @@ public:
 	RenderPass RenderPass() const { return m_RenderPass; }
 	float Radius() const { return m_Radius; }
 
-	Material GetMaterial() const { return m_Material; }
+	GLUFMaterial GetMaterial() const { return m_Material; }
 };
 
 //////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ public:
 	glm::vec3 GetDirection() const { return ::GetDirection(m_Props.m_ToWorld); }
 
 	void SetRadius(const float radius) { m_Props.m_Radius = radius; }
-	void SetMaterial(const Material &mat) { m_Props.m_Material = mat; }
+	void SetMaterial(const GLUFMaterial &mat) { m_Props.m_Material = mat; }
 };
 
 //
@@ -311,9 +311,9 @@ protected:
 
 	//    int                     m_squares;
 
-	GLVertexArrayPtr			  m_VertexArray;
+	GLUFVertexArrayPtr			  m_VertexArray;
 
-	GLProgramPtr				  m_Program;
+	GLUFProgramPtr				  m_Program;
 
 public:
 	bool					m_bTextureHasAlpha;

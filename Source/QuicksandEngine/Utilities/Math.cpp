@@ -645,7 +645,7 @@ glm::vec3 GetVectorFromYRotation(float angleRadians)
 	lookAt.x = cos(angleRadians);
 	lookAt.y = 0;
 	lookAt.z = sin(angleRadians);
-	normalize(lookAt);  // just in case
+	glm::normalize(lookAt);  // just in case
 	return lookAt;
 }
 

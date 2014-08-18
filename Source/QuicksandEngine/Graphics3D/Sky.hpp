@@ -3,7 +3,7 @@
 
 
 #include "Geometry.hpp"
-#include "Material.hpp"
+#include "GLUFMaterial.hpp"
 #include "Shaders.hpp"
 
 // Forward declarations

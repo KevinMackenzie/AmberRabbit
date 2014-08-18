@@ -95,7 +95,7 @@ void MemoryPool::Free(void* pMem)
 #ifdef _DEBUG
 		// update allocation reports
 		--m_numAllocs;
-		GCC_ASSERT(m_numAllocs >= 0);
+		LOG_ASSERT(m_numAllocs >= 0);
 #endif
 	}
 }

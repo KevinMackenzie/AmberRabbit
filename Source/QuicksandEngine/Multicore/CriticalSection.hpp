@@ -130,6 +130,7 @@ private:
        CriticalSection & m_csResource;
 };
  
+#define SCOPED_CS(cs) ScopedCriticalSection __sec##__COUNTER__(cs)
 
 
 // concurrent_queue was grabbed from 
