@@ -170,7 +170,7 @@ LuaPlus::LuaObject ScriptProcess::CreateFromScript(LuaPlus::LuaObject self, LuaP
 {
 	// Note: The self parameter is not use in this function, but it allows us to be consistent when calling
 	// Create().  The Lua version of this function needs self.
-	LOG_WRITE("Script", string("Creating instance of ") + SCRIPT_PROCESS_NAME);
+	LOG_WRITE("Script" + string("Creating instance of ") + SCRIPT_PROCESS_NAME);
 	ScriptProcess* pObj = QSE_NEW ScriptProcess;
 	
     pObj->m_self.AssignNewTable(LuaStateManager::Get()->GetLuaState());

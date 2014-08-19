@@ -13,10 +13,10 @@ public:
 public:
     PhysicsComponent(void);
     virtual ~PhysicsComponent(void);
-    virtual XMLElement* VGenerateXml(XMLDocument* pDoc) override;
+    virtual tinyxml2::XMLElement* VGenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
     // ActorComponent interface
-    virtual bool VInit(XMLElement* pData) override;
+    virtual bool VInit(tinyxml2::XMLElement* pData) override;
     virtual void VPostInit(void) override;
     virtual void VUpdate(int deltaMs) override;
 
@@ -41,7 +41,7 @@ public:
 
 protected:
     void CreateShape();
-    void BuildRigidBodyTransform(XMLElement* pTransformElement);
+    void BuildRigidBodyTransform(tinyxml2::XMLElement* pTransformElement);
 
     float m_acceleration, m_angularAcceleration;
     float m_maxVelocity, m_maxAngularVelocity;

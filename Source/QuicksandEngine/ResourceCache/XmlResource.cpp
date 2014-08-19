@@ -5,7 +5,7 @@ using namespace tinyxml2;
 
 void XmlResourceExtraData::ParseXml(char* pRawBuffer)
 {
-    m_xmlDocument.Parse(pRawBuffer);
+    XmlDocument.Parse(pRawBuffer);
 }
 
 
@@ -29,7 +29,7 @@ shared_ptr<IResourceLoader> CreateXmlResourceLoader()
 }
 
 
-XMLElement* XmlResourceLoader::LoadAndReturnRootXmlElement(const char* resourceString)
+tinyxml2::XMLElement* XmlResourceLoader::LoadAndReturnRootXmlElement(const char* resourceString)
 {
     Resource resource(resourceString);
     shared_ptr<ResHandle> pResourceHandle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);  // this actually loads the XML file from the zip file

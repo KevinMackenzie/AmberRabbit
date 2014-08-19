@@ -68,7 +68,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>fd54e30e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>ef368846</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -104,7 +104,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
@@ -177,7 +177,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\Interfaces.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Audio\Audio.hpp" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SFMLAudio.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SoundProcess.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SoundResource.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Config\ConfigManager.hpp" />
@@ -239,7 +239,6 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.hpp" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptProcess.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptResource.hpp" />
@@ -282,7 +281,7 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Application\Application.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Application\QuicksandEngineApp.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Audio\Audio.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SFMLAudio.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SoundProcess.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SoundResource.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Config\ConfigManager.cpp" />
@@ -305,7 +304,6 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAddons.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAll.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus_Libs.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.cpp" />
@@ -347,7 +345,6 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\print.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptProcess.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptResource.cpp" />
@@ -403,6 +400,8 @@
     <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
     <Import Project="..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets" Condition="Exists('..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" />
     <Import Project="..\packages\libogg.1.3.0.1\build\native\libogg.targets" Condition="Exists('..\packages\libogg.1.3.0.1\build\native\libogg.targets')" />
+    <Import Project="..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets" Condition="Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" />
+    <Import Project="..\packages\sfml.2.1.0.0\build\native\sfml.targets" Condition="Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -425,5 +424,7 @@
     <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
     <Error Condition="!Exists('..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets'))" />
     <Error Condition="!Exists('..\packages\libogg.1.3.0.1\build\native\libogg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libogg.1.3.0.1\build\native\libogg.targets'))" />
+    <Error Condition="!Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.2.1.0.0\build\native\sfml.targets'))" />
   </Target>
 </Project>

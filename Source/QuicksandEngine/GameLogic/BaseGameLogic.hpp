@@ -96,10 +96,10 @@ public:
 	virtual void VAddView(shared_ptr<IGameView> pView, ActorId actorId = INVALID_ACTOR_ID);
 	virtual void VRemoveView(shared_ptr<IGameView> pView);
 
-	virtual StrongActorPtr VCreateActor(const std::string &actorResource, XMLElement *overrides, const glm::mat4* initialTransform = NULL, const ActorId serversActorId = INVALID_ACTOR_ID);  // [rez] note: don't store this strong pointer outside of this class
+	virtual StrongActorPtr VCreateActor(const std::string &actorResource, tinyxml2::XMLElement *overrides, const glm::mat4* initialTransform = NULL, const ActorId serversActorId = INVALID_ACTOR_ID);  // [rez] note: don't store this strong pointer outside of this class
 	virtual void VDestroyActor(const ActorId actorId);
 	virtual WeakActorPtr VGetActor(const ActorId actorId);
-	virtual void VModifyActor(const ActorId actorId, XMLElement *overrides);
+	virtual void VModifyActor(const ActorId actorId, tinyxml2::XMLElement *overrides);
 
 	virtual void VMoveActor(const ActorId id, glm::mat4 const &mat) {}
 
@@ -132,7 +132,7 @@ protected:
 	virtual ActorFactory* VCreateActorFactory(void);
 
 	// [rez] Override this function to do any game-specific loading.
-	virtual bool VLoadGameDelegate(XMLElement* pLevelData) { return true; }
+	virtual bool VLoadGameDelegate(tinyxml2::XMLElement* pLevelData) { return true; }
 
 	void MoveActorDelegate(IEventDataPtr pEventData);
 	void RequestNewActorDelegate(IEventDataPtr pEventData);

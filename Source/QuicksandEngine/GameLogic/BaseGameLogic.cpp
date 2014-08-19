@@ -115,7 +115,7 @@ std::string BaseGameLogic::GetActorXml(const ActorId id)
 bool BaseGameLogic::VLoadGame(const char* levelResource)
 {
 	// Grab the root XML node
-	XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(levelResource);
+	tinyxml2::XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(levelResource);
 	if (!pRoot)
 	{
 		LOG_ERROR("Failed to find level resource file: " + std::string(levelResource));
@@ -127,7 +127,7 @@ bool BaseGameLogic::VLoadGame(const char* levelResource)
 	const char* postLoadScript = NULL;
 
 	// parse the pre & post script attributes
-	XMLElement* pScriptElement = pRoot->FirstChildElement("Script");
+	tinyxml2::XMLElement* pScriptElement = pRoot->FirstChildElement("Script");
 	if (pScriptElement)
 	{
 		preLoadScript = pScriptElement->Attribute("preLoad");
@@ -142,10 +142,10 @@ bool BaseGameLogic::VLoadGame(const char* levelResource)
 	}
 
 	// load all initial actors
-	XMLElement* pActorsNode = pRoot->FirstChildElement("StaticActors");
+	tinyxml2::XMLElement* pActorsNode = pRoot->FirstChildElement("StaticActors");
 	if (pActorsNode)
 	{
-		for (XMLElement* pNode = pActorsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
+		for (tinyxml2::XMLElement* pNode = pActorsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
 		{
 			const char* actorResource = pNode->Attribute("resource");
 
@@ -211,7 +211,7 @@ void BaseGameLogic::VSetProxy()
 }
 
 
-StrongActorPtr BaseGameLogic::VCreateActor(const std::string &actorResource, XMLElement* overrides, const glm::mat4* initialTransform, const ActorId serversActorId)
+StrongActorPtr BaseGameLogic::VCreateActor(const std::string &actorResource, tinyxml2::XMLElement* overrides, const glm::mat4* initialTransform, const ActorId serversActorId)
 {
 	LOG_ASSERT(m_pActorFactory);
 	if (!m_bProxy && serversActorId != INVALID_ACTOR_ID)
@@ -261,7 +261,7 @@ WeakActorPtr BaseGameLogic::VGetActor(const ActorId actorId)
 	return WeakActorPtr();
 }
 
-void BaseGameLogic::VModifyActor(const ActorId actorId, XMLElement* overrides)
+void BaseGameLogic::VModifyActor(const ActorId actorId, tinyxml2::XMLElement* overrides)
 {
 	LOG_ASSERT(m_pActorFactory);
 	if (!m_pActorFactory)

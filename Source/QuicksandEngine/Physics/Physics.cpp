@@ -322,13 +322,13 @@ BulletPhysics::~BulletPhysics()
 void BulletPhysics::LoadXml()
 {
     // Load the physics config file and grab the root XML node
-    XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement("config\\Physics.xml");
+    tinyxml2::XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement("config\\Physics.xml");
     LOG_ASSERT(pRoot);
 
     // load all materials
-    XMLElement* pParentNode = pRoot->FirstChildElement("PhysicsMaterials");
+    tinyxml2::XMLElement* pParentNode = pRoot->FirstChildElement("PhysicsMaterials");
     LOG_ASSERT(pParentNode);
-    for (XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
+    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
     {
         double restitution = 0;
         double friction = 0;
@@ -340,7 +340,7 @@ void BulletPhysics::LoadXml()
     // load all densities
     pParentNode = pRoot->FirstChildElement("DensityTable");
     LOG_ASSERT(pParentNode);
-    for (XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
+    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
     {
         m_densityTable.insert(std::make_pair(pNode->Value(), (float)atof(pNode->FirstChild()->Value())));
     }
@@ -818,9 +818,9 @@ float BulletPhysics::VGetOrientationY(ActorId actorId)
 
 	else
 	{
-		btVector3 cross = startingVec.glm::cross(endingVec);
+		btVector3 cross = startingVec.cross(endingVec);
 		float sign = cross.getY() > 0 ? 1.0f : -1.0f;
-		return (acosf(startingVec.glm::dot(endingVec) / endingVecLength) * sign);
+		return (acosf(startingVec.dot(endingVec) / endingVecLength) * sign);
 	}
 
 	return FLT_MAX;  // fail...

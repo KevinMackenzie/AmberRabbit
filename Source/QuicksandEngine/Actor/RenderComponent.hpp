@@ -17,20 +17,20 @@ protected:
     shared_ptr<SceneNode> m_pSceneNode;
 
 public:
-    virtual bool VInit(XMLElement* pData) override;
+    virtual bool VInit(tinyxml2::XMLElement* pData) override;
     virtual void VPostInit(void) override;
 	virtual void VOnChanged(void) override;
-    virtual XMLElement* VGenerateXml(XMLDocument* pDoc) override;
+    virtual tinyxml2::XMLElement* VGenerateXml(tinyxml2::XMLDocument* pDoc) override;
 	const Color GetColor() const { return m_color; }
 
 protected:
     // loads the SceneNode specific data (represented in the <SceneNode> tag)
-    virtual bool VDelegateInit(XMLElement* pData) { return true; }
+    virtual bool VDelegateInit(tinyxml2::XMLElement* pData) { return true; }
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) = 0;  // factory method to create the appropriate scene node
-    Color LoadColor(XMLElement* pData);
+    Color LoadColor(tinyxml2::XMLElement* pData);
 
     // editor stuff
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement) = 0;
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement) = 0;
 
 private:
     virtual shared_ptr<SceneNode> VGetSceneNode(void) override;
@@ -50,7 +50,7 @@ public:
 
 protected:
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;  // factory method to create the appropriate scene node
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
 };
 
 
@@ -70,11 +70,11 @@ public:
     SphereRenderComponent(void);
 
 protected:
-    virtual bool VDelegateInit(XMLElement* pData) override;
+    virtual bool VDelegateInit(tinyxml2::XMLElement* pData) override;
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;  // factory method to create the appropriate scene node
 
     // editor stuff
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
 };
 
 
@@ -92,7 +92,7 @@ protected:
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;  // factory method to create the appropriate scene node
 
     // editor stuff
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
 };
 */
 
@@ -113,11 +113,11 @@ public:
 	const int GetDivision() { return m_squares; }
 
 protected:
-    virtual bool VDelegateInit(XMLElement* pData) override;
+    virtual bool VDelegateInit(tinyxml2::XMLElement* pData) override;
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;  // factory method to create the appropriate scene node
 
     // editor stuff
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
 };
 
 
@@ -135,11 +135,11 @@ public:
     LightRenderComponent(void);
 
 protected:
-    virtual bool VDelegateInit(XMLElement* pData) override;
+    virtual bool VDelegateInit(tinyxml2::XMLElement* pData) override;
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;  // factory method to create the appropriate scene node
 
     // editor stuff
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
 };
 
 
@@ -154,11 +154,11 @@ public:
     SkyRenderComponent(void);
 
 protected:
-    virtual bool VDelegateInit(XMLElement* pData) override;
+    virtual bool VDelegateInit(tinyxml2::XMLElement* pData) override;
     virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;  // factory method to create the appropriate scene node
 
     // editor stuff
-    virtual void VCreateInheritedXmlElements(XMLElement* pBaseElement);
+    virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
 };
 
 #endif

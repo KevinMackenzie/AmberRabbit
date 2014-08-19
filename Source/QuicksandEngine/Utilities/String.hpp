@@ -20,6 +20,8 @@ extern BOOL WildcardMatch(const char *pat, const char *str);
 // converts a regular string to a wide string
 extern void StringToWideString(const string& source, std::wstring& outDest);
 
+extern std::string ConcatString(std::string str1, std::string str2);
+
 extern HRESULT AnsiToWideCch( WCHAR* dest, const CHAR* src, int charCount);  
 extern HRESULT WideToAnsiCch( CHAR* dest, const WCHAR* src, int charCount);  
 extern HRESULT GenericToAnsiCch( CHAR* dest, const TCHAR* src, int charCount); 

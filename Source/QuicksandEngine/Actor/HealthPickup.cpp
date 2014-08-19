@@ -4,14 +4,14 @@
 
 const char* HealthPickup::g_Name = "HealthPickup";
 
-bool HealthPickup::VInit(XMLElement* pData)
+bool HealthPickup::VInit(tinyxml2::XMLElement* pData)
 {
     return true;
 }
 
-XMLElement* HealthPickup::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* HealthPickup::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-    XMLElement* pComponentElement = pDoc->NewElement(VGetName());
+    tinyxml2::XMLElement* pComponentElement = pDoc->NewElement(VGetName());
     return pComponentElement;
 }
 

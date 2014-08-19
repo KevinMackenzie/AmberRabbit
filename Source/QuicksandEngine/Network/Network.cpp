@@ -261,7 +261,10 @@ void NetSocket::VHandleInput()
 
 	char metrics[1024];
 	sprintf_s(metrics, 1024, "Incoming: %6d bytes. Begin %6d Offset %4d\n", rc, m_recvBegin, m_recvOfs);
-    LOG_WRITE("Network", metrics);
+
+	std::stringstream ss;
+	ss << "Network" << metrics;
+    LOG_WRITE(ss.str());
 
 	if (rc==0)
 	{
@@ -814,7 +817,10 @@ void BaseSocketManager::PrintError()
 
 	char buffer[256];
 	sprintf(buffer, "SOCKET error: %s", reason);
-    LOG_WRITE("Network", buffer);
+
+	std::stringstream ss;
+	ss << "Network" << buffer;
+    LOG_WRITE(ss.str());
 }
 
 
@@ -898,7 +904,8 @@ void RemoteEventSocket::VHandleInput()
 					int serverSockId, actorId;
 					in >> serverSockId;
 					in >> actorId;
-					in >> g_pApp->m_Options.m_Level;			// [mrmike] This was the best spot to set the level !
+					//in >> QuicksandEngine::g_pApp->m_Options.m_Level;			// [mrmike] This was the best spot to set the level !
+					in >> GET_CONFIG_ELEMENT_STR("LEVEL");
                     shared_ptr<EvtData_Network_Player_Actor_Assignment> pEvent(QSE_NEW EvtData_Network_Player_Actor_Assignment(actorId, serverSockId));
                     IEventManager::Get()->VQueueEvent(pEvent);
 					break;
@@ -910,7 +917,9 @@ void RemoteEventSocket::VHandleInput()
 		}
 		else if (!strcmp(packet->VGetType(), TextPacket::g_Type))
 		{
-            LOG_WRITE("Network", packet->VGetData()+sizeof(u_long));
+			std::stringstream ss;
+			ss << "Network" << packet->VGetData() + sizeof(u_long);
+            LOG_WRITE(ss.str());
 		}
 	}
 }
@@ -985,7 +994,7 @@ void NetworkGameView::AttachRemotePlayer(int sockID)
 	out << static_cast<int>(RemoteEventSocket::NetMsg_PlayerLoginOk) << " ";
 	out << m_SockId << " ";
 	out << m_ActorId << " ";
-	out << g_pApp->m_Options.m_Level << " ";
+	out << GET_CONFIG_ELEMENT_STR("LEVEL") << " ";
 	out << "\r\n";
 
 	shared_ptr<BinaryPacket> gvidMsg(QSE_NEW BinaryPacket(out.rdbuf()->str(), (u_long)out.pcount()));
@@ -1014,7 +1023,7 @@ void NetworkGameView::NewActorDelegate(IEventDataPtr pEventData)
 {
     shared_ptr<EvtData_New_Actor> pCastEventData = static_pointer_cast<EvtData_New_Actor>(pEventData);
 	ActorId actorId = pCastEventData->GetActorId();
-    StrongActorPtr pActor = MakeStrongPtr(g_pApp->m_pGame->VGetActor(actorId));
+    StrongActorPtr pActor = MakeStrongPtr(QuicksandEngine::g_pApp->m_pGame->VGetActor(actorId));
 
 	// FUTURE WORK: This could be in a script.
     if (pActor && pActor->GetType() == "Teapot")

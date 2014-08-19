@@ -104,6 +104,12 @@ test_match:
    goto test_match;
 }
 
+std::string ConcatStrings(std::string str1, std::string str2)
+{
+	std::string ret = str1.c_str();
+	ret += str2.c_str();
+	return ret;
+}
 
 //-----------------------------------------------------------------------------
 // Name: AnsiToWideCch()

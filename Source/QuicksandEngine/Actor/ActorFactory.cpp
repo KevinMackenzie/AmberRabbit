@@ -36,10 +36,10 @@ ActorFactory::ActorFactory(void)
     m_componentFactory.Register<BaseScriptComponent>(ActorComponent::GetIdFromName(BaseScriptComponent::g_Name));
 }
 
-StrongActorPtr ActorFactory::CreateActor(const char* actorResource, XMLElement *overrides, const glm::mat4 *pInitialTransform, const ActorId serversActorId)
+StrongActorPtr ActorFactory::CreateActor(const char* actorResource, tinyxml2::XMLElement *overrides, const glm::mat4 *pInitialTransform, const ActorId serversActorId)
 {
     // Grab the root XML node
-    XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(actorResource);
+    tinyxml2::XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(actorResource);
     if (!pRoot)
     {
 		LOG_ERROR("Failed to create actor from resource: " + string(actorResource));
@@ -62,7 +62,7 @@ StrongActorPtr ActorFactory::CreateActor(const char* actorResource, XMLElement *
 	bool initialTransformSet = false;
 
     // Loop through each child element and load the component
-    for (XMLElement* pNode = pRoot->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
+    for (tinyxml2::XMLElement* pNode = pRoot->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
     {
         StrongActorComponentPtr pComponent(VCreateComponent(pNode));
         if (pComponent)
@@ -98,7 +98,7 @@ StrongActorPtr ActorFactory::CreateActor(const char* actorResource, XMLElement *
     return pActor;
 }
 
-StrongActorComponentPtr ActorFactory::VCreateComponent(XMLElement* pData)
+StrongActorComponentPtr ActorFactory::VCreateComponent(tinyxml2::XMLElement* pData)
 {
     const char* name = pData->Value();
     StrongActorComponentPtr pComponent(m_componentFactory.Create(ActorComponent::GetIdFromName(name)));
@@ -124,10 +124,10 @@ StrongActorComponentPtr ActorFactory::VCreateComponent(XMLElement* pData)
 }
 
 
-void ActorFactory::ModifyActor(StrongActorPtr pActor, XMLElement* overrides)
+void ActorFactory::ModifyActor(StrongActorPtr pActor, tinyxml2::XMLElement* overrides)
 {
 	// Loop through each child element and load the component
-	for (XMLElement* pNode = overrides->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
+	for (tinyxml2::XMLElement* pNode = overrides->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
 	{
 		ComponentId componentId = ActorComponent::GetIdFromName(pNode->Value());
 		StrongActorComponentPtr pComponent = MakeStrongPtr(pActor->GetComponent<ActorComponent>(componentId));

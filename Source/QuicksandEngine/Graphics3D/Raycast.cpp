@@ -15,29 +15,29 @@ void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, F
 	intersection.m_fBary1 = u;
 	intersection.m_fBary2 = v;
 
-	T *v0 = &pVertices[pIndices[3 * faceIndex + 0]];
-	T *v1 = &pVertices[pIndices[3 * faceIndex + 1]];
-	T *v2 = &pVertices[pIndices[3 * faceIndex + 2]];
+	T v0 = pVertices[pIndices[3 * faceIndex + 0]];
+	T v1 = pVertices[pIndices[3 * faceIndex + 1]];
+	T v2 = pVertices[pIndices[3 * faceIndex + 2]];
 
 	// If all you want is the vertices hit, then you are done.  In this sample, we
 	// want to show how to infer texture coordinates as well, using the BaryCentric
 	// coordinates supplied by D3DXIntersect
-	FLOAT dtu1 = v1->tu - v0->tu;
+	/*FLOAT dtu1 = v1->tu - v0->tu;
 	FLOAT dtu2 = v2->tu - v0->tu;
 	FLOAT dtv1 = v1->tv - v0->tv;
 	FLOAT dtv2 = v2->tv - v0->tv;
 	intersection.m_tu = v0->tu + intersection.m_fBary1 * dtu1 + intersection.m_fBary2 * dtu2;
-	intersection.m_tv = v0->tv + intersection.m_fBary1 * dtv1 + intersection.m_fBary2 * dtv2;
+	intersection.m_tv = v0->tv + intersection.m_fBary1 * dtv1 + intersection.m_fBary2 * dtv2;*/
 
-	glm::vec3 a = v0->position - v1->position;
-	glm::vec3 b = v2->position - v1->position;
+	glm::vec3 a = v0 - v1;
+	glm::vec3 b = v2 - v1;
 
-	glm::vec3 crss = glm::glm::cross(a, b);
-	crss /= length(cross);
+	glm::vec3 cross = glm::cross(a, b);
+	cross /= glm::length(cross);
 
-	glm::vec3 actorLoc = BarycentricTovec3(v0->position, v1->position, v2->position, intersection.m_fBary1, intersection.m_fBary2);
+	glm::vec3 actorLoc = BarycentricTovec3(v0, v1, v2, intersection.m_fBary1, intersection.m_fBary2);
 	intersection.m_actorLoc = actorLoc;
-	intersection.m_worldLoc = matWorld.Xform(actorLoc);
+	intersection.m_worldLoc = Xform(matWorld, actorLoc);
 	intersection.m_actorId = actorId;
 	intersection.m_normal = cross;
 }
@@ -54,7 +54,7 @@ RayCast::RayCast(Point point, DWORD maxIntersections)
 	m_Point = point;
 }
 
-HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLMeshBarebones *pMesh)
+HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 {
 	if (!m_bAllHits && m_NumIntersections > 0)
 		return S_OK;
@@ -75,7 +75,7 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLMeshBarebones *pMesh)
 
 
 	glm::mat4 mWorldView = matWorld * matView;
-	glm::mat4 m = inverse(mWorldView);
+	glm::mat4 m = glm::inverse(mWorldView);
 	
 
 	// Transform the screen space Pick ray into 3D space
@@ -86,8 +86,8 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLMeshBarebones *pMesh)
 	m_vPickRayOrig.y = m[4][2];
 	m_vPickRayOrig.z = m[4][3];
 
-	Vec3Array pVB = pMesh->mVertexArray;
-	GLIndexArray pIB = pMesh->mIndexArray;
+	Vec3Array pVB = pMesh->mVertices;
+	IndexArray pIB = pMesh->mIndices;
 	//TODO: READ THIS NOW: i must calculate my own intersect method
 
 	DWORD intersections = 0;
@@ -108,7 +108,7 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLMeshBarebones *pMesh)
 		{
 			m_NumIntersections = 1;
 			m_IntersectionArray.resize(1);
-			InitIntersection(m_IntersectionArray[0], dwFace, fDist, fBary1, fBary2, actorId, pIB.data(), pVB.data(), matWorld);
+			InitIntersection(m_IntersectionArray[0], dwFace, fDist, fBary1, fBary2, actorId, &pIB[0], &pVB[0], matWorld);
 		}
 		else
 		{
@@ -176,7 +176,7 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, Vec3Array pVB, GLIndexArra
 
 	glm::mat4 mWorldView = matWorld * matView;
 	glm::mat4 m;
-	m = inverse(mWorldView);
+	m = glm::inverse(mWorldView);
 
 	// Transform the screen space Pick ray into 3D space
 	m_vPickRayDir.x = v.x * m[1][1] + v.y * m[2][1] + v.z * m[3][1];
@@ -233,14 +233,14 @@ void RayCast::Sort()
 
 
 
-bool RayIntersect(GLMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits, DWORD *pCountOfHits)
+bool RayIntersect(GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits, DWORD *pCountOfHits)
 {
 	bool hasSucceeded = false;
 	bool hasSucceeded1 = false;
-	for (unsigned int i = 0; i < mesh.mVertexArray.size() && hasSucceeded == false; i += 3)
+	for (unsigned int i = 0; i < mesh.mVertices.size() && hasSucceeded == false; i += 3)
 	{
 		glm::vec3 baryTmp;
-		if (intersectRayTriangle(rayPos, rayDir, mesh.mVertexArray[mesh.mIndexArray[i]], mesh.mVertexArray[mesh.mIndexArray[i + 1]], mesh.mVertexArray[mesh.mIndexArray[i + 2]], baryTmp))
+		if (glm::intersectRayTriangle(rayPos, rayDir, mesh.mVertices[mesh.mIndices[i]], mesh.mVertices[mesh.mIndices[i + 1]], mesh.mVertices[mesh.mIndices[i + 2]], baryTmp))
 		{
 			//only collect the other data from the first hit
 			if (!hasSucceeded1)
@@ -257,9 +257,9 @@ bool RayIntersect(GLMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL
 
 			//for the distance get the distance from the furthest vertex on the face
 			float *dist0 = new float(0.0f);
-			float dist1 = length(mesh.mVertexArray[mesh.mIndexArray[i]] - rayPos);
-			float dist2 = length(mesh.mVertexArray[mesh.mIndexArray[i + 1]] - rayPos);
-			float dist3 = length(mesh.mVertexArray[mesh.mIndexArray[i + 2]] - rayPos);
+			float dist1 = glm::length(mesh.mVertices[mesh.mIndices[i]] - rayPos);
+			float dist2 = glm::length(mesh.mVertices[mesh.mIndices[i + 1]] - rayPos);
+			float dist3 = glm::length(mesh.mVertices[mesh.mIndices[i + 2]] - rayPos);
 
 			if (dist1 >= dist2)
 			{

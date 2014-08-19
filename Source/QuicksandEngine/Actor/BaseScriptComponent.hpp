@@ -25,9 +25,9 @@ public:
 
 	BaseScriptComponent(void);
 	virtual ~BaseScriptComponent(void);
-	virtual bool VInit(XMLElement* pData);
+	virtual bool VInit(tinyxml2::XMLElement* pData);
     virtual void VPostInit(void);
-    virtual XMLElement* VGenerateXml(XMLDocument* pDoc);
+    virtual tinyxml2::XMLElement* VGenerateXml(tinyxml2::XMLDocument* pDoc);
 	
 	static void RegisterScriptFunctions(void);
 	static void UnregisterScriptFunctions(void);

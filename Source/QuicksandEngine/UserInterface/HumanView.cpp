@@ -5,7 +5,7 @@
 
 #include "../Actor/AudioComponent.hpp"
 #include "../Actor/RenderComponentInterface.hpp"
-#include "../Audio/DirectSoundAudio.hpp"
+#include "../Audio/SFMLAudio.hpp"
 #include "../Audio/SoundProcess.hpp"
 #include "../EventManager/Events.hpp"
 #include "../EventManager/EventManagerImpl.hpp"
@@ -66,7 +66,7 @@ HumanView::~HumanView()
 	SAFE_DELETE(g_pAudio);
 }
 
-bool HumanView::LoadGame(XMLElement* pLevelData)
+bool HumanView::LoadGame(tinyxml2::XMLElement* pLevelData)
 {
     // call the delegate method
     return VLoadGameDelegate(pLevelData);
@@ -151,7 +151,7 @@ bool HumanView::InitAudio()
 {
 	if (!g_pAudio)
 	{
-		g_pAudio = QSE_NEW DirectSoundAudio();		// use this line for DirectSound
+		g_pAudio = QSE_NEW SFMLSoundAudio();		// use this line for DirectSound
 	}
 
 	if (!g_pAudio)
@@ -185,7 +185,7 @@ void HumanView::TogglePause(bool active)
 //
 // HumanView::VOnMsgProc						- Chapter 10, page 279
 //
-LRESULT CALLBACK HumanView::VOnMsgProc( AppMsg msg )
+LRESULT HumanView::VOnMsgProc( AppMsg msg )
 {
 	// Iterate through the screen layers first
 	// In reverse order since we'll send input messages to the 
@@ -202,74 +202,91 @@ LRESULT CALLBACK HumanView::VOnMsgProc( AppMsg msg )
 	}
 
 	LRESULT result = 0;
-	switch (msg.m_uMsg) 
+	switch (msg.m_Event) 
 	{
-        case WM_KEYDOWN:
+        case GM_KEY:
+			if (msg.param3 == GLFW_KEY_DOWN)
+			{
+				if (m_Console.IsActive())
+				{
+					// Let the console eat this.
+					m_Console.HandleKeyboardInput(msg.param1);
+				}
+				else if (m_KeyboardHandler)
+				{
+					result = m_KeyboardHandler->VOnKeyDown(static_cast<const BYTE>(msg.param1));
+				}
+			}
+			else if (msg.param3 == GLFW_KEY_UP)
+			{
+				if (m_Console.IsActive())
+				{
+					// Let the console eat this.
+				}
+				else if (m_KeyboardHandler)
+					result = m_KeyboardHandler->VOnKeyUp(static_cast<const BYTE>(msg.param1));
+			}
+			else//GLFW_REPEAT
+			{
+				m_Console.HandleKeyboardInput(msg.param1);
+			}
+
+			break;
+		case GM_CURSOR_POS:
+			if (m_PointerHandler)
+				result = m_PointerHandler->VOnPointerMove(Point(msg.param1, msg.param2), 1);
+			break;
+
+		case GM_MB:
+			if (msg.param1 == GLFW_MOUSE_BUTTON_LEFT)
+			{
+				if (msg.param2 == GLFW_PRESS)
+				{
+					if (m_PointerHandler)
+					{
+						//SetCapture(msg.m_hWnd);
+						result = m_PointerHandler->VOnPointerButtonDown(Point(msg.param1, msg.param2), 1, "PointerLeft");
+					}
+				}
+				else
+				{
+					if (m_PointerHandler)
+					{
+						//SetCapture(NULL);
+						result = m_PointerHandler->VOnPointerButtonUp(Point(msg.param1, msg.param2), 1, "PointerLeft");
+					}
+				}
+			}
+			else if (msg.param1 == GLFW_MOUSE_BUTTON_RIGHT)
+			{
+				if (msg.param1 == GLFW_PRESS)
+				{
+					if (m_PointerHandler)
+					{
+						//SetCapture(msg.m_hWnd);
+						result = m_PointerHandler->VOnPointerButtonDown(Point(msg.param1, msg.param2), 1, "PointerRight");
+					}
+				}
+				else if (msg.param1 == GLFW_RELEASE)
+				{
+					if (m_PointerHandler)
+					{
+						//SetCapture(NULL);
+						result = m_PointerHandler->VOnPointerButtonUp(Point(msg.param1, msg.param2), 1, "PointerRight");
+					}
+				}
+			}
+			break;
+		case GM_UNICODE_CHAR:
 			if (m_Console.IsActive())
 			{
-                // Let the console eat this.
-			}
-			else if (m_KeyboardHandler)
-            {
-				result = m_KeyboardHandler->VOnKeyDown(static_cast<const BYTE>(msg.m_wParam));
-            }
-			break;
-	
-        case WM_KEYUP:
-			if (m_Console.IsActive())
-			{
-				// Let the console eat this.
-			}
-			else if (m_KeyboardHandler)
-				result = m_KeyboardHandler->VOnKeyUp(static_cast<const BYTE>(msg.m_wParam));
-			break;
-
-		case WM_MOUSEMOVE:
-			if (m_PointerHandler)
-				result = m_PointerHandler->VOnPointerMove(Point(LOWORD(msg.m_lParam), HIWORD(msg.m_lParam)), 1);
-			break;
-
-		case WM_LBUTTONDOWN:
-			if (m_PointerHandler)
-			{
-				SetCapture(msg.m_hWnd);
-				result = m_PointerHandler->VOnPointerButtonDown(Point(LOWORD(msg.m_lParam), HIWORD(msg.m_lParam)), 1, "PointerLeft");
-			}	
-			break;
-
-		case WM_LBUTTONUP:
-			if (m_PointerHandler)
-			{
-				SetCapture(NULL);
-				result = m_PointerHandler->VOnPointerButtonUp(Point(LOWORD(msg.m_lParam), HIWORD(msg.m_lParam)), 1, "PointerLeft");
-			}
-			break;
-
-		case WM_RBUTTONDOWN:
-			if (m_PointerHandler)
-			{
-				SetCapture(msg.m_hWnd);
-				result = m_PointerHandler->VOnPointerButtonDown(Point(LOWORD(msg.m_lParam), HIWORD(msg.m_lParam)), 1, "PointerRight");
-			}
-			break;
-
-		case WM_RBUTTONUP:
-			if (m_PointerHandler)
-			{
-				SetCapture(NULL);
-				result = m_PointerHandler->VOnPointerButtonUp(Point(LOWORD(msg.m_lParam), HIWORD(msg.m_lParam)), 1, "PointerRight");
-			}
-			break;
-		case WM_CHAR:
-			if (m_Console.IsActive())
-			{
-				const unsigned int oemScan = int( msg.m_lParam & ( 0xff << 16 ) ) >> 16;
-				m_Console.HandleKeyboardInput( msg.m_wParam, MapVirtualKey( oemScan, 1 ), true );
+				//const unsigned int oemScan = int( msg.m_lParam & ( 0xff << 16 ) ) >> 16;
+				m_Console.HandleKeyboardInput((unsigned int)msg.param1);
 			}
 			else
 			{
 				//See if it was the console key.
-				if (('~'==msg.m_wParam) || ('`'==msg.m_wParam))
+				if (('~'==msg.param1) || ('`'==msg.param1))
 				{
 					m_Console.SetActive(true);
 				}
@@ -278,7 +295,8 @@ LRESULT CALLBACK HumanView::VOnMsgProc( AppMsg msg )
 		default:
 			return 0;
 	}
-
+	
+	//should never be hit
 	return 0;
 }
 
@@ -482,57 +500,57 @@ void HumanView::Console::Render( )
 		return;	//Bail!
 	}
 
-	GLRenderer_Base::g_pTextHelper->Begin();
-	const glm::vec4 white( 1.0f, 1.0f, 1.0f, 1.0f );
-	const glm::vec4 black( 0.0f, 0.0f, 0.0f, 1.0f );
-	RECT inputTextRect, outputTextRect, shadowRect;
+	GLRenderer_Base::g_pTextHelper->Begin(0,0.025f,FONT_WEIGHT_NORMAL);//TODO: custom console font
+	//const glm::vec4 white( 1.0f, 1.0f, 1.0f, 1.0f );
+	//const glm::vec4 black( 0.0f, 0.0f, 0.0f, 1.0f );
+	GLUFRect inputTextRect, outputTextRect, shadowRect;
 
 	//Display the console text at screen top, below the other text displayed.
 	const std::string finalInputString = std::string( ">" ) + m_CurrentInputString + ( m_bCursorOn ? '\xa0' : '_' );
-	inputTextRect.left = 10;
-	inputTextRect.right = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
-	inputTextRect.top = 100;
-	inputTextRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y - 10;
+	inputTextRect.left = 10.0f / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
+	inputTextRect.right = (float)(QuicksandEngine::g_pApp->GetScreenSize().x - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
+	inputTextRect.top = 100.0f / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
+	inputTextRect.bottom = (float)(QuicksandEngine::g_pApp->GetScreenSize().y - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
 
 	const int kNumWideChars = 4096;
-	WCHAR wideBuffer[ kNumWideChars ];
+	wchar_t wideBuffer[ kNumWideChars ];
 	AnsiToWideCch( wideBuffer, finalInputString.c_str(), kNumWideChars );
 
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP | DT_CALCRECT, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP | DT_CALCRECT, wideBuffer, kNumWideChars);
 
 	//Draw with shadow first.
 	shadowRect = inputTextRect;
 	++shadowRect.left;
 	++shadowRect.top;
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( black );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_Black );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars );
 
 	//Now bright text.
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( white );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_White );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars );
 
 	//Now display the output text just below the input text.
-	outputTextRect.left = inputTextRect.left + 15;
-	outputTextRect.top = inputTextRect.bottom + 15;
-	outputTextRect.right = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
-	outputTextRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y - 10;
+	outputTextRect.left = inputTextRect.left + (15.0f / QuicksandEngine::g_pApp->GetScreenSize().x);
+	outputTextRect.top = inputTextRect.bottom + (15.0f / QuicksandEngine::g_pApp->GetScreenSize().y);
+	outputTextRect.right = (float)(QuicksandEngine::g_pApp->GetScreenSize().x - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
+	outputTextRect.bottom = (float)(QuicksandEngine::g_pApp->GetScreenSize().y - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().y;
 	AnsiToWideCch( wideBuffer, m_CurrentOutputString.c_str(), kNumWideChars );
 
 	//Draw with shadow first.
 	shadowRect = outputTextRect;
 	++shadowRect.left;
 	++shadowRect.top;
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( black );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_Black );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars);
 
 	//Now bright text.
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( white );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( outputTextRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_White );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( outputTextRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars );
 
 	GLRenderer_Base::g_pTextHelper->End();
 }
 
-void HumanView::Console::HandleKeyboardInput( const unsigned int keyVal, const unsigned int oemKeyVal, const bool bKeyDown )
+void HumanView::Console::HandleKeyboardInput(unsigned int codepoint)
 {
 	if ( true == m_bExecuteStringOnUpdate )
 	{
@@ -541,28 +559,27 @@ void HumanView::Console::HandleKeyboardInput( const unsigned int keyVal, const u
 	}
 
 	//See if it's a valid key press that we care about.
-	switch( oemKeyVal )
+	m_CurrentInputString += (char)codepoint;
+}
+
+void HumanView::Console::HandleKeyboardInput(int key)
+{
+	switch (key)
 	{
-	    case VK_BACK:
+	case GLFW_KEY_BACKSPACE:
+	{
+		const size_t strSize = m_CurrentInputString.size();
+		if (strSize > 0)
 		{
-			const size_t strSize = m_CurrentInputString.size();
-			if ( strSize > 0 )
-			{
-				m_CurrentInputString.erase((strSize - 1), 1);
-			}
-            break;
+			m_CurrentInputString.erase((strSize - 1), 1);
 		}
+		break;
+	}
 
-    	case VK_RETURN:
-		{
-			m_bExecuteStringOnUpdate = true;	//Execute this string.
-            break;
-		}
-
-    	default:
-        {
-		    m_CurrentInputString += (char)keyVal;
-		    break;
-        }
+	case GLFW_KEY_ENTER:
+	{
+		m_bExecuteStringOnUpdate = true;	//Execute this string.
+		break;
+	}
 	}
 }

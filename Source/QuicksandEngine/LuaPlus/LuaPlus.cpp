@@ -200,8 +200,11 @@ static int FatalError( lua_State* state )
 {
 	const char* err = lua_tostring(state, 1);
 #ifdef WIN32
+	LPWSTR errWindows;
+	mbstowcs(errWindows, err, strlen(err));
+
 	if (err)
-		OutputDebugString(err);
+		OutputDebugString(errWindows);
 #else // !WIN32
 	if (err)
 		puts(err);

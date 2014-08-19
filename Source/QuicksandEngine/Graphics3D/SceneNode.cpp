@@ -13,7 +13,6 @@
 #include "Mesh.hpp"
 #include "Raycast.hpp"
 #include "SceneNode.hpp"
-#include "Shaders.hpp"
 #include "tchar.h"
 #include "../ResourceCache/ResCache.hpp"
 #include "Scene.hpp"
@@ -121,7 +120,7 @@ void SceneNode::VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWor
 	m_Props.m_ToWorld = *toWorld;
 	if (!fromWorld)
 	{
-		m_Props.m_FromWorld = inverse(m_Props.m_ToWorld);
+		m_Props.m_FromWorld = glm::inverse(m_Props.m_ToWorld);
 	}
 	else
 	{
@@ -299,7 +298,7 @@ bool SceneNode::VAddChild(shared_ptr<ISceneNode> ikid)
 	//glm::vec3 dir = kidPos - m_Props.ToWorld().GetPosition();
 	//float newRadius = dir.Length() + kid->VGet()->Radius();
 
-	float newRadius = length(kidPos) + kid->VGet()->Radius();
+	float newRadius = glm::length(kidPos) + kid->VGet()->Radius();
 
 	if (newRadius > m_Props.m_Radius)
 		m_Props.m_Radius = newRadius;
@@ -349,7 +348,7 @@ HRESULT SceneNode::VPick(Scene *pScene, RayCast *raycast)
 // not as a SceneNode that changes renderstate by itself.
 void SceneNode::SetAlpha(float alpha)
 {
-	m_Props.SetAlpha(alpha);
+	m_Props.SetAlpha((glm::u8)(alpha * 255.0f));
 	for (SceneNodeList::const_iterator i = m_Children.begin(); i != m_Children.end(); ++i)
 	{
 		shared_ptr<SceneNode> sceneNode = static_pointer_cast<SceneNode>(*i);
@@ -480,7 +479,7 @@ HRESULT CameraNode::VOnRestore(Scene *pScene)
 	int windowHeight, windowWidth;
 	glfwGetWindowSize(QuicksandEngine::g_pApp->GLFWWindow(), &windowWidth, &windowHeight);
 	m_Frustum.SetAspect((FLOAT)windowWidth / (FLOAT)windowHeight);
-	m_Projection =  perspective(m_Frustum.m_Fov, m_Frustum.m_Aspect, m_Frustum.m_Near, m_Frustum.m_Far);
+	m_Projection = glm::perspective(m_Frustum.m_Fov, m_Frustum.m_Aspect, m_Frustum.m_Near, m_Frustum.m_Far);
 	pScene->GetRenderer()->VSetProjectionTransform(&m_Projection);
 	return S_OK;
 }

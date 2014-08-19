@@ -20,10 +20,10 @@ const char* SkyRenderComponent::g_Name = "SkyRenderComponent";
 //---------------------------------------------------------------------------------------------------------------------
 // RenderComponent
 //---------------------------------------------------------------------------------------------------------------------
-bool BaseRenderComponent::VInit(XMLElement* pData)
+bool BaseRenderComponent::VInit(tinyxml2::XMLElement* pData)
 {
     // color
-    XMLElement* pColorNode = pData->FirstChildElement("Color");
+    tinyxml2::XMLElement* pColorNode = pData->FirstChildElement("Color");
     if (pColorNode)
         m_color = LoadColor(pColorNode);
 
@@ -45,12 +45,12 @@ void BaseRenderComponent::VOnChanged(void)
 }
 
 
-XMLElement* BaseRenderComponent::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* BaseRenderComponent::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-	XMLElement* pBaseElement = pDoc->NewElement(VGetName());
+	tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(VGetName());
 
     // color
-	XMLElement* pColor = pDoc->NewElement("Color");
+	tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
     pColor->SetAttribute("r", ToStr(m_color.r).c_str());
     pColor->SetAttribute("g", ToStr(m_color.g).c_str());
     pColor->SetAttribute("b", ToStr(m_color.b).c_str());
@@ -70,7 +70,7 @@ shared_ptr<SceneNode> BaseRenderComponent::VGetSceneNode(void)
     return m_pSceneNode;
 }
 
-Color BaseRenderComponent::LoadColor(XMLElement* pData)
+Color BaseRenderComponent::LoadColor(tinyxml2::XMLElement* pData)
 {
 	Color color;
 
@@ -101,7 +101,7 @@ shared_ptr<SceneNode> MeshRenderComponent::VCreateSceneNode(void)
     return shared_ptr<SceneNode>();
 }
 
-void MeshRenderComponent::VCreateInheritedXmlElements(XMLElement *)
+void MeshRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *)
 {
     LOG_ERROR("MeshRenderComponent::VGenerateSubclassXml() not implemented");
 }
@@ -116,9 +116,9 @@ SphereRenderComponent::SphereRenderComponent(void)
     m_segments = 50;
 }
 
-bool SphereRenderComponent::VDelegateInit(XMLElement* pData)
+bool SphereRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
-    XMLElement* pMesh = pData->FirstChildElement("Sphere");
+    tinyxml2::XMLElement* pMesh = pData->FirstChildElement("Sphere");
     int segments = 50;
 	double radius = 1.0;
 	radius = std::stod(pMesh->Attribute("radius"));
@@ -144,9 +144,9 @@ shared_ptr<SceneNode> SphereRenderComponent::VCreateSceneNode(void)
 	return sphere;
 }
 
-void SphereRenderComponent::VCreateInheritedXmlElements(XMLElement* pBaseElement)
+void SphereRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement)
 {
-    XMLElement* pMesh = pBaseElement->ToDocument()->NewElement("Sphere");
+    tinyxml2::XMLElement* pMesh = pBaseElement->ToDocument()->NewElement("Sphere");
 	pMesh->SetAttribute("radius", ToStr(m_radius).c_str());
     pMesh->SetAttribute("segments", ToStr(m_segments).c_str());
     pBaseElement->LinkEndChild(pBaseElement);
@@ -182,7 +182,7 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
     return shared_ptr<SceneNode>();
 }
 
-void TeapotRenderComponent::VCreateInheritedXmlElements(XMLElement *)
+void TeapotRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *)
 {
 }
 */
@@ -196,15 +196,15 @@ GridRenderComponent::GridRenderComponent(void)
     m_squares = 0;
 }
 
-bool GridRenderComponent::VDelegateInit(XMLElement* pData)
+bool GridRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
-    XMLElement* pTexture = pData->FirstChildElement("Texture");
+    tinyxml2::XMLElement* pTexture = pData->FirstChildElement("Texture");
     if (pTexture)
 	{
 		m_textureResource = pTexture->FirstChild()->Value();
 	}
 
-    XMLElement* pDivision = pData->FirstChildElement("Division");
+    tinyxml2::XMLElement* pDivision = pData->FirstChildElement("Division");
     if (pDivision)
 	{
 		m_squares = atoi(pDivision->FirstChild()->Value());
@@ -226,15 +226,15 @@ shared_ptr<SceneNode> GridRenderComponent::VCreateSceneNode(void)
     return shared_ptr<SceneNode>();
 }
 
-void GridRenderComponent::VCreateInheritedXmlElements(XMLElement *pBaseElement)
+void GridRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *pBaseElement)
 {
-    XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
-	XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
+    tinyxml2::XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
+	tinyxml2::XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
     pTextureNode->LinkEndChild(pTextureText);
     pBaseElement->LinkEndChild(pTextureNode);
 
-	XMLElement* pDivisionNode = pBaseElement->ToDocument()->NewElement("Division");
-	XMLText* pDivisionText = pDivisionNode->ToDocument()->NewText(ToStr(m_squares).c_str());
+	tinyxml2::XMLElement* pDivisionNode = pBaseElement->ToDocument()->NewElement("Division");
+	tinyxml2::XMLText* pDivisionText = pDivisionNode->ToDocument()->NewText(ToStr(m_squares).c_str());
     pDivisionNode->LinkEndChild(pDivisionText);
     pBaseElement->LinkEndChild(pDivisionNode);
 }
@@ -247,12 +247,12 @@ LightRenderComponent::LightRenderComponent(void)
 {
 }
 
-bool LightRenderComponent::VDelegateInit(XMLElement* pData)
+bool LightRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
-    XMLElement* pLight = pData->FirstChildElement("Light");
+    tinyxml2::XMLElement* pLight = pData->FirstChildElement("Light");
 
 	double temp;
-    XMLElement* pAttenuationNode = NULL;
+    tinyxml2::XMLElement* pAttenuationNode = NULL;
 	pAttenuationNode = pLight->FirstChildElement("Attenuation");
     if (pAttenuationNode)
 	{
@@ -267,7 +267,7 @@ bool LightRenderComponent::VDelegateInit(XMLElement* pData)
 		m_Props.m_Attenuation[2] = (float) temp;
 	}
 
-    XMLElement* pShapeNode = NULL;
+    tinyxml2::XMLElement* pShapeNode = NULL;
 	pShapeNode = pLight->FirstChildElement("Shape");
     if (pShapeNode)
 	{
@@ -295,19 +295,19 @@ shared_ptr<SceneNode> LightRenderComponent::VCreateSceneNode(void)
     return shared_ptr<SceneNode>();
 }
 
-void LightRenderComponent::VCreateInheritedXmlElements(XMLElement *pBaseElement)
+void LightRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *pBaseElement)
 {
-    XMLElement* pSceneNode = pBaseElement->ToDocument()->NewElement("Light");
+    tinyxml2::XMLElement* pSceneNode = pBaseElement->ToDocument()->NewElement("Light");
 
     // attenuation
-    XMLElement* pAttenuation = pSceneNode->ToDocument()->NewElement("Attenuation");
+    tinyxml2::XMLElement* pAttenuation = pSceneNode->ToDocument()->NewElement("Attenuation");
     pAttenuation->SetAttribute("const", ToStr(m_Props.m_Attenuation[0]).c_str());
     pAttenuation->SetAttribute("linear", ToStr(m_Props.m_Attenuation[1]).c_str());
     pAttenuation->SetAttribute("exp", ToStr(m_Props.m_Attenuation[2]).c_str());
     pSceneNode->LinkEndChild(pAttenuation);
 
     // shape
-    XMLElement* pShape = pSceneNode->ToDocument()->NewElement("Shape");
+    tinyxml2::XMLElement* pShape = pSceneNode->ToDocument()->NewElement("Shape");
     pShape->SetAttribute("range", ToStr(m_Props.m_Range).c_str());
     pShape->SetAttribute("falloff", ToStr(m_Props.m_Falloff).c_str());
     pShape->SetAttribute("theta", ToStr(m_Props.m_Theta).c_str());
@@ -324,9 +324,9 @@ SkyRenderComponent::SkyRenderComponent(void)
 {
 }
 
-bool SkyRenderComponent::VDelegateInit(XMLElement* pData)
+bool SkyRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
-    XMLElement* pTexture = pData->FirstChildElement("Texture");
+    tinyxml2::XMLElement* pTexture = pData->FirstChildElement("Texture");
     if (pTexture)
 	{
 		m_textureResource = pTexture->FirstChild()->Value();
@@ -339,10 +339,10 @@ shared_ptr<SceneNode> SkyRenderComponent::VCreateSceneNode(void)
 	return shared_ptr<SkyNode>(QSE_NEW GLSkyNode(m_textureResource.c_str() ));
 }
 
-void SkyRenderComponent::VCreateInheritedXmlElements(XMLElement *pBaseElement)
+void SkyRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *pBaseElement)
 {
-    XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
-    XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
+    tinyxml2::XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
+    tinyxml2::XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
     pTextureNode->LinkEndChild(pTextureText);
     pBaseElement->LinkEndChild(pTextureNode);
 }

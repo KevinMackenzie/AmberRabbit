@@ -13,6 +13,7 @@
 // Scene Implementation
 ////////////////////////////////////////////////////
 
+shared_ptr<GLUFMatrixStack> g_pMatrixStack = shared_ptr<GLUFMatrixStack>(new GLUFMatrixStack());
 
 //
 // Scene::Scene						- Chapter 16, page 539
@@ -26,7 +27,7 @@ Scene::Scene(shared_ptr<IRenderer> renderer)
 	m_Renderer = renderer;
 	m_LightManager = QSE_NEW LightManager;
 
-	GLUFBUFFERMANAGER.m_pMatrixStack = m_MatrixStack;
+	m_MatrixStack = m_MatrixStack;
 
 	// [mrmike] - event delegates were added post-press
 	IEventManager* pEventMgr = IEventManager::Get();
@@ -107,7 +108,6 @@ HRESULT Scene::OnRestore()
 	if (!m_Root)
 		return S_OK;
 
-	HRESULT hr;
 	/*V_RETURN(*/m_Renderer->VOnRestore()/*)*/;
 
 	return m_Root->VOnRestore(this);

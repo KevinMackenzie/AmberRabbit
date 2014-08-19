@@ -39,13 +39,13 @@ BaseScriptComponent::~BaseScriptComponent(void)
 	}
 }
 
-bool BaseScriptComponent::VInit(XMLElement* pData)
+bool BaseScriptComponent::VInit(tinyxml2::XMLElement* pData)
 {
     LuaStateManager* pStateMgr = LuaStateManager::Get();
     LOG_ASSERT(pStateMgr);
 
     // load the <ScriptObject> tag and validate it
-    XMLElement* pScriptObjectElement = pData->FirstChildElement("ScriptObject");
+    tinyxml2::XMLElement* pScriptObjectElement = pData->FirstChildElement("ScriptObject");
     if (!pScriptObjectElement)
     {
         LOG_ERROR("No <ScriptObject> tag in XML.  This won't be a very useful script component.");
@@ -103,7 +103,7 @@ bool BaseScriptComponent::VInit(XMLElement* pData)
 	}
 
     // read the <ScriptData> tag
-    XMLElement* pScriptDataElement = pData->FirstChildElement("ScriptData");
+    tinyxml2::XMLElement* pScriptDataElement = pData->FirstChildElement("ScriptData");
     if (pScriptDataElement)
     {
         if (m_scriptObject.IsNil())
@@ -131,12 +131,12 @@ void BaseScriptComponent::VPostInit(void)
     }
 }
 
-XMLElement* BaseScriptComponent::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* BaseScriptComponent::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-    XMLElement* pBaseElement = pDoc->NewElement(VGetName());
+    tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(VGetName());
 
     // ScriptObject
-	XMLElement* pScriptObjectElement = pDoc->NewElement("ScriptObject");
+	tinyxml2::XMLElement* pScriptObjectElement = pDoc->NewElement("ScriptObject");
     if (!m_scriptObjectName.empty())
         pScriptObjectElement->SetAttribute("var", m_scriptObjectName.c_str());
     if (!m_constructorName.empty())

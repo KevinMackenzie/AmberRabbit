@@ -18,7 +18,7 @@ class StringsManager
 public:
 	StringsManager(){}
 
-	XMLDocument* GetDocument(){ return gConfig.pDoc; }
+	tinyxml2::XMLDocument* GetDocument(){ return gConfig.pDoc; }
 
 	//the three below functions are NOT MUTABLE IN ANY WAY
 

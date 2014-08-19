@@ -32,7 +32,7 @@ PhysicsComponent::~PhysicsComponent(void)
     m_pGamePhysics->VRemoveActor(m_pOwner->GetId());
 }
 
-bool PhysicsComponent::VInit(XMLElement* pData)
+bool PhysicsComponent::VInit(tinyxml2::XMLElement* pData)
 {
     // no point in having a physics component with no game physics
     m_pGamePhysics = QuicksandEngine::g_pApp->m_pGame->VGetGamePhysics();
@@ -40,71 +40,71 @@ bool PhysicsComponent::VInit(XMLElement* pData)
         return false;
 
     // shape
-    XMLElement* pShape = pData->FirstChildElement("Shape");
+    tinyxml2::XMLElement* pShape = pData->FirstChildElement("Shape");
     if (pShape)
     {
 		m_shape = pShape->FirstChild()->Value();
     }
 
     // density
-    XMLElement* pDensity = pData->FirstChildElement("Density");
+    tinyxml2::XMLElement* pDensity = pData->FirstChildElement("Density");
     if (pDensity)
         m_density = pDensity->FirstChild()->Value();
 
     // material
-    XMLElement* pMaterial = pData->FirstChildElement("PhysicsMaterial");
+    tinyxml2::XMLElement* pMaterial = pData->FirstChildElement("PhysicsMaterial");
     if (pMaterial)
         m_material = pMaterial->FirstChild()->Value();
 
     // initial transform
-    XMLElement* pRigidBodyTransform = pData->FirstChildElement("RigidBodyTransform");
+    tinyxml2::XMLElement* pRigidBodyTransform = pData->FirstChildElement("RigidBodyTransform");
     if (pRigidBodyTransform)
         BuildRigidBodyTransform(pRigidBodyTransform);
 
     return true;
 }
 
-XMLElement* PhysicsComponent::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* PhysicsComponent::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-	XMLElement* pBaseElement = pDoc->NewElement(VGetName());
+	tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(VGetName());
 
     // shape
-	XMLElement* pShape = pDoc->NewElement("Shape");
-	XMLText* pShapeText = pDoc->NewText(m_shape.c_str());
+	tinyxml2::XMLElement* pShape = pDoc->NewElement("Shape");
+	tinyxml2::XMLText* pShapeText = pDoc->NewText(m_shape.c_str());
     pShape->LinkEndChild(pShapeText);
 	pBaseElement->LinkEndChild(pShape);
 
     // density
-	XMLElement* pDensity = pDoc->NewElement("Density");
-	XMLText* pDensityText = pDoc->NewText(m_density.c_str());
+	tinyxml2::XMLElement* pDensity = pDoc->NewElement("Density");
+	tinyxml2::XMLText* pDensityText = pDoc->NewText(m_density.c_str());
     pDensity->LinkEndChild(pDensityText);
     pBaseElement->LinkEndChild(pDensity);
 
     // material
-	XMLElement* pMaterial = pDoc->NewElement("GLUFMaterial");
-	XMLText* pMaterialText = pDoc->NewText(m_material.c_str());
+	tinyxml2::XMLElement* pMaterial = pDoc->NewElement("GLUFMaterial");
+	tinyxml2::XMLText* pMaterialText = pDoc->NewText(m_material.c_str());
     pMaterial->LinkEndChild(pMaterialText);
     pBaseElement->LinkEndChild(pMaterial);
 
     // rigid body transform
-	XMLElement* pInitialTransform = pDoc->NewElement("RigidBodyTransform");
+	tinyxml2::XMLElement* pInitialTransform = pDoc->NewElement("RigidBodyTransform");
 
     // initial transform -> position
-	XMLElement* pPosition = pDoc->NewElement("Position");
+	tinyxml2::XMLElement* pPosition = pDoc->NewElement("Position");
     pPosition->SetAttribute("x", ToStr(m_RigidBodyLocation.x).c_str());
     pPosition->SetAttribute("y", ToStr(m_RigidBodyLocation.y).c_str());
     pPosition->SetAttribute("z", ToStr(m_RigidBodyLocation.z).c_str());
     pInitialTransform->LinkEndChild(pPosition);
 
     // initial transform -> orientation
-	XMLElement* pOrientation = pDoc->NewElement("Orientation");
+	tinyxml2::XMLElement* pOrientation = pDoc->NewElement("Orientation");
     pOrientation->SetAttribute("yaw", ToStr(m_RigidBodyOrientation.x).c_str());
     pOrientation->SetAttribute("pitch", ToStr(m_RigidBodyOrientation.y).c_str());
     pOrientation->SetAttribute("roll", ToStr(m_RigidBodyOrientation.z).c_str());
     pInitialTransform->LinkEndChild(pOrientation);
 
 	// initial transform -> scale 
-	XMLElement* pScale = pDoc->NewElement("Scale");
+	tinyxml2::XMLElement* pScale = pDoc->NewElement("Scale");
     pScale->SetAttribute("x", ToStr(m_RigidBodyScale.x).c_str());
     pScale->SetAttribute("y", ToStr(m_RigidBodyScale.y).c_str());
     pScale->SetAttribute("z", ToStr(m_RigidBodyScale.z).c_str());
@@ -185,12 +185,12 @@ void PhysicsComponent::VUpdate(int deltaMs)
     }
 }
 
-void PhysicsComponent::BuildRigidBodyTransform(XMLElement* pTransformElement)
+void PhysicsComponent::BuildRigidBodyTransform(tinyxml2::XMLElement* pTransformElement)
 {
 	// FUTURE WORK Mrmike - this should be exactly the same as the TransformComponent - maybe factor into a helper method?
     LOG_ASSERT(pTransformElement);
 
-    XMLElement* pPositionElement = pTransformElement->FirstChildElement("Position");
+    tinyxml2::XMLElement* pPositionElement = pTransformElement->FirstChildElement("Position");
     if (pPositionElement)
     {
         double x = 0;
@@ -202,7 +202,7 @@ void PhysicsComponent::BuildRigidBodyTransform(XMLElement* pTransformElement)
 		m_RigidBodyLocation = glm::vec3(x, y, z);
     }
 
-    XMLElement* pOrientationElement = pTransformElement->FirstChildElement("Orientation");
+    tinyxml2::XMLElement* pOrientationElement = pTransformElement->FirstChildElement("Orientation");
     if (pOrientationElement)
     {
         double yaw = 0;
@@ -214,7 +214,7 @@ void PhysicsComponent::BuildRigidBodyTransform(XMLElement* pTransformElement)
         m_RigidBodyOrientation = glm::vec3((float)DEGREES_TO_RADIANS(yaw), (float)DEGREES_TO_RADIANS(pitch), (float)DEGREES_TO_RADIANS(roll));
     }
 
-    XMLElement* pScaleElement = pTransformElement->FirstChildElement("Scale");
+    tinyxml2::XMLElement* pScaleElement = pTransformElement->FirstChildElement("Scale");
     if (pScaleElement)
     {
         double x = 0;

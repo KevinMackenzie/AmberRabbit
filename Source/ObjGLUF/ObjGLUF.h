@@ -276,6 +276,12 @@ struct OBJGLUF_API GLUFShaderInfoStruct
 	}
 };
 
+struct OBJGLUF_API GLUFMeshBarebones
+{
+	Vec3Array mVertices;
+	IndexArray mIndices;
+};
+
 typedef GLUFShaderInfoStruct GLUFCompileOutputStruct;
 typedef GLUFShaderInfoStruct GLUFLinkOutputStruct;
 
@@ -495,6 +501,8 @@ protected:
 	{}
 public:
 
+	GLUFMatrixTransformBlock(glm::mat4 m, glm::mat4 v, glm::mat4 p) : pM(new glm::mat4(m)), pV(new glm::mat4(v)), pP(new glm::mat4(p)), pMV(new glm::mat4(v * m)), pMVP(new glm::mat4(p * *pMV))
+	{}
 
 	GLUFMatrixTransformBlock& operator=(GLUFMatrixTransformBlock other)
 	{

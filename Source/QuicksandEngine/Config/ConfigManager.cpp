@@ -18,11 +18,11 @@ bool StringsManager::AddConfigElements(string pathToXml)
 
 	file.close();
 
-	gConfig.pDoc = new XMLDocument();
+	gConfig.pDoc = new tinyxml2::XMLDocument();
 	gConfig.pDoc->LoadFile(pathToXml.c_str());
 	//TODO: make username/password a config element but secure it in a good way
 
-	tinyxml2::XMLElement *root = gConfig.pDoc->FirstChildElement("ROOT");//this is manditory
+	tinyxml2::tinyxml2::XMLElement *root = gConfig.pDoc->FirstChildElement("ROOT");//this is manditory
 	
 	//now loop through all of the iterators
 	//this is a map, so to MYSQL->PORT will be MYSQL_PORT and so forth
@@ -33,7 +33,7 @@ bool StringsManager::AddConfigElements(string pathToXml)
 	return true;
 }
 
-void StringsManager::LoadConfigElements(tinyxml2::XMLElement *root)
+void StringsManager::LoadConfigElements(tinyxml2::tinyxml2::XMLElement *root)
 {
 	
 	//since we are using a map, make a prefix ie MYSQL_ and this is append with each new node
@@ -44,7 +44,7 @@ void StringsManager::LoadConfigElements(tinyxml2::XMLElement *root)
 		mCurrPrefix += "_";
 	}
 
-	for (tinyxml2::XMLElement* child = root->FirstChildElement(); child != nullptr; child = child->NextSiblingElement())
+	for (tinyxml2::tinyxml2::XMLElement* child = root->FirstChildElement(); child != nullptr; child = child->NextSiblingElement())
 	{
 		//is there a child element?
 		if (child->FirstChildElement() != nullptr)

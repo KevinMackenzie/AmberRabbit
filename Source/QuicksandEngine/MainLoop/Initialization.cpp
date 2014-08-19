@@ -1,9 +1,11 @@
+//INCLUDE BEFORE STDAFX because of annoying 'near', 'far', 'NEAR', 'FAR' issues
+#include <shlobj.h>
+#include <direct.h>
+
 #include "../Stdafx.hpp"
 #include "Initialization.hpp"
 
 
-#include <shlobj.h>
-#include <direct.h>
 
 bool CheckStorage(const DWORDLONG diskSpaceNeeded)
 {

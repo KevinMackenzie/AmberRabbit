@@ -11,7 +11,10 @@
 #include <windows.h>
 #include <windowsx.h>
 
+
 #include <crtdbg.h>
+
+
 
 #define _VS2005_
 #if _MSC_VER < 1400
@@ -44,6 +47,13 @@
 #include <queue>
 #include <map>
 #include <sstream>
+
+//clean some older windows macros
+#undef near
+#undef far
+
+#undef FAR
+#define FAR
 
 //some boost stuff
 #include <boost/lexical_cast.hpp>
@@ -109,7 +119,7 @@ public:
 #include <GLFW/glfw3native.h>
 
 #include <tinyxml2.h>
-using namespace tinyxml2;
+//using namespace tinyxml2;
 
 // fast delegate stuff
 #include "FastDelegate/FastDelegate.h"
@@ -207,6 +217,7 @@ extern const int SCREEN_HEIGHT;
 #include "Utilities/Math.hpp"
 //#include "Graphics3D/Buffer.hpp"
 #include "GameLogic/BaseGameLogic.hpp"
+#include "Utilities/String.hpp"
 
 extern INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -217,9 +228,5 @@ extern INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 template <class M>
 std::vector<M> ArrToVec(M* arr, size_t size);
 
-
-//clean some older windows macros
-#undef near
-#undef far
 
 #endif

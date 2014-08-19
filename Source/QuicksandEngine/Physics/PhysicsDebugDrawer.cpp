@@ -36,13 +36,13 @@ int BulletDebugDrawer::getDebugMode() const
 
 void BulletDebugDrawer::ReadOptions()
 {
-	XMLDocument *optionsDoc = QuicksandEngine::g_pApp->mConfigManager.GetDocument();
-	XMLElement *pRoot = optionsDoc->RootElement();
+	tinyxml2::XMLDocument *optionsDoc = QuicksandEngine::g_pApp->mConfigManager.GetDocument();
+	tinyxml2::XMLElement *pRoot = optionsDoc->RootElement();
     if (!pRoot)
 		return;
 
 	int debugModes = btIDebugDraw::DBG_NoDebug;
-	XMLElement *pNode = pRoot->FirstChildElement("PhysicsDebug");
+	tinyxml2::XMLElement *pNode = pRoot->FirstChildElement("PhysicsDebug");
 	if (pNode)
 	{
 		if (pNode->Attribute("DrawWireFrame"))

@@ -28,9 +28,9 @@ protected:
 	virtual void VRenderText() { };
 
 public:
-    bool LoadGame(XMLElement* pLevelData);
+    bool LoadGame(tinyxml2::XMLElement* pLevelData);
 protected:
-	virtual bool VLoadGameDelegate(XMLElement* pLevelData) { VPushElement(m_pScene);  return true; }
+	virtual bool VLoadGameDelegate(tinyxml2::XMLElement* pLevelData) { VPushElement(m_pScene);  return true; }
 
 public:
 	// Implement the IGameView interface, except for the VOnRender() method, which is renderer specific
@@ -45,7 +45,7 @@ public:
 		m_ViewId = vid; 
 		m_ActorId = aid;
 	}
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
+	virtual LRESULT VOnMsgProc( AppMsg msg );
 	virtual void VOnUpdate(const int deltaMilliseconds );
 
 	// Virtual methods to control the layering of interface elements
@@ -107,7 +107,9 @@ public:
 		void SetActive( const bool bIsActive )  { m_bActive = bIsActive; }
 		bool IsActive(void) const  { return m_bActive; }
 
-		void HandleKeyboardInput( const unsigned int keyVal, const unsigned int oemKeyVal, const bool bKeyDown );
+		//void HandleKeyboardInput( const unsigned int keyVal, const unsigned int oemKeyVal, const bool bKeyDown );
+		void HandleKeyboardInput(const unsigned int codepoint);
+		void HandleKeyboardInput(int key);
 
 		void Update( const int deltaMilliseconds );
 

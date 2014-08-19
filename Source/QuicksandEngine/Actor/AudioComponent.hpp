@@ -23,10 +23,10 @@ public:
 
     AudioComponent(void);
 
-    virtual XMLElement* VGenerateXml(XMLDocument* pDoc);
+    virtual tinyxml2::XMLElement* VGenerateXml(tinyxml2::XMLDocument* pDoc);
 
     // ActorComponent interface
-    virtual bool VInit(XMLElement* pData) override;
+    virtual bool VInit(tinyxml2::XMLElement* pData) override;
     virtual void VPostInit(void) override;
 };
 

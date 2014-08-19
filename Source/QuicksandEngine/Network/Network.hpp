@@ -1,8 +1,10 @@
 #ifndef QSE_NETWORK_HPP
 #define QSE_NETWORK_HPP
 
+#undef FAR
+#define FAR 
 #include <sys/types.h>
-#include <winsock.h>
+//#include <winsock.h>
 #include <WinSock2.h>
 #include "..\EventManager\EventManager.hpp"
 
@@ -332,7 +334,7 @@ public:
 	virtual GameViewType VGetType() { return GameView_Remote; }
 	virtual GameViewId VGetId() const { return m_ViewId; }
 	virtual void VOnAttach(GameViewId vid, ActorId aid);
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg ) { return 0; }
+	virtual LRESULT VOnMsgProc( AppMsg msg ) { return 0; }
 	virtual void VOnUpdate(unsigned long deltaMs);
 
 	void NewActorDelegate(IEventDataPtr pEventData);

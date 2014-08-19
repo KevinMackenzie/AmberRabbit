@@ -16,29 +16,29 @@ AudioComponent::AudioComponent()
 	m_volume = 100;
 }
 
-bool AudioComponent::VInit(XMLElement* pData)
+bool AudioComponent::VInit(tinyxml2::XMLElement* pData)
 {
-    XMLElement* pTexture = pData->FirstChildElement("Sound");
+    tinyxml2::XMLElement* pTexture = pData->FirstChildElement("Sound");
     if (pTexture)
 	{
 		m_audioResource = pTexture->FirstChild()->Value();
 	}
 
-	XMLElement* pLooping = pData->FirstChildElement("Looping");
+	tinyxml2::XMLElement* pLooping = pData->FirstChildElement("Looping");
 	if (pLooping)
 	{
 		string value = pLooping->FirstChild()->Value();
 		m_looping = (value == "0") ? false : true;
 	}
 
-	XMLElement* pFadeIn = pData->FirstChildElement("FadeIn");
+	tinyxml2::XMLElement* pFadeIn = pData->FirstChildElement("FadeIn");
 	if (pFadeIn)
 	{
 		string value = pFadeIn->FirstChild()->Value();
 		m_fadeInTime = (float)atof(value.c_str());
 	}
 
-	XMLElement* pVolume = pData->FirstChildElement("Volume");
+	tinyxml2::XMLElement* pVolume = pData->FirstChildElement("Volume");
 	if (pVolume)
 	{
 		string value = pVolume->FirstChild()->Value();
@@ -49,27 +49,27 @@ bool AudioComponent::VInit(XMLElement* pData)
 }
 
 
-XMLElement* AudioComponent::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* AudioComponent::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-    XMLElement* pBaseElement = pDoc->NewElement(VGetName());
+    tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(VGetName());
 
-	XMLElement* pSoundNode = pDoc->NewElement("Sound");
-    XMLText* pSoundText = pDoc->NewText(m_audioResource.c_str());
+	tinyxml2::XMLElement* pSoundNode = pDoc->NewElement("Sound");
+    tinyxml2::XMLText* pSoundText = pDoc->NewText(m_audioResource.c_str());
     pSoundNode->LinkEndChild(pSoundText);
     pBaseElement->LinkEndChild(pSoundNode);
 
-	XMLElement* pLoopingNode = pDoc->NewElement("Looping");
-	XMLText* pLoopingText = pDoc->NewText(m_looping ? "1" : "0");
+	tinyxml2::XMLElement* pLoopingNode = pDoc->NewElement("Looping");
+	tinyxml2::XMLText* pLoopingText = pDoc->NewText(m_looping ? "1" : "0");
     pLoopingNode->LinkEndChild(pLoopingText);
     pBaseElement->LinkEndChild(pLoopingNode);
 
-	XMLElement* pFadeInNode = pDoc->NewElement("FadeIn");
-	XMLText* pFadeInText = pDoc->NewText(ToStr(m_fadeInTime).c_str());
+	tinyxml2::XMLElement* pFadeInNode = pDoc->NewElement("FadeIn");
+	tinyxml2::XMLText* pFadeInText = pDoc->NewText(ToStr(m_fadeInTime).c_str());
     pFadeInNode->LinkEndChild(pFadeInText);
     pBaseElement->LinkEndChild(pFadeInNode);
 
-	XMLElement* pVolumeNode = pDoc->NewElement("Volume");
-	XMLText* pVolumeText = pDoc->NewText(ToStr(m_volume).c_str());
+	tinyxml2::XMLElement* pVolumeNode = pDoc->NewElement("Volume");
+	tinyxml2::XMLText* pVolumeText = pDoc->NewText(ToStr(m_volume).c_str());
     pVolumeNode->LinkEndChild(pVolumeText);
     pBaseElement->LinkEndChild(pVolumeNode);
 

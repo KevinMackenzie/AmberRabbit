@@ -15,8 +15,8 @@ public:
 	static const char* g_Name;
 	virtual const char* VGetName() const { return g_Name; }
 
-    virtual bool VInit(XMLElement* pData) override;
-    virtual XMLElement* VGenerateXml(XMLDocument* pDoc) override;
+    virtual bool VInit(tinyxml2::XMLElement* pData) override;
+    virtual tinyxml2::XMLElement* VGenerateXml(tinyxml2::XMLDocument* pDoc) override;
     virtual void VApply(WeakActorPtr pActor) override;
 };
 

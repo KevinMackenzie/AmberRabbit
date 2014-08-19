@@ -8,12 +8,12 @@
 
 class XmlResourceExtraData : public IResourceExtraData
 {
-    tinyxml2::XMLDocument m_xmlDocument;
+    tinyxml2::XMLDocument XmlDocument;
 
 public:
     virtual string VToString() { return "XmlResourceExtraData"; }
     void ParseXml(char* pRawBuffer);
-    tinyxml2::XMLElement* GetRoot(void) { return m_xmlDocument.RootElement(); }
+	tinyxml2::XMLElement* GetRoot(void) { return XmlDocument.RootElement(); }
 };
 
 
@@ -27,7 +27,7 @@ public:
     virtual string VGetPattern() { return "*.xml"; }
 
     // convenience function
-    static XMLElement* LoadAndReturnRootXmlElement(const char* resourceString);
+    static tinyxml2::XMLElement* LoadAndReturnRootXmlElement(const char* resourceString);
 };
 
 

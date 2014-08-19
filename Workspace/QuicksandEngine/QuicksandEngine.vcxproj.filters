@@ -109,9 +109,6 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Utilities\PrimeSearch.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.hpp">
-      <Filter>LUAScripting</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.hpp">
       <Filter>LUAScripting</Filter>
     </ClInclude>
@@ -374,7 +371,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Audio\Audio.hpp">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.hpp">
+    <ClInclude Include="..\..\Source\QuicksandEngine\Audio\SFMLAudio.hpp">
       <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
@@ -425,9 +422,6 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\PrimeSearch.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEventListener.cpp">
-      <Filter>LUAScripting</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.cpp">
       <Filter>LUAScripting</Filter>
     </ClCompile>
@@ -450,9 +444,6 @@
       <Filter>LuaPlus</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAddons.c">
-      <Filter>LuaPlus</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAll.cpp">
       <Filter>LuaPlus</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus_Libs.cpp">
@@ -677,7 +668,7 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Audio\Audio.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\DirectSoundAudio.cpp">
+    <ClCompile Include="..\..\Source\QuicksandEngine\Audio\SFMLAudio.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>

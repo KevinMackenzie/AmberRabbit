@@ -3,8 +3,6 @@
 
 
 #include "Geometry.hpp"
-#include "GLUFMaterial.hpp"
-#include "Shaders.hpp"
 
 // Forward declarations
 class SceneNode;
@@ -50,10 +48,10 @@ protected:
 
 	shared_ptr<ResHandle>       m_pTexture;
 
-	GLVertexArrayPtr            m_pVertexArray;
-	GLUniformBufferPtr			m_pUniformBuffer;
+	GLUFVertexArrayPtr            m_pVertexArray;
+	GLUFUniformBufferPtr			m_pUniformBuffer;
 
-	GLProgramPtr				m_pShaderProgram;
+	GLUFProgramPtr				m_pShaderProgram;
 };
 
 

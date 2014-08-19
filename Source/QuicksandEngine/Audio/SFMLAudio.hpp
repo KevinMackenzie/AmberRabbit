@@ -4,9 +4,11 @@
 #include "Audio.hpp"
 
 // DirectSound includes
-#include <dsound.h>
-#include <mmsystem.h>
+//#include <dsound.h>
+//#include <mmsystem.h>
 
+//ssfml audio includes
+#include <SFML/Audio.hpp>
 
 //////////////////////////////////////////////////////////////////////
 // DirectSoundAudioBuffer						- Chapter 13, page 420
@@ -17,13 +19,14 @@
 // 
 //////////////////////////////////////////////////////////////////////
 
-class DirectSoundAudioBuffer : public AudioBuffer
+class SFMLSoundBuffer : public AudioBuffer
 {
 protected:
-	LPDIRECTSOUNDBUFFER m_Sample;
+	sf::SoundBuffer m_Sample;
+	shared_ptr<sf::Sound> m_pSound;
 
 public:
-	DirectSoundAudioBuffer(LPDIRECTSOUNDBUFFER sample, shared_ptr<ResHandle> resource);
+	SFMLSoundBuffer(sf::SoundBuffer sample, shared_ptr<ResHandle> resource);
 	virtual void *VGet();
 	virtual bool VOnRestore();
 
@@ -40,8 +43,8 @@ public:
 	virtual float VGetProgress();
 
 private:
-	HRESULT FillBufferWithSound( );
-	HRESULT RestoreBuffer( BOOL* pbWasRestored );
+	HRESULT FillBufferWithSound();
+	//HRESULT RestoreBuffer( BOOL* pbWasRestored );
 };
 
 
@@ -55,11 +58,11 @@ private:
 // 
 //////////////////////////////////////////////////////////////////////
 
-class DirectSoundAudio : public Audio
+class SFMLSoundAudio : public Audio
 {
 public:
-	DirectSoundAudio() { m_pDS = NULL; }
-	virtual bool VActive() { return m_pDS!=NULL; }
+	SFMLSoundAudio() {  }
+	virtual bool VActive() { return true; }
 
 	virtual IAudioBuffer *VInitAudioBuffer(shared_ptr<ResHandle> handle);
 	virtual void VReleaseAudioBuffer(IAudioBuffer* audioBuffer);
@@ -69,11 +72,14 @@ public:
 
 protected:
 
-    IDirectSound8* m_pDS;
 
-	HRESULT SetPrimaryBufferFormat( DWORD dwPrimaryChannels, 
-									DWORD dwPrimaryFreq, 
-									DWORD dwPrimaryBitRate );
+    //IDirectSound8* m_pDS;
+
+	//HRESULT SetPrimaryBufferFormat( DWORD dwPrimaryChannels, 
+	//								DWORD dwPrimaryFreq, 
+	//								DWORD dwPrimaryBitRate );
 };
+
+//NOTE: sf::Music is not used, because our resource loading system loads directly into memory anyway
 
 #endif

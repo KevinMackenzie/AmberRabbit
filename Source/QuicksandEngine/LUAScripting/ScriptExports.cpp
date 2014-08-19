@@ -79,7 +79,7 @@ public:
 	static void AttachScriptProcess(LuaPlus::LuaObject scriptProcess);
 
     // math
-    static float GetYRotationFromvector(LuaPlus::LuaObject glm::vec3);
+    static float GetYRotationFromvector(LuaPlus::LuaObject vec3);
     static float WrapPi(float wrapMe);
     static LuaPlus::LuaObject GetvectorFromRotation(float angleRadians);
 
@@ -328,11 +328,11 @@ int InternalScriptExports::CreateActor(const char* actorArchetype, LuaPlus::LuaO
 	glm::vec3 ypr(luaYawPitchRoll["x"].GetFloat(), luaYawPitchRoll["y"].GetFloat(), luaYawPitchRoll["z"].GetFloat());
 
 	glm::mat4 initialTransform;
-	quat tmpQuat = quat(ypr);
-	initialTransform = rotate(initialTransform, tmpQuat.w, glm::vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
-	initialTransform = translate(initialTransform, pos);
+	glm::quat tmpQuat = glm::quat(ypr);
+	initialTransform = glm::rotate(initialTransform, tmpQuat.w, glm::vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
+	initialTransform = glm::translate(initialTransform, pos);
 
-	XMLElement *overloads = NULL;
+	tinyxml2::XMLElement *overloads = NULL;
 	StrongActorPtr pActor = QuicksandEngine::g_pApp->m_pGame->VCreateActor(actorArchetype, overloads, &initialTransform);
 
 	if (pActor)
@@ -382,11 +382,11 @@ void InternalScriptExports::LuaLog(LuaPlus::LuaObject text)
 {
     if (text.IsConvertibleToString())
     {
-        LOG_WRITE("Lua", text.ToString());
+        LOG_WRITE(ConcatString("Lua", text.ToString()));
     }
     else
     {
-        LOG_WRITE("Lua", "<" + string(text.TypeName()) + ">");
+		LOG_WRITE(ConcatString("Lua", "<" + string(text.TypeName()) + ">"));
     }
 }
 

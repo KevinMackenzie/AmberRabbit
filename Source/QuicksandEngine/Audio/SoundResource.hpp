@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <mmsystem.h>
+//#include <mmsystem.h>
 
 #include "../ResourceCache/ResCache.hpp"
 

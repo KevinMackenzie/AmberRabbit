@@ -2,22 +2,22 @@
 
 
 #include "SoundResource.hpp"
-#include "DirectSoundAudio.hpp"
+#include "SFMLAudio.hpp"
 
 #include <cguid.h>
 
 //////////////////////////////////////////////////////////////////////
 // 
-// DirectSoundAudio Implementation
+// SFMLSoundAudio Implementation
 //
 //////////////////////////////////////////////////////////////////////
 
 
 
 //
-// DirectSoundAudio::VInitialize			- Chapter 13, page 415
+// SFMLSoundAudio::VInitialize			- Chapter 13, page 415
 //
-bool DirectSoundAudio::VInitialize(HWND hWnd)
+bool SFMLSoundAudio::VInitialize(HWND hWnd)
 {
 	if(m_Initialized)
 		return true;
@@ -25,12 +25,12 @@ bool DirectSoundAudio::VInitialize(HWND hWnd)
 	m_Initialized=false;
 	m_AllSamples.clear();
 
-	SAFE_RELEASE( m_pDS );
+	//SAFE_RELEASE( m_pSound );
 
-	HRESULT hr;
+	//HRESULT hr;
 
 	// Create IDirectSound using the primary sound device
-	if( FAILED( hr = DirectSoundCreate8( NULL, &m_pDS, NULL ) ) )
+	/*if( FAILED( hr = DirectSoundCreate8( NULL, &m_pDS, NULL ) ) )
 		return false;
 
 	// Set DirectSound coop level 
@@ -38,7 +38,9 @@ bool DirectSoundAudio::VInitialize(HWND hWnd)
 		return false;
 
 	if( FAILED( hr = SetPrimaryBufferFormat( 8, 44100, 16 ) ) )
-		return false;
+		return false;*/
+
+	//m_pSound = shared_ptr<sf::Sound>(new sf::Sound());
 
 	m_Initialized = true;
 
@@ -46,9 +48,9 @@ bool DirectSoundAudio::VInitialize(HWND hWnd)
 }
 
 //
-// DirectSoundAudio::SetPrimaryBufferFormat		- Chapter 13, page 416
+// SFMLSoundAudio::SetPrimaryBufferFormat		- Chapter 13, page 416
 //
-HRESULT DirectSoundAudio::SetPrimaryBufferFormat( 
+/*HRESULT SFMLSoundAudio::SetPrimaryBufferFormat( 
 	DWORD dwPrimaryChannels, 
     DWORD dwPrimaryFreq, 
     DWORD dwPrimaryBitRate )
@@ -99,32 +101,32 @@ HRESULT DirectSoundAudio::SetPrimaryBufferFormat(
 
 	return S_OK;
 }
-
+*/
 
 //
-// DirectSoundAudio::VShutdown					- Chapter 13, page 417
+// SFMLSoundAudio::VShutdown					- Chapter 13, page 417
 //
-void DirectSoundAudio::VShutdown()
+void SFMLSoundAudio::VShutdown()
 {
 	if(m_Initialized)
 	{
 		Audio::VShutdown();
-		SAFE_RELEASE(m_pDS);
+		//SAFE_RELEASE(m_pDS);
 		m_Initialized = false;
 	}
 }
 
 
 //
-// DirectSoundAudio::VInitAudioBuffer			- Chapter 13, page 418
+// SFMLSoundAudio::VInitAudioBuffer			- Chapter 13, page 418
 //   Allocate a sample handle for the newborn sound (used by SoundResource) and tell you it's length
 //
-IAudioBuffer *DirectSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle)//const
+IAudioBuffer *SFMLSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle)//const
 {
 	shared_ptr<SoundResourceExtraData> extra = static_pointer_cast<SoundResourceExtraData>(resHandle->GetExtra());
-
-    if( ! m_pDS )
-        return NULL;
+	/*
+    if( ! m_pSound )
+        return NULL;*/
 
 	switch(extra->GetSoundType())
 	{
@@ -144,27 +146,28 @@ IAudioBuffer *DirectSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle
 			return NULL;
 	}//end switch
 
-    LPDIRECTSOUNDBUFFER sampleHandle;
+    sf::SoundBuffer sampleHandle;
 
     // Create the direct sound buffer, and only request the flags needed
     // since each requires some overhead and limits if the buffer can 
     // be hardware accelerated
-    DSBUFFERDESC dsbd;
-    ZeroMemory( &dsbd, sizeof(DSBUFFERDESC) );
+    //DSBUFFERDESC dsbd;
+    /*ZeroMemory( &dsbd, sizeof(DSBUFFERDESC) );
     dsbd.dwSize          = sizeof(DSBUFFERDESC);
     dsbd.dwFlags         = DSBCAPS_CTRLVOLUME;
     dsbd.dwBufferBytes   = resHandle->Size();
     dsbd.guid3DAlgorithm = GUID_NULL;
     dsbd.lpwfxFormat     = const_cast<WAVEFORMATEX *>(extra->GetFormat());
 
-	HRESULT hr;
+
+	//HRESULT hr;
     if( FAILED( hr = m_pDS->CreateSoundBuffer( &dsbd, &sampleHandle, NULL ) ) )
     {
         return NULL;
-    }
+    }*/
 
 	// Add handle to the list
-	IAudioBuffer *audioBuffer = QSE_NEW DirectSoundAudioBuffer(sampleHandle, resHandle);
+	IAudioBuffer *audioBuffer = QSE_NEW SFMLSoundBuffer(sampleHandle, resHandle);
 	m_AllSamples.push_front( audioBuffer);
 	
 	return audioBuffer;
@@ -172,44 +175,45 @@ IAudioBuffer *DirectSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle
 }
 
 //
-// DirectSoundAudio::VReleaseAudioBuffer			- Chapter 13, page 419
+// SFMLSoundAudio::VReleaseAudioBuffer			- Chapter 13, page 419
 //    Allocate a sample handle for the newborn sound (used by SoundResource)
 //
-void DirectSoundAudio::VReleaseAudioBuffer(IAudioBuffer *sampleHandle)//const
+void SFMLSoundAudio::VReleaseAudioBuffer(IAudioBuffer *sampleHandle)//const
 {
 	sampleHandle->VStop();
 	m_AllSamples.remove(sampleHandle);
 }
 
 //
-// DirectSoundAudioBuffer::DirectSoundAudioBuffer	- Chapter 13, page 420
+// SFMLSoundBuffer::SFMLSoundBuffer	- Chapter 13, page 420
 //
-DirectSoundAudioBuffer::DirectSoundAudioBuffer(
-	LPDIRECTSOUNDBUFFER sample, 
+SFMLSoundBuffer::SFMLSoundBuffer(
+	sf::SoundBuffer sample, 
 	shared_ptr<ResHandle> resource)
  : AudioBuffer(resource) 
 { 
 	m_Sample = sample; 
 	FillBufferWithSound();
+	m_pSound->setBuffer(m_Sample);
 }
 
 //
-// DirectSoundAudioBuffer::VGet						- Chapter 13, page 420
+// SFMLSoundBuffer::VGet						- Chapter 13, page 420
 //
-void *DirectSoundAudioBuffer::VGet()
+void *SFMLSoundBuffer::VGet()
 {
  	if (!VOnRestore())
 		return NULL;
 
-	return m_Sample;
+	return &m_pSound;
 }
 
 
 //
-// DirectSoundAudioBuffer::VPlay					- Chapter 13, page 421
+// SFMLSoundBuffer::VPlay					- Chapter 13, page 421
 //    Play a sound
 //
-bool DirectSoundAudioBuffer::VPlay(int volume, bool looping)
+bool SFMLSoundBuffer::VPlay(int volume, bool looping)
 {
    if(!g_pAudio->VActive())
       return false;
@@ -219,46 +223,46 @@ bool DirectSoundAudioBuffer::VPlay(int volume, bool looping)
 	m_Volume = volume;
 	m_isLooping = looping;
 
-	LPDIRECTSOUNDBUFFER pDSB = (LPDIRECTSOUNDBUFFER)VGet();
-	if (!pDSB)
+	sf::Sound *pSB = (sf::Sound*)VGet();
+	if (!pSB)
 		return false;
 
-    pDSB->SetVolume( volume );
+	pSB->setVolume(volume);
     
-    DWORD dwFlags = looping ? DSBPLAY_LOOPING : 0L;
-
-    return (S_OK==pDSB->Play( 0, 0, dwFlags ) );
+    //DWORD dwFlags = looping ? DSBPLAY_LOOPING : 0L;
+	pSB->setLoop(looping);
+    pSB->play();
 
 }//end Play
 
 
 //
-// DirectSoundAudioBuffer::VStop					- Chapter 13, page 421
+// SFMLSoundBuffer::VStop					- Chapter 13, page 421
 //    Stop a sound and rewind play position to the beginning.
 //
-bool DirectSoundAudioBuffer::VStop()
+bool SFMLSoundBuffer::VStop()
 {
 	if(!g_pAudio->VActive())
 		return false;
 
-	LPDIRECTSOUNDBUFFER pDSB = (LPDIRECTSOUNDBUFFER)VGet();
+	sf::Sound *pDSB = (sf::Sound*)VGet();
 
    if( ! pDSB )
 		return false;
 
 	m_isPaused=true;
-    pDSB->Stop();
+    pDSB->stop();
 	return true;
 }
 
 
 //
-// DirectSoundAudioBuffer::VPause					- Chapter X, page Y
+// SFMLSoundBuffer::VPause					- Chapter X, page Y
 //    Pause a sound 
 //
-bool DirectSoundAudioBuffer::VPause()
+bool SFMLSoundBuffer::VPause()
 {
-	LPDIRECTSOUNDBUFFER pDSB = (LPDIRECTSOUNDBUFFER)VGet();
+	sf::Sound* pDSB = (sf::Sound*)VGet();
 
 	if(!g_pAudio->VActive())
 		return false;
@@ -267,25 +271,30 @@ bool DirectSoundAudioBuffer::VPause()
 		return false;
 
 	m_isPaused=true;
-    pDSB->Stop();
-	pDSB->SetCurrentPosition(0);	// rewinds buffer to beginning.
+    pDSB->pause();
+	//pDSB->setPlayingOffset(sf::Time());	// rewinds buffer to beginning.
 	return true;
 }
 
 //
-// DirectSoundAudioBuffer::VResume					- Chapter 13, page 421
+// SFMLSoundBuffer::VResume					- Chapter 13, page 421
 //    Resume a sound
-bool DirectSoundAudioBuffer::VResume()
+bool SFMLSoundBuffer::VResume()
 {
+	sf::Sound* pDSB = (sf::Sound*)VGet();
+
+	pDSB->play();
 	m_isPaused=false;
-	return VPlay(VGetVolume(), VIsLooping());
+	//return VPlay(VGetVolume(), VIsLooping());
+	return true;
+
 }
 
 //
-// DirectSoundAudioBuffer::VTogglePause				- Chapter 13, page 421
+// SFMLSoundBuffer::VTogglePause				- Chapter 13, page 421
 //    Pause a sound or Resume a Paused sound
 //
-bool DirectSoundAudioBuffer::VTogglePause()
+bool SFMLSoundBuffer::VTogglePause()
 {
 	if(!g_pAudio->VActive())
 		return false;
@@ -308,41 +317,40 @@ bool DirectSoundAudioBuffer::VTogglePause()
 
 
 //
-// DirectSoundAudioBuffer::VIsPlaying				- Chapter 13, page 422
+// SFMLSoundBuffer::VIsPlaying				- Chapter 13, page 422
 //
-bool DirectSoundAudioBuffer::VIsPlaying() 
+bool SFMLSoundBuffer::VIsPlaying() 
 {
 	if(!g_pAudio->VActive())
 		return false;
 
-	DWORD dwStatus = 0;
-	LPDIRECTSOUNDBUFFER pDSB = (LPDIRECTSOUNDBUFFER)VGet();
-	pDSB->GetStatus( &dwStatus );
-    bool bIsPlaying = ( ( dwStatus & DSBSTATUS_PLAYING ) != 0 );
+	sf::Sound* pDSB = (sf::Sound*)VGet();
+	sf::SoundSource::Status stat = pDSB->getStatus();
+	bool bIsPlaying = stat == sf::SoundSource::Playing;
 
 	return bIsPlaying;
 }
 
 //
-// DirectSoundAudioBuffer::VSetVolume				- Chapter 13, page 422
+// SFMLSoundBuffer::VSetVolume				- Chapter 13, page 422
 //
-void DirectSoundAudioBuffer::VSetVolume(int volume)
+void SFMLSoundBuffer::VSetVolume(int volume)
 {
 	// DSBVOLUME_MIN, defined in dsound.h is set to as -10000, which is just way too silent for a 
 	// lower bound and many programmers find -5000 to be a better minimum bound for the volume 
 	// range to avoid an annoying silence for the lower 50% of a volume slider that uses a logarithmic scale.
 	// This was contributed by BystanderKain!
-	int gccDSBVolumeMin = DSBVOLUME_MIN;
+	//int gccDSBVolumeMin = DSBVOLUME_MIN;
 
 	if(!g_pAudio->VActive())
 		return;
 
-	LPDIRECTSOUNDBUFFER pDSB = (LPDIRECTSOUNDBUFFER)VGet();
+	sf::Sound* pDSB = (sf::Sound*)VGet();
 
 	LOG_ASSERT(volume>=0 && volume<=100 && "Volume must be a number between 0 and 100");
 
 	// convert volume from 0-100 into range for DirectX - don't forget to use a logarithmic scale!
-
+	/*
 	float coeff = (float)volume / 100.0f;
 	float logarithmicProportion = coeff >0.1f  ? 1+log10(coeff)  : 0;
 	float range = float(DSBVOLUME_MAX - gccDSBVolumeMin);
@@ -350,45 +358,47 @@ void DirectSoundAudioBuffer::VSetVolume(int volume)
 
 	LOG_ASSERT(fvolume>=gccDSBVolumeMin && fvolume<=DSBVOLUME_MAX);
 	HRESULT hr = pDSB->SetVolume( LONG(fvolume) );
-	LOG_ASSERT(hr==S_OK);
+	LOG_ASSERT(hr==S_OK);*/
+
+	pDSB->setVolume(volume);
 
 }
 
-void DirectSoundAudioBuffer::VSetPosition(unsigned long newPosition)
+void SFMLSoundBuffer::VSetPosition(unsigned long newPosition)
 {
-    m_Sample->SetCurrentPosition(newPosition);
+    m_pSound->setPlayingOffset(sf::milliseconds(newPosition));
 }
 
 
 //
-// DirectSoundAudioBuffer::VOnRestore		- Chapter 13, page 423
-//    NOTE: Renamed from DirectSoundAudioBuffer::VRestore in the book
-bool DirectSoundAudioBuffer::VOnRestore()
+// SFMLSoundBuffer::VOnRestore		- Chapter 13, page 423
+//    NOTE: Renamed from SFMLSoundBuffer::VRestore in the book
+bool SFMLSoundBuffer::VOnRestore()
 {
    HRESULT hr;
-   BOOL    bRestored;
+   //BOOL    bRestored;
 
     // Restore the buffer if it was lost
-    if( FAILED( hr = RestoreBuffer( &bRestored ) ) )
-        return NULL;
-
+    //if( FAILED( hr = RestoreBuffer( &bRestored ) ) )
+    //    return NULL;
+    /*
     if( bRestored )
     {
         // The buffer was restored, so we need to fill it with new data
         if( FAILED( hr = FillBufferWithSound( ) ) )
             return NULL;
     }
-
+	*/
 	return true;
 }
 
 //
-// DirectSoundAudioBuffer::RestoreBuffer			- Chapter 13, page 423
+// SFMLSoundBuffer::RestoreBuffer			- Chapter 13, page 423
 //
 //    Restores the lost buffer. *pbWasRestored returns TRUE if the buffer was 
 //    restored.  It can also NULL if the information is not needed.
 //
-HRESULT DirectSoundAudioBuffer::RestoreBuffer( BOOL* pbWasRestored )
+/*HRESULT SFMLSoundBuffer::RestoreBuffer( BOOL* pbWasRestored )
 {
     HRESULT hr;
 
@@ -429,63 +439,66 @@ HRESULT DirectSoundAudioBuffer::RestoreBuffer( BOOL* pbWasRestored )
     {
         return S_FALSE;
     }
-}
+}*/
 
 //
-// DirectSoundAudioBuffer::FillBufferWithSound				- Chapter 13, page 425
+// SFMLSoundBuffer::FillBufferWithSound				- Chapter 13, page 425
 //
-HRESULT DirectSoundAudioBuffer::FillBufferWithSound( void )
+HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
 {
     HRESULT hr; 
-	VOID	*pDSLockedBuffer = NULL;	 // a pointer to the DirectSound buffer
-    DWORD   dwDSLockedBufferSize = 0;    // Size of the locked DirectSound buffer
+	//VOID	*pDSLockedBuffer = NULL;	 // a pointer to the DirectSound buffer
+    //DWORD   dwDSLockedBufferSize = 0;    // Size of the locked DirectSound buffer
     DWORD   dwWavDataRead        = 0;    // Amount of data read from the wav file 
 
-    if( ! m_Sample )
-        return CO_E_NOTINITIALIZED;
+    //if( ! m_Sample )
+    //    return CO_E_NOTINITIALIZED;
 
     // Make sure we have focus, and we didn't just switch in from
     // an app which had a DirectSound device
-	if (FAILED(hr = RestoreBuffer(NULL)))
+	/*if (FAILED(hr = RestoreBuffer(NULL)))
 	{
 		LOG_ERROR("RestoreBuffer");
 		return E_FAIL;
-	}
+	}*/
 
 	int pcmBufferSize = m_Resource->Size();
 	shared_ptr<SoundResourceExtraData> extra = static_pointer_cast<SoundResourceExtraData>(m_Resource->GetExtra());
 
 	
     // Lock the buffer down
-	if (FAILED(hr = m_Sample->Lock(0, pcmBufferSize,
+	/*if (FAILED(hr = m_Sample->Lock(0, pcmBufferSize,
 		&pDSLockedBuffer, &dwDSLockedBufferSize,
 		NULL, NULL, 0L)))
 	{
 		LOG_ERROR("Lock");
 		return E_FAIL;
-	}
+	}*/
 
     if( pcmBufferSize == 0 )
     {
         // Wav is blank, so just fill with silence
-        FillMemory( (BYTE*) pDSLockedBuffer, 
-                    dwDSLockedBufferSize, 
-                    (BYTE)(extra->GetFormat()->wBitsPerSample == 8 ? 128 : 0 ) );
+        //FillMemory( (BYTE*) pDSLockedBuffer, 
+        //            dwDSLockedBufferSize, 
+        //            (BYTE)(extra->GetFormat()->wBitsPerSample == 8 ? 128 : 0 ) );
+		m_Sample.loadFromSamples(nullptr, 0, extra->GetFormat()->nChannels, extra->GetFormat()->nSamplesPerSec);
     }
     else 
 	{
-		CopyMemory(pDSLockedBuffer, m_Resource->Buffer(), pcmBufferSize);
-		if( pcmBufferSize < (int)dwDSLockedBufferSize )
+		//CopyMemory(pDSLockedBuffer, m_Resource->Buffer(), pcmBufferSize);
+		/*if( pcmBufferSize < (int)dwDSLockedBufferSize )
 		{
             // If the buffer sizes are different fill in the rest with silence 
             FillMemory( (BYTE*) pDSLockedBuffer + pcmBufferSize, 
                         dwDSLockedBufferSize - pcmBufferSize, 
                         (BYTE)(extra->GetFormat()->wBitsPerSample == 8 ? 128 : 0 ) );
-        }
+        }*/
+		m_Sample.loadFromSamples((const sf::Int16*)m_Resource->Buffer(), pcmBufferSize, extra->GetFormat()->nChannels, extra->GetFormat()->nSamplesPerSec);
     }
 
     // Unlock the buffer, we don't need it anymore.
-    m_Sample->Unlock( pDSLockedBuffer, dwDSLockedBufferSize, NULL, 0 );
+    //m_Sample->Unlock( pDSLockedBuffer, dwDSLockedBufferSize, NULL, 0 );
+
 
     return S_OK;
 }
@@ -494,18 +507,18 @@ HRESULT DirectSoundAudioBuffer::FillBufferWithSound( void )
 
 
 //
-// DirectSoundAudioBuffer::VGetProgress				- Chapter 13, page 426
+// SFMLSoundBuffer::VGetProgress				- Chapter 13, page 426
 //
-float DirectSoundAudioBuffer::VGetProgress()
+float SFMLSoundBuffer::VGetProgress()
 {
-	LPDIRECTSOUNDBUFFER pDSB = (LPDIRECTSOUNDBUFFER)VGet();	
-	DWORD progress = 0;
+	sf::Sound* pDSB = (sf::Sound*)VGet();	
+	sf::Time progress;
 
-	pDSB->GetCurrentPosition(&progress, NULL);
+	progress = pDSB->getPlayingOffset();
 
-	float length = (float)m_Resource->Size();
+	sf::Time length = pDSB->getBuffer()->getDuration();
 
-	return (float)progress / length;
+	return (float)(progress.asSeconds() / length.asSeconds());
 }
 
 

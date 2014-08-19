@@ -13,7 +13,7 @@ public:
 	FLOAT m_fDist;                  // distance from ray origin to intersection
 	DWORD m_dwFace;					// the face index of the intersection
 	FLOAT m_fBary1, m_fBary2;		// Barycentric coordinates of the intersection
-	FLOAT m_tu, m_tv;               // texture coords of intersection
+	//FLOAT m_tu, m_tv;               // texture coords of intersection
 	ActorId m_actorId;				// Which actor was intersected if there was one
 	glm::vec3 m_worldLoc;				// world location of intersection
 	glm::vec3 m_actorLoc;				// actor local coordinates of intersection
@@ -29,7 +29,7 @@ void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, F
 typedef std::vector<Intersection> IntersectionArray;
 
 //the distance between rayPos and rayDir MUST be of unit length and the mesh MUST have indexes, AND must be divisible by three
-bool RayIntersect(GLMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, DWORD *pCountOfHits = nullptr);
+bool RayIntersect(GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, DWORD *pCountOfHits = nullptr);
 
 
 
@@ -37,7 +37,7 @@ bool RayIntersect(GLMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL
 class RayCast
 {
 protected:
-	GLVertexBuffer m_pVB;
+	GLUFMeshBarebones m_pVB;
 
 public:
 	RayCast(Point point, DWORD maxIntersections = 16);
@@ -53,7 +53,7 @@ public:
 
 	IntersectionArray m_IntersectionArray;
 
-	HRESULT Pick(Scene *pScene, ActorId actorId, GLMeshBarebones *pMesh);
+	HRESULT Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh);
 
 	HRESULT Pick(Scene *pScene, ActorId actorId, Vec3Array pVerts, GLIndexArray pIndices);
 

@@ -55,7 +55,9 @@ public:
 		va_end(arglist);
 
 #if defined(WIN32) || defined(_XBOX) || defined(_XBOX_VER)
-		OutputDebugString(message);
+		LPWSTR errWindonws = L"";
+		mbstowcs(errWindonws, message, 800);
+		OutputDebugString(errWindonws);
 #else // !WIN32
 		puts(message);
 #endif // WIN32

@@ -78,7 +78,7 @@ class IGameLogic
 {
 public:
 	virtual WeakActorPtr VGetActor(const ActorId id)=0;
-    virtual StrongActorPtr VCreateActor(const std::string &actorResource, XMLElement *overrides, const glm::mat4 *initialTransform=NULL, const ActorId serversActorId=INVALID_ACTOR_ID)=0;
+    virtual StrongActorPtr VCreateActor(const std::string &actorResource, tinyxml2::XMLElement *overrides, const glm::mat4 *initialTransform=NULL, const ActorId serversActorId=INVALID_ACTOR_ID)=0;
     virtual void VDestroyActor(const ActorId actorId)=0;
 	virtual bool VLoadGame(const char* levelResource)=0;
 	virtual void VSetProxy()=0;				
@@ -110,7 +110,7 @@ public:
 	virtual GameViewId VGetId() const=0;
 	virtual void VOnAttach(GameViewId vid, ActorId aid)=0;
 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg )=0;
+	virtual LRESULT VOnMsgProc( AppMsg msg )=0;
 	virtual void VOnUpdate(unsigned long deltaMs)=0;
 
 	virtual ~IGameView() { };
@@ -142,7 +142,7 @@ class IKeyboardHandler
 {
 public:
 	virtual bool VOnKeyDown(const BYTE c)=0;
-	virtual bool VOnKeyUp(const BYTE c)=0;
+	virtual bool VOnKeyUp(const BYTE c) = 0;
 };
 
 class IPointerHandler

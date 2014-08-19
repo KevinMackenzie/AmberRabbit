@@ -12,7 +12,7 @@ typedef  std::map<string, string>::iterator ConfigIterator;
 class Configuration
 {
 	std::map<string, string> mConfigOptions;
-	XMLDocument* pDoc;
+	tinyxml2::XMLDocument* pDoc;
 
 	friend class StringsManager;
 

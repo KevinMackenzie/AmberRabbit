@@ -291,7 +291,7 @@ bool QuicksandEngineApp::LoadStrings(std::string language)
 	languageFile += language;
 	languageFile += ".xml";
 
-	XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(languageFile.c_str());
+	tinyxml2::XMLElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(languageFile.c_str());
 	if (!pRoot)
 	{
 		LOG_ERROR("Strings are missing.");
@@ -299,7 +299,7 @@ bool QuicksandEngineApp::LoadStrings(std::string language)
 	}
 
 	// Loop through each child element and load the component
-	for (XMLElement* pElem = pRoot->FirstChildElement(); pElem; pElem = pElem->NextSiblingElement())
+	for (tinyxml2::XMLElement* pElem = pRoot->FirstChildElement(); pElem; pElem = pElem->NextSiblingElement())
 	{
 		const char *pKey = pElem->Attribute("id");
 		const char *pText = pElem->Attribute("value");

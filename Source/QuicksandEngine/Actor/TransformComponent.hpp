@@ -15,8 +15,8 @@ public:
 	virtual const char* VGetName() const { return g_Name; }
 
     TransformComponent(void) : m_transform(glm::mat4()) { }
-    virtual bool VInit(XMLElement* pData) override;
-    virtual XMLElement* VGenerateXml(XMLDocument* pDoc) override;
+    virtual bool VInit(tinyxml2::XMLElement* pData) override;
+    virtual tinyxml2::XMLElement* VGenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
     // transform functions
     glm::mat4 GetTransform(void) const { return m_transform; }

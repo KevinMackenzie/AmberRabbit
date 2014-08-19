@@ -4,7 +4,7 @@
 
 const char* TransformComponent::g_Name = "TransformComponent";
 
-bool TransformComponent::VInit(XMLElement* pData)
+bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
 {
     LOG_ASSERT(pData);
 
@@ -18,7 +18,7 @@ bool TransformComponent::VInit(XMLElement* pData)
 
 	glm::vec3 position = ::GetPosition(m_transform);
 
-    XMLElement* pPositionElement = pData->FirstChildElement("Position");
+    tinyxml2::XMLElement* pPositionElement = pData->FirstChildElement("Position");
     if (pPositionElement)
     {
         double x = 0;
@@ -30,7 +30,7 @@ bool TransformComponent::VInit(XMLElement* pData)
         position = glm::vec3(x, y, z);
     }
 
-    XMLElement* pOrientationElement = pData->FirstChildElement("YawPitchRoll");
+    tinyxml2::XMLElement* pOrientationElement = pData->FirstChildElement("YawPitchRoll");
     if (pOrientationElement)
     {
         double yaw = 0;
@@ -50,7 +50,7 @@ bool TransformComponent::VInit(XMLElement* pData)
 
 	/**
 	// This is not supported yet.
-    XMLElement* pLookAtElement = pData->FirstChildElement("LookAt");
+    tinyxml2::XMLElement* pLookAtElement = pData->FirstChildElement("LookAt");
     if (pLookAtElement)
     {
         double x = 0;
@@ -64,7 +64,7 @@ bool TransformComponent::VInit(XMLElement* pData)
 		rotation.BuildRotationLookAt(translation.GetPosition(), lookAt, g_Up);
     }
 
-    XMLElement* pScaleElement = pData->FirstChildElement("Scale");
+    tinyxml2::XMLElement* pScaleElement = pData->FirstChildElement("Scale");
     if (pScaleElement)
     {
         double x = 0;
@@ -82,12 +82,12 @@ bool TransformComponent::VInit(XMLElement* pData)
     return true;
 }
 
-XMLElement* TransformComponent::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* TransformComponent::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-	XMLElement* pBaseElement = pDoc->NewElement(VGetName());
+	tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(VGetName());
 
     // initial transform -> position
-	XMLElement* pPosition = pDoc->NewElement("Position");
+	tinyxml2::XMLElement* pPosition = pDoc->NewElement("Position");
     glm::vec3 pos(::GetPosition(m_transform));
     pPosition->SetAttribute("x", ToStr(pos.x).c_str());
     pPosition->SetAttribute("y", ToStr(pos.y).c_str());
@@ -95,7 +95,7 @@ XMLElement* TransformComponent::VGenerateXml(XMLDocument* pDoc)
     pBaseElement->LinkEndChild(pPosition);
 
     // initial transform -> LookAt
-	XMLElement* pDirection = pDoc->NewElement("YawPitchRoll");
+	tinyxml2::XMLElement* pDirection = pDoc->NewElement("YawPitchRoll");
 	glm::vec3 orient(GetYawPitchRoll(m_transform));
 	orient.x = RADIANS_TO_DEGREES(orient.x);
 	orient.y = RADIANS_TO_DEGREES(orient.y);
@@ -108,7 +108,7 @@ XMLElement* TransformComponent::VGenerateXml(XMLDocument* pDoc)
 	/***
 	// This is not supported yet
     // initial transform -> position
-    XMLElement* pScale = QSE_NEW XMLElement("Scale");
+    tinyxml2::XMLElement* pScale = QSE_NEW tinyxml2::XMLElement("Scale");
     pPosition->SetAttribute("x", ToStr(m_scale.x).c_str());
     pPosition->SetAttribute("y", ToStr(m_scale.y).c_str());
     pPosition->SetAttribute("z", ToStr(m_scale.z).c_str());

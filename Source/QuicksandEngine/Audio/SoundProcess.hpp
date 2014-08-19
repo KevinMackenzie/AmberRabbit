@@ -1,10 +1,10 @@
 #ifndef QSE_SOUNDPROCESS_HPP
 #define QSE_SOUNDPROCESS_HPP
 
-#include "..\MainLoop\Process.h"
+#include "..\MainLoop\Process.hpp"
 
-#include "Audio.h"
-#include "SoundResource.h"
+#include "Audio.hpp"
+#include "SoundResource.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
 // class SoundProcess							- Chapter 13, page 426

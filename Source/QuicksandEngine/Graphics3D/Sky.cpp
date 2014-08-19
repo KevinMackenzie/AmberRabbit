@@ -6,7 +6,6 @@
 #include "Geometry.hpp"
 #include "SceneNode.hpp"
 #include "Scene.hpp"
-#include "Shaders.hpp"
 #include "Sky.hpp"
 
 ////////////////////////////////////////////////////
@@ -91,7 +90,7 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	Color skyVertColor = g_White;
 	float dim = 50.0f;
 
-	GLVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_pVertexArray);
+	GLUFVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_pVertexArray);
 
 	data.mPositions->resize(4); data.mUVCoords->resize(4);
 	(*data.mPositions)[0] = glm::vec3(dim, dim, dim);   (*data.mUVCoords)[0] = glm::vec2(1.0f, 0.0f);
@@ -108,8 +107,8 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	glm::vec3 edge2 = triangle[2] - triangle[0];
 
 	glm::vec3 normal;
-	normal = glm::glm::cross(edge1,edge2);
-	normal = glm::glm::normalize(normal);
+	normal = glm::cross(edge1,edge2);
+	normal = glm::normalize(normal);
 
 	glm::mat4 rotY;
 	rotY = BuildRotationY(AR_PI / 2.0f);
@@ -209,8 +208,6 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 //
 HRESULT GLSkyNode::VRender(Scene *pScene)
 {
-	HRESULT hr;
-
 	//TODO:
 	//V_RETURN(m_VertexShader.SetupRender(pScene, this));
 	//V_RETURN(m_PixelShader.SetupRender(pScene, this));
@@ -242,9 +239,9 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 		****/
 
 		//TODO: set this up correctly AND WITH TEXTURES
-		MatrixTransformBlock block(pScene->GetTopMatrix(), m_camera->GetView, m_camera->GetProjection());
-		GLUFBUFFERMANAGER.ModifyUniformMatrix(m_pUniformBuffer, block);
-		ShaderManager.UseProgram(m_pShaderProgram);
+		GLUFMatrixTransformBlockParam block(pScene->GetTopMatrix(), m_camera->GetView(), m_camera->GetProjection());
+		GLUFBUFFERMANAGER.ModifyUniformTransformMatrix(m_pUniformBuffer, block);
+		GLUFSHADERMANAGER.UseProgram(m_pShaderProgram);
 		GLUFBUFFERMANAGER.DrawVertexArray(m_pVertexArray);
 		GLUFBUFFERMANAGER.ResetBufferBindings();
 

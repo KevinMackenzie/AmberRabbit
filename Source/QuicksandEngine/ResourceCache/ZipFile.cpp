@@ -13,6 +13,7 @@
 
 #include "ZipFile.hpp"
 
+#undef FAR
 #define FAR
 #include <zlib.h>
 #include <string.h>

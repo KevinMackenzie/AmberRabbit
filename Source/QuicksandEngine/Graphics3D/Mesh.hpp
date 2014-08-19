@@ -80,12 +80,12 @@ public:
 	GLObjMeshResourceExtraData m_Nodes;
 };*/
 /*
-struct GLMeshBarebones
+struct Vec3Array
 {
 	Vec3Array mVertexArray;
 	GLIndexArray mIndexArray;
 
-	GLMeshBarebones(GLMeshData mesh) : mVertexArray(mesh.mVertexArray), mIndexArray(mesh.mIndexArray){}
+	Vec3Array(GLMeshData mesh) : mVertexArray(mesh.mVertexArray), mIndexArray(mesh.mIndexArray){}
 };*/
 
 

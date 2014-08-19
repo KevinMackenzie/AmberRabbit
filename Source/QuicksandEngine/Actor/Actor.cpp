@@ -23,7 +23,7 @@ Actor::~Actor(void)
     LOG_ASSERT(m_components.empty());  // [rez] if this assert fires, the actor was destroyed without calling Actor::Destroy()
 }
 
-bool Actor::Init(XMLElement* pData)
+bool Actor::Init(tinyxml2::XMLElement* pData)
 {
 	LOG_WRITE("Actor", string("Initializing Actor ") + ToStr(m_id));
 
@@ -55,10 +55,10 @@ void Actor::Update(int deltaMs)
 
 string Actor::ToXML()
 {
-    XMLDocument outDoc;
+    tinyxml2::XMLDocument outDoc;
 	
     // Actor element
-	XMLElement* pActorElement = outDoc.NewElement("Actor");
+	tinyxml2::XMLElement* pActorElement = outDoc.NewElement("Actor");
     pActorElement->SetAttribute("type", m_type.c_str());
 	pActorElement->SetAttribute("resource", m_resource.c_str());
 
@@ -66,7 +66,7 @@ string Actor::ToXML()
     for (auto it = m_components.begin(); it != m_components.end(); ++it)
     {
         StrongActorComponentPtr pComponent = it->second;
-		XMLElement* pComponentElement = pComponent->VGenerateXml(&outDoc);
+		tinyxml2::XMLElement* pComponentElement = pComponent->VGenerateXml(&outDoc);
         pActorElement->LinkEndChild(pComponentElement);
     }
 

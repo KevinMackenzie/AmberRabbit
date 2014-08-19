@@ -32,6 +32,8 @@ class SkyNode;
 class LightNode;
 class LightManager;
 
+extern shared_ptr<GLUFMatrixStack> g_pMatrixStack;
+
 class Scene
 {
 protected:

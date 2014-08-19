@@ -4,14 +4,14 @@
 
 const char* AmmoPickup::g_Name = "AmmoPickup";
 
-bool AmmoPickup::VInit(XMLElement* pData)
+bool AmmoPickup::VInit(tinyxml2::XMLElement* pData)
 {
     return true;
 }
 
-XMLElement* AmmoPickup::VGenerateXml(XMLDocument* pDoc)
+tinyxml2::XMLElement* AmmoPickup::VGenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-    XMLElement* pComponentElement = QSE_NEW XMLElement(VGetName());
+    tinyxml2::XMLElement* pComponentElement = QSE_NEW tinyxml2::XMLElement(VGetName());
     return pComponentElement;
 }
 
