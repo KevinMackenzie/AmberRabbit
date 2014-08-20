@@ -29,7 +29,7 @@ float PathingNode::GetCostFromNode(PathingNode* pFromNode)
 	PathingArc* pArc = FindArc(pFromNode);
 	LOG_ASSERT(pArc);
 	glm::vec3 diff = pFromNode->GetPos() - m_pos;
-	return pArc->GetWeight() * length(diff);
+	return pArc->GetWeight() * glm::length(diff);
 }
 
 PathingArc* PathingNode::FindArc(PathingNode* pLinkedNode)
@@ -86,7 +86,7 @@ bool PathPlan::CheckForNextNode(const glm::vec3& pos)
     //GCC_LOG("AI", str);
 	// end DEBUG
 	
-	if (length(diff) <= (*m_index)->GetTolerance())
+	if (glm::length(diff) <= (*m_index)->GetTolerance())
 	{
 		++m_index;
 		return true;
@@ -139,7 +139,7 @@ void PathPlanNode::UpdateHeuristics(void)
 
 	// heuristic (h)
 	glm::vec3 diff = m_pPathingNode->GetPos() - m_pGoalNode->GetPos();
-	m_heuristic = length(diff);
+	m_heuristic = glm::length(diff);
 
 	// cost to goal (f)
 	m_fitness = m_goal + m_heuristic;
@@ -385,10 +385,10 @@ PathingNode* PathingGraph::FindClosestNode(const glm::vec3& pos)
 	{
 		PathingNode* pNode = *it;
 		glm::vec3 diff = pos - pNode->GetPos();
-		if (::length(diff) < length)
+		if (glm::length(diff) < length)
 		{
 			pClosestNode = pNode;
-			length = ::length(diff);
+			length = glm::length(diff);
 		}
 	}
 	
@@ -405,10 +405,10 @@ PathingNode* PathingGraph::FindFurthestNode(const glm::vec3& pos)
 	{
 		PathingNode* pNode = *it;
 		glm::vec3 diff = pos - pNode->GetPos();
-		if (::length(diff) > length)
+		if (glm::length(diff) > length)
 		{
 			pFurthestNode = pNode;
-			length = ::length(diff);
+			length = glm::length(diff);
 		}
 	}
 

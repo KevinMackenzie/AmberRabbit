@@ -68,35 +68,35 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>ef368846</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>0011f998</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)/../Lib/;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)/../Source/;$(IncludePath)</IncludePath>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,11 +106,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -119,11 +123,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -134,6 +142,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +150,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -151,6 +163,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +171,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\QuicksandEngine\Actor\Actor.hpp" />
@@ -214,6 +230,8 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateCD.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\luathread.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\pt.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.h" />
@@ -237,6 +255,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.h" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\srm.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.hpp" />
@@ -304,13 +323,16 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAddons.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusFunctions.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus_Libs.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState_DumpObject.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\luathread.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\lwstrlib.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\popen.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\pt.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lbaselib.c" />
@@ -337,12 +359,11 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltablib.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lua.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\luac.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\print.c" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\srm.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.cpp" />
@@ -374,9 +395,28 @@
     <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.inl" />
     <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.inl" />
     <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.inl" />
+    <None Include="..\..\Source\QuicksandEngine\LuaPlus\premake.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bullet\BulletCollision.vcxproj">
+      <Project>{da88b8c3-bc36-0c4c-8364-f4be59a2c98e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\BulletDynamics.vcxproj">
+      <Project>{a48bec65-b241-7f4e-92bb-25328c769ace}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\BulletSoftBody.vcxproj">
+      <Project>{25913f80-4a7a-d34c-9fe4-c54db232ac6a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\ConvexDecomposition.vcxproj">
+      <Project>{9f237ae8-6f61-6249-9ac3-e797479648c8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\HACD.vcxproj">
+      <Project>{55ba09a5-0bdd-e94c-9831-893a5fc347a7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\LinearMath.vcxproj">
+      <Project>{25a1937a-d0f1-a348-82a6-bf1036c32f4c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ObjGLUF\ObjGLUF.vcxproj">
       <Project>{06ddd1c2-d673-4a97-aba7-c5c1dd72c875}</Project>
     </ProjectReference>

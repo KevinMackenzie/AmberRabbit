@@ -26,7 +26,7 @@ EventManager::~EventManager()
 //---------------------------------------------------------------------------------------------------------------------
 bool EventManager::VAddListener(const EventListenerDelegate& eventDelegate, const EventType& type)
 {
-    LOG_WRITE("Events", "Attempting to add delegate function for event type: " + ToStr(type, 16));
+    LOG_WRITE(ConcatString("Events", "Attempting to add delegate function for event type: " + ToStr(type, 16)));
 
     EventListenerList& eventListenerList = m_eventListeners[type];  // this will find or create the entry
     for (auto it = eventListenerList.begin(); it != eventListenerList.end(); ++it)
@@ -39,7 +39,7 @@ bool EventManager::VAddListener(const EventListenerDelegate& eventDelegate, cons
     }
 
     eventListenerList.push_back(eventDelegate);
-    LOG_WRITE("Events", "Successfully added delegate for event type: " + ToStr(type, 16));
+	LOG_WRITE(ConcatString("Events", "Successfully added delegate for event type: " + ToStr(type, 16)));
 
 	return true;
 }
@@ -50,7 +50,7 @@ bool EventManager::VAddListener(const EventListenerDelegate& eventDelegate, cons
 //---------------------------------------------------------------------------------------------------------------------
 bool EventManager::VRemoveListener(const EventListenerDelegate& eventDelegate, const EventType& type)
 {
-    LOG_WRITE("Events", "Attempting to remove delegate function from event type: " + ToStr(type, 16));
+	LOG_WRITE(ConcatString("Events", "Attempting to remove delegate function from event type: " + ToStr(type, 16)));
 	bool success = false;
 
     auto findIt = m_eventListeners.find(type);
@@ -62,7 +62,7 @@ bool EventManager::VRemoveListener(const EventListenerDelegate& eventDelegate, c
             if (eventDelegate == (*it))
             {
                 listeners.erase(it);
-                LOG_WRITE("Events", "Successfully removed delegate function from event type: " + ToStr(type, 16));
+				LOG_WRITE(ConcatString("Events", "Successfully removed delegate function from event type: " + ToStr(type, 16)));
                 success = true;
                 break;  // we don't need to continue because it should be impossible for the same delegate function to be registered for the same event more than once
             }
@@ -78,7 +78,7 @@ bool EventManager::VRemoveListener(const EventListenerDelegate& eventDelegate, c
 //---------------------------------------------------------------------------------------------------------------------
 bool EventManager::VTriggerEvent(const IEventDataPtr& pEvent) const
 {
-    LOG_WRITE("Events", "Attempting to trigger event " + string(pEvent->GetName()));
+	LOG_WRITE(ConcatString("Events", "Attempting to trigger event " + string(pEvent->GetName())));
     bool processed = false;
 
     auto findIt = m_eventListeners.find(pEvent->VGetEventType());
@@ -88,7 +88,7 @@ bool EventManager::VTriggerEvent(const IEventDataPtr& pEvent) const
 	    for (EventListenerList::const_iterator it = eventListenerList.begin(); it != eventListenerList.end(); ++it)
 	    {
 		    EventListenerDelegate listener = (*it);
-            LOG_WRITE("Events", "Sending Event " + string(pEvent->GetName()) + " to delegate.");
+			LOG_WRITE(ConcatString("Events", "Sending Event " + string(pEvent->GetName()) + " to delegate."));
 		    listener(pEvent);  // call the delegate
             processed = true;
 	    }
@@ -113,18 +113,18 @@ bool EventManager::VQueueEvent(const IEventDataPtr& pEvent)
         return false;
     }
 
-    LOG_WRITE("Events", "Attempting to queue event: " + string(pEvent->GetName()));
+	LOG_WRITE(ConcatString("Events", "Attempting to queue event: " + string(pEvent->GetName())));
 
 	auto findIt = m_eventListeners.find(pEvent->VGetEventType());
     if (findIt != m_eventListeners.end())
     {
         m_queues[m_activeQueue].push_back(pEvent);
-        LOG_WRITE("Events", "Successfully queued event: " + string(pEvent->GetName()));
+		LOG_WRITE(ConcatString("Events", "Successfully queued event: " + string(pEvent->GetName())));
         return true;
     }
     else
     {
-        LOG_WRITE("Events", "Skipping event since there are no delegates registered to receive it: " + string(pEvent->GetName()));
+		LOG_WRITE(ConcatString("Events", "Skipping event since there are no delegates registered to receive it: " + string(pEvent->GetName())));
         return false;
     }
 }
@@ -205,7 +205,7 @@ bool EventManager::VUpdate(unsigned long maxMillis)
 	m_activeQueue = (m_activeQueue + 1) % EVENTMANAGER_NUM_QUEUES;
 	m_queues[m_activeQueue].clear();
 
-    LOG_WRITE("EventLoop", "Processing Event Queue " + ToStr(queueToProcess) + "; " + ToStr((unsigned long)m_queues[queueToProcess].size()) + " events to process");
+	LOG_WRITE(ConcatString("EventLoop", "Processing Event Queue " + ToStr(queueToProcess) + "; " + ToStr((unsigned long)m_queues[queueToProcess].size()) + " events to process"));
 
 	// Process the queue
 	while (!m_queues[queueToProcess].empty())
@@ -213,7 +213,7 @@ bool EventManager::VUpdate(unsigned long maxMillis)
         // pop the front of the queue
 		IEventDataPtr pEvent = m_queues[queueToProcess].front();
         m_queues[queueToProcess].pop_front();
-        LOG_WRITE("EventLoop", "\t\tProcessing Event " + string(pEvent->GetName()));
+		LOG_WRITE(ConcatString("EventLoop", "\t\tProcessing Event " + string(pEvent->GetName())));
 
 		const EventType& eventType = pEvent->VGetEventType();
 
@@ -222,13 +222,13 @@ bool EventManager::VUpdate(unsigned long maxMillis)
 		if (findIt != m_eventListeners.end())
 		{
 			const EventListenerList& eventListeners = findIt->second;
-            LOG_WRITE("EventLoop", "\t\tFound " + ToStr((unsigned long)eventListeners.size()) + " delegates");
+			LOG_WRITE(ConcatString("EventLoop", "\t\tFound " + ToStr((unsigned long)eventListeners.size()) + " delegates"));
 
             // call each listener
 			for (auto it = eventListeners.begin(); it != eventListeners.end(); ++it)
 			{
                 EventListenerDelegate listener = (*it);
-                LOG_WRITE("EventLoop", "\t\tSending event " + string(pEvent->GetName()) + " to delegate");
+				LOG_WRITE(ConcatString("EventLoop", "\t\tSending event " + string(pEvent->GetName()) + " to delegate"));
 				listener(pEvent);
 			}
 		}
@@ -237,7 +237,7 @@ bool EventManager::VUpdate(unsigned long maxMillis)
 		currMs = GetTickCount();
 		if (maxMillis != IEventManager::kINFINITE && currMs >= maxMs)
         {
-            LOG_WRITE("EventLoop", "Aborting event processing; time ran out");
+			LOG_WRITE(ConcatString("EventLoop", "Aborting event processing; time ran out"));
 			break;
         }
 	}

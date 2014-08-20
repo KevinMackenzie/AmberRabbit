@@ -23,7 +23,7 @@ MovementController::MovementController(shared_ptr<SceneNode> object, float initi
 
 	glm::vec3 pos = GetPosition(m_matToWorld);
 
-	m_matPosition = translate(m_matPosition, pos);
+	m_matPosition = glm::translate(m_matPosition, pos);
 
 	POINT ptCursor;
 	GetCursorPos(&ptCursor);
@@ -187,7 +187,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 		// new world-to-object matrix. 
 
 		m_matToWorld = matRot * m_matPosition;
-		m_matFromWorld = inverse(m_matToWorld);
+		m_matFromWorld = glm::inverse(m_matToWorld);
 		m_object->VSetTransform(&m_matToWorld, &m_matFromWorld);
 	}
 
@@ -210,7 +210,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 		SetPosition(m_matPosition,pos);
 		SetPosition(m_matToWorld, pos);
 
-		m_matFromWorld = inverse(m_matToWorld);
+		m_matFromWorld = glm::inverse(m_matToWorld);
 		m_object->VSetTransform(&m_matToWorld, &m_matFromWorld);
 	}
 	else

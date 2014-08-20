@@ -118,12 +118,9 @@ public:
 	GLRenderer() { m_pLineDrawer = NULL; }
 	virtual void VShutdown()  { GLRenderer_Base::VShutdown(); SAFE_DELETE(m_pLineDrawer); }
 
-	virtual void VSetBackgroundColor(BYTE bgA, BYTE bgR, BYTE bgG, BYTE bgB)
+	virtual void VSetBackgroundColor(glm::u8 bgA, glm::u8 bgR, glm::u8 bgG, glm::u8 bgB)
 	{
-		m_backgroundColor[0] = float(bgA) / 255.0f;
-		m_backgroundColor[1] = float(bgR) / 255.0f;
-		m_backgroundColor[2] = float(bgG) / 255.0f;
-		m_backgroundColor[3] = float(bgB) / 255.0f;
+		m_BackgroundColor = Color(bgR, bgG, bgB, bgA);
 	}
 
 	virtual bool VPreRender();
@@ -145,7 +142,7 @@ public:
 	//GLBufferManager mBufferManager;
 
 protected:
-	float								m_backgroundColor[4];
+	Color  m_BackgroundColor;
 
 	GLLineDrawer						*m_pLineDrawer;
 };

@@ -19,13 +19,13 @@ Actor::Actor(ActorId id)
 
 Actor::~Actor(void)
 {
-    LOG_WRITE("Actor", string("Destroying Actor ") + ToStr(m_id));
+    LOG_WRITE(ConcatString("Actor", string("Destroying Actor ") + ToStr(m_id)));
     LOG_ASSERT(m_components.empty());  // [rez] if this assert fires, the actor was destroyed without calling Actor::Destroy()
 }
 
 bool Actor::Init(tinyxml2::XMLElement* pData)
 {
-	LOG_WRITE("Actor", string("Initializing Actor ") + ToStr(m_id));
+	LOG_WRITE(ConcatString("Actor", string("Initializing Actor ") + ToStr(m_id)));
 
 	m_type = pData->Attribute("type");
 	m_resource = pData->Attribute("resource");
@@ -71,7 +71,7 @@ string Actor::ToXML()
     }
 
     outDoc.LinkEndChild(pActorElement);
-	XMLPrinter printer;
+	tinyxml2::XMLPrinter printer;
 	outDoc.Accept(&printer);
 
 	return printer.CStr();

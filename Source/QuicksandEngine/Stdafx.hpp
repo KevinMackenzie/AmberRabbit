@@ -11,10 +11,11 @@
 #include <windows.h>
 #include <windowsx.h>
 
-
 #include <crtdbg.h>
 
 
+#include <mmsystem.h>
+#include <mmreg.h>
 
 #define _VS2005_
 #if _MSC_VER < 1400

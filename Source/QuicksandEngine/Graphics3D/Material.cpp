@@ -158,7 +158,7 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 
 	//------ Allocate a buffer to store the bitmap data.
 
-	unsigned char* data;
+	char* data = "";
 
 
 	//------ Copy data from DevIL to our pixmap.
@@ -173,7 +173,7 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 
 	//make this openGL
 	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTextureBuffer();
-	GLUFBUFFERMANAGER.BufferTexture(extra->m_pTexture, texWidth  * texHeight * 4 * sizeof(unsigned char), data);
+	GLUFBUFFERMANAGER.LoadTextureFromMemory(extra->m_pTexture, data, texWidth  * texHeight * 4 * sizeof(unsigned char), TFF_DDS);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
@@ -236,7 +236,7 @@ bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTexture(texId);
+	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTextureBuffer(texId);
 	handle->SetExtra(extra);
 	return true;
 }

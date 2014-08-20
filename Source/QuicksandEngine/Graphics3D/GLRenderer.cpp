@@ -24,7 +24,7 @@ public:
 
 GLRendererAlphaPass::GLRendererAlphaPass()
 {
-	m_oldWorld = GLUFBUFFERMANAGER.GetMatrixStackState();
+	m_oldWorld = *g_pMatrixStack;
 	//DXUTGetD3D9Device()->GetTransform(D3DTS_WORLD, &m_oldWorld);
 	//DXUTGetD3D9Device()->GetRenderState(D3DRS_ZWRITEENABLE, &m_oldZWriteEnable);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
@@ -47,7 +47,8 @@ GLRendererAlphaPass::~GLRendererAlphaPass()
 	DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, m_oldZWriteEnable);
 	DXUTGetD3D9Device()->SetTransform(D3DTS_WORLD, &m_oldWorld);*/
 
-	GLUFBUFFERMANAGER.SetMatrixStackOverride(m_oldWorld);
+
+	*g_pMatrixStack = m_oldWorld;
 	glEnable(GL_DEPTH_BUFFER_BIT);
 }
 
@@ -347,7 +348,7 @@ HRESULT GLLineDrawer::OnRestore()
 
 void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color)
 {
-	HRESULT hr;
+	//HRESULT hr;
 
 	shared_ptr<Scene> pScene = QuicksandEngine::g_pApp->GetHumanView()->m_pScene;
 	shared_ptr<IRenderer> pRenderer = pScene->GetRenderer();
@@ -370,7 +371,7 @@ void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Co
 	pVerts[1] = to;
 	DXUTGetD3D11DeviceContext()->Unmap(m_pVertexBuffer, 0);*/
 
-	GLVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_pVertexBuffer);
+	GLUFVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_pVertexBuffer);
 	data.mPositions->resize(2);
 	(*data.mPositions)[0] = from;
 	(*data.mPositions)[1] = to;
@@ -378,7 +379,7 @@ void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Co
 
 	//DXUTGetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
-	ShaderManager.UseProgram(m_LineDrawerShader);
+	GLUFSHADERMANAGER.UseProgram(m_LineDrawerShader);
 
 	// Set primitive topology
 	//DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
@@ -414,7 +415,11 @@ bool GLRenderer::VPreRender()
 
 	//DXUTGetD3D11DeviceContext()->ClearRenderTargetView(DXUTGetD3D11RenderTargetView(), m_backgroundColor);
 
-	int* width, *height, *x, *y;
+	int *width  = new int, 
+		*height = new int, 
+		*x      = new int, 
+		*y      = new int;
+
 	glfwGetWindowSize(QuicksandEngine::g_pApp->GLFWWindow(), width, height);
 	glfwGetWindowPos(QuicksandEngine::g_pApp->GLFWWindow(), x, y);
 
@@ -426,7 +431,8 @@ bool GLRenderer::VPreRender()
 	//DXUTGetD3D11DeviceContext()->ClearDepthStencilView(DXUTGetD3D11DepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	glClearDepth(1.0f);
-	glClearBufferfv(GL_COLOR, 0, m_backgroundColor);
+	Color4f col = GLUFColorToFloat(m_BackgroundColor);
+	glClearBufferfv(GL_COLOR, 0, &col[0]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	return true;

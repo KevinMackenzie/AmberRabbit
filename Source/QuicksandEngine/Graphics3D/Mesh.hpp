@@ -12,7 +12,7 @@ struct GLMeshData
 	Vec3Array mVertexArray;
 	Vec3Array mNormalArray;
 	Vec2Array mUVArray;
-	GLIndexArray mIndexArray;
+	IndexArray mIndexArray;
 };
 
 struct GLMeshHandles
@@ -83,7 +83,7 @@ public:
 struct Vec3Array
 {
 	Vec3Array mVertexArray;
-	GLIndexArray mIndexArray;
+	IndexArray mIndexArray;
 
 	Vec3Array(GLMeshData mesh) : mVertexArray(mesh.mVertexArray), mIndexArray(mesh.mIndexArray){}
 };*/

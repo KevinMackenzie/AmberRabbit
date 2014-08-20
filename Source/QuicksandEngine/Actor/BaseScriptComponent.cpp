@@ -112,7 +112,7 @@ bool BaseScriptComponent::VInit(tinyxml2::XMLElement* pData)
             return false;
         }
 
-        for (const XMLAttribute* pAttribute = pScriptDataElement->FirstAttribute(); pAttribute != NULL; pAttribute = pAttribute->Next())
+        for (const tinyxml2::XMLAttribute* pAttribute = pScriptDataElement->FirstAttribute(); pAttribute != NULL; pAttribute = pAttribute->Next())
         {
             m_scriptObject.SetString(pAttribute->Name(), pAttribute->Value());
         }

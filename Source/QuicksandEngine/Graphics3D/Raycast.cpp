@@ -59,7 +59,7 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 	if (!m_bAllHits && m_NumIntersections > 0)
 		return S_OK;
 
-	HRESULT hr;
+	HRESULT hr = S_OK;
 
 
 	// Get the inverse view matrix
@@ -155,7 +155,7 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 
 
 
-HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, Vec3Array pVB, GLIndexArray pIB)
+HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, Vec3Array pVB, IndexArray pIB)
 {
 	if (!m_bAllHits && m_NumIntersections > 0)
 		return S_OK;

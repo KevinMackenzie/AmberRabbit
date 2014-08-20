@@ -112,23 +112,23 @@ extern bool IntersectTriangle(const glm::vec3& orig, const glm::vec3& dir,
 	FLOAT* t, FLOAT* u, FLOAT* v);
 
 
-void BuildYawPitchRoll(glm::mat4& m, const float yawRadians, const float pitchRadians, const float rollRadians)
+inline void BuildYawPitchRoll(glm::mat4& m, const float yawRadians, const float pitchRadians, const float rollRadians)
 {
 	m = m * glm::toMat4(glm::quat(glm::vec3(yawRadians, pitchRadians, rollRadians)));
 }
 
 //kinda expensive, but avoid gimbal lock
-glm::mat4 BuildRotationX(float rot)
+inline glm::mat4 BuildRotationX(float rot)
 {
 	return glm::toMat4(glm::quat(glm::vec3(rot, 0.0f, 0.0f)));
 }
 
-glm::mat4 BuildRotationY(float rot)
+inline glm::mat4 BuildRotationY(float rot)
 {
 	return glm::toMat4(glm::quat(glm::vec3(0.0f, rot, 0.0f)));
 }
 
-glm::mat4 BuildRotationZ(float rot)
+inline glm::mat4 BuildRotationZ(float rot)
 {
 	return glm::toMat4(glm::quat(glm::vec3(0.0f, 0.0f, rot)));
 }

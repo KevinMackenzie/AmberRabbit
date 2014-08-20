@@ -2,7 +2,7 @@
 #include "LuaStateManager.hpp"
 #include "../Utilities/String.hpp"
 
-#pragma comment(lib, "luaplus51-1201.lib")
+//#pragma comment(lib, "luaplus51-1201.lib")
 
 LuaStateManager* LuaStateManager::s_pSingleton = NULL;
 

@@ -29,9 +29,9 @@ glm::vec2 Aivec3ToVec2(aiVector3D vec)
 }
 
 template <class M>
-std::vector<M> ArrToVec(M* arr, size_t size)
+std::vector<M> ArrToVec(M* arr, unsigned long size)
 {
-	return std::vector<GLuint>(std::begin(arr), std::end(arr));
+	return std::vector<M>(std::begin(arr), std::end(arr));
 }
 
 unsigned int ObjMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)

@@ -525,7 +525,7 @@ glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 
 
 ////////////////////////////////////////////////////
-// D3DGrid9 Implementation
+// GLGrid Implementation
 //
 // D3D9 classes are not covered in the 4th edition. They are included here for those 
 // people that don't have D3D11 compatible video cards. 
@@ -536,29 +536,32 @@ glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 ////////////////////////////////////////////////////
 
 //
-// D3DGrid9::D3DGrid9						- 3rd Edition, Chapter 13, page 448
+// GLGrid::GLGrid						- 3rd Edition, Chapter 13, page 448
 //
-/*
-D3DGrid9::D3DGrid9(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
+
+GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
 	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
 {
 	m_bTextureHasAlpha = false;
-	m_pVerts = NULL;
-	m_pIndices = NULL;
+	//m_pVerts = NULL;
+	//m_pIndices = NULL;
+	//m_VertexArray = GLUFVertexArrayPtr(new GLUFVertexArrayPtr());
+	//m_VertexArray = GLUFBUFFERMANAGER.CreateVertexArray();
+
 	m_numVerts = m_numPolys = 0;
 }
 
 //
-// D3DGrid9::~D3DGrid9						-  3rd Edition, Chapter 13, page 449
+// GLGrid::~GLGrid						-  3rd Edition, Chapter 13, page 449
 //
-D3DGrid9::~D3DGrid9()
+GLGrid::~GLGrid()
 {
-	SAFE_RELEASE(m_pVerts);
-	SAFE_RELEASE(m_pIndices);
+	//SAFE_RELEASE(m_pVerts);
+	//SAFE_RELEASE(m_pIndices);
 }
 
 //
-// D3DGrid9::VOnRestore						- 3rd Edition, Chapter 13, page 449
+// GLGrid::VOnRestore						- 3rd Edition, Chapter 13, page 449
 //   Note: the book incorrectly names this method Grid::Create
 //
 //	 Here's a list of changes that were made from the 3rd Edition's code:
@@ -567,7 +570,7 @@ D3DGrid9::~D3DGrid9()
 //		3. SetRadius() is called with the spherical dimensions of this grid to aid culling
 //		4. The input parameter was changed to a platform independent Scene object
 //
-HRESULT D3DGrid9::VOnRestore(Scene *pScene)
+HRESULT GLGrid::VOnRestore(Scene *pScene)
 {
 	// Call the base class's restore
 	SceneNode::VOnRestore(pScene);
@@ -576,8 +579,8 @@ HRESULT D3DGrid9::VOnRestore(Scene *pScene)
 
 	int squares = grc->GetDivision();
 
-	SAFE_RELEASE(m_pVerts);
-	SAFE_RELEASE(m_pIndices);
+	//SAFE_RELEASE(m_pVerts);
+	//SAFE_RELEASE(m_pIndices);
 
 	SetRadius(sqrt(squares * squares / 2.0f));
 
@@ -586,57 +589,60 @@ HRESULT D3DGrid9::VOnRestore(Scene *pScene)
 	// need 3x3 set of verts.
 	m_numVerts = (squares + 1)*(squares + 1);
 
+	/*
 	if (FAILED(DXUTGetD3D9Device()->CreateVertexBuffer(
 		m_numVerts*sizeof(D3D9Vertex_ColoredTextured),
 		D3DUSAGE_WRITEONLY, D3D9Vertex_ColoredTextured::FVF,
 		D3DPOOL_MANAGED, &m_pVerts, NULL)))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	// Fill the vertex buffer. We are setting the tu and tv texture
 	// coordinates, which range from 0.0 to 1.0
-	D3D9Vertex_ColoredTextured* pVertices;
-	if (FAILED(m_pVerts->Lock(0, 0, (void**)&pVertices, 0)))
-		return E_FAIL;
+	//D3D9Vertex_ColoredTextured* pVertices;
+	//if (FAILED(m_pVerts->Lock(0, 0, (void**)&pVertices, 0)))
+	//	return E_FAIL;
 
+	GLUFVAOData dat = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
+	
 	for (int j = 0; j<(squares + 1); j++)
 	{
 		for (int i = 0; i<(squares + 1); i++)
 		{
 			// Which vertex are we setting?
 			int index = i + (j * (squares + 1));
-			D3D9Vertex_ColoredTextured *vert = &pVertices[index];
+			GLUFVertex vert;
+
 
 			// Default position of the grid is centered on the origin, flat on
 			// the XZ plane.
 			float x = (float)i - (squares / 2.0f);
 			float y = (float)j - (squares / 2.0f);
-			vert->position = (x * glm::vec3(1.f, 0.f, 0.f)) + (y * glm::vec3(0.f, 0.f, 1.f));
-			vert->color = m_Props.GetMaterial().GetDiffuse();
+			vert.mPosition = (x * glm::vec3(1.f, 0.f, 0.f)) + (y * glm::vec3(0.f, 0.f, 1.f));
+			vert.mColor = m_Props.GetMaterial().GetDiffuse();
 
 			// The texture coordinates are set to x,y to make the
 			// texture tile along with units - 1.0, 2.0, 3.0, etc.
-			vert->tu = x;
-			vert->tv = y;
+			vert.mUV.x = x;
+			vert.mUV.y = y;
 		}
 	}
-	m_pVerts->Unlock();
 
 	// The number of indicies equals the number of polygons times 3
 	// since there are 3 indicies per polygon. Each grid square contains
 	// two polygons. The indicies are 16 bit, since our grids won't
 	// be that big!
-	m_numPolys = squares * squares * 2;
+	/*m_numPolys = squares * squares * 2;
 	if (FAILED(DXUTGetD3D9Device()->CreateIndexBuffer(sizeof(WORD) * m_numPolys * 3,
 		D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pIndices, NULL)))
 	{
 		return E_FAIL;
-	}
+	}*/
 
-	WORD *pIndices;
-	if (FAILED(m_pIndices->Lock(0, 0, (void**)&pIndices, 0)))
-		return E_FAIL;
+	WORD *pIndices = (WORD*)malloc(m_numPolys * 6);
+	//if (FAILED(m_pIndices->Lock(0, 0, (void**)&pIndices, 0)))
+	//	return E_FAIL;
 
 	// Loop through the grid squares and calc the values
 	// of each index. Each grid square has two triangles:
@@ -661,28 +667,29 @@ HRESULT D3DGrid9::VOnRestore(Scene *pScene)
 			pIndices += 6;
 		}
 	}
+	GLUFBUFFERMANAGER.UnMapVertexArray(m_VertexArray);
 
-	m_pIndices->Unlock();
+	free(pIndices);
 
 	return S_OK;
 }
 
 //
-// D3DGrid9::VRender					- 3rd Edition, Chapter 13, page 451
+// GLGrid::VRender					- 3rd Edition, Chapter 13, page 451
 //   Note: the book incorrectly names this method Grid::Render
 // 
 //   This function also handles alpha textures on the Grid, where the book's
 //   code does not. 
 //
-HRESULT D3DGrid9::VRender(Scene *pScene)
+HRESULT GLGrid::VRender(Scene *pScene)
 {
-	DWORD oldLightMode;
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &oldLightMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
+	//DWORD oldLightMode;
+	//DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &oldLightMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	DWORD oldCullMode;
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_CULLMODE, &oldCullMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	//DWORD oldCullMode;
+	//DXUTGetD3D9Device()->GetRenderState(D3DRS_CULLMODE, &oldCullMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	// Setup our texture. Using textures introduces the texture stage states,
 	// which govern how textures get blended together (in the case of multiple
@@ -693,15 +700,16 @@ HRESULT D3DGrid9::VRender(Scene *pScene)
 
 	Resource resource(grc->GetTextureResource());
 	shared_ptr<ResHandle> texture = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);
-	shared_ptr<D3DTextureResourceExtraData9> extra = static_pointer_cast<D3DTextureResourceExtraData9>(texture->GetExtra());
-	DXUTGetD3D9Device()->SetTexture(0, extra->GetTexture());
-
+	shared_ptr<GLTextureResourceExtraData> extra = static_pointer_cast<GLTextureResourceExtraData>(texture->GetExtra());
+	//DXUTGetD3D9Device()->SetTexture(0, extra->GetTexture());
+	GLUFBUFFERMANAGER.UseTexture(extra->GetTexture(), 0, GL_TEXTURE0);
+	/*
 	if (m_bTextureHasAlpha)
 	{
-		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+		//DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		//DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
 
-		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+		//DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 
 		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
@@ -713,39 +721,42 @@ HRESULT D3DGrid9::VRender(Scene *pScene)
 		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
 		DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-	}
+	}*/
 
-	DXUTGetD3D9Device()->SetStreamSource(0, m_pVerts, 0, sizeof(D3D9Vertex_ColoredTextured));
-	DXUTGetD3D9Device()->SetIndices(m_pIndices);
-	DXUTGetD3D9Device()->SetFVF(D3D9Vertex_ColoredTextured::FVF);
-	DXUTGetD3D9Device()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_numVerts, 0, m_numPolys);
+	//DXUTGetD3D9Device()->SetStreamSource(0, m_pVerts, 0, sizeof(D3D9Vertex_ColoredTextured));
+	//DXUTGetD3D9Device()->SetIndices(m_pIndices);
+	//DXUTGetD3D9Device()->SetFVF(D3D9Vertex_ColoredTextured::FVF);
+	//DXUTGetD3D9Device()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_numVerts, 0, m_numPolys);
 
 	// Notice that the render states are returned to 
 	// their original settings.....
 	// Could there be a better way???
 
-	DXUTGetD3D9Device()->SetTexture(0, NULL);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, oldLightMode);
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, oldCullMode);
+	//DXUTGetD3D9Device()->SetTexture(0, NULL);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, oldLightMode);
+	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, oldCullMode);
 
 	return S_OK;
 }
 
 
-HRESULT D3DGrid9::VPick(Scene *pScene, RayCast *pRayCast)
+HRESULT GLGrid::VPick(Scene *pScene, RayCast *pRayCast)
 {
 	if (SceneNode::VPick(pScene, pRayCast) == E_FAIL)
 		return E_FAIL;
 
 	pScene->PushAndSetMatrix(m_Props.ToWorld());
 
-	HRESULT hr = pRayCast->Pick(pScene, m_Props.ActorId(), m_pVerts, m_pIndices, m_numPolys);
+	GLUFVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
+
+	ActorId id = m_Props.ActorId();
+	HRESULT hr = pRayCast->Pick(pScene, id, *data.mPositions, *data.mIndicies);
 
 	pScene->PopMatrix();
 
 	return hr;
 }
-*/
+
 
 
 /*

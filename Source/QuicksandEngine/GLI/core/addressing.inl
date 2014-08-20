@@ -107,7 +107,7 @@ namespace detail
 		assert(TexelCoord.x < Dimensions.x);
 		assert(TexelCoord.y < Dimensions.y);
 
-		return glm::bitfieldInterleave(TexelCoord.x, TexelCoord.y);
+		return (size_type)glm::bitfieldInterleave(TexelCoord.x, TexelCoord.y);
 	}
 
 	inline size_type texelMortonAdressing
@@ -120,7 +120,7 @@ namespace detail
 		assert(TexelCoord.y < Dimensions.y);
 		assert(TexelCoord.z < Dimensions.z);
 
-		return glm::bitfieldInterleave(TexelCoord.x, TexelCoord.y, TexelCoord.z);
+		return (size_type)glm::bitfieldInterleave(TexelCoord.x, TexelCoord.y, TexelCoord.z);
 	}
 }//namespace detail
 }//namespace gli

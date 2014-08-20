@@ -28,12 +28,14 @@ namespace AwLogging
 			return "ASSERT";
 		case MEMLEAK:
 			return "MEMLEAK";
+		default:
+			return "UNDEFINED";
 		}
 	}
 
 	void WriteLog(LogType logType, string logMessage, const char* funcName, const char* sourceFile, unsigned int lineNum)
 	{
-		stringstream ss;
+		std::stringstream ss;
 
 		//get the time for the log
 		time_t t = time(0);
@@ -50,7 +52,7 @@ namespace AwLogging
 		ss << " --" << funcName << "-- ";
 
 		//if it is debug, add some extra stuff
-		if (GET_CONFIG_ELEMENT_STR("APPLICATION_MODE") == "DEBUG");
+		if (GET_CONFIG_ELEMENT_STR("APPLICATION_MODE") == "DEBUG")
 		{
 			ss << "--" << sourceFile << "-- --" << lineNum << "-- ";
 		}
@@ -68,7 +70,7 @@ namespace AwLogging
 		case STDOUT:
 			gLogInfo.IncrementLogEntryCount();
 			break;
-		case ERROR:
+		case ERROR_:
 			gLogInfo.IncrementErrorCount();
 			gLogInfo.IncrementLogEntryCount();
 			break;
@@ -91,7 +93,7 @@ namespace AwLogging
 	void Init()
 	{
 		//the name of the file will be the data added to the time
-		stringstream ss;
+		std::stringstream ss;
 
 		time_t t = time(0);
 		struct tm * now = localtime(&t);
@@ -118,7 +120,7 @@ namespace AwLogging
 		case STDOUT:
 			gLogInfo.IncrementLogEntryCount();
 			break;
-		case ERROR:
+		case ERROR_:
 			gLogInfo.IncrementErrorCount();
 			gLogInfo.IncrementLogEntryCount();
 			break;
@@ -143,7 +145,7 @@ namespace AwLogging
 		if (logType == "STDOUT")
 			return STDOUT;
 		if (logType == "ERROR")
-			return ERROR;
+			return ERROR_;
 		if (logType == "WARNING")
 			return WARNING;
 		if (logType == "MEMLEAK")

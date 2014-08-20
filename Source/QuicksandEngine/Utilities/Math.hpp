@@ -37,7 +37,7 @@
 #define CMATH_TEMPERING_SHIFT_T(y)  (y << 15)
 #define CMATH_TEMPERING_SHIFT_L(y)  (y >> 18)
 
-#define AS_PI (3.14159265358979323846)
+#define AS_PI (3.14159265358979323846f)
 
 #define RADIANS_TO_DEGREES(x) ((x) * 180.0f / AS_PI)
 #define DEGREES_TO_RADIANS(x) ((x) * AS_PI / 180.0f)

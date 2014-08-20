@@ -1,5 +1,5 @@
 /*
-** $Id: loadlib.c,v 1.52.1.4 2009/09/09 13:17:16 roberto Exp $
+** $Id: loadlib.c,v 1.52.1.2 2007/12/28 14:58:43 roberto Exp $
 ** Dynamic library loader for Lua
 ** See Copyright Notice in lua.h
 **
@@ -48,7 +48,7 @@ static void *ll_load (lua_State *L, const char *path);
 static lua_CFunction ll_sym (lua_State *L, void *lib, const char *sym);
 
 
-
+#pragma warning(disable : 4133)
 #if defined(LUA_DL_DLOPEN)
 /*
 ** {========================================================================
@@ -187,7 +187,7 @@ static void lp_loadlocalconfig(lua_State *L) {
     lua_rawset(L, LUA_GLOBALSINDEX);
 
     strcpy(lb, "\\luaplus51-1201.config.lua");
-    if (access(buff, 0) != -1) {
+    if (_access(buff, 0) != -1) {
       int top = lua_gettop(L);
       int ret = luaL_dofile(L, buff);
       if (ret != 0)
@@ -269,7 +269,7 @@ static void *ll_load (lua_State *L, const char *path) {
   char* dotPos;
   strcpy(buffer, path);
   dotPos = strrchr(buffer, '.');
-  if (dotPos  &&  stricmp(dotPos, ".so") == 0) {
+  if (dotPos  &&  _stricmp(dotPos, ".so") == 0) {
     *dotPos = 0;
     dotPos = NULL;
   }
@@ -871,7 +871,7 @@ LUALIB_API int luaopen_package (lua_State *L) {
   lua_pushvalue(L, -1);
   lua_replace(L, LUA_ENVIRONINDEX);
   /* create `loaders' table */
-  lua_createtable(L, sizeof(loaders)/sizeof(loaders[0]) - 1, 0);
+  lua_createtable(L, 0, sizeof(loaders)/sizeof(loaders[0]) - 1);
   /* fill it with pre-defined loaders */
   for (i=0; loaders[i] != NULL; i++) {
     lua_pushcfunction(L, loaders[i]);
@@ -898,5 +898,7 @@ LUALIB_API int luaopen_package (lua_State *L) {
 #endif /* LUAPLUS_EXTENSIONS */
   return 1;  /* return 'package' table */
 }
+
+#pragma warning(default : 4133)
 
 NAMESPACE_LUA_END

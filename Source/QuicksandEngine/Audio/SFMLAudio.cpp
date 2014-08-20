@@ -227,12 +227,13 @@ bool SFMLSoundBuffer::VPlay(int volume, bool looping)
 	if (!pSB)
 		return false;
 
-	pSB->setVolume(volume);
+	pSB->setVolume((float)volume);
     
     //DWORD dwFlags = looping ? DSBPLAY_LOOPING : 0L;
 	pSB->setLoop(looping);
     pSB->play();
 
+	return true;
 }//end Play
 
 
@@ -360,7 +361,7 @@ void SFMLSoundBuffer::VSetVolume(int volume)
 	HRESULT hr = pDSB->SetVolume( LONG(fvolume) );
 	LOG_ASSERT(hr==S_OK);*/
 
-	pDSB->setVolume(volume);
+	pDSB->setVolume((float)volume);
 
 }
 
@@ -375,7 +376,7 @@ void SFMLSoundBuffer::VSetPosition(unsigned long newPosition)
 //    NOTE: Renamed from SFMLSoundBuffer::VRestore in the book
 bool SFMLSoundBuffer::VOnRestore()
 {
-   HRESULT hr;
+   //HRESULT hr;
    //BOOL    bRestored;
 
     // Restore the buffer if it was lost
@@ -446,7 +447,7 @@ bool SFMLSoundBuffer::VOnRestore()
 //
 HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
 {
-    HRESULT hr; 
+    //HRESULT hr; 
 	//VOID	*pDSLockedBuffer = NULL;	 // a pointer to the DirectSound buffer
     //DWORD   dwDSLockedBufferSize = 0;    // Size of the locked DirectSound buffer
     DWORD   dwWavDataRead        = 0;    // Amount of data read from the wav file 

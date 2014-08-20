@@ -61,8 +61,8 @@ public:
 	// Game Application Data
 	// You must define these in an inherited
 	// class - see TeapotWarsApp for an example
-	virtual TCHAR *VGetGameTitle() = 0;
-	virtual TCHAR *VGetGameAppDirectory() = 0;
+	virtual char *VGetGameTitle() = 0;
+	virtual char *VGetGameAppDirectory() = 0;
 	virtual HICON VGetIcon() = 0;
 
 	// Win32 Specific Stuff
@@ -70,18 +70,18 @@ public:
 	HINSTANCE GetInstance() { return m_hInstance; }
 	virtual bool InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWND hWnd = NULL, int screenWidth = SCREEN_WIDTH, int screenHeight = SCREEN_HEIGHT);
 
-	static LRESULT CALLBACK MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	static bool MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, int param3, int param4);
 	bool HasModalDialog() { return m_HasModalDialog != 0; }
 	void ForceModalExit() { PostMessage(GetHwnd(), g_MsgEndModal, 0, g_QuitNoPrompt); }
 
-	LRESULT OnDisplayChange(int colorDepth, int width, int height);
-	LRESULT OnPowerBroadcast(int event);
-	LRESULT OnSysCommand(WPARAM wParam, LPARAM lParam);
-	LRESULT OnClose();
+	bool OnDisplayChange(int colorDepth, int width, int height);
+	bool OnPowerBroadcast(int event);
+	bool OnSysCommand(GLUF_MESSAGE_TYPE msg, int param1, int param2);
+	bool OnClose();
 
 	// Game Application actions
-	LRESULT OnAltEnter();
-	LRESULT OnNcCreate(LPCREATESTRUCT cs);
+	bool OnAltEnter();
+	bool OnNcCreate(LPCREATESTRUCT cs);
 
 	bool LoadStrings(string language);
 	std::wstring GetString(std::wstring sID);
@@ -138,7 +138,7 @@ public:
 
 	// File and Resource System
 	class ResCache *m_ResCache;
-	TCHAR m_saveGameDirectory[MAX_PATH];
+	char m_saveGameDirectory[MAX_PATH];
 
 	bool IsEditorRunning() { return m_bIsEditorRunning; }
 
@@ -175,7 +175,7 @@ private:
 
 namespace QuicksandEngine
 {
-	QuicksandEngineApp *g_pApp;
+	extern QuicksandEngineApp *g_pApp;
 }
 
 #endif

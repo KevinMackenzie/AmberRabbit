@@ -74,20 +74,17 @@ Color BaseRenderComponent::LoadColor(tinyxml2::XMLElement* pData)
 {
 	Color color;
 
-    double r = 1.0;
-    double g = 1.0;
-    double b = 1.0;
-    double a = 1.0;
+	glm::u8 r = 255;
+    glm::u8 g = 255;
+	glm::u8 b = 255;
+	glm::u8 a = 255;
 
-    r = std::stod(pData->Attribute("r"));
-	b = std::stod(pData->Attribute("g"));
-	g = std::stod(pData->Attribute("b"));
-	a = std::stod(pData->Attribute("a"));
+    r = (glm::u8)std::stoi(pData->Attribute("r"));
+	b = (glm::u8)std::stoi(pData->Attribute("g"));
+	g = (glm::u8)std::stoi(pData->Attribute("b"));
+	a = (glm::u8)std::stoi(pData->Attribute("a"));
 
-    color.r = (float)r;
-    color.g = (float)g;
-    color.b = (float)b;
-    color.a = (float)a;
+	color = Color(r, g, b, a);
 
 	return color;
 }
@@ -122,7 +119,7 @@ bool SphereRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
     int segments = 50;
 	double radius = 1.0;
 	radius = std::stod(pMesh->Attribute("radius"));
-    segments = std::stod(pMesh->Attribute("segments"));
+    segments = std::stoi(pMesh->Attribute("segments"));
 	m_radius = (float)radius;
     m_segments = (unsigned int)segments;
 

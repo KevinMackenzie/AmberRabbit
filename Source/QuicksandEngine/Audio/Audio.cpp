@@ -1,12 +1,9 @@
 #include "../Stdafx.hpp"
 
-#include <mmsystem.h>
-#include <mmreg.h>
-
 #include "Audio.hpp"
 #include "SoundResource.hpp"
 
-#pragma comment( lib, "dsound" )
+//#pragma comment( lib, "dsound" )
 
 //////////////////////////////////////////////////////////////////////
 // Globals

@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Extras">
+      <UniqueIdentifier>{D2D1CFEC-9425-7944-841B-D18F3AB75961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extras\ConvexDecomposition">
+      <UniqueIdentifier>{3FECEFA3-1E88-9F4B-AF2E-76DFD8827139}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\bestfit.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\bestfitobb.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\cd_hull.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\cd_wavefront.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\concavity.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\ConvexBuilder.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\ConvexDecomposition.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\fitsphere.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\float_math.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\meshvolume.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\planetri.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\raytri.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\splitplane.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BulletPhysics\ConvexDecomposition\vlookup.cpp">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\bestfit.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\bestfitobb.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\cd_hull.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\cd_vector.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\cd_wavefront.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\concavity.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\ConvexBuilder.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\ConvexDecomposition.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\fitsphere.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\float_math.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\meshvolume.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\planetri.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\raytri.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\splitplane.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BulletPhysics\ConvexDecomposition\vlookup.h">
+      <Filter>Extras\ConvexDecomposition</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

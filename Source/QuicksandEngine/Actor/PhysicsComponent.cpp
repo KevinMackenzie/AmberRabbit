@@ -157,7 +157,7 @@ void PhysicsComponent::VUpdate(int deltaMs)
         // the direction this actor is going in and the speed of the actor.  The scalar is just the speed 
         // component.
         glm::vec3 velocity(m_pGamePhysics->VGetVelocity(m_pOwner->GetId()));
-		float velocityScalar = length(velocity);
+		float velocityScalar = glm::length(velocity);
 
 		glm::vec3 direction(GetDirection(transform));
 		m_pGamePhysics->VApplyForce(direction, accelerationToApplyThisFrame, m_pOwner->GetId());
@@ -281,7 +281,7 @@ void PhysicsComponent::RotateY(float angleRadians)
 		glm::vec3 position = GetPosition(transform);
 
         glm::mat4 rotateY;
-        rotateY = rotate(rotateY, angleRadians, g_YAxis);
+		rotateY = glm::rotate(rotateY, angleRadians, g_YAxis);
 		::SetPosition(rotateY, position);
 
         KinematicMove(rotateY);

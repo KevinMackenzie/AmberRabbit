@@ -303,6 +303,7 @@ protected:
 };
 
 
+//TODO: SHADER FOR GRID
 class GLGrid : public SceneNode
 {
 protected:
@@ -311,7 +312,11 @@ protected:
 
 	//    int                     m_squares;
 
-	GLUFVertexArrayPtr			  m_VertexArray;
+	GLuint m_VertexArray	= 0;
+	GLuint m_PositionArray	= 0;
+	GLuint m_ColorArray		= 0;
+	GLuint m_UVArray		= 0;
+	GLuint m_IndexArray		= 0;
 
 	GLUFProgramPtr				  m_Program;
 
@@ -323,7 +328,7 @@ public:
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VRender(Scene *pScene);
 	virtual HRESULT VOnUpdate(Scene *pScene, DWORD const elapsedMs) { return S_OK; }
-	virtual HRESULT VPick(Scene *pScene, RayCast *pRayCast) { return E_FAIL; }
+	virtual HRESULT VPick(Scene *pScene, RayCast *pRayCast);// { return E_FAIL; }
 
 	bool VHasAlpha() const { return m_bTextureHasAlpha; }
 };

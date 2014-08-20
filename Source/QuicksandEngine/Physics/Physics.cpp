@@ -366,10 +366,12 @@ bool BulletPhysics::VInitialize()
 
 	// Manages constraints which apply forces to the physics simulation.  Used
 	//  for e.g. springs, motors.  We don't use any constraints right now.
-	m_solver = QSE_NEW btSequentialImpulseConstraintSolver;
+	m_solver = new btSequentialImpulseConstraintSolver();
+
+	//NOTE: for some reason QSE_NEW does not work with these two
 
 	// This is the main Bullet interface point.  Pass in all these components to customize its behavior.
-	m_dynamicsWorld = QSE_NEW btDiscreteDynamicsWorld( m_dispatcher, 
+	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher,
 	                                                        m_broadphase, 
 	                                                        m_solver, 
 	                                                        m_collisionConfiguration );

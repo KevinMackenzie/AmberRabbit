@@ -55,7 +55,7 @@ public:
 
 	HRESULT Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh);
 
-	HRESULT Pick(Scene *pScene, ActorId actorId, Vec3Array pVerts, GLIndexArray pIndices);
+	HRESULT Pick(Scene *pScene, ActorId actorId, Vec3Array pVerts, IndexArray pIndices);
 
 	void Sort();
 };

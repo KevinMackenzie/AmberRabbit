@@ -1,18 +1,8 @@
 #include "../Stdafx.hpp"
 
-#pragma comment(lib, "BulletCollision_debug.lib")
-#pragma comment(lib, "BulletDynamics_debug.lib")
-#pragma comment(lib, "BulletSoftBody_debug.lib")
-#pragma comment(lib, "BulletSoftBodyDX11Solvers_debug.lib")
-#pragma comment(lib, "ConvexDecomposition_debug.lib")
-#pragma comment(lib, "effects11.lib")
-#pragma comment(lib, "HACD_debug.lib")
-#pragma comment(lib, "LinearMath_debug.lib")
-#pragma comment(lib, "OpenGLSupport_debug.lib")
-
 void glufErrorMethod(const char* message, const char* funcName, const char* sourceFile, unsigned int lineNum)
 {
-
+	AwLogging::WriteLog(AwLogging::ERROR_, message, funcName, sourceFile, lineNum);
 }
 
 INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
@@ -55,12 +45,15 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	// device created/destroyed callbacks then the sample framework won't be able to 
 	// recreate your device resources.
 
-	
+	/*
 	GLUFRegisterErrorMethod(glufErrorMethod);
 	if (!GLUFInit())
 	{
 		return false;
-	}
+	}*/
+
+	GLUFRegisterErrorMethod(glufErrorMethod);
+	GLUFInit();
 
 	//DXUTSetCallbackMsgProc(GameCodeApp::MsgProc);
 	//DXUTSetCallbackFrameMove(GameCodeApp::OnUpdateGame);
@@ -103,7 +96,7 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	// Pass control to the sample framework for handling the message pump and 
 	// dispatching render calls. The sample framework will call your FrameMove 
 	// and FrameRender callback when there is idle time between handling window messages.
-
+	/*
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -112,46 +105,22 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	wcex.lpfnWndProc = QuicksandEngineApp::MsgProc;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
-	wcex.hInstance = hInstance;
+	wcex.hInstance = hInstance;*/
 
-	return RegisterClassEx(&wcex);
+	//return RegisterClassEx(&wcex);
 
-	int currentTime = glfwGetTime();
-	MSG msg;
+	float currentTime = GLUFGetTimef();
 	while (QuicksandEngine::g_pApp->IsRunning())
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
-		{
-			if (msg.message == WM_CLOSE)
-			{
-				QuicksandEngine::g_pApp->SetQuitting(true);
-				GetMessage(&msg, NULL, 0, 0);
-				break;
-			}
-			else
-			{
-				// Default processing
-				if (GetMessage(&msg, NULL, NULL, NULL))
-				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
-				}
+		// Update the game views, but nothing else!
+		// Remember this is a modal screen.
+		float timeNow = GLUFGetTimef();
+		float deltaMilliseconds = timeNow - currentTime;
 
-			}
-		}
-		else
-		{
-			// Update the game views, but nothing else!
-			// Remember this is a modal screen.
-			int timeNow = glfwGetTime();
-			int deltaMilliseconds = timeNow - currentTime;
+		currentTime = timeNow;
 
-			currentTime = timeNow;
-
-			QuicksandEngine::g_pApp->OnUpdateGame(timeNow, deltaMilliseconds);
-			QuicksandEngine::g_pApp->GLFrameRender(timeNow, deltaMilliseconds);
-			
-		}
+		QuicksandEngine::g_pApp->OnUpdateGame(timeNow, deltaMilliseconds);
+		QuicksandEngine::g_pApp->GLFrameRender(timeNow, deltaMilliseconds);
 	}
 	//DXUTMainLoop();
 	//DXUTShutdown();

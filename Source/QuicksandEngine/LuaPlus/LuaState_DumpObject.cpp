@@ -55,9 +55,9 @@ public:
 		va_end(arglist);
 
 #if defined(WIN32) || defined(_XBOX) || defined(_XBOX_VER)
-		LPWSTR errWindonws = L"";
-		mbstowcs(errWindonws, message, 800);
-		OutputDebugString(errWindonws);
+		LPWSTR wndMessage = L"";
+		mbtowc(wndMessage, message, 800);
+		OutputDebugString(wndMessage);
 #else // !WIN32
 		puts(message);
 #endif // WIN32
@@ -217,14 +217,12 @@ static void WriteKey(LuaStateOutFile& file, LuaObject& key) {
 		sprintf(keyName, "[%.16g]", key.GetNumber());
 		file.Print("%s", keyName);
 	} else if (key.IsString()) {
-		size_t keyLen = key.StrLen();
 		const char* ptr = key.GetString();
-		const char* endPtr = ptr + keyLen;
 		bool isAlphaNumeric = true;
-		if (isdigit((unsigned char)*ptr))
+		if (isdigit(*ptr))
 			isAlphaNumeric = false;
-		while (ptr < endPtr) {
-			if (!isalnum((unsigned char)*ptr)  &&  *ptr != '_') {
+		while (*ptr) {
+			if (!isalnum(*ptr)  &&  *ptr != '_') {
 				isAlphaNumeric = false;
 				break;
 			}
@@ -469,7 +467,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 				lua_Debug ar;
 				value.Push();
 				lua_getinfo(*this, ">S", &ar);
-//				printf("%d\n", ar.linedefined);
+//				printf("%d\r\n", ar.linedefined);
 				file.Print("-- ");
 				if (!key.IsNil())
 				{
@@ -535,16 +533,16 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 			{
 				if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 				{
-					file.Print("\n");
+					file.Print("\r\n");
 					file.Indent(indentSpaces);
 				}
 				if (flags & DUMP_WRITETABLEPOINTERS)
-					file.Print("{ --%8x\n", value.GetLuaPointer());
+					file.Print("{ --%8x\r\n", value.GetLuaPointer());
 				else
 					file.Print("{");
 				if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 				{
-					file.Print("\n");
+					file.Print("\r\n");
 				}
 			}
 
@@ -560,8 +558,8 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 			// Block to search for array items.
 			{
 				// Grab index 1 and index 2 of the table.
-				LuaObject value1 = table.RawGetByIndex(1);
-				LuaObject value2 = table.RawGetByIndex(2);
+				LuaObject value1 = table[1];
+				LuaObject value2 = table[2];
 
 				// If they both exist, then there is a sequential list.
 				if (!value1.IsNil())
@@ -571,7 +569,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 					for (; ; ++upperIndex)
 					{
 						// Try retrieving the table entry at upperIndex.
-						LuaObject value = table.RawGetByIndex(upperIndex);
+						LuaObject value = table[upperIndex];
 
 						// If it doesn't exist, then exit the loop.
 						if (value.IsNil())
@@ -583,7 +581,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 							file.Print(",");
 							if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 							{
-								file.Print("\n");
+								file.Print("\r\n");
 							}
 						}
 
@@ -654,7 +652,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 						file.Print(", ");
 						if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 						{
-							file.Print("\n");
+							file.Print("\r\n");
 						}
 						wroteSemi = true;
 					}
@@ -674,7 +672,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 						file.Print(",");
 						if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 						{
-							file.Print("\n");
+							file.Print("\r\n");
 						}
 					}
 				}
@@ -720,7 +718,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 							file.Print(", ");
 							if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 							{
-								file.Print("\n");
+								file.Print("\r\n");
 							}
 						}
 						wroteSemi = true;
@@ -736,7 +734,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 						file.Print(",");
 						if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 						{
-							file.Print("\n");
+							file.Print("\r\n");
 						}
 					}
 				}
@@ -749,7 +747,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 				file.Print(",");
 				if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 				{
-					file.Print("\n");
+					file.Print("\r\n");
 				}
 			}
 
@@ -763,7 +761,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 				file.Print("}");
 				if ((unsigned int)indentLevel + 1 < maxIndentLevel)
 				{
-					file.Print("\n\n");
+					file.Print("\r\n\r\n");
 				}
 			}
 			else if (indentLevel > 0)
@@ -781,7 +779,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 	{
 		if ((unsigned int)indentLevel < maxIndentLevel)
 		{
-			file.Print("\n");
+			file.Print("\r\n");
 		}
 	}
 
@@ -821,14 +819,14 @@ bool LuaState::DumpObject(LuaStateOutFile& file, const char* name, LuaObject& va
 				lua_Debug ar;
 				value.Push();
 				lua_getinfo(*this, ">S", &ar);
-//				printf("%d\n", ar.linedefined);
+//				printf("%d\r\n", ar.linedefined);
 				file.Print("-- %s", name);
-				file.Print(" = '!!!FUNCTION!!! %s %d'\n", ar.source, ar.linedefined);
+				file.Print(" = '!!!FUNCTION!!! %s %d'\r\n", ar.source, ar.linedefined);
 			}
 			else
 			{
 				file.Print("-- %s", name);
-				file.Print(" = '!!!CFUNCTION!!!'\n");
+				file.Print(" = '!!!CFUNCTION!!!'\r\n");
 			}
 
 			return true;
@@ -850,7 +848,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, const char* name, LuaObject& va
 
 	LuaObject key(this);
 	bool ret = DumpObject(file, key, value, flags | 0xF0000000, indentLevel, maxIndentLevel);
-	file.Print("\n");
+	file.Print("\r\n");
 	return ret;
 }
 
@@ -935,14 +933,14 @@ bool LuaState::DumpObject(const char* filename, const char* name, LuaObject& val
 				lua_Debug ar;
 				value.Push();
 				lua_getinfo(*this, ">S", &ar);
-//				printf("%d\n", ar.linedefined);
+//				printf("%d\r\n", ar.linedefined);
 				file->Print("-- %s", name);
-				file->Print(" = '!!!FUNCTION!!! %s %d'\n", ar.source, ar.linedefined);
+				file->Print(" = '!!!FUNCTION!!! %s %d'\r\n", ar.source, ar.linedefined);
 			}
 			else
 			{
 				file->Print("-- %s", name);
-				file->Print(" = '!!!CFUNCTION!!!'\n");
+				file->Print(" = '!!!CFUNCTION!!!'\r\n");
 			}
 
 			return true;

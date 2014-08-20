@@ -20,7 +20,7 @@ void HealthPickup::VApply(WeakActorPtr pActor)
     StrongActorPtr pStrongActor = MakeStrongPtr(pActor);
     if (pStrongActor)
     {
-        LOG_WRITE("Actor", "Applying health pickup to actor id " + ToStr(pStrongActor->GetId()));
+        LOG_WRITE(ConcatString("Actor", "Applying health pickup to actor id " + ToStr(pStrongActor->GetId())));
     }
 }
 

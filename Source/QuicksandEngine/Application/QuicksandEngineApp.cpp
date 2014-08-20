@@ -192,7 +192,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	// DXUTInit, DXUTCreateWindow - Chapter 5, page 145	
 	//DXUTInit(true, true, lpCmdLine, true); // Parse the command line, handle the default hotkeys, and show msgboxes
 
-	m_pWindow = glfwCreateWindow(GET_CONFIG_ELEMENT_S("WINDOW_WIDTH"), GET_CONFIG_ELEMENT_S("WINDOW_HEIGHT"), GET_CONFIG_ELEMENT_STR("WINDOW_TITLE").c_str(), (GET_CONFIG_ELEMENT_STR("WINDOW_FULLSCREEN") == "TRUE") ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	m_pWindow = glfwCreateWindow(GET_CONFIG_ELEMENT_S("WINDOW_WIDTH"), GET_CONFIG_ELEMENT_S("WINDOW_HEIGHT"), VGetGameTitle(), (GET_CONFIG_ELEMENT_STR("WINDOW_FULLSCREEN") == "TRUE") ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!m_pWindow)
 	{
@@ -217,10 +217,10 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	{
 		return FALSE;
 	}
-	SetWindowText(GetHwnd(), VGetGameTitle());
+	//SetWindowText(GetHwnd(), VGetGameTitle());
 
 	// initialize the directory location you can store save game files
-	_tcscpy_s(m_saveGameDirectory, GetSaveGameDirectory(GetHwnd(), VGetGameAppDirectory()));
+	strcpy(m_saveGameDirectory, GetSaveGameDirectory(GetHwnd(), VGetGameAppDirectory()));
 
 	// DXUTCreateDevice - Chapter 5 - page 139
 	m_screenSize = Point(screenWidth, screenHeight);
@@ -367,41 +367,42 @@ std::wstring QuicksandEngineApp::GetString(std::wstring sID)
 //
 // Note: pUserContext added to comply with DirectX 9c - June 2005 Update
 //
-LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+bool QuicksandEngineApp::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, int param3, int param4)
 {
 	// Always allow dialog resource manager calls to handle global messages
 	// so GUI state is updated correctly
 	//TODO:
 	
 	bool *pbNoFurtherProcessing = new bool;
-	*pbNoFurtherProcessing = GLRenderer::g_DialogResourceManager.MsgProc(hWnd, message, wParam, lParam);
+	*pbNoFurtherProcessing = GLRenderer::g_DialogResourceManager.MsgProc(GLUF_PASS_CALLBACK_PARAM);
 	if (*pbNoFurtherProcessing)
 		return 0;
 	
-	LRESULT result = 0;
+	bool result = false;
 
-	switch (message)
+	switch (msg)
 	{
-	case WM_POWERBROADCAST:
+	/*case WM_POWERBROADCAST:
 	{
 		int event = (int)wParam;
 		result = QuicksandEngine::g_pApp->OnPowerBroadcast(event);
 		break;
-	}
+	}*/
 
-	case WM_DISPLAYCHANGE:
+	case GM_RESIZE:
 	{
-		int colorDepth = (int)wParam;
-		int width = (int)(short)LOWORD(lParam);
-		int height = (int)(short)HIWORD(lParam);
+		//int colorDepth = (int)wParam;
+		//int width = (int)LOWORD(lParam);
+		//int height = (int)HIWORD(lParam);
 
-		result = QuicksandEngine::g_pApp->OnDisplayChange(colorDepth, width, height);
+		result = QuicksandEngine::g_pApp->OnDisplayChange(16/*TODO*/, param1, param2);
 		break;
 	}
 
-	case WM_SYSCOMMAND:
+	case GM_CLOSE:
+	case GM_FOCUS:
 	{
-		result = QuicksandEngine::g_pApp->OnSysCommand(wParam, lParam);
+		result = QuicksandEngine::g_pApp->OnSysCommand(msg, param1, param2);
 		if (result)
 		{
 			*pbNoFurtherProcessing = true;
@@ -409,7 +410,7 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 		break;
 	}
 
-	case WM_SYSKEYDOWN:
+	/*case WM_SYSKEYDOWN:
 	{
 		if (wParam == VK_RETURN)
 		{
@@ -417,43 +418,39 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 			return QuicksandEngine::g_pApp->OnAltEnter();
 		}
 		return DefWindowProc(hWnd, message, wParam, lParam);
-	}
+	}*/
 
 
-	case WM_CLOSE:
+	case GM_KEY:
 	{
-		// DXUT apps choose ESC key as a default exit command.
-		// GameCode4 doesn't like this so we disable it by checking 
-		// the m_bQuitting bool, and if we're not really quitting
-		// set the "no further processing" parameter to true.
-		if (QuicksandEngine::g_pApp->m_bQuitting)
+		if (param1 == GLFW_KEY_ESCAPE)//DEBUG MODE ONLY
 		{
-			result = QuicksandEngine::g_pApp->OnClose();
+			// DXUT apps choose ESC key as a default exit command.
+			// GameCode4 doesn't like this so we disable it by checking 
+			// the m_bQuitting bool, and if we're not really quitting
+			// set the "no further processing" parameter to true.
+			if (QuicksandEngine::g_pApp->m_bQuitting)
+			{
+				result = QuicksandEngine::g_pApp->OnClose();
+			}
+			else
+			{
+				*pbNoFurtherProcessing = true;
+			}
+			break;
 		}
-		else
-		{
-			*pbNoFurtherProcessing = true;
-		}
-		break;
 	}
-
-
-	case WM_KEYDOWN:
-	case WM_KEYUP:
-	case WM_CHAR:
-	case WM_MOUSEMOVE:
-	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-	case WM_RBUTTONDOWN:
-	case WM_RBUTTONUP:
-	case MM_JOY1BUTTONDOWN:
-	case MM_JOY1BUTTONUP:
-	case MM_JOY1MOVE:
-	case MM_JOY1ZMOVE:
-	case MM_JOY2BUTTONDOWN:
-	case MM_JOY2BUTTONUP:
-	case MM_JOY2MOVE:
-	case MM_JOY2ZMOVE:
+	case GM_UNICODE_CHAR:
+	case GM_CURSOR_POS:
+	case GM_MB:
+	//case MM_JOY1BUTTONDOWN:
+	//case MM_JOY1BUTTONUP:
+	//case MM_JOY1MOVE:
+	//case MM_JOY1ZMOVE:
+	//case MM_JOY2BUTTONDOWN:
+	//case MM_JOY2BUTTONUP:
+	//case MM_JOY2MOVE:
+	//case MM_JOY2ZMOVE:
 	{
 		//
 		// See Chapter 10, page 278 for more explanation of this code.
@@ -463,14 +460,16 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 			BaseGameLogic *pGame = QuicksandEngine::g_pApp->m_pGame;
 			// Note the reverse order! User input is grabbed first from the view that is on top, 
 			// which is the last one in the list.
-			AppMsg msg;
-			msg.m_hWnd = hWnd;
-			msg.m_uMsg = message;
-			msg.m_wParam = wParam;
-			msg.m_lParam = lParam;
+			AppMsg appMsg;
+			//msg.m_hWnd = hWnd;
+			appMsg.m_Event = msg;
+			appMsg.param1 = param1;
+			appMsg.param2 = param2;
+			appMsg.param3 = param3;
+			appMsg.param4 = param4;
 			for (GameViewList::reverse_iterator i = pGame->m_gameViews.rbegin(); i != pGame->m_gameViews.rend(); ++i)
 			{
-				if ((*i)->VOnMsgProc(msg))
+				if ((*i)->VOnMsgProc(appMsg))
 				{
 					result = true;
 					break;				// WARNING! This breaks out of the for loop.
@@ -485,7 +484,7 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 		Framework the DefWindowProc is called for you....
 
 		default:*/
-		return DefWindowProc(hWnd, message, wParam, lParam);
+		//return DefWindowProc(hWnd, message, wParam, lParam);
 		/*
 		***********************/
 	}
@@ -504,7 +503,7 @@ LRESULT CALLBACK QuicksandEngineApp::MsgProc(HWND hWnd, UINT message, WPARAM wPa
 // window looks like we want it to look.
 //=========================================================
 
-LRESULT QuicksandEngineApp::OnNcCreate(LPCREATESTRUCT cs)
+bool QuicksandEngineApp::OnNcCreate(LPCREATESTRUCT cs)
 {
 	// If you want to override something in the CREATESTRUCT, do it here!
 	// You'll usually do something like change window borders, etc.
@@ -518,7 +517,7 @@ LRESULT QuicksandEngineApp::OnNcCreate(LPCREATESTRUCT cs)
 //
 //=========================================================
 
-LRESULT QuicksandEngineApp::OnDisplayChange(int colorDepth, int width, int height)
+bool QuicksandEngineApp::OnDisplayChange(int colorDepth, int width, int height)
 {
 	m_rcDesktop.left = 0;
 	m_rcDesktop.top = 0;
@@ -534,12 +533,12 @@ LRESULT QuicksandEngineApp::OnDisplayChange(int colorDepth, int width, int heigh
 // Handles the WM_POWERBROADCAST message
 //
 //=========================================================
-
-LRESULT QuicksandEngineApp::OnPowerBroadcast(int event)
+//TODO: never called
+bool QuicksandEngineApp::OnPowerBroadcast(int event)
 {
 	// Don't allow the game to go into sleep mode
 	if (event == PBT_APMQUERYSUSPEND)
-		return BROADCAST_QUERY_DENY;
+		return false;
 	else if (event == PBT_APMBATTERYLOW)
 	{
 		AbortGame();
@@ -555,11 +554,11 @@ LRESULT QuicksandEngineApp::OnPowerBroadcast(int event)
 //
 //=========================================================
 
-LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
+bool QuicksandEngineApp::OnSysCommand(GLUF_MESSAGE_TYPE msg, int param1, int param2)
 {
-	switch (wParam)
+	switch (msg)
 	{
-	case SC_MAXIMIZE:
+	case GM_FOCUS:
 	{
 		// If windowed and ready...
 		if (m_bWindowedMode && IsRunning())
@@ -570,7 +569,7 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 	}
 		return 0;
 
-	case SC_CLOSE:
+	case GM_CLOSE:
 	{
 		// The quit dialog confirmation would appear once for
 		// every SC_CLOSE we get - which happens multiple times
@@ -579,8 +578,8 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 		// generated by us (identified by g_QuitNoPrompt).
 
 		// If closing, prompt to close if this isn't a forced quit
-		if (lParam != g_QuitNoPrompt)
-		{
+		//if (lParam != g_QuitNoPrompt)
+		//{
 			// ET - 05/21/01 - Bug #1916 - Begin
 			// We were receiving multiple close dialogs
 			// when closing again ALT-F4 while the close
@@ -600,7 +599,7 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 			// Quit requested
 			m_bQuitRequested = true;
 			// Prompt
-			if (MessageBox::Ask(QUESTION_QUIT_GAME) == IDNO)
+			if (GLMessageBox::Ask(QUESTION_QUIT_GAME) == IDNO)
 			{
 				// Bail - quit aborted
 
@@ -609,7 +608,7 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 
 				return true;
 			}
-		}
+		//}
 
 		m_bQuitting = true;
 
@@ -625,7 +624,7 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 			// Issue the new close after handling the current one,
 			// but send in g_QuitNoPrompt to differentiate it from a 
 			// regular CLOSE issued by the system.
-			PostMessage(GetHwnd(), WM_SYSCOMMAND, SC_CLOSE, g_QuitNoPrompt);
+			//PostMessage(GetHwnd(), WM_SYSCOMMAND, SC_CLOSE, g_QuitNoPrompt);
 
 			m_bQuitRequested = false;
 
@@ -639,11 +638,12 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	default:
+		break;
 		// return non-zero of we didn't process the SYSCOMMAND message
-		return DefWindowProc(GetHwnd(), WM_SYSCOMMAND, wParam, lParam);
+		//return DefWindowProc(GetHwnd(), WM_SYSCOMMAND, wParam, lParam);
 	}
 
-	return 0;
+	return true;
 }
 
 //=========================================================
@@ -653,7 +653,7 @@ LRESULT QuicksandEngineApp::OnSysCommand(WPARAM wParam, LPARAM lParam)
 //
 //=========================================================
 
-LRESULT QuicksandEngineApp::OnClose()
+bool QuicksandEngineApp::OnClose()
 {
 	// release all the game systems in reverse order from which they were created
 
@@ -673,7 +673,7 @@ LRESULT QuicksandEngineApp::OnClose()
 
 	SAFE_DELETE(m_ResCache);
 
-	return 0;
+	return false;
 }
 
 
@@ -751,8 +751,9 @@ void QuicksandEngineApp::FlashWhileMinimized()
 // Not discussed in the book.
 //=========================================================
 
-LRESULT QuicksandEngineApp::OnAltEnter()
+bool QuicksandEngineApp::OnAltEnter()
 {
+	//TODO:
 	//DXUTToggleFullScreen();
 	return 0;
 }
@@ -846,7 +847,7 @@ int QuicksandEngineApp::Modal(shared_ptr<IScreenElement> pModalScreen, int defau
 //
 int QuicksandEngineApp::PumpUntilMessage(UINT msgEnd, WPARAM* pWParam, LPARAM* pLParam)
 {
-	int currentTime = glfwGetTime();
+	int currentTime = GLUFGetTimeMs();
 	MSG msg;
 	for (;;)
 	{
@@ -878,7 +879,7 @@ int QuicksandEngineApp::PumpUntilMessage(UINT msgEnd, WPARAM* pWParam, LPARAM* p
 			// Remember this is a modal screen.
 			if (m_pGame)
 			{
-				int timeNow = glfwGetTime();
+				int timeNow = GLUFGetTimeMs();
 				int deltaMilliseconds = timeNow - currentTime;
 				for (GameViewList::iterator i = m_pGame->m_gameViews.begin(); i != m_pGame->m_gameViews.end(); ++i)
 				{
@@ -1172,7 +1173,7 @@ bool CALLBACK QuicksandEngineApp::ModifyDeviceSettings(DXUTDeviceSettings* pDevi
 //
 // See Game Coding Complete - 4th Edition - Chapter X, page Y
 //--------------------------------------------------------------------------------------
-void CALLBACK QuicksandEngineApp::OnUpdateGame(double fTime, float fElapsedTime)
+void QuicksandEngineApp::OnUpdateGame(double fTime, float fElapsedTime)
 {
 	if (QuicksandEngine::g_pApp->HasModalDialog())
 	{
@@ -1192,7 +1193,7 @@ void CALLBACK QuicksandEngineApp::OnUpdateGame(double fTime, float fElapsedTime)
 		if (QuicksandEngine::g_pApp->m_pBaseSocketManager)
 			QuicksandEngine::g_pApp->m_pBaseSocketManager->DoSelect(0);	// pause 0 microseconds
 
-		QuicksandEngine::g_pApp->m_pGame->VOnUpdate(float(fTime), fElapsedTime);
+		QuicksandEngine::g_pApp->m_pGame->VOnUpdate(float(fTime), (float)fElapsedTime);
 	}
 }
 
