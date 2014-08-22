@@ -6,10 +6,10 @@
 
 
 ////////////////////////////////////////////////////
-// class GLUFMaterial						- Chapter 14, page 486
+// class GLMaterial						- Chapter 14, page 486
 ////////////////////////////////////////////////////
-/*
-GLUFMaterial::GLUFMaterial()
+
+GLMaterial::GLMaterial()
 {
 	m_Diffuse = g_White;
 	m_Ambient = Color(0.10f, 0.10f, 0.10f, 1.0f);
@@ -17,36 +17,36 @@ GLUFMaterial::GLUFMaterial()
 	m_Emissive = g_Black;
 }
 
-void GLUFMaterial::SetAmbient(const Color &color)
+void GLMaterial::SetAmbient(const Color &color)
 {
 	m_Ambient = color;
 }
 
-void GLUFMaterial::SetDiffuse(const Color &color)
+void GLMaterial::SetDiffuse(const Color &color)
 {
 	m_Diffuse = color;
 }
 
-void GLUFMaterial::SetSpecular(const Color &color, const float power)
+void GLMaterial::SetSpecular(const Color &color, const float power)
 {
 	m_Specular = color;
 	m_Power = power;
 }
 
-void GLUFMaterial::SetEmissive(const Color &color)
+void GLMaterial::SetEmissive(const Color &color)
 {
 	m_Emissive = color;
 }
 
-void GLUFMaterial::SetAlpha(float alpha)
+void GLMaterial::SetAlpha(float alpha)
 {
 	m_Diffuse.a = alpha;
 }
 
-void GLUFMaterial::GLUse()
+void GLMaterial::GLUse()
 {
 	//TODO;
-}*/
+}
 
 
 //

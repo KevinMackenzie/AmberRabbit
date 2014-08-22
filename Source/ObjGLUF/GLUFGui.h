@@ -1,12 +1,6 @@
 #pragma once
 
 #include "ObjGLUF.h"
-//#include <Dimm.h>
-//#include "usp10NoWindows.h"
-
-//TODO: create MsgProcs for all Controls
-//TODO: change the whole coordinate system to use a normalized value (origin at bottom left)
-//					0,0 is origin, and 1, 1, is upper right.  Just like texture coordinates
 
 //--------------------------------------------------------------------------------------
 // Macro definitions
@@ -82,13 +76,14 @@ typedef bool(*PGLUFCALLBACK)(GLUF_MESSAGE_TYPE, int, int, int, int);
 // a callback does not use the parameter, it will be 0, but this does not mean 0 is an invalid parameter for callbacks
 // that use it.  Other notes: when specifying hotkeys, always use the GLFW macros for specifying them.  Consult the GLFW
 // input documentation for more information.
-void OBJGLUF_API GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex);
+bool OBJGLUF_API GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex);
 
 typedef std::shared_ptr<GLUFFont> GLUFFontPtr;
 typedef float GLUFFontSize;//this is in normalized screencoords
 
 //NOTE: i am no longer using freetype, it is just more than is necisary right now
-OBJGLUF_API GLUFFontPtr GLUFLoadFont(char* rawData, uint64_t rawSize);
+OBJGLUF_API GLUFFontPtr GLUFLoadFont(char* rawData, uint64_t rawSize, float fontHeight);
+OBJGLUF_API GLUFFontSize GLUFGetFontHeight(GLUFFontPtr font);
 
 //NOTE: not all fonts support all of these weights! the closest available will be chosen (ALSO this does not work well with preinstalled fonts)
 enum GLUF_FONT_WEIGHT
@@ -111,7 +106,7 @@ enum GLUF_FONT_WEIGHT
 };
 
 
-extern OBJGLUF_API GLUFProgramPtr g_UIProgram;
+//extern OBJGLUF_API GLUFProgramPtr g_UIProgram;
 
 
 //--------------------------------------------------------------------------------------
@@ -263,7 +258,7 @@ public:
 	// Render helpers
 	GLUFResult          DrawRect(GLUFRect pGLUFRect, Color color);
 	GLUFResult          DrawPolyLine(GLUFPoint* apPoints, unsigned int nNumPoints, Color color);
-	GLUFResult          DrawSprite(GLUFElement* pElement, GLUFRect prcDest, float fDepth);
+	GLUFResult          DrawSprite(GLUFElement* pElement, GLUFRect prcDest, float fDepth, bool textured = true);
 	GLUFResult          CalcTextRect(std::wstring strText, GLUFElement* pElement, GLUFRect prcDest, int nCount = -1);
 	GLUFResult          DrawText(std::wstring strText, GLUFElement* pElement, GLUFRect prcDest, bool bShadow = false,
 		bool bCenter = false, bool bHardRect = false);
@@ -284,6 +279,8 @@ public:
 	void                SetSize(float width, float height)			{ m_width = width; m_height = height; }
 	float               GetWidth()									{ return m_width; }
 	float               GetHeight()									{ return m_height; }
+
+	void LockPosition(bool lock = true){ m_bPosLocked = lock; }
 
 	static void			SetRefreshTime(float fTime)					{ s_fTimeRefresh = fTime;																	}
 
@@ -325,7 +322,15 @@ public:
 	GLUFPoint m_MousePosition;
 	GLUFPoint m_MousePositionDialogSpace;
 
+
+	GLUFPoint m_MousePositionOld;
+
 private:
+	bool firstTime = true;
+
+	bool m_bPosLocked = true;
+	bool m_bDragged = false;
+
 	int m_nDefaultControlID;
 
 	//HRESULT             OnRender9(float fElapsedTime);
@@ -398,7 +403,7 @@ struct GLUFTextureNode
 //WIP, support more font options eg. stroke, italics, variable leading, etc.
 struct GLUFFontNode
 {
-	GLUFFontSize mSize;
+	//GLUFFontSize mSize;
 	GLUF_FONT_WEIGHT mWeight;
 	GLUFFontPtr m_pFontType;
 };
@@ -453,12 +458,10 @@ public:
 	//void    StoreD3D11State( ID3D11DeviceContext* pd3dImmediateContext );
 	//void    RestoreD3D11State( ID3D11DeviceContext* pd3dImmediateContext );
 
-	//We openGL guys don't need any Direct3D crap
-
 	void    ApplyRenderUI();
 	void	ApplyRenderUIUntex();
 	void	BeginSprites();
-	void	EndSprites(bool textured = true);
+	void	EndSprites(bool textured);
 	/*ID3D11Device* GetD3D11Device()
 	{
 	return m_pd3d11Device;
@@ -474,7 +477,7 @@ public:
 	int		GetTextureCount(){ return m_TextureCache.size(); }
 	int     GetFontCount()   { return m_FontCache.size(); }
 
-	int     AddFont(GLUFFontPtr font, GLUFFontSize size, GLUF_FONT_WEIGHT weight);
+	int     AddFont(GLUFFontPtr font, GLUF_FONT_WEIGHT weight);
 	int     AddTexture(GLuint texture);
 
 	bool    RegisterDialog(GLUFDialog* pDialog);

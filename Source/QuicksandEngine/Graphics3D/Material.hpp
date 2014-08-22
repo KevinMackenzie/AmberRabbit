@@ -4,8 +4,8 @@
 
 #include "Geometry.hpp"
 #include "../ResourceCache/ResCache.hpp"
-/*
-class GLUFMaterial
+
+class GLMaterial
 {
 	Color m_Diffuse, m_Ambient, m_Specular, m_Emissive;			// This structure stores diffuse, ambient, specular, emissive, and power.
 	float m_Power;
@@ -13,7 +13,7 @@ class GLUFMaterial
 	std::string m_MaterialName;
 	shared_ptr<ResHandle> m_pTexture;
 public:
-	GLUFMaterial();
+	GLMaterial();
 	void SetAmbient(const Color &color);
 	const Color GetAmbient() { return m_Ambient; }
 
@@ -41,7 +41,7 @@ public:
 	float GetAlpha() const { return m_Diffuse.a; }
 
 	void GLUse();
-};*/
+};
 
 
 // 

@@ -23,7 +23,7 @@ struct GLMeshHandles
 	GLuint mUVArray;
 	GLuint mIndexArray;
 
-	GLUFMaterial mMaterial;
+	GLMaterial mMaterial;
 	//todo: support bones and animation
 
 	GLuint* operator*()

@@ -57,7 +57,7 @@ protected:
 	glm::mat4					m_ToWorld, m_FromWorld;
 	float					m_Radius;
 	RenderPass				m_RenderPass;
-	GLUFMaterial				m_Material;
+	GLMaterial				m_Material;
 	AlphaType				m_AlphaType;
 
 	void SetAlpha(glm::u8 alpha)
@@ -81,7 +81,7 @@ public:
 	RenderPass RenderPass() const { return m_RenderPass; }
 	float Radius() const { return m_Radius; }
 
-	GLUFMaterial GetMaterial() const { return m_Material; }
+	GLMaterial GetMaterial() const { return m_Material; }
 };
 
 //////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ public:
 	glm::vec3 GetDirection() const { return ::GetDirection(m_Props.m_ToWorld); }
 
 	void SetRadius(const float radius) { m_Props.m_Radius = radius; }
-	void SetMaterial(const GLUFMaterial &mat) { m_Props.m_Material = mat; }
+	void SetMaterial(const GLMaterial &mat) { m_Props.m_Material = mat; }
 };
 
 //
@@ -312,13 +312,9 @@ protected:
 
 	//    int                     m_squares;
 
-	GLuint m_VertexArray	= 0;
-	GLuint m_PositionArray	= 0;
-	GLuint m_ColorArray		= 0;
-	GLuint m_UVArray		= 0;
-	GLuint m_IndexArray		= 0;
+	GLUFVertexArrayAoS				m_Squares;
 
-	GLUFProgramPtr				  m_Program;
+	GLUFProgramPtr					m_Program;
 
 public:
 	bool					m_bTextureHasAlpha;

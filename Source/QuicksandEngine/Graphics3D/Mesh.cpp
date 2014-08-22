@@ -58,7 +58,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 		}
 		if (scene->mNumMaterials > 1)
 		{
-			LOG_WARNING("Loaded File with more than one GLUFMaterial, Skipping all other materials");
+			LOG_WARNING("Loaded File with more than one GLMaterial, Skipping all other materials");
 		}
 
 		aiMesh* pMesh = scene->mMeshes[0];
@@ -133,7 +133,7 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 
 		//now load the material (singular)
 		aiMaterial* pMat = scene->mMaterials[0];
-		GLUFMaterial mat;
+		GLMaterial mat;
 
 		//load the file name of the texture if it exists
 		aiString texPath;

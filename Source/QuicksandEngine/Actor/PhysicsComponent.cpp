@@ -81,7 +81,7 @@ tinyxml2::XMLElement* PhysicsComponent::VGenerateXml(tinyxml2::XMLDocument* pDoc
     pBaseElement->LinkEndChild(pDensity);
 
     // material
-	tinyxml2::XMLElement* pMaterial = pDoc->NewElement("GLUFMaterial");
+	tinyxml2::XMLElement* pMaterial = pDoc->NewElement("GLMaterial");
 	tinyxml2::XMLText* pMaterialText = pDoc->NewText(m_material.c_str());
     pMaterial->LinkEndChild(pMaterialText);
     pBaseElement->LinkEndChild(pMaterial);
