@@ -51,6 +51,7 @@
 #include <locale>
 #include <codecvt>
 #include <stdlib.h>
+#include <stack>
 
 #ifndef OBJGLUF_EXPORTS
 #ifndef SUPPRESS_RADIAN_ERROR
@@ -124,6 +125,8 @@ namespace std
 	}
 }
 
+namespace GLUF
+{
 //added openGL functionality
 
 //This first generates a single buffer, then immediatly binds it
@@ -207,8 +210,6 @@ typedef std::vector<glm::vec3> Vec3Array;
 typedef std::vector<glm::vec2> Vec2Array;
 typedef std::vector<GLushort>  IndexArray;
 
-#include <stack>
-
 class OBJGLUF_API GLUFMatrixStack
 {
 	std::stack<glm::mat4> mStack;
@@ -276,6 +277,26 @@ OBJGLUF_API inline std::vector<std::wstring> GLUFSplitStr(const std::wstring &s,
 	return elems;
 }
 
+OBJGLUF_API inline std::vector<std::string> &GLUFSplitStr(const std::string &s, char delim, std::vector<std::string> &elems, bool keepDelim = false)
+{
+	std::stringstream ss(s);
+	std::string item;
+	while (std::getline(ss, item, delim))
+	{
+		if (keepDelim)//OOPS forgot this earlier
+			item += delim;
+		elems.push_back(item);
+	}
+	return elems;
+}
+
+OBJGLUF_API inline std::vector<std::string> GLUFSplitStr(const std::string &s, char delim, bool keepDelim = false)
+{
+	std::vector<std::string> elems;
+	GLUFSplitStr(s, delim, elems, keepDelim);
+	return elems;
+}
+
 template<typename T>
 OBJGLUF_API inline size_t GLUFGetVectorSize(std::vector<T> vec)
 {
@@ -293,7 +314,11 @@ OBJGLUF_API Color4f GLUFColorToFloat(Color color);//takes 0-255 to 0.0f - 1.0f
 
 
 
-
+enum GLUFLocationType
+{
+	GLT_ATTRIB = 0,
+	GLT_UNIFORM,
+};
 
 struct OBJGLUF_API GLUFShaderInfoStruct
 {
@@ -315,6 +340,8 @@ enum GLUFShaderType
 	SH_GEOMETRY_SHADER = GL_GEOMETRY_SHADER,
 	SH_FRAGMENT_SHADER = GL_FRAGMENT_SHADER
 };
+
+
 
 typedef GLUFShaderInfoStruct GLUFCompileOutputStruct;
 typedef GLUFShaderInfoStruct GLUFLinkOutputStruct;
@@ -347,6 +374,8 @@ typedef std::map<GLUFShaderType, GLUFProgramPtr> GLUFProgramPtrMap;
 typedef std::vector<GLUFShaderPtrWeak> GLUFShaderPtrListWeak;
 typedef std::vector<GLUFProgramPtrWeak> GLUFProgramPtrListWeak;
 
+typedef std::map<std::string, GLuint> GLUFVariableLocMap;
+typedef std::pair<std::string, GLuint> GLUFVariableLocPair;
 
 class OBJGLUF_API GLUFShaderManager
 {
@@ -372,7 +401,15 @@ public:
 	GLUFProgramPtr CreateProgram(GLUFShaderSourceList shaderSources, bool seperate = false);
 	GLUFProgramPtr CreateProgram(GLUFShaderPathList shaderPaths, bool seperate = false);
 
-	GLUFSepProgramPtr CreateSeperateProgram(GLUFProgramPtrStagesMap programs);
+	//program pipelines are broken
+	//GLUFSepProgramPtr CreateSeperateProgram(GLUFProgramPtrStagesMap programs);
+
+	GLuint GetShaderVariableLocation(GLUFProgramPtr prog, GLUFLocationType locType, std::string varName);
+	GLUFVariableLocMap GetShaderAttribLocations(GLUFProgramPtr prog);
+	GLUFVariableLocMap GetShaderUniformLocations(GLUFProgramPtr prog);
+
+	GLUFVariableLocMap GetShaderAttribLocations(GLUFSepProgramPtr prog);
+	GLUFVariableLocMap GetShaderUniformLocations(GLUFSepProgramPtr prog);
 
 	//for removing things
 
@@ -413,7 +450,7 @@ public:
 extern GLUFShaderManager OBJGLUF_API g_ShaderManager;
 
 //#define GLUFBUFFERMANAGER g_BufferManager
-#define GLUFSHADERMANAGER g_ShaderManager
+#define GLUFSHADERMANAGER GLUF::g_ShaderManager
 
 /*
 Usage examples
@@ -562,33 +599,38 @@ public:
 typedef GLUFVertexArraySoA GLUFVertexArray;
 
 #ifdef USING_ASSIMP
-GLUFVertexArray               OBJGLUF_API *LoadVertexArrayFromScene(const aiScene* scene, unsigned int meshNum = 0);
-std::vector<GLUFVertexArray*> OBJGLUF_API LoadVertexArraysFromScene(const aiScene* scene, unsigned int numMeshes);
+GLUFVertexArray					OBJGLUF_API *LoadVertexArrayFromScene(const aiScene* scene, unsigned int meshNum = 0);
+std::vector<GLUFVertexArray*>	OBJGLUF_API LoadVertexArraysFromScene(const aiScene* scene, unsigned int numMeshes);
+
+typedef std::map<unsigned char, GLUFVertexAttribInfo> GLUFVertexAttribMap;
+typedef std::pair<unsigned char, GLUFVertexAttribInfo> GLUFVertexAttribPair;
+//the unsigned char represents the below #defines (GLUF_VERTEX_ATTRIB_*)
+GLUFVertexArray					OBJGLUF_API *LoadVertexArrayFromScene(const aiScene* scene, GLUFVertexAttribMap inputs, unsigned int meshNum = 0);
 #endif
 
 //these are preprocessors that require the differet locations for different attributes(defaults)
-#define VERTEX_ATTRIB_POSITION	0
-#define VERTEX_ATTRIB_NORMAL	1 
-#define VERTEX_ATTRIB_UV0		2
-#define VERTEX_ATTRIB_COLOR0	3
-#define VERTEX_ATTRIB_TAN		4	
-#define VERTEX_ATTRIB_BITAN		5
+#define GLUF_VERTEX_ATTRIB_POSITION		0
+#define GLUF_VERTEX_ATTRIB_NORMAL		1
+#define GLUF_VERTEX_ATTRIB_UV0			2
+#define GLUF_VERTEX_ATTRIB_COLOR0		3
+#define GLUF_VERTEX_ATTRIB_TAN			4
+#define GLUF_VERTEX_ATTRIB_BITAN		5
 
-#define VERTEX_ATTRIB_UV1       10
-#define VERTEX_ATTRIB_UV2       11
-#define VERTEX_ATTRIB_UV3       12
-#define VERTEX_ATTRIB_UV4       13
-#define VERTEX_ATTRIB_UV5       14
-#define VERTEX_ATTRIB_UV6       15
-#define VERTEX_ATTRIB_UV7       16
+#define GLUF_VERTEX_ATTRIB_UV1			10
+#define GLUF_VERTEX_ATTRIB_UV2			11
+#define GLUF_VERTEX_ATTRIB_UV3			12
+#define GLUF_VERTEX_ATTRIB_UV4			13
+#define GLUF_VERTEX_ATTRIB_UV5			14
+#define GLUF_VERTEX_ATTRIB_UV6			15
+#define GLUF_VERTEX_ATTRIB_UV7			16
 
-#define VERTEX_ATTRIB_COLOR1    17
-#define VERTEX_ATTRIB_COLOR2    18
-#define VERTEX_ATTRIB_COLOR3    19
-#define VERTEX_ATTRIB_COLOR4    20
-#define VERTEX_ATTRIB_COLOR5    21
-#define VERTEX_ATTRIB_COLOR6    22
-#define VERTEX_ATTRIB_COLOR7    23
+#define GLUF_VERTEX_ATTRIB_COLOR1		17
+#define GLUF_VERTEX_ATTRIB_COLOR2		18
+#define GLUF_VERTEX_ATTRIB_COLOR3		19
+#define GLUF_VERTEX_ATTRIB_COLOR4		20
+#define GLUF_VERTEX_ATTRIB_COLOR5		21
+#define GLUF_VERTEX_ATTRIB_COLOR6		22
+#define GLUF_VERTEX_ATTRIB_COLOR7		23
 
 //these are premade GLUFVertexAttribInfo for the standard inputs
 extern const GLUFVertexAttribInfo OBJGLUF_API g_attribPOS;
@@ -611,3 +653,21 @@ extern const GLUFVertexAttribInfo OBJGLUF_API g_attribCOLOR6;
 extern const GLUFVertexAttribInfo OBJGLUF_API g_attribCOLOR7;
 extern const GLUFVertexAttribInfo OBJGLUF_API g_attribTAN;
 extern const GLUFVertexAttribInfo OBJGLUF_API g_attribBITAN;
+
+extern std::map<unsigned char, GLUFVertexAttribInfo> OBJGLUF_API g_stdAttrib;
+
+#define GLUFVertAttrib(location, bytes, count, type) {bytes, count, location, type}
+
+
+
+extern GLuint OBJGLUF_API g_GLVersionMajor;
+extern GLuint OBJGLUF_API g_GLVersionMinor;
+
+
+
+//GLUF exception system
+typedef unsigned int GLUFException;
+
+#define GLUF_EXCEPTION_INVALID_LOCATION 0x00000001
+
+}

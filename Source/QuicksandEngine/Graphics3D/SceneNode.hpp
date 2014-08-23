@@ -307,17 +307,15 @@ protected:
 class GLGrid : public SceneNode
 {
 protected:
-	GLsizei					m_numVerts;
-	GLsizei					m_numPolys;
-
 	//    int                     m_squares;
 
-	GLUFVertexArrayAoS				m_Squares;
+	GLUF::GLUFVertexArray			m_Squares;
+	glm::mat4						m_ModelMatrix;
 
-	GLUFProgramPtr					m_Program;
+	static GLUF::GLUFProgramPtr		m_Program;
 
 public:
-	bool					m_bTextureHasAlpha;
+	//bool					m_bTextureHasAlpha;
 
 	GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, /* const string& name, const char* textureResource, int squares, const Color &diffuseColor, */ const glm::mat4* pMatrix);
 	virtual ~GLGrid();
@@ -326,7 +324,7 @@ public:
 	virtual HRESULT VOnUpdate(Scene *pScene, DWORD const elapsedMs) { return S_OK; }
 	virtual HRESULT VPick(Scene *pScene, RayCast *pRayCast);// { return E_FAIL; }
 
-	bool VHasAlpha() const { return m_bTextureHasAlpha; }
+	//bool VHasAlpha() const { return m_bTextureHasAlpha; }
 };
 
 

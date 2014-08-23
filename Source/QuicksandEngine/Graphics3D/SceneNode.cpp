@@ -542,13 +542,18 @@ glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
 	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
 {
-	m_bTextureHasAlpha = false;
+	//m_bTextureHasAlpha = false;
 	//m_pVerts = NULL;
 	//m_pIndices = NULL;
 	//m_VertexArray = GLUFVertexArrayPtr(new GLUFVertexArrayPtr());
 	//m_VertexArray = GLUFBUFFERMANAGER.CreateVertexArray();
 
-	m_numVerts = m_numPolys = 0;
+	if (!m_Program)
+	{
+		//TODO: create shader Resource Loader
+
+		//m_Program = GLUFSHADERMANAGER.CreateProgram();
+	}
 }
 
 //
@@ -587,7 +592,7 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	// Create the vertex buffer - we'll need enough verts
 	// to populate the grid. If we want a 2x2 grid, we'll
 	// need 3x3 set of verts.
-	m_numVerts = (squares + 1)*(squares + 1);
+	//m_numVerts = (squares + 1)*(squares + 1);
 
 	/*
 	if (FAILED(DXUTGetD3D9Device()->CreateVertexBuffer(
@@ -604,7 +609,7 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	//if (FAILED(m_pVerts->Lock(0, 0, (void**)&pVertices, 0)))
 	//	return E_FAIL;
 
-	GLUFVAOData dat = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
+	//GLUFVAOData dat = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
 	
 	for (int j = 0; j<(squares + 1); j++)
 	{
@@ -759,7 +764,7 @@ HRESULT GLGrid::VPick(Scene *pScene, RayCast *pRayCast)
 
 
 
-/*
+
 
 GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
 	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
@@ -921,7 +926,7 @@ HRESULT GLGrid::VRender(Scene *pScene)
 	return S_OK;
 }
 
-*/
+
 
 ////////////////////////////////////////////////////
 // ArrowNode Implementation - added post press

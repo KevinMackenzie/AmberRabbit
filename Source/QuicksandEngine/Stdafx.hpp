@@ -101,8 +101,12 @@ public:
 //ObjGLUF Include
 #define SUPPRESS_RADIAN_ERROR
 #define SUPPRESS_UTF8_ERROR
+#define USING_ASSIMP
 #include "../ObjGLUF/ObjGLUF.h"
 #include "../ObjGLUF/GLUFGui.h"
+
+using GLUF::Color;
+using GLUF::Color4f;
 
 // OpenGL Includes
 #include <glm/glm.hpp>

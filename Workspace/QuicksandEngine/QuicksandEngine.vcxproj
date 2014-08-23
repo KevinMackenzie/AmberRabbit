@@ -212,6 +212,7 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.hpp" />
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\ShaderResource.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaAutoBlock.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.h" />
@@ -319,6 +320,7 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Raycast.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Scene.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.cpp" />
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\ShaderResource.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp" />

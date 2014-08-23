@@ -383,6 +383,9 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.h">
       <Filter>LuaPlus</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\ShaderResource.hpp">
+      <Filter>Graphics3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\QuicksandEngine\Stdafx.cpp" />
@@ -685,6 +688,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\print.c">
       <Filter>LuaPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\ShaderResource.cpp">
+      <Filter>Graphics3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
