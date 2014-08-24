@@ -18,6 +18,7 @@
 #include "Scene.hpp"
 
 
+shared_ptr<ResHandle> GLGrid::m_pGridProgram(nullptr);
 
 ////////////////////////////////////////////////////
 // SceneNodeProperties Implementation
@@ -128,7 +129,7 @@ void SceneNode::VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWor
 	}
 }
 
-shared_ptr<GLProgramResourceExtraData> SceneNode::GetShader()
+shared_ptr<ResHandle> SceneNode::GetShader()
 {
 	if (!m_pShader)
 		return m_pParent->GetShader();
@@ -157,10 +158,11 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 
 	//set the shader in this method, because this will render all children who have this as null
 	
-	GLUF::GLUFProgramPtr prog = GetShader()->GetProgram();
+	GLUFProgramPtr prog = static_pointer_cast<GLProgramResourceExtraData>(GetShader()->GetExtra())->GetProgram();
 	if (m_pShader)
 	{
-		GLUFSHADERMANAGER.UseProgram(m_pShader->GetProgram());
+		//this is always safe to do
+		GLUFSHADERMANAGER.UseProgram(prog);
 	}
 
 
@@ -172,11 +174,62 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 	glm::mat4 model_view = view * model;
 	glm::mat4 model_view_proj = proj * model_view;
 
-	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_model"), 1, GL_FALSE, &model[0][0]);
-	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_view"), 1, GL_FALSE, &view[0][0]);
-	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_mv"), 1, GL_FALSE, &model_view[0][0]);
-	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_mvp"), 1, GL_FALSE, &model_view_proj[0][0]);
+	GLUFVariableLocMap uniformLocations = GLUFSHADERMANAGER.GetShaderUniformLocations(prog);
+
+	GLUFVariableLocMap::iterator it;
 	
+	it = uniformLocations.find("_model");
+	if (it != uniformLocations.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, &model[0][0]);
+
+	it = uniformLocations.find("_view");
+	if (it != uniformLocations.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, &view[0][0]);
+	
+	it = uniformLocations.find("_proj");
+	if (it != uniformLocations.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, &proj[0][0]);
+	
+	it = uniformLocations.find("_mv");
+	if (it != uniformLocations.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, &model_view[0][0]);
+	
+	it = uniformLocations.find("_mvp");
+	if (it != uniformLocations.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, &model_view_proj[0][0]);
+
+
+	//these are the material uniforms
+	GLMaterial mat = m_Props.m_Material;
+
+	it = uniformLocations.find("mat_diffuse");
+	if (it != uniformLocations.end())
+		glUniform4fv(it->second, 1, &GLUFColorToFloat(mat.GetDiffuse())[0]);
+
+	it = uniformLocations.find("mat_ambient");
+	if (it != uniformLocations.end())
+		glUniform4fv(it->second, 1, &GLUFColorToFloat(mat.GetAmbient())[0]);
+
+
+	Color specular;
+	GLfloat power;
+	mat.GetSpecular(specular, power);
+
+	it = uniformLocations.find("mat_specular");
+	if (it != uniformLocations.end())
+		glUniform4fv(it->second, 1, &GLUFColorToFloat(specular)[0]);
+
+	it = uniformLocations.find("mat_power");
+	if (it != uniformLocations.end())
+		glUniform1f(it->second, power);
+
+	it = uniformLocations.find("mat_tex0");
+	if (it != uniformLocations.end())
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, static_pointer_cast<GLTextureResourceExtraData>(mat.GetTexture()->GetExtra())->GetTexture());
+		glUniform1i(it->second, 0);
+	}
 
 	return S_OK;
 }
@@ -233,7 +286,7 @@ const glm::vec3 SceneNode::GetWorldPosition() const
 //
 // SceneNode::VOnUpdate					- Chapter 16, page 532
 //
-HRESULT SceneNode::VOnUpdate(Scene *pScene, DWORD const elapsedMs)
+HRESULT SceneNode::VOnUpdate(Scene *pScene, double const fEllapsed)
 {
 	// This is meant to be called from any class
 	// that inherits from SceneNode and overloads
@@ -244,7 +297,7 @@ HRESULT SceneNode::VOnUpdate(Scene *pScene, DWORD const elapsedMs)
 
 	while (i != end)
 	{
-		(*i)->VOnUpdate(pScene, elapsedMs);
+		(*i)->VOnUpdate(pScene, fEllapsed);
 		++i;
 	}
 	return S_OK;
@@ -259,12 +312,13 @@ HRESULT SceneNode::VRenderChildren(Scene *pScene)
 	SceneNodeList::iterator i = m_Children.begin();
 	SceneNodeList::iterator end = m_Children.end();
 
+	GLUFProgramPtr prog = static_pointer_cast<GLProgramResourceExtraData>(GetShader()->GetExtra())->GetProgram();
 	while (i != end)
 	{
 		//make sure to set this back to this program
 		if (m_pShader)
 		{
-			GLUFSHADERMANAGER.UseProgram(m_pShader->GetProgram());
+			GLUFSHADERMANAGER.UseProgram(prog);
 		}
 
 		if ((*i)->VPreRender(pScene) == S_OK)
@@ -397,7 +451,7 @@ void SceneNode::SetAlpha(float alpha)
 
 void SceneNode::SetShader(shared_ptr<ResHandle> pShader)
 {
-	m_pShader = static_pointer_cast<GLProgramResourceExtraData>(pShader);
+	m_pShader = pShader;
 }
 
 
@@ -583,7 +637,7 @@ glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 //
 
 GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int squares, float squareSize, const Color &diffuseColor, const glm::mat4* pMatrix)
-	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix), m_Squares(GL_LINES, GL_DYNAMIC_DRAW), m_nSideLength(squares), m_fSquareLength(squareSize)
+	: SceneNode(actorId, renderComponent, RenderPass_Static, pMatrix), m_Squares(GL_LINES, GL_DYNAMIC_DRAW), m_nSideLength(squares), m_fSquareLength(squareSize)
 {
 	GLMaterial material = m_Props.GetMaterial();
 	material.SetDiffuse(diffuseColor);
@@ -595,14 +649,19 @@ GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int 
 	//m_VertexArray = GLUFVertexArrayPtr(new GLUFVertexArrayPtr());
 	//m_VertexArray = GLUFBUFFERMANAGER.CreateVertexArray();
 
+	if (!m_pGridProgram)
+	{
+		Resource* gridProg = new Resource("Shaders/Grid.prog");
+		m_pGridProgram = QuicksandEngine::g_pApp->m_ResCache->GetHandle(gridProg);
+	}
+
 	//use the predefined grid shader
-	Resource* gridProg = new Resource("Shaders/Grid.prog");
 
-	SceneNode::SetShader(QuicksandEngine::g_pApp->m_ResCache->GetHandle(gridProg));
+	SceneNode::SetShader(m_pGridProgram);
 
-	GLUF::GLUFVariableLocMap varLocations = GLUFSHADERMANAGER.GetShaderAttribLocations(m_pShader->GetProgram());
+	GLUFVariableLocMap varLocations = GLUFSHADERMANAGER.GetShaderAttribLocations(static_pointer_cast<GLProgramResourceExtraData>(m_pShader->GetExtra())->GetProgram());
 
-	GLUF::GLUFVariableLocMap::iterator it = varLocations.find(GLUF_VERTEX_ATTRIB_POSITION);
+	GLUFVariableLocMap::iterator it = varLocations.find(GLUF_VERTEX_ATTRIB_POSITION);
 
 	if (it != varLocations.end())
 		m_Squares.AddVertexAttrib(GLUFVertAttrib(it->second, 4, 3, GL_FLOAT));
@@ -671,15 +730,15 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	std::vector<glm::vec3> vertices;
 
 	//yes, i do want it to go one past, because there is one more set of vertices than sides
-	for (unsigned int i = 0; i <= m_nSideLength; ++i)
+	for (int i = 0; i <= m_nSideLength; ++i)
 	{
 		baseVertices.push_back(glm::vec3(0.0f, 0.0f, i * m_fSquareLength));
 	}
 
 	//fill the vertex array by 'extruding' this line
-	for (unsigned int i = 0; i <= m_nSideLength; ++i)
+	for (int i = 0; i <= m_nSideLength; ++i)
 	{
-		for (unsigned int j = 0; j < -m_nSideLength; ++i)
+		for (int j = 0; j < -m_nSideLength; ++i)
 		{
 			vertices.push_back(baseVertices[j] + glm::vec3(i * m_fSquareLength, 0.0f, 0.0f));
 		}
@@ -689,18 +748,18 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	std::vector<glm::u32vec2> Lines;
 
 	//lines going in the z direction
-	for (unsigned int i = 0; i < m_nSideLength; ++i)
+	for (int i = 0; i < m_nSideLength; ++i)
 	{
-		for (unsigned int j = 0; j < m_nSideLength; ++j)
+		for (int j = 0; j < m_nSideLength; ++j)
 		{
 			Lines.push_back(glm::u32vec2(j + i, j + i + 1));
 		}
 	}
 
 	//lines going in the x direction
-	for (unsigned int i = 0; i < m_nSideLength; ++i)
+	for (int i = 0; i < m_nSideLength; ++i)
 	{
-		for (unsigned int j = 0; j < m_nSideLength; ++j)
+		for (int j = 0; j < m_nSideLength; ++j)
 		{
 			//remember to add the stride when doing it this way
 			Lines.push_back(glm::u32vec2(j * m_nSideLength + i, j * m_nSideLength + i + 1));

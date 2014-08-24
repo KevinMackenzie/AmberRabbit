@@ -2,7 +2,7 @@
 #include "ShaderResource.hpp"
 
 
-bool GLShaderResourceLoader::LoadResource(char* text, GLUF::GLUFShaderType type, shared_ptr<ResHandle> handle)
+bool GLShaderResourceLoader::LoadResource(char* text, GLUFShaderType type, shared_ptr<ResHandle> handle)
 {
 	shared_ptr<GLShaderResourceExtraData> extra = static_pointer_cast<GLShaderResourceExtraData>(handle->GetExtra());
 
@@ -10,31 +10,33 @@ bool GLShaderResourceLoader::LoadResource(char* text, GLUF::GLUFShaderType type,
 
 	if (!extra->m_pShader)
 		return false;
+
+	return true;
 }
 
 bool GLVertShaderResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	return GLShaderResourceLoader::LoadResource(rawBuffer, GLUF::SH_VERTEX_SHADER, handle);
+	return GLShaderResourceLoader::LoadResource(rawBuffer, SH_VERTEX_SHADER, handle);
 }
 
 bool GLCtrlShaderResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	return GLShaderResourceLoader::LoadResource(rawBuffer, GLUF::SH_TESS_CONTROL_SHADER, handle);
+	return GLShaderResourceLoader::LoadResource(rawBuffer, SH_TESS_CONTROL_SHADER, handle);
 }
 
 bool GLEvalShaderResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	return GLShaderResourceLoader::LoadResource(rawBuffer, GLUF::SH_TESS_EVALUATION_SHADER, handle);
+	return GLShaderResourceLoader::LoadResource(rawBuffer, SH_TESS_EVALUATION_SHADER, handle);
 }
 
 bool GLGeomShaderResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	return GLShaderResourceLoader::LoadResource(rawBuffer, GLUF::SH_GEOMETRY_SHADER, handle);
+	return GLShaderResourceLoader::LoadResource(rawBuffer, SH_GEOMETRY_SHADER, handle);
 }
 
 bool GLFragShaderResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	return GLShaderResourceLoader::LoadResource(rawBuffer, GLUF::SH_FRAGMENT_SHADER, handle);
+	return GLShaderResourceLoader::LoadResource(rawBuffer, SH_FRAGMENT_SHADER, handle);
 }
 
 bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
@@ -42,7 +44,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 	if (!XmlResourceLoader::VLoadResource(rawBuffer, rawSize, handle))
 		return false;
 
-	shared_ptr<GLProgramResourceExtraData> extra = static_pointer_cast<GLProgramResourceExtraData>(handle);
+	shared_ptr<GLProgramResourceExtraData> extra = static_pointer_cast<GLProgramResourceExtraData>(handle->GetExtra());
 
 	tinyxml2::XMLElement* pRoot = extra->GetRoot();
 
@@ -70,7 +72,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		return false;
 
 	//this is just used because it uses normal characters
-	GLUF::GLUFShaderSourceList paths;
+	GLUFShaderSourceList paths;
 
 	tinyxml2::XMLElement* shaderType = pRoot->FirstChildElement("VERTEX");
 	if (shaderType)
@@ -78,7 +80,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		tinyxml2::XMLElement* shader = pRoot->FirstChildElement("SHADER");
 		while (shader)
 		{
-			paths.insert(std::pair<GLUF::GLUFShaderType, const char*>(GLUF::SH_VERTEX_SHADER, shader->GetText()));
+			paths.insert(std::pair<GLUFShaderType, const char*>(SH_VERTEX_SHADER, shader->GetText()));
 
 			shader = shader->NextSiblingElement("SHADER");
 		}
@@ -90,7 +92,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		tinyxml2::XMLElement* shader = pRoot->FirstChildElement("SHADER");
 		while (shader)
 		{
-			paths.insert(std::pair<GLUF::GLUFShaderType, const char*>(GLUF::SH_TESS_CONTROL_SHADER, shader->GetText()));
+			paths.insert(std::pair<GLUFShaderType, const char*>(SH_TESS_CONTROL_SHADER, shader->GetText()));
 
 			shader = shader->NextSiblingElement("SHADER");
 		}
@@ -102,7 +104,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		tinyxml2::XMLElement* shader = pRoot->FirstChildElement("SHADER");
 		while (shader)
 		{
-			paths.insert(std::pair<GLUF::GLUFShaderType, const char*>(GLUF::SH_TESS_EVALUATION_SHADER, shader->GetText()));
+			paths.insert(std::pair<GLUFShaderType, const char*>(SH_TESS_EVALUATION_SHADER, shader->GetText()));
 
 			shader = shader->NextSiblingElement("SHADER");
 		}
@@ -114,7 +116,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		tinyxml2::XMLElement* shader = pRoot->FirstChildElement("SHADER");
 		while (shader)
 		{
-			paths.insert(std::pair<GLUF::GLUFShaderType, const char*>(GLUF::SH_GEOMETRY_SHADER, shader->GetText()));
+			paths.insert(std::pair<GLUFShaderType, const char*>(SH_GEOMETRY_SHADER, shader->GetText()));
 
 			shader = shader->NextSiblingElement("SHADER");
 		}
@@ -127,7 +129,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		tinyxml2::XMLElement* shader = pRoot->FirstChildElement("SHADER");
 		while (shader)
 		{
-			paths.insert(std::pair<GLUF::GLUFShaderType, const char*>(GLUF::SH_FRAGMENT_SHADER, shader->GetText()));
+			paths.insert(std::pair<GLUFShaderType, const char*>(SH_FRAGMENT_SHADER, shader->GetText()));
 
 			shader = shader->NextSiblingElement("SHADER");
 		}
@@ -135,12 +137,12 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 
 
 	///now take these paths and get their data
-	GLUF::GLUFShaderPtrList shaders;
+	GLUFShaderPtrList shaders;
 
 	for (auto it : paths)
 	{
 		Resource* res = new Resource(it.second);
-		shared_ptr<GLShaderResourceExtraData> shadExtra = static_pointer_cast<GLShaderResourceExtraData>(QuicksandEngine::g_pApp->m_ResCache->GetHandle(res));
+		shared_ptr<GLShaderResourceExtraData> shadExtra = static_pointer_cast<GLShaderResourceExtraData>(QuicksandEngine::g_pApp->m_ResCache->GetHandle(res)->GetExtra());
 
 		shaders.push_back(shadExtra->GetShader());
 	}

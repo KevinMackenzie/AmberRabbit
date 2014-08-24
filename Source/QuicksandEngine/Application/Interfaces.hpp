@@ -57,7 +57,7 @@ class IScreenElement
 public:
 	virtual HRESULT VOnRestore() = 0;
 	virtual HRESULT VOnLostDevice() = 0;
-	virtual HRESULT VOnRender(double fTime, float fElapsedTime) = 0;
+	virtual HRESULT VOnRender(double fTime, double fElapsedTime) = 0;
 	virtual void VOnUpdate(int deltaMilliseconds) = 0;
 
 	virtual int VGetZOrder() const = 0;
@@ -104,7 +104,7 @@ class IGameView
 {
 public:
 	virtual HRESULT VOnRestore()=0;
-	virtual void VOnRender(double fTime, float fElapsedTime)=0;
+	virtual void VOnRender(double fTime, double fElapsedTime)=0;
 	virtual HRESULT VOnLostDevice()=0;
 	virtual GameViewType VGetType()=0;
 	virtual GameViewId VGetId() const=0;
@@ -219,9 +219,9 @@ public:
 enum RenderPass
 {
 	RenderPass_0,
-	RenderPass_Static = RenderPass_0,
+	RenderPass_Sky, //render the sky first
+	RenderPass_Static = RenderPass_Sky + 1,
 	RenderPass_Actor,
-	RenderPass_Sky,
 	RenderPass_NotRendered,
 	RenderPass_Last
 };
@@ -279,7 +279,7 @@ public:
 
 	virtual void VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWorld=NULL)=0;
 
-	virtual HRESULT VOnUpdate(Scene *pScene, DWORD const elapsedMs)=0;
+	virtual HRESULT VOnUpdate(Scene *pScene, double const fEllapsed)=0;
 	virtual HRESULT VOnRestore(Scene *pScene)=0;
 
 	virtual HRESULT VPreRender(Scene *pScene)=0;

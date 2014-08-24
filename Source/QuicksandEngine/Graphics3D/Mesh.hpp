@@ -43,15 +43,16 @@ class GLObjMeshResourceExtraData : public IResourceExtraData
 	friend class GLObjMeshResourceLoader;
 
 public:
-	GLObjMeshResourceExtraData(){};
+	GLObjMeshResourceExtraData() : m_pArray(nullptr), m_pMaterial(nullptr){};
 	virtual ~GLObjMeshResourceExtraData(){}
 	virtual std::string VToString() { return "GLObjMeshResourceExtraData"; }
 
 	GLMaterial* GetMaterial(){ return m_pMaterial; }
+	GLUFVertexArray* GetVertexArray(){ return m_pArray; }
 
 protected:
 
-	GLUF::GLUFVertexArray* m_pArray;
+	GLUFVertexArray* m_pArray;
 
 	GLMaterial *m_pMaterial;
 

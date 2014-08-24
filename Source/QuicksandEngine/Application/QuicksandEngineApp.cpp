@@ -1,4 +1,7 @@
 #include "../Stdafx.hpp"
+#include <shlobj.h>
+#include <direct.h>
+
 
 #include "QuicksandEngineApp.hpp"
 
@@ -140,9 +143,9 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	extern shared_ptr<IResourceLoader> CreateWAVResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateDDSResourceLoader();
-	extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
+	//extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
-	extern shared_ptr<IResourceLoader> CreateSdkMeshResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateObjMeshResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateScriptResourceLoader();
 
 	// Note - register these in order from least specific to most specific! They get pushed onto a list.
@@ -150,9 +153,9 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	m_ResCache->RegisterLoader(CreateWAVResourceLoader());
 	m_ResCache->RegisterLoader(CreateOGGResourceLoader());
 	m_ResCache->RegisterLoader(CreateDDSResourceLoader());
-	m_ResCache->RegisterLoader(CreateJPGResourceLoader());
+	//m_ResCache->RegisterLoader(CreateJPGResourceLoader());
 	m_ResCache->RegisterLoader(CreateXmlResourceLoader());
-	m_ResCache->RegisterLoader(CreateSdkMeshResourceLoader());
+	m_ResCache->RegisterLoader(CreateObjMeshResourceLoader());
 	m_ResCache->RegisterLoader(CreateScriptResourceLoader());
 
 	if (!LoadStrings("English"))
@@ -253,9 +256,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	//    Preload calls are discussed in Chapter 5, page 148
 	m_ResCache->Preload("*.ogg", NULL);
 	m_ResCache->Preload("*.dds", NULL);
-	m_ResCache->Preload("*.jpg", NULL);
-	m_ResCache->Preload("*.png", NULL);
-	m_ResCache->Preload("*.obj", NULL);
+	m_ResCache->Preload("*.model.obj", NULL);
 
 	CheckForJoystick(GetHwnd());
 
@@ -646,6 +647,19 @@ bool QuicksandEngineApp::OnSysCommand(GLUF_MESSAGE_TYPE msg, int param1, int par
 	return true;
 }
 
+void QuicksandEngineApp::GLFrameRender(double dTime, double dEllapsed)
+{
+	BaseGameLogic *pGame = m_pGame;
+
+	for (GameViewList::iterator i = pGame->m_gameViews.begin(),
+		end = pGame->m_gameViews.end(); i != end; ++i)
+	{
+		(*i)->VOnRender(dTime, dEllapsed);
+	}
+
+	m_pGame->VRenderDiagnostics();
+}
+
 //=========================================================
 // QuicksandEngineApp::OnClose - Chapter 5, page 152
 //
@@ -703,8 +717,8 @@ void QuicksandEngineApp::FlashWhileMinimized()
 		// this should be the case most of the time, but when
 		// we close the app down, minimized, and a confirmation
 		// dialog appears, we need to restore
-		DWORD now = timeGetTime();
-		DWORD then = now;
+		double now = glfwGetTime();
+		double then = now;
 		MSG msg;
 
 		FlashWindow(GetHwnd(), true);
@@ -728,9 +742,9 @@ void QuicksandEngineApp::FlashWhileMinimized()
 			}
 			else
 			{
-				now = timeGetTime();
-				DWORD timeSpan = now > then ? (now - then) : (then - now);
-				if (timeSpan > 1000)
+				now = glfwGetTime();
+				double timeSpan = now > then ? (now - then) : (then - now);
+				if (timeSpan > 1.0)
 				{
 					then = now;
 					FlashWindow(GetHwnd(), true);
@@ -1313,4 +1327,3 @@ void QuicksandEngineApp::GLFWErrorFunc(int error, const char* description)
 	ss << "GLFW ERROR: error-code=" << error << ";  Message = \"" << description << "\"";
 	LOG_ERROR(ss.str());
 }
-

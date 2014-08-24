@@ -14,11 +14,11 @@ public:
 	virtual ~GLShaderResourceExtraData(){}
 	virtual std::string VToString() { return "GLShaderResourceExtraData"; }
 
-	GLUF::GLUFShaderPtr GetShader(){	return m_pShader;	}
+	GLUFShaderPtr GetShader(){	return m_pShader;	}
 
 protected:
 
-	GLUF::GLUFShaderPtr m_pShader;
+	GLUFShaderPtr m_pShader;
 };
 
 class GLProgramResourceExtraData : public XmlResourceExtraData
@@ -30,21 +30,21 @@ public:
 	virtual ~GLProgramResourceExtraData(){}
 	virtual std::string VToString(){ return "GLProgramResourceExtraData"; }
 
-	GLUF::GLUFProgramPtr GetProgram(){ return m_pProgram; }
+	GLUFProgramPtr GetProgram(){ return m_pProgram; }
 
 protected:
 
-	GLUF::GLUFProgramPtr m_pProgram;
+	GLUFProgramPtr m_pProgram;
 };
 
 class GLShaderResourceLoader : public IResourceLoader
 {
 public:
-	virtual bool VUseRawFile() { return true; }
+	virtual bool VUseRawFile() { return false; }
 	virtual bool VDiscardRawBufferAfterLoad() { return false; }
-	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize){ return rawSize; }
+	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize){ return 0; }
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle) = 0;
-	bool LoadResource(char* text, GLUF::GLUFShaderType type, shared_ptr<ResHandle> handle);
+	bool LoadResource(char* text, GLUFShaderType type, shared_ptr<ResHandle> handle);
 	virtual std::string VGetPattern() { return "*.glsl"; }
 };
 

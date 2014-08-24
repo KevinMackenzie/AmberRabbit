@@ -29,7 +29,7 @@ void InitIntersection(Intersection &intersection, GLuint faceIndex, GLfloat dist
 typedef std::vector<Intersection> IntersectionArray;
 
 //the distance between rayPos and rayDir MUST be of unit length and the mesh MUST have indexes, AND must be divisible by three
-bool RayIntersect(GLUF::GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, bool *hit, GLuint *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, GLuint *pCountOfHits = nullptr);
+bool RayIntersect(GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, bool *hit, GLuint *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, GLuint *pCountOfHits = nullptr);
 
 
 
@@ -37,7 +37,7 @@ bool RayIntersect(GLUF::GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayD
 class RayCast
 {
 protected:
-	GLUF::GLUFMeshBarebones m_pVB;
+	GLUFMeshBarebones m_pVB;
 
 public:
 	RayCast(Point point, DWORD maxIntersections = 16);
@@ -53,7 +53,7 @@ public:
 
 	IntersectionArray m_IntersectionArray;
 
-	HRESULT Pick(Scene *pScene, ActorId actorId, GLUF::GLUFMeshBarebones *pMesh);
+	HRESULT Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh);
 
 	void Sort();
 };

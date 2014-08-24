@@ -5,8 +5,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include    <vorbis/codec.h>            // from the vorbis sdk
-#include    <vorbis/vorbisfile.h>       // also :)
+#include    <Vorbis/vorbis/codec.h>            // from the vorbis sdk
+#include    <Vorbis/vorbis/vorbisfile.h>       // also :)
 
 #include "SoundResource.hpp"
 #include "Audio.hpp"

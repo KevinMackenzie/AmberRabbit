@@ -8629,11 +8629,6 @@ GLUFTextHelper::GLUFTextHelper(GLUFDialogResourceManager* pManager, GLUFFontSize
 	GLUF_ASSERT(pManager);
 }
 
-GLUFTextHelper::~GLUFTextHelper()
-{
-	m_pManager = 0;
-}
-
 void GLUFTextHelper::Init(GLUFFontSize fLineHeight)
 {
 	m_fLineHeight = fLineHeight;
@@ -8642,7 +8637,7 @@ void GLUFTextHelper::Init(GLUFFontSize fLineHeight)
 	m_nFont = 0;
 }
 
-void GLUFTextHelper::Begin(unsigned int fontToUse, GLUFFontSize size, GLUF_FONT_WEIGHT weight)
+void GLUFTextHelper::Begin(GLUFFontIndex fontToUse, GLUFFontSize size, GLUF_FONT_WEIGHT weight)
 {
 	m_nFont = fontToUse;
 	m_fFontSize = size;
@@ -8661,10 +8656,10 @@ GLUFResult GLUFTextHelper::DrawFormattedTextLine(const wchar_t* strMsg, size_t s
 	//let sprintf handle all of the formatting
 	swprintf(Msg, strLen, strMsg, param);//TODO: if this fails?
 
-	return DrawTextLine(Msg, strLen);
+	return DrawTextLine(Msg);
 }
 
-GLUFResult GLUFTextHelper::DrawTextLine(const wchar_t* strMsg, size_t strLen)
+GLUFResult GLUFTextHelper::DrawTextLine(const wchar_t* strMsg)
 {
 	std::wstring sMsg = strMsg;
 
@@ -8689,10 +8684,10 @@ GLUFResult GLUFTextHelper::DrawFormattedTextLine(const GLUFRect& rc, unsigned in
 
 	swprintf(Msg, strLen, strMsg, param);
 
-	return DrawTextLine(rc, dwFlags, Msg, strLen);
+	return DrawTextLine(rc, dwFlags, Msg);
 }
 
-GLUFResult GLUFTextHelper::DrawTextLine(const GLUFRect& rc, unsigned int dwFlags, const wchar_t* strMsg, size_t strLen)
+GLUFResult GLUFTextHelper::DrawTextLine(const GLUFRect& rc, unsigned int dwFlags, const wchar_t* strMsg)
 {
 	DrawTextGLUF(*m_pManager->GetFontNode(m_nFont), strMsg, rc, m_clr, dwFlags & GT_CENTER, true);
 

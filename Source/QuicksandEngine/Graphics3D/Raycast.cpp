@@ -54,7 +54,7 @@ RayCast::RayCast(Point point, DWORD maxIntersections)
 	m_Point = point;
 }
 
-HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUF::GLUFMeshBarebones* pMesh)
+HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones* pMesh)
 {
 	if (!m_bAllHits && m_NumIntersections > 0)
 		return S_OK;
@@ -164,7 +164,8 @@ void RayCast::Sort()
 
 
 
-bool RayIntersect(GLUF::GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, bool *hit, GLuint *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, GLuint *pCountOfHits = nullptr)
+bool RayIntersect(GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, bool *hit, GLuint *pFaceIndex, 
+	GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits, GLuint *pCountOfHits)
 {
 	bool hasSucceeded = false;
 	bool hasSucceeded1 = false;

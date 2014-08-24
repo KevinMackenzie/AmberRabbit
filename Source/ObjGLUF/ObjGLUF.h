@@ -65,59 +65,7 @@
 #endif
 #endif
 
-#ifdef USING_ASSIMP
-inline glm::vec2 AssimpToGlm(aiVector2D v)
-{
-	return glm::vec2(v.x, v.y);
-}
-inline glm::vec2 AssimpToGlm3_2(aiVector3D v)
-{
-	return glm::vec2(v.x, v.y);
-}
-inline glm::vec2* AssimpToGlm(aiVector2D* v, unsigned int count)
-{
-	glm::vec2* ret = new glm::vec2[count];
-	for(unsigned int i = 0; i < count; ++i)
-		ret[i] = AssimpToGlm(v[i]);
-	return ret;
-}
-inline glm::vec2* AssimpToGlm3_2(aiVector3D* v, unsigned int count)
-{
-	glm::vec2* ret = new glm::vec2[count];
-	for(unsigned int i = 0; i < count; ++i)
-		ret[i] = AssimpToGlm3_2(v[i]);
-	return ret;
-}
 
-
-
-inline glm::vec3 AssimpToGlm(aiVector3D v)
-{
-	return glm::vec3(v.x, v.y, v.z);
-}
-inline glm::vec3* AssimpToGlm(aiVector3D* v, unsigned int count)
-{
-	glm::vec3* ret = new glm::vec3[count];
-	for(unsigned int i = 0; i < count; ++i)
-		ret[i] = AssimpToGlm(v[i]);
-	return ret;
-}
-inline glm::vec3 AssimpToGlm(aiColor3D v)
-{
-	return glm::vec3(v.r, v.g, v.b);
-}
-
-inline glm::vec4 AssimpToGlm(aiColor4D v)
-{
-	return glm::vec4(v.r, v.g, v.b, v.a);
-}
-
-inline GLUF::Color AssimpToGlm4_3u8(aiColor4D)
-{
-
-}
-
-#endif
 
 
 namespace std
@@ -309,9 +257,9 @@ OBJGLUF_API inline size_t GLUFGetVectorSize(std::vector<T> vec)
 }
 
 template<typename T>
-OBJGLUF_API inline std::vector<T> GLUFArrToVec(T* arr)
+OBJGLUF_API inline std::vector<T> GLUFArrToVec(T* arr, unsigned long len)
 {
-	return std::vector<T>(std::begin(arr), std::end(arr));
+	return std::vector<T>(arr, arr + len);
 }
 
 //used for getting vertices from rects 0,0 is bottom left
@@ -477,12 +425,12 @@ GLUFShaderPtr shad = CreateShader("shader.glsl", ST_VERTEX_SHADER);
 
 enum GLUFTextureFileFormat
 {
-	TFF_DDS = 0//all for now
+	TFF_DDS = 0,//we will ONLY support dds's, because they are flexible enough, AND have mipmaps
 };
 
 
 GLuint OBJGLUF_API LoadTextureFromFile(std::wstring filePath, GLUFTextureFileFormat format);
-GLuint OBJGLUF_API LoadTextureFromMemory(char* data, unsigned int length, GLUFTextureFileFormat format);
+GLuint OBJGLUF_API LoadTextureFromMemory(char* data, unsigned int length, GLUFTextureFileFormat format);//this is broken, WHY
 
 
 
@@ -514,12 +462,14 @@ class OBJGLUF_API GLUFVertexArrayBase
 protected:
 	GLuint mVertexArrayId = 0;
 	GLuint mVertexCount = 0;
+	
 
 	GLenum mUsageType;
 	GLenum mPrimitiveType;
 	std::vector<GLUFVertexAttribInfo> mAttribInfos;//these are IN ORDER
 
 	GLuint mIndexBuffer = 0;
+	GLuint mRangedIndexBuffer = 0;
 	GLuint mIndexCount  = 0;
 
 	virtual void RefreshDataBufferAttribute() = 0;
@@ -535,6 +485,8 @@ public:
 	void BindVertexArray();
 
 	void Draw();
+	void DrawRange(GLuint start, GLuint count);
+
 	void DrawInstanced(GLuint instances);
 
 	void BufferIndices(GLuint* indices, unsigned int Count);
@@ -579,7 +531,6 @@ public:
 	GLUFVertexArraySoA(GLenum PrimType = GL_TRIANGLES, GLenum buffUsage = GL_STATIC_DRAW, bool indexed = true);
 	~GLUFVertexArraySoA();
 	GLUFVertexArraySoA(const GLUFVertexArraySoA& other);
-
 
 	GLUFMeshBarebones GetBarebonesMesh();
 	void BufferData(GLUFAttribLoc loc, GLuint VertexCount, void* data);
@@ -689,3 +640,57 @@ typedef unsigned int GLUFException;
 #define GLUF_EXCEPTION_INVALID_LOCATION 0x00000001
 
 }
+
+#ifdef USING_ASSIMP
+inline glm::vec2 AssimpToGlm(aiVector2D v)
+{
+	return glm::vec2(v.x, v.y);
+}
+inline glm::vec2 AssimpToGlm3_2(aiVector3D v)
+{
+	return glm::vec2(v.x, v.y);
+}
+inline glm::vec2* AssimpToGlm(aiVector2D* v, unsigned int count)
+{
+	glm::vec2* ret = new glm::vec2[count];
+	for (unsigned int i = 0; i < count; ++i)
+		ret[i] = AssimpToGlm(v[i]);
+	return ret;
+}
+inline glm::vec2* AssimpToGlm3_2(aiVector3D* v, unsigned int count)
+{
+	glm::vec2* ret = new glm::vec2[count];
+	for (unsigned int i = 0; i < count; ++i)
+		ret[i] = AssimpToGlm3_2(v[i]);
+	return ret;
+}
+
+
+
+inline glm::vec3 AssimpToGlm(aiVector3D v)
+{
+	return glm::vec3(v.x, v.y, v.z);
+}
+inline glm::vec3* AssimpToGlm(aiVector3D* v, unsigned int count)
+{
+	glm::vec3* ret = new glm::vec3[count];
+	for (unsigned int i = 0; i < count; ++i)
+		ret[i] = AssimpToGlm(v[i]);
+	return ret;
+}
+inline glm::vec3 AssimpToGlm(aiColor3D v)
+{
+	return glm::vec3(v.r, v.g, v.b);
+}
+
+inline glm::vec4 AssimpToGlm(aiColor4D v)
+{
+	return glm::vec4(v.r, v.g, v.b, v.a);
+}
+
+inline GLUF::Color AssimpToGlm4_3u8(aiColor4D col)
+{
+	return GLUF::Color(col.r * 255, col.g * 255, col.b * 255, col.a * 255);
+}
+
+#endif

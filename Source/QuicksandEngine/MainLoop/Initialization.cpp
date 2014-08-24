@@ -1,13 +1,12 @@
-//INCLUDE BEFORE STDAFX because of annoying 'near', 'far', 'NEAR', 'FAR' issues
-#include <shlobj.h>
-#include <direct.h>
-
 #include "../Stdafx.hpp"
 #include "Initialization.hpp"
 
+#include <shlobj.h>
+#include <direct.h>
 
 
-bool CheckStorage(const DWORDLONG diskSpaceNeeded)
+
+bool CheckStorage(const unsigned long long diskSpaceNeeded)
 {
 	// Check for enough free disk space on the current disk.
 	int const drive = _getdrive();
@@ -30,7 +29,7 @@ bool CheckStorage(const DWORDLONG diskSpaceNeeded)
 //
 // CheckMemory							- Chapter 5, page 139
 //
-bool CheckMemory(const DWORDLONG physicalRAMNeeded, const DWORDLONG virtualRAMNeeded)
+bool CheckMemory(const unsigned long long physicalRAMNeeded, const unsigned long long virtualRAMNeeded)
 {
 	MEMORYSTATUSEX status;
 	GlobalMemoryStatusEx(&status);
@@ -68,11 +67,11 @@ bool CheckMemory(const DWORDLONG physicalRAMNeeded, const DWORDLONG virtualRAMNe
 //
 // ReadCPUSpeed							- Chapter 5, page 140
 //
-DWORD ReadCPUSpeed()
+unsigned long ReadCPUSpeed()
 {
-	DWORD BufSize = sizeof(DWORD);
-	DWORD dwMHz = 0;
-	DWORD type = REG_DWORD;
+	unsigned long BufSize = sizeof(unsigned long);
+	unsigned long dwMHz = 0;
+	unsigned long type = REG_DWORD;
 	HKEY hKey;
 
 	// open the key where the proc speed is hidden:
@@ -86,4 +85,74 @@ DWORD ReadCPUSpeed()
 		RegQueryValueEx(hKey, L"~MHz", NULL, &type, (LPBYTE)&dwMHz, &BufSize);
 	}
 	return dwMHz;
+}
+
+//
+// IsOnlyInstance							- Chapter 5, page 137
+//
+bool IsOnlyInstance(const wchar_t* gameTitle)
+{
+	// Find the window.  If active, set and return false
+	// Only one game instance may have this mutex at a time...
+
+	HANDLE handle = CreateMutex(NULL, TRUE, gameTitle);
+
+	// Does anyone else think 'ERROR_SUCCESS' is a bit of an oxymoron?
+	if (GetLastError() != ERROR_SUCCESS)
+	{
+		HWND hWnd = FindWindow(gameTitle, NULL);
+		if (hWnd)
+		{
+			// An instance of your game is already running.
+			ShowWindow(hWnd, SW_SHOWNORMAL);
+			SetFocus(hWnd);
+			SetForegroundWindow(hWnd);
+			SetActiveWindow(hWnd);
+			return false;
+		}
+	}
+	return true;
+}
+
+//
+// GetSaveGameDirectory - Chapter 5, page 146
+//
+const char *GetSaveGameDirectory(HWND hWnd, const char *gameAppDirectory)
+{
+	HRESULT hr;
+	static wchar_t m_SaveGameDirectory[MAX_PATH];
+	wchar_t userDataPath[MAX_PATH];
+	wchar_t gameAppDir[MAX_PATH];
+
+	mbstowcs(gameAppDir, gameAppDirectory, MAX_PATH);
+
+	hr = SHGetSpecialFolderPath(hWnd, userDataPath, CSIDL_APPDATA, true);
+
+	_tcscpy_s(m_SaveGameDirectory, userDataPath);
+	_tcscat_s(m_SaveGameDirectory, _T("\\"));
+	_tcscat_s(m_SaveGameDirectory, gameAppDir);
+
+	// Does our directory exist?
+	if (0xffffffff == GetFileAttributes(m_SaveGameDirectory))
+	{
+		if (SHCreateDirectoryEx(hWnd, m_SaveGameDirectory, NULL) != ERROR_SUCCESS)
+			return false;
+	}
+
+	_tcscat_s(m_SaveGameDirectory, _T("\\"));
+
+	char *ret = new char[MAX_PATH];
+	wcstombs(ret, m_SaveGameDirectory, MAX_PATH);
+
+	//TODO: does this mess things up?
+	//delete[] m_SaveGameDirectory;
+	//delete[] userDataPath;
+	//delete[] gameAppDir;
+
+	return ret;
+}
+
+bool CheckForJoystick(HWND hWnd)
+{
+	return false;
 }

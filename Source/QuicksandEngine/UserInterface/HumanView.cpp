@@ -75,9 +75,9 @@ bool HumanView::LoadGame(tinyxml2::XMLElement* pLevelData)
 //
 // HumanView::VOnRender							- Chapter 10, page 274
 //
-void HumanView::VOnRender(double fTime, float fElapsedTime )
+void HumanView::VOnRender(double fTime, double fElapsedTime )
 {
-	m_currTick = timeGetTime();
+	m_currTick = fTime;
 	if (m_currTick == m_lastDraw)
 		return;
 
@@ -516,18 +516,18 @@ void HumanView::Console::Render( )
 	wchar_t wideBuffer[ kNumWideChars ];
 	AnsiToWideCch( wideBuffer, finalInputString.c_str(), kNumWideChars );
 
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP | DT_CALCRECT, wideBuffer, kNumWideChars);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP | DT_CALCRECT, wideBuffer);
 
 	//Draw with shadow first.
 	shadowRect = inputTextRect;
 	++shadowRect.left;
 	++shadowRect.top;
 	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_Black );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer );
 
 	//Now bright text.
 	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_White );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP, wideBuffer );
 
 	//Now display the output text just below the input text.
 	outputTextRect.left = inputTextRect.left + (15.0f / QuicksandEngine::g_pApp->GetScreenSize().x);
@@ -541,11 +541,11 @@ void HumanView::Console::Render( )
 	++shadowRect.left;
 	++shadowRect.top;
 	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_Black );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer);
 
 	//Now bright text.
 	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_White );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( outputTextRect, DT_LEFT | DT_TOP, wideBuffer, kNumWideChars );
+	GLRenderer_Base::g_pTextHelper->DrawTextLine( outputTextRect, DT_LEFT | DT_TOP, wideBuffer );
 
 	GLRenderer_Base::g_pTextHelper->End();
 }

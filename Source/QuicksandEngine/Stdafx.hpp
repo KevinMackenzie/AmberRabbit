@@ -49,13 +49,6 @@
 #include <map>
 #include <sstream>
 
-//clean some older windows macros
-#undef near
-#undef far
-
-#undef FAR
-#define FAR
-
 //some boost stuff
 #include <boost/lexical_cast.hpp>
 
@@ -105,8 +98,7 @@ public:
 #include "../ObjGLUF/ObjGLUF.h"
 #include "../ObjGLUF/GLUFGui.h"
 
-using GLUF::Color;
-using GLUF::Color4f;
+using namespace GLUF;
 
 // OpenGL Includes
 #include <glm/glm.hpp>
@@ -194,15 +186,15 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 #if !defined(SAFE_DELETE)
-#define SAFE_DELETE(x) if(x) delete x; x=NULL;
+#define SAFE_DELETE(x) if(x){delete x; x=nullptr;};
 #endif
 
 #if !defined(SAFE_DELETE_ARRAY)
-#define SAFE_DELETE_ARRAY(x) if (x) delete [] x; x=NULL; 
+#define SAFE_DELETE_ARRAY(x) if (x) delete [] x; x=nullptr; 
 #endif
 
 #if !defined(SAFE_RELEASE)
-#define SAFE_RELEASE(x) if(x) x->Release(); x=NULL;
+#define SAFE_RELEASE(x) if(x) x->Release(); x=nullptr;
 #endif
 
 #ifdef UNICODE
@@ -230,8 +222,6 @@ extern INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	int       nCmdShow);
 
 
-template <class M>
-std::vector<M> ArrToVec(M* arr, size_t size);
 
 
 #endif

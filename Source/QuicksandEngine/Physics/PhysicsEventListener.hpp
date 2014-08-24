@@ -104,7 +104,7 @@ class EvtData_PhysCollision : public ScriptEvent
     ActorId m_ActorB;
 	glm::vec3 m_SumNormalForce;
     glm::vec3 m_SumFrictionForce;
-    Vec3List m_CollisionPoints;
+    Vec3Array m_CollisionPoints;
 
 public:
 	static const EventType sk_EventType;
@@ -126,7 +126,7 @@ public:
 								ActorId actorB,
 								glm::vec3 sumNormalForce,
 								glm::vec3 sumFrictionForce,
-								Vec3List collisionPoints )
+								Vec3Array collisionPoints)
 		: m_ActorA(actorA),
 		m_ActorB(actorB),
 		m_SumNormalForce(sumNormalForce),
@@ -164,7 +164,7 @@ public:
         return m_SumFrictionForce;
     }
 
-    const Vec3List& GetCollisionPoints(void) const
+	const Vec3Array& GetCollisionPoints(void) const
     {
         return m_CollisionPoints;
     }

@@ -74,28 +74,28 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -111,6 +111,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -128,6 +130,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -149,6 +153,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -170,6 +176,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -421,6 +429,9 @@
     </ProjectReference>
     <ProjectReference Include="..\ObjGLUF\ObjGLUF.vcxproj">
       <Project>{06ddd1c2-d673-4a97-aba7-c5c1dd72c875}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vorbis\Vorbis.vcxproj">
+      <Project>{e18cc76f-eef9-4501-9806-bedf995dd6e8}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

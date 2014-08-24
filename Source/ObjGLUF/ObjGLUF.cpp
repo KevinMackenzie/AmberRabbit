@@ -139,8 +139,7 @@ char* GLUFLoadFileIntoMemory(const wchar_t* path, unsigned long* rawSize)
 #pragma warning(default : 4244)
 	inFile.seekg(0, std::ios::beg);
 
-	char* rawData;
-	rawData = (char*)malloc(*rawSize);
+	char* rawData = (char*)malloc(*rawSize);
 	//if (sizeof(rawData) != *rawSize)
 	//	return false;
 
@@ -371,15 +370,11 @@ glm::vec2 GLUFGetVec2FromRect(GLUFRect rect, bool x, bool y)
 			return glm::vec2(rect.left, rect.bottom);
 }
 
-GLuint LoadTextureFromFile(std::wstring filePath, GLUFTextureFileFormat format)
+GLuint LoadTextureDDS(char* rawData, unsigned int size)
 {
-	/*unsigned long rawSize = 0;
-	char* data = GLUFLoadFileIntoMemory(filePath.c_str(), &rawSize);
-
-	return LoadTextureFromMemory(data, rawSize, format);*/
 
 	GLuint tex = 0;
-	gli::texture2D Texture(gli::load_dds(filePath.c_str()));
+	gli::texture2D Texture(gli::load_dds_memory(rawData, size));
 	assert(!Texture.empty());
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
@@ -418,56 +413,29 @@ GLuint LoadTextureFromFile(std::wstring filePath, GLUFTextureFileFormat format)
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	
+
 	return tex;
-	
+}
+
+GLuint LoadTextureFromFile(std::wstring filePath, GLUFTextureFileFormat format)
+{
+	unsigned long rawSize = 0;
+	char* data = GLUFLoadFileIntoMemory(filePath.c_str(), &rawSize);
+
+	return LoadTextureFromMemory(data, rawSize, format);
 }
 
 
 GLuint LoadTextureFromMemory(char* data, unsigned int length, GLUFTextureFileFormat format)
 {
-	GLuint tex = 0;
-	gli::texture2D Texture(gli::load_dds_memory(data, length));
-	assert(!Texture.empty());
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, GLint(Texture.levels() - 1));
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_GREEN);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_BLUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_ALPHA);
-	if (gli::is_compressed(Texture.format()))
+
+	switch (format)
 	{
-		for (gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			glCompressedTexImage2D(GL_TEXTURE_2D,
-				GLint(Level),
-				GLenum(gli::internal_format(Texture.format())),
-				GLsizei(Texture[Level].dimensions().x),
-				GLsizei(Texture[Level].dimensions().y), 0,
-				GLsizei(Texture[Level].size()),
-				Texture[Level].data());
-		}
-	}
-	else
-	{
-		for (gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			glTexImage2D(GL_TEXTURE_2D,
-				GLint(Level),
-				GLenum(gli::internal_format(Texture.format())),
-				GLsizei(Texture[Level].dimensions().x),
-				GLsizei(Texture[Level].dimensions().y), 0,
-				GLenum(gli::external_format(Texture.format())),
-				GLenum(gli::type_format(Texture.format())),
-				Texture[Level].data());
-		}
+	case TFF_DDS:
+		return LoadTextureDDS(data, length);
 	}
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	return tex;
+	return 0;
 }
 
 ////////////////////////////
@@ -1047,7 +1015,7 @@ void GLUFShaderManager::UseProgramNull()
 	glBindProgramPipeline(0);//juse in case we are using pipelines
 }
 
-GLUFSepProgramPtr GLUFShaderManager::CreateSeperateProgram(GLUFProgramPtrStagesMap programs)
+/*GLUFSepProgramPtr GLUFShaderManager::CreateSeperateProgram(GLUFProgramPtrStagesMap programs)
 {
 	GLUFSepProgramPtr ret(new GLUFSeperateProgram);
 	ret->Init();
@@ -1057,7 +1025,7 @@ GLUFSepProgramPtr GLUFShaderManager::CreateSeperateProgram(GLUFProgramPtrStagesM
 		ret->AttachProgram(it.second, it.first);
 	}
 	return ret;
-}
+}*/
 
 GLuint GLUFShaderManager::GetShaderVariableLocation(GLUFProgramPtr prog, GLUFLocationType locType, std::string varName)
 {
@@ -1146,7 +1114,10 @@ GLUFVertexArrayBase::GLUFVertexArrayBase(GLenum PrimType, GLenum buffUsage, bool
 	glGenVertexArrayBindVertexArray(&mVertexArrayId);
 
 	if (index)
+	{
 		glGenBuffers(1, &mIndexBuffer);
+		glGenBuffers(1, &mRangedIndexBuffer);
+	}
 }
 
 GLUFVertexArrayBase::~GLUFVertexArrayBase()
@@ -1218,6 +1189,30 @@ void GLUFVertexArrayBase::Draw()
 	else
 	{
 		glDrawArrays(mPrimitiveType, 0, mVertexCount);
+	}
+
+	DisableVertexAttributes();
+}
+
+void GLUFVertexArrayBase::DrawRange(GLuint start, GLuint count)
+{
+	BindVertexArray();
+	EnableVertexAttributes();
+
+	if (mIndexBuffer != 0)
+	{
+		//copy the range over an draw
+		glBindBuffer(GL_COPY_READ_BUFFER, mIndexBuffer);
+		glBindBuffer(GL_COPY_WRITE_BUFFER, mRangedIndexBuffer);
+
+		glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, sizeof(GLuint) * start, 0, sizeof(GLuint) * count);
+		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRangedIndexBuffer);
+		glDrawElements(mPrimitiveType, mIndexCount, GL_UNSIGNED_INT, nullptr);
+	}
+	else
+	{
+		glDrawArrays(mPrimitiveType, (start < 0 || start > mVertexCount) ? 0 : start, (count > mVertexCount) ? mVertexCount : count);
 	}
 
 	DisableVertexAttributes();
@@ -1393,12 +1388,14 @@ GLUFMeshBarebones GLUFVertexArraySoA::GetBarebonesMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, it->second);
 	glm::vec3* pVerts = (glm::vec3*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
 
-	ret.mVertices = GLUFArrToVec(pVerts);
+	ret.mVertices = GLUFArrToVec(pVerts, mVertexCount);
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
 	GLuint* pIndices = (GLuint*)glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
-	ret.mIndices = GLUFArrToVec(pIndices);
+	ret.mIndices = GLUFArrToVec(pIndices, mIndexCount);
+
+	return ret;
 }
 
 void GLUFVertexArraySoA::BufferData(GLUFAttribLoc loc, GLuint VertexCount, void* data)

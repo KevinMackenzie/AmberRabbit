@@ -1135,11 +1135,11 @@ protected:
 
 
 
-class GLUFTextHelper
+class OBJGLUF_API GLUFTextHelper
 {
 public:
 	GLUFTextHelper(GLUFDialogResourceManager* pManager, GLUFFontSize fLineHeight);
-	~GLUFTextHelper();
+	~GLUFTextHelper(){};
 
 	//line height = leadding
 	void Init(GLUFFontSize fLineHeight = 0.025f);
@@ -1152,12 +1152,12 @@ public:
 
 	void       Begin(GLUFFontIndex fontToUse, GLUFFontSize size, GLUF_FONT_WEIGHT weight);
 	GLUFResult DrawFormattedTextLine(const wchar_t* strMsg, size_t strLen, ...);
-	GLUFResult DrawTextLine(const wchar_t* strMsg, size_t strLen);
+	GLUFResult DrawTextLine(const wchar_t* strMsg);
 	//GLUFResult DrawFormattedTextLine(const GLUFRect& rc, _In_ DWORD dwFlags, const WCHAR* strMsg, ...);
 	//GLUFResult DrawTextLine(_In_ const GLUFRect& rc, _In_ DWORD dwFlags, _In_z_ const WCHAR* strMsg);
 	GLUFResult DrawFormattedTextLine(const GLUFRect& rc, unsigned int dwFlags, const wchar_t* strMsg, size_t strLen, ...);
-	GLUFResult DrawTextLine(const GLUFRect& rc, unsigned int dwFlags, const wchar_t* strMsg, size_t strLen);
-	void    End();
+	GLUFResult DrawTextLine(const GLUFRect& rc, unsigned int dwFlags, const wchar_t* strMsg);
+	void	   End();
 
 protected:
 	Color m_clr;

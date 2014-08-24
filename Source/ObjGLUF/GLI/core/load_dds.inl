@@ -463,6 +463,8 @@ wchar_t const * Filename
 }
 
 
+
+
 inline storage load_dds_memory
 (
 char* Memory, unsigned int Size

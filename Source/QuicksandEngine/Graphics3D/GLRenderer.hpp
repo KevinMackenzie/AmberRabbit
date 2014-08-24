@@ -55,6 +55,10 @@ public:
 	static GLUFDialogResourceManager g_DialogResourceManager;
 	static GLUFTextHelper* g_pTextHelper;
 
+	virtual void VSetWorldTransform(const glm::mat4 *m){};
+	virtual void VSetViewTransform(const glm::mat4 *m){};
+	virtual void VSetProjectionTransform(const glm::mat4 *m){};
+
 	virtual HRESULT VOnRestore() { return S_OK; }
 	virtual void VShutdown() { SAFE_DELETE(g_pTextHelper); }
 };
@@ -100,15 +104,18 @@ protected:
 class GLLineDrawer
 {
 public:
-	GLLineDrawer() { m_pVertexBuffer = nullptr; m_LineDrawerShader = nullptr; }
+	GLLineDrawer();
 	~GLLineDrawer() {  }
 
 	void DrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color);
 	HRESULT OnRestore();
 
 protected:
-	GLUFProgramPtr        		  m_LineDrawerShader;
-	GLUFVertexArrayPtr            m_pVertexBuffer;
+	static shared_ptr<ResHandle>  m_LineDrawerShader;
+	GLUFVertexArray         m_pVertexBuffer;
+
+	GLuint m_PositionLocation;
+	GLuint m_ColorLocation;
 };
 
 
@@ -127,11 +134,6 @@ public:
 	virtual bool VPostRender();
 	virtual HRESULT VOnRestore();
 	virtual void VCalcLighting(Lights *lights, int maximumLights) { }
-
-	// These three functions are done for each shader, not as a part of beginning the render - so they do nothing in D3D11.
-	virtual void VSetWorldTransform(const glm::mat4 *m) {  }
-	virtual void VSetViewTransform(const glm::mat4 *m) {  }
-	virtual void VSetProjectionTransform(const glm::mat4 *m) {  }
 
 	virtual void VDrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color);
 

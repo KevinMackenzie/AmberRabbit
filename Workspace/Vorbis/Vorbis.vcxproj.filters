@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{de87cd8d-560f-4e29-8d4f-84383d3b570e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\Vorbis\barkmel.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\bitrate.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\block.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\codebook.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\envelope.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\floor0.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\floor1.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\info.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\lookup.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\lpc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\lsp.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\mapping0.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\mdct.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\psy.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\registry.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\res0.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\sharedbook.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\smallft.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\synthesis.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\tone.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\vorbisenc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\vorbisfile.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\window.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vorbis\analysis.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\Vorbis\bitrate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\codebook.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\codec_internal.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\envelope.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\highlevel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\lookup.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\lookup_data.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\lpc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\lsp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\masking.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\mdct.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\misc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\os.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\psy.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\registry.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\scales.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\smallft.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\window.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\books\coupled\res_books_51.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\books\coupled\res_books_stereo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\books\floor\floor_books.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\books\uncoupled\res_books_uncoupled.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\floor_all.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\psych_11.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\psych_16.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\psych_44.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\psych_8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\residue_16.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\residue_44.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\residue_44p51.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\residue_44u.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\residue_8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_11.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_16.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_22.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_32.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_44.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_44p51.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_44u.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\modes\setup_X.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Vorbis\backends.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Source\Vorbis\lookups.pl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="..\..\Source\Vorbis\Makefile.am">
+      <Filter>src</Filter>
+    </None>
+    <None Include="..\..\Source\Vorbis\Makefile.in">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+</Project>

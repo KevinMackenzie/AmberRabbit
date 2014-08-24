@@ -19,7 +19,7 @@ public:
 
 	// IScreenElement Implementation
 	virtual HRESULT VOnRestore();
-	virtual HRESULT VOnRender(double fTime, float fElapsedTime);
+	virtual HRESULT VOnRender(double fTime, double fElapsedTime);
 	virtual int VGetZOrder() const { return 99; }
 	virtual void VSetZOrder(int const zOrder) { }
 

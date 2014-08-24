@@ -219,9 +219,9 @@ HRESULT Scene::OnUpdate(const int deltaMilliseconds)
 	if (!m_Root)
 		return S_OK;
 
-	static DWORD lastTime = timeGetTime();
-	DWORD elapsedTime = 0;
-	DWORD now = timeGetTime();
+	static double lastTime = glfwGetTime();
+	double elapsedTime = 0.0f;
+	double now = glfwGetTime();
 
 	elapsedTime = now - lastTime;
 	lastTime = now;

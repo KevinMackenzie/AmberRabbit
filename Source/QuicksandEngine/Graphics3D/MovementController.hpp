@@ -49,7 +49,7 @@ public:
 	MovementController(shared_ptr<SceneNode> object, float initialYaw, float initialPitch, bool rotateWhenLButtonDown);
 	void SetObject(shared_ptr<SceneNode> newObject);
 
-	void OnUpdate(DWORD const elapsedMs);
+	void OnUpdate(double const fEllapsed);
 
 public:
 	bool VOnPointerMove(const Point &mousePos, const int radius);

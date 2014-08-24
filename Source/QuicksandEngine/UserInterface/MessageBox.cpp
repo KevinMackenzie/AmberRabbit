@@ -56,7 +56,7 @@ GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags
 	//m_UI.SetBackgroundColors(g_Gray40);
 
 	Color red = Color(255,0,0,200);
-	m_UI.SetBackgroundColors(red);
+	m_UI.SetBackgroundColor(red);
 
 	float fY = border; 
 	float fX = (m_Width - msgWidth) / 2; 
@@ -129,10 +129,10 @@ HRESULT GLMessageBox::VOnRestore()
 //
 // class MessageBox::VOnRender					- Chapter 10, page 291
 //
-HRESULT GLMessageBox::VOnRender(double fTime, float fElapsedTime)
+HRESULT GLMessageBox::VOnRender(double fTime, double fElapsedTime)
 {
 	HRESULT hr;
-	V( m_UI.OnRender( fElapsedTime ) );
+	V( m_UI.OnRender( (float)fElapsedTime ) );
 	return S_OK;
 };
 

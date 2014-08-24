@@ -35,7 +35,7 @@ namespace gli
 {
 
 	//a little treat for initializing streambuf's with existing data
-	struct MemStreamBuf : public std::streambuf
+	struct MemStreamBuf : std::streambuf
 	{
 		MemStreamBuf(char* data, std::ptrdiff_t length)
 		{

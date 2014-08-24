@@ -2,7 +2,7 @@
 #include "Material.hpp"
 #include "../ResourceCache/ResCache.hpp"
 #include "SceneNode.hpp"
-#include "../GLI/gli.hpp"
+//#include "../GLI/gli.hpp"
 
 
 ////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ void GLMaterial::SetEmissive(const Color &color)
 
 void GLMaterial::SetAlpha(float alpha)
 {
-	m_Diffuse.a = alpha;
+	m_Diffuse.a = glm::u8(glm::clamp(alpha * 255.0f, 0.0f, 255.0f));
 }
 
 void GLMaterial::GLUse()
@@ -67,7 +67,7 @@ shared_ptr<IResourceLoader> CreateDDSResourceLoader()
 //
 // class JpgResourceLoader					- creates an interface with the Resource cache to load JPG files
 //
-class JpgResourceLoader : public TextureResourceLoader
+/*class JpgResourceLoader : public TextureResourceLoader
 {
 public:
 	virtual std::string VGetPattern() { return "*.jpg"; }
@@ -90,11 +90,11 @@ public:
 shared_ptr<IResourceLoader> CreatePNGResourceLoader()
 {
 	return shared_ptr<IResourceLoader>(QSE_NEW PngResourceLoader());
-}
+}*/
 
 
 GLTextureResourceExtraData::GLTextureResourceExtraData()
-	: m_pTexture(nullptr)
+	: m_pTexture(0)
 {
 }
 
@@ -119,7 +119,7 @@ unsigned int TextureResourceLoader::VGetLoadedResourceSize(char *rawBuffer, unsi
 	// This will keep the resource cache from allocating memory for the texture, so DirectX can manage it on it's own.
 	return 0;
 }
-
+/*
 //
 // TextureResourceLoader::VLoadResource				- Chapter 14, page 492
 //
@@ -162,7 +162,7 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 
 
 	//------ Copy data from DevIL to our pixmap.
-	ilCopyPixels(0, 0, 0, texHeight, texWidth, 1, IL_RGBA/*ALWAYS load in RGBA space, becuase everything but JPG and a couple others support it*/, IL_UNSIGNED_BYTE, data);
+	ilCopyPixels(0, 0, 0, texHeight, texWidth, 1, IL_RGBA/*ALWAYS load in RGBA space, becuase everything but JPG and a couple others support it, IL_UNSIGNED_BYTE, data);
 
 	//------ Unbound image name and frees DevIL image memory.  I am only using DevIL to load to memory, I am loading to OpenGL Manuall
 	ilBindImage(0);
@@ -172,19 +172,18 @@ bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize,
 	//NO, there will be ONE... ONE sampler that is in the renderer
 
 	//make this openGL
-	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTextureBuffer();
-	GLUFBUFFERMANAGER.LoadTextureFromMemory(extra->m_pTexture, data, texWidth  * texHeight * 4 * sizeof(unsigned char), TFF_DDS);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glGenBufferBindBuffer(GL_TEXTURE_2D, &extra->m_pTexture);
+	gl
 	
 
 	handle->SetExtra(extra);
 	return true;
-}
+}*/
 
 bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	shared_ptr<GLTextureResourceExtraData> extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
+	shared_ptr<GLTextureResourceExtraData> extra = static_pointer_cast<GLTextureResourceExtraData>(handle->GetExtra());
 	//GLI only does .dds's
 
 	//make a special exception for .dds's, let them load themselves 
@@ -233,11 +232,8 @@ bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 				Texture[Level].data());
 		}
 	}
+	extra->m_pTexture = texId;
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	extra->m_pTexture = GLUFBUFFERMANAGER.CreateTextureBuffer(texId);
-	handle->SetExtra(extra);
 	return true;
 }
 

@@ -78,7 +78,7 @@ public:
 	void SetAspect(float aspect) { m_Aspect = aspect; Init(m_Fov, m_Aspect, m_Near, m_Far); }
 	void SetNear(float nearClip) { m_Near = nearClip; Init(m_Fov, m_Aspect, m_Near, m_Far); }
 	void SetFar(float farClip) { m_Far = farClip; Init(m_Fov, m_Aspect, m_Near, m_Far); }
-	void Init(const float fov, const float aspect, const float near, const float far);
+	void Init(const float fov, const float aspect, const float fNear, const float fFar);
 
 	void Render();
 };

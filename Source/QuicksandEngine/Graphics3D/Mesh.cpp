@@ -2,6 +2,7 @@
 #include "Mesh.hpp"
 #include <iterator>
 
+#include "Raycast.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/types.h>
 #include <assimp/mesh.h>
@@ -14,7 +15,7 @@
 
 unsigned int GLObjMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
 {
-	return rawSize;
+	return 0;
 }
 
 bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
@@ -32,7 +33,7 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 	{
 		
 
-		extraData->m_pArray = GLUF::LoadVertexArrayFromScene(scene);
+		extraData->m_pArray = LoadVertexArrayFromScene(scene);
 
 		//now load the material (singular)
 		aiMaterial* pMat = scene->mMaterials[0];
@@ -46,7 +47,7 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 			//load the texture from the file
 			Resource resource(texPath.C_Str());
 			shared_ptr<ResHandle> pResourceHandle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);
-			extraData->m_pMaterial->SetTexture(static_pointer_cast<GLTextureResourceExtraData>(pResourceHandle->GetExtra())->GetTexture());
+			extraData->m_pMaterial->SetTexture(pResourceHandle);
 		}
 
 		aiColor4D tempColor;
@@ -164,12 +165,12 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		//now load the material into the uniform buffer
 		GLUFBUFFERMANAGER.ModifyUniformMaterial(extraData->mUniforms, mat);
 		*/
-		delete scene;
+		//delete scene;
 		return true;
 	}
 	else
 	{
-		delete scene;
+		//delete scene;
 		LOG_ERROR("Mesh File Has no Meshes");
 		return false;
 	}
@@ -189,4 +190,64 @@ GLMeshNode::GLMeshNode(const ActorId actorId,
 		SetMaterial(*mat);
 
 
+}
+
+HRESULT GLMeshNode::VOnRestore(Scene* pScene)
+{
+	//nothing
+	return S_OK;
+}
+
+HRESULT GLMeshNode::VRender(Scene* pScene)
+{
+	//prerender does all of the work;
+	GLUFVertexArray* data = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetVertexArray();
+
+	if (data)
+		data->Draw();
+
+	return S_OK;
+}
+
+HRESULT GLMeshNode::VPick(Scene *pScene, RayCast *pRayCast)
+{
+	GLUFVertexArray* data = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetVertexArray();
+
+	if (data)
+	{
+		GLUFMeshBarebones mesh = data->GetBarebonesMesh();
+		return pRayCast->Pick(pScene, this->m_Props.ActorId(), &mesh);
+	}
+
+	return E_FAIL;
+}
+
+float GLMeshNode::CalcBoundingSphere()
+{
+	GLUFVertexArray* data = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetVertexArray();
+	if (!data)
+		return 0;
+
+	float oldMax = 0.0f;
+	float thisLen = 0.0f;
+
+	GLUFMeshBarebones mesh = data->GetBarebonesMesh();
+	
+	//NOTE: there are better ways to get a more accurate sphere, but that requires a different point of origin
+	//this is very simple, it just figures out which one the greatest from this object's origin
+	for (auto it : mesh.mVertices)
+	{
+		thisLen = glm::length(it);
+		if (thisLen > oldMax)
+			oldMax = thisLen;
+	}
+	
+
+	return oldMax;
+}
+
+
+shared_ptr<IResourceLoader> CreateObjMeshResourceLoader()
+{
+	return shared_ptr<IResourceLoader>(QSE_NEW GLObjMeshResourceLoader());
 }

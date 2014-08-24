@@ -19,8 +19,8 @@ protected:
 
 	ProcessManager* m_pProcessManager;				// strictly for things like button animations, etc.
 
-	DWORD m_currTick;		// time right now
-	DWORD m_lastDraw;		// last time the game rendered
+	double m_currTick;		// time right now
+	double m_lastDraw;		// last time the game rendered
 	bool m_runFullSpeed;	// set to true if you want to run full speed
 
 	BaseGameState m_BaseGameState;					// Added post-press - what is the current game state
@@ -36,7 +36,7 @@ public:
 	// Implement the IGameView interface, except for the VOnRender() method, which is renderer specific
 	virtual HRESULT VOnRestore();
 	virtual HRESULT VOnLostDevice();
-	virtual void VOnRender(double fTime, float fElapsedTime);
+	virtual void VOnRender(double fTime, double fElapsedTime);
 	virtual GameViewType VGetType() { return GameView_Human; }
 	virtual GameViewId VGetId() const { return m_ViewId; }
 

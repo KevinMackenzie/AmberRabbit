@@ -329,7 +329,7 @@ class NetworkGameView : public IGameView
 public:
 	// IGameView Implementation - everything is stubbed out.
 	virtual HRESULT VOnRestore() { return S_OK; }
-	virtual void VOnRender(double fTime, float fElapsedTime) { }
+	virtual void VOnRender(double fTime, double fElapsedTime) { }
 	virtual HRESULT VOnLostDevice() { return S_OK; }
 	virtual GameViewType VGetType() { return GameView_Remote; }
 	virtual GameViewId VGetId() const { return m_ViewId; }

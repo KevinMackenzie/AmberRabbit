@@ -118,14 +118,14 @@ protected:
 	SceneNodeProperties		m_Props;
 	WeakBaseRenderComponentPtr	m_RenderComponent;
 
-	shared_ptr<GLProgramResourceExtraData> m_pShader;
+	shared_ptr<ResHandle> m_pShader;
 
 public:
 	SceneNode(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, RenderPass renderPass, const glm::mat4 *to, const glm::mat4 *from = NULL);
 
 	virtual ~SceneNode();
 
-	shared_ptr<GLProgramResourceExtraData> GetShader();
+	shared_ptr<ResHandle> GetShader();
 
 	void ApplyTransformUniforms();
 
@@ -134,7 +134,7 @@ public:
 	virtual void VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWorld = NULL);
 
 	virtual HRESULT VOnRestore(Scene *pScene);
-	virtual HRESULT VOnUpdate(Scene *, DWORD const elapsedMs);
+	virtual HRESULT VOnUpdate(Scene *, double const fEllapsed);
 
 	virtual HRESULT VPreRender(Scene *pScene);
 	virtual bool VIsVisible(Scene *pScene) const;
@@ -158,6 +158,8 @@ public:
 	const glm::vec3 GetWorldPosition() const;					// [mrmike] added post-press to respect ancestor's position 
 
 	glm::vec3 GetDirection() const { return ::GetDirection(m_Props.m_ToWorld); }
+
+	glm::mat4 GetToWorld() const { return m_Props.m_ToWorld; }
 
 	void SetRadius(const float radius) { m_Props.m_Radius = radius; }
 	void SetMaterial(const GLMaterial &mat) { m_Props.m_Material = mat; }
@@ -323,8 +325,10 @@ protected:
 	//the length of each square
 	float							m_fSquareLength;
 
-	GLUF::GLUFVertexArray			m_Squares;
+	GLUFVertexArray					m_Squares;
 	glm::mat4						m_ModelMatrix;
+
+	static shared_ptr<ResHandle> m_pGridProgram;
 
 public:
 	//bool					m_bTextureHasAlpha;
@@ -335,7 +339,7 @@ public:
 	virtual ~GLGrid();
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VRender(Scene *pScene);
-	virtual HRESULT VOnUpdate(Scene *pScene, DWORD const elapsedMs) { return S_OK; }
+	virtual HRESULT VOnUpdate(Scene *pScene, double const fEllapsed) { return S_OK; }
 	virtual HRESULT VPick(Scene *pScene, RayCast *pRayCast);// { return E_FAIL; }
 
 	//bool VHasAlpha() const { return m_bTextureHasAlpha; }

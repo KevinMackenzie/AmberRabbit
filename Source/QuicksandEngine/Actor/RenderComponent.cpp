@@ -217,7 +217,7 @@ shared_ptr<SceneNode> GridRenderComponent::VCreateSceneNode(void)
     {
 		WeakBaseRenderComponentPtr weakThis(this);
 
-		return shared_ptr<SceneNode>(QSE_NEW GLGrid(m_pOwner->GetId(), weakThis, &(pTransformComponent->GetTransform())));  
+		return shared_ptr<SceneNode>(QSE_NEW GLGrid(m_pOwner->GetId(), weakThis, 10, 0.5f, g_Black, &(pTransformComponent->GetTransform())));  
     }
 
     return shared_ptr<SceneNode>();

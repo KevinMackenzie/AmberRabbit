@@ -42,16 +42,17 @@ public:
 	GLSkyNode(const char *pTextureBaseName);
 	virtual ~GLSkyNode();
 	HRESULT VOnRestore(Scene *pScene);
+	virtual HRESULT VPreRender(Scene* pScene);
 	HRESULT VRender(Scene *pScene);
 
 protected:
 
-	shared_ptr<ResHandle>       m_pTexture;
+	GLUFVertexArray				m_pVertexArray;
 
-	GLUFVertexArrayPtr            m_pVertexArray;
-	GLUFUniformBufferPtr			m_pUniformBuffer;
+	GLUFAttribLoc mPositionLoc;
+	GLUFAttribLoc mUVLoc;
 
-	GLUFProgramPtr				m_pShaderProgram;
+	static shared_ptr<ResHandle>		m_pSkyProgram;
 };
 
 

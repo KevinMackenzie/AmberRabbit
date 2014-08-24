@@ -10,7 +10,7 @@ LightNode::LightNode(const ActorId actorId, WeakBaseRenderComponentPtr renderCom
 	m_LightProps = props;
 }
 
-HRESULT GLLightNode::VOnUpdate(Scene *, DWORD const elapsedMs)
+HRESULT GLLightNode::VOnUpdate(Scene *, double const fEllapsed)
 {
 	// light color can change anytime! Check the BaseRenderComponent!
 	LightRenderComponent* lrc = static_cast<LightRenderComponent*>(m_RenderComponent);

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{edabedae-982a-414a-8eb7-8f81d95d88dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TeapotWars">
+      <UniqueIdentifier>{2b1887b0-4158-4444-b6d3-d0133d2428b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TeapotWars.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TeapotWars.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\TeapotWars\TeapotEvents.cpp">
+      <Filter>TeapotWars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TeapotWars\TeapotWars.cpp">
+      <Filter>TeapotWars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TeapotWars\TeapotWarsView.cpp">
+      <Filter>TeapotWars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TeapotWars\TeapotController.cpp">
+      <Filter>TeapotWars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\TeapotWars\TeapotEvents.h">
+      <Filter>TeapotWars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\TeapotWarsNetwork.h">
+      <Filter>TeapotWars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\TeapotWarsView.h">
+      <Filter>TeapotWars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\TeapotController.h">
+      <Filter>TeapotWars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\Application\Resource.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\Application\targetver.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotResources.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

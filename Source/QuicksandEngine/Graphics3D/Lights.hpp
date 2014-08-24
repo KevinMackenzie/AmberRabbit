@@ -45,7 +45,7 @@ public:
 		: LightNode(actorId, renderComponent, lightProps, t) { }
 
 	virtual HRESULT VOnRestore() { return S_OK; };
-	virtual HRESULT VOnUpdate(Scene *, DWORD const elapsedMs);
+	virtual HRESULT VOnUpdate(Scene *, double const fEllapsed);
 };
 
 

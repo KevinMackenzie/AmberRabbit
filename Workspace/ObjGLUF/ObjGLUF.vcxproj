@@ -78,19 +78,19 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -106,7 +106,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;freetype246_D.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;freetype246_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -124,7 +124,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;freetype246_D.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;freetype246_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -146,7 +146,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;freetype246.lib;</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;freetype246.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
@@ -168,7 +168,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;freetype246.lib;</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;freetype246.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>

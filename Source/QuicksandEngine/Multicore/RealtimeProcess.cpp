@@ -224,7 +224,7 @@ void EventSenderProcess::VThreadProc(void)
 
     while( dwCount < m_MaxLoops )
     { 
-		IEventDataPtr e(QSE_NEW EvtData_Update_Tick(timeGetTime()));
+		IEventDataPtr e(QSE_NEW EvtData_Update_Tick(GLUFGetTimeMs()));
 		IEventManager::Get()->VThreadSafeQueueEvent(e);
 		Sleep(10);
 		dwCount++;

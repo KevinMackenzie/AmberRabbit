@@ -58,12 +58,12 @@ public:
 	virtual ~GLTextureResourceExtraData();
 	virtual std::string VToString() { return "GLTextureResourceExtraData"; }
 
-	GLUFTexturePtr GetTexture() { return m_pTexture; }
+	GLuint GetTexture() { return m_pTexture; }
 
 	//NOTE: all sampling is a config element that is accessed by the renderer
 protected:
 	
-	GLUFTexturePtr m_pTexture;
+	GLuint m_pTexture;
 };
 
 
@@ -77,7 +77,7 @@ public:
 	virtual bool VUseRawFile() { return false; }
 	virtual bool VDiscardRawBufferAfterLoad() { return true; }
 	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize);
-	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
+	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle) = 0;
 };
 
 

@@ -105,7 +105,7 @@ NetSocket::NetSocket(SOCKET new_sock, unsigned int hostIP)
 	m_recvOfs = m_recvBegin = 0;
 	m_internal = 0;
 
-	m_timeCreated = timeGetTime();
+	m_timeCreated = GLUFGetTimeMs();
 
 	m_sock = new_sock;
 	m_ipaddr = hostIP;
@@ -700,7 +700,7 @@ void BaseSocketManager::DoSelect(int pauseMicroSecs, bool handleInput)
 		 }	
 	}
 
-	unsigned int timeNow = timeGetTime();
+	unsigned int timeNow = GLUFGetTimeMs();
 
 	// handle deleting any sockets
 	SocketList::iterator i = m_SockList.begin();

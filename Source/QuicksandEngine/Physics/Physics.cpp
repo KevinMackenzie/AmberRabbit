@@ -997,7 +997,7 @@ void BulletPhysics::SendCollisionPairAddEvent( btPersistentManifold const * mani
 		}
 		
 		// this pair of colliding objects is new.  send a collision-begun event
-		Vec3List collisionPoints;
+		Vec3Array collisionPoints;
 		glm::vec3 sumNormalForce;
 		glm::vec3 sumFrictionForce;
 		

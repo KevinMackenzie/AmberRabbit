@@ -6,6 +6,10 @@
 #include "../UserInterface/HumanView.hpp"
 
 
+GLUFDialogResourceManager GLRenderer_Base::g_DialogResourceManager;
+GLUFTextHelper *GLRenderer_Base::g_pTextHelper;
+
+shared_ptr<ResHandle> GLLineDrawer::m_LineDrawerShader(nullptr);
 
 //
 // class D3DRendererAlphaPass9				- not described in the book, see class GLRenderPass 
@@ -53,9 +57,6 @@ GLRendererAlphaPass::~GLRendererAlphaPass()
 }
 
 
-//
-// class D3DRendererAlphaPass911			- Chapter 16, page 543
-//
 class GLRenderPass : public IRenderState
 {
 protected:
@@ -85,7 +86,6 @@ GLRenderPass::GLRenderPass()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_BLEND_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_BLEND_EQUATION_RGB);
 	
 
 	/*BlendState.AlphaToCoverageEnable = false;
@@ -120,9 +120,6 @@ GLRenderPass::~GLRenderPass()
 class GLRenderSkyBoxPass : public IRenderState
 {
 protected:
-	DWORD m_oldZWriteEnable;
-	DWORD m_oldLightMode;
-	DWORD m_oldCullMode;
 
 public:
 	GLRenderSkyBoxPass();
@@ -139,7 +136,7 @@ GLRenderSkyBoxPass::GLRenderSkyBoxPass()
 	//DXUTGetD3D9Device()->GetRenderState(D3DRS_CULLMODE, &m_oldCullMode);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	glDisable(GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
 }
 
 
@@ -149,11 +146,11 @@ GLRenderSkyBoxPass::~GLRenderSkyBoxPass()
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, m_oldCullMode);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, m_oldZWriteEnable);
 
-	glEnable(GL_DEPTH_BUFFER_BIT);
-}
+	glEnable(GL_DEPTH_TEST);
+}*/
 
 
-*/
+
 
 
 //
@@ -186,8 +183,7 @@ GLRenderSkyBox::GLRenderSkyBox()
 	DXUTGetD3D11Device()->CreateDepthStencilState(&DSDesc, &m_pSkyboxDepthStencilState);
 	DXUT_SetDebugName(m_pSkyboxDepthStencilState, "SkyboxDepthStencil");*/
 
-	glEnable(GL_DEPTH_BUFFER_BIT);
-	glDepthFunc(GL_LESS);
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL);
 	
 	/*
@@ -205,7 +201,7 @@ GLRenderSkyBox::~GLRenderSkyBox()
 	//SAFE_RELEASE(m_pOldDepthStencilState);
 	//SAFE_RELEASE(m_pSkyboxDepthStencilState);
 
-	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL);
 }
 
@@ -321,6 +317,31 @@ void D3DRenderer9::VDrawLine(const glm::vec3& from, const glm::vec3& to, const C
 }
 */
 
+GLLineDrawer::GLLineDrawer() : m_pVertexBuffer(GL_LINES, GL_STREAM_DRAW, false) 
+{ 
+	if (m_LineDrawerShader == nullptr)
+	{
+		Resource res("Shaders/LineDrawer.prog");
+		m_LineDrawerShader = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+	}
+
+	GLUFVariableLocMap attribLocations = GLUFSHADERMANAGER.GetShaderAttribLocations(static_pointer_cast<GLProgramResourceExtraData>(m_LineDrawerShader->GetExtra())->GetProgram());
+	GLUFVariableLocMap::iterator it;
+	
+	it = attribLocations.find("_position");
+	if (it != attribLocations.end())
+	{
+		m_pVertexBuffer.AddVertexAttrib(GLUFVertAttrib(it->second, 4, 3, GL_FLOAT));
+		m_PositionLocation = it->second;
+	}
+	it = attribLocations.find("_color0");
+	if (it != attribLocations.end())
+	{
+		m_pVertexBuffer.AddVertexAttrib(GLUFVertAttrib(it->second, 4, 4, GL_FLOAT));
+		m_ColorLocation = it->second;
+	}
+}
+
 
 HRESULT GLLineDrawer::OnRestore()
 {
@@ -371,20 +392,17 @@ void GLLineDrawer::DrawLine(const glm::vec3& from, const glm::vec3& to, const Co
 	pVerts[1] = to;
 	DXUTGetD3D11DeviceContext()->Unmap(m_pVertexBuffer, 0);*/
 
-	GLUFVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_pVertexBuffer);
-	data.mPositions->resize(2);
-	(*data.mPositions)[0] = from;
-	(*data.mPositions)[1] = to;
-	GLUFBUFFERMANAGER.UnMapVertexArray(m_pVertexBuffer);
+	glm::vec3 two[] = { from, to };
+	m_pVertexBuffer.BufferData(m_PositionLocation, 2, two);
 
 	//DXUTGetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
-	GLUFSHADERMANAGER.UseProgram(m_LineDrawerShader);
+	GLUFSHADERMANAGER.UseProgram(static_pointer_cast<GLProgramResourceExtraData>(m_LineDrawerShader->GetExtra())->GetProgram());
 
 	// Set primitive topology
 	//DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-	GLUFBUFFERMANAGER.DrawVertexArray(m_pVertexBuffer, GL_LINES);
+	m_pVertexBuffer.Draw();
 
 	//DXUTGetD3D11DeviceContext()->Draw(2, 0);
 }
@@ -430,7 +448,6 @@ bool GLRenderer::VPreRender()
 	//
 	//DXUTGetD3D11DeviceContext()->ClearDepthStencilView(DXUTGetD3D11DepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	glClearDepth(1.0f);
 	Color4f col = GLUFColorToFloat(m_BackgroundColor);
 	glClearBufferfv(GL_COLOR, 0, &col[0]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -512,9 +529,8 @@ void GLRenderer::VDrawLine(const glm::vec3& from, const glm::vec3& to, const Col
 	{
 		m_pLineDrawer = QSE_NEW GLLineDrawer();
 		m_pLineDrawer->OnRestore();
-
-
 	}
+
 	m_pLineDrawer->DrawLine(from, to, color);
 }
 

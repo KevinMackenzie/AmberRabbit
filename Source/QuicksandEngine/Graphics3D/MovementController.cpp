@@ -94,7 +94,7 @@ bool MovementController::VOnPointerMove(const Point &mousePos, const int radius)
 
 //  class MovementController::OnUpdate			- Chapter 10, page 283
 
-void MovementController::OnUpdate(DWORD const deltaMilliseconds)
+void MovementController::OnUpdate(double const fEllapsed)
 {
 	//if (m_bKey['Q'])
 	//{
@@ -193,7 +193,7 @@ void MovementController::OnUpdate(DWORD const deltaMilliseconds)
 
 	if (bTranslating)
 	{
-		float elapsedTime = (float)deltaMilliseconds / 1000.0f;
+		float elapsedTime = (float)fEllapsed / 1000.0f;
 
 		glm::vec3 direction = glm::vec3(atWorld + rightWorld + upWorld);
 		direction = glm::normalize(direction);
