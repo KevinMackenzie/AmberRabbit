@@ -12,34 +12,12 @@
 
 #include <IL/ilut.h>
 
-//useful for converting aiColor4d to glm::vec4
-Color AiColorToColor(aiColor4D color)
-{
-	return Color(color.r, color.g, color.b, color.a);
-}
-
-glm::vec3 Aivec3Tovec3(aiVector3D vec)
-{
-	return glm::vec3(vec.x, vec.y, vec.z);
-}
-
-glm::vec2 Aivec3ToVec2(aiVector3D vec)
-{
-	return glm::vec2(vec.x, vec.y);
-}
-
-template <class M>
-std::vector<M> ArrToVec(M* arr, unsigned long size)
-{
-	return std::vector<M>(std::begin(arr), std::end(arr));
-}
-
-unsigned int ObjMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
+unsigned int GLObjMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
 {
 	return rawSize;
 }
 
-bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
+bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
 	//since we are only loading one object, only load the first of all
 	shared_ptr<GLObjMeshResourceExtraData> extraData = static_pointer_cast<GLObjMeshResourceExtraData>(handle->GetExtra());
@@ -48,10 +26,60 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 	const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_SortByPType, "");
 	
 	//create the vertex array pointer (empty)
-	extraData->mData = GLUFBUFFERMANAGER.CreateVertexArray();
+	//extraData->mData = GLUFBUFFERMANAGER.CreateVertexArray();
 
 	if (scene->HasMeshes() == true && scene->HasMaterials() == true)
 	{
+		
+
+		extraData->m_pArray = GLUF::LoadVertexArrayFromScene(scene);
+
+		//now load the material (singular)
+		aiMaterial* pMat = scene->mMaterials[0];
+		extraData->m_pMaterial = new GLMaterial();
+
+		//load the file name of the texture if it exists
+		aiString texPath;
+		if (AI_SUCCESS == pMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath))
+		{
+
+			//load the texture from the file
+			Resource resource(texPath.C_Str());
+			shared_ptr<ResHandle> pResourceHandle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);
+			extraData->m_pMaterial->SetTexture(static_pointer_cast<GLTextureResourceExtraData>(pResourceHandle->GetExtra())->GetTexture());
+		}
+
+		aiColor4D tempColor;
+
+		//DIFFUSE
+		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_DIFFUSE, &tempColor))
+			extraData->m_pMaterial->SetDiffuse(AssimpToGlm4_3u8(tempColor));
+
+		//AMBIENT
+		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_AMBIENT, &tempColor))
+			extraData->m_pMaterial->SetAmbient(AssimpToGlm4_3u8(tempColor));
+
+		//EMMISIVE
+		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_EMISSIVE, &tempColor))
+			extraData->m_pMaterial->SetEmissive(AssimpToGlm4_3u8(tempColor));
+
+		//POWER
+		float power;
+		unsigned int max;
+		aiGetMaterialFloatArray(pMat, AI_MATKEY_SHININESS, &power, &max);
+
+		//SPECULAR
+		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_SPECULAR, &tempColor))
+			extraData->m_pMaterial->SetSpecular(AssimpToGlm4_3u8(tempColor), power);
+
+		aiString path;
+		pMat->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
+
+		Resource res(path.C_Str());
+		shared_ptr<ResHandle> tex = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+		extraData->m_pMaterial->SetTexture(tex);
+
+		/*
 		if (scene->mNumMeshes > 1)
 		{
 			LOG_WARNING("Loaded File with more than one Mesh, Skipping all other meshes");
@@ -126,52 +154,16 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		*/
+		
 
 		
 
 
-		//now load the material (singular)
-		aiMaterial* pMat = scene->mMaterials[0];
-		GLMaterial mat;
-
-		//load the file name of the texture if it exists
-		aiString texPath;
-		if (AI_SUCCESS == pMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath))
-		{
-
-			//load the texture from the file
-			Resource resource(texPath.C_Str());
-			shared_ptr<ResHandle> pResourceHandle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);
-			mat.SetTexture(static_pointer_cast<GLTextureResourceExtraData>(pResourceHandle->GetExtra())->GetTexture());
-		}
-
-		aiColor4D tempColor;
-
-		//DIFFUSE
-		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_DIFFUSE, &tempColor))
-			mat.SetDiffuse(AiColorToColor(tempColor));
-
-		//AMBIENT
-		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_AMBIENT, &tempColor))
-			mat.SetAmbient(AiColorToColor(tempColor));
-
-		//EMMISIVE
-		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_EMISSIVE, &tempColor))
-			mat.SetEmissive(AiColorToColor(tempColor));
-
-		//POWER
-		float power;
-		unsigned int max;
-		aiGetMaterialFloatArray(pMat, AI_MATKEY_SHININESS, &power, &max);
-
-		//SPECULAR
-		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_SPECULAR, &tempColor))
-			mat.SetSpecular(AiColorToColor(tempColor), power);
+		
 
 		//now load the material into the uniform buffer
 		GLUFBUFFERMANAGER.ModifyUniformMaterial(extraData->mUniforms, mat);
-
+		*/
 		delete scene;
 		return true;
 	}
@@ -183,3 +175,18 @@ bool ObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize,
 	}
 }
 
+GLMeshNode::GLMeshNode(const ActorId actorId,
+	WeakBaseRenderComponentPtr renderComponent,
+	std::string FileName,
+	RenderPass renderPass,
+	const glm::mat4 *t) : SceneNode(actorId, renderComponent, renderPass, t)
+{
+	Resource res(FileName);
+	m_Data = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+
+	GLMaterial* mat = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetMaterial();
+	if (mat)
+		SetMaterial(*mat);
+
+
+}

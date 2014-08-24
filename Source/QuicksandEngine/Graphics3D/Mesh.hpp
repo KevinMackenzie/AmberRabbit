@@ -40,27 +40,35 @@ struct GLMeshHandles
 
 class GLObjMeshResourceExtraData : public IResourceExtraData
 {
-	friend class ObjMeshResourceLoader;
+	friend class GLObjMeshResourceLoader;
 
 public:
 	GLObjMeshResourceExtraData(){};
 	virtual ~GLObjMeshResourceExtraData(){}
-	virtual std::string VToString() { return "GLobjResourceExtraData"; }
+	virtual std::string VToString() { return "GLObjMeshResourceExtraData"; }
+
+	GLMaterial* GetMaterial(){ return m_pMaterial; }
 
 protected:
 
-	GLUFVertexArrayPtr mData;
-	GLUFUniformBufferPtr mUniforms;
+	GLUF::GLUFVertexArray* m_pArray;
+
+	GLMaterial *m_pMaterial;
+
+	// m_pTextureResource;
+
+	//GLUFVertexArrayPtr mData;
+	//GLUFUniformBufferPtr mUniforms;
 };
 
-class ObjMeshResourceLoader : public IResourceLoader
+class GLObjMeshResourceLoader : public IResourceLoader
 {
 public:
 	virtual bool VUseRawFile() { return false; }
 	virtual bool VDiscardRawBufferAfterLoad() { return false; }
 	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize);
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
-	virtual std::string VGetPattern() { return "*.obj"; }
+	virtual std::string VGetPattern() { return "*.model.obj"; }
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +114,7 @@ public:
 protected:
 	shared_ptr<ResHandle> m_Data;
 
-	GLUFProgramPtr m_ShadingProgram;
+	//GLUFProgramPtr m_ShadingProgram;
 
 	float CalcBoundingSphere();
 };

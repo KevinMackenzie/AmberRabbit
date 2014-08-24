@@ -128,11 +128,22 @@ void SceneNode::VSetTransform(const glm::mat4 *toWorld, const glm::mat4 *fromWor
 	}
 }
 
+shared_ptr<GLProgramResourceExtraData> SceneNode::GetShader()
+{
+	if (!m_pShader)
+		return m_pParent->GetShader();
+	else
+		return m_pShader;
+}
+
 //
 // SceneNode::VPreRender					- Chapter 16, page 532
 //
 HRESULT SceneNode::VPreRender(Scene *pScene)
 {
+	pScene->PushAndSetMatrix(m_Props.m_ToWorld);
+
+
 	// This was added post press! Is is always ok to read directly from the game logic.
 	StrongActorPtr pActor = MakeStrongPtr(QuicksandEngine::g_pApp->GetGameLogic()->VGetActor(m_Props.m_ActorId));
 	if (pActor)
@@ -144,7 +155,29 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 		}
 	}
 
-	pScene->PushAndSetMatrix(m_Props.m_ToWorld);
+	//set the shader in this method, because this will render all children who have this as null
+	
+	GLUF::GLUFProgramPtr prog = GetShader()->GetProgram();
+	if (m_pShader)
+	{
+		GLUFSHADERMANAGER.UseProgram(m_pShader->GetProgram());
+	}
+
+
+	//apply the uniforms
+	glm::mat4 model = pScene->GetTopMatrix();
+	glm::mat4 view = pScene->GetCamera()->GetView();
+	glm::mat4 proj = pScene->GetCamera()->GetProjection();
+
+	glm::mat4 model_view = view * model;
+	glm::mat4 model_view_proj = proj * model_view;
+
+	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_model"), 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_view"), 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_mv"), 1, GL_FALSE, &model_view[0][0]);
+	glUniformMatrix4fv(GLUFSHADERMANAGER.GetShaderVariableLocation(prog, GLUF::GLT_UNIFORM, "_mvp"), 1, GL_FALSE, &model_view_proj[0][0]);
+	
+
 	return S_OK;
 }
 
@@ -228,6 +261,12 @@ HRESULT SceneNode::VRenderChildren(Scene *pScene)
 
 	while (i != end)
 	{
+		//make sure to set this back to this program
+		if (m_pShader)
+		{
+			GLUFSHADERMANAGER.UseProgram(m_pShader->GetProgram());
+		}
+
 		if ((*i)->VPreRender(pScene) == S_OK)
 		{
 			// You could short-circuit rendering
@@ -356,6 +395,10 @@ void SceneNode::SetAlpha(float alpha)
 	}
 }
 
+void SceneNode::SetShader(shared_ptr<ResHandle> pShader)
+{
+	m_pShader = static_pointer_cast<GLProgramResourceExtraData>(pShader);
+}
 
 
 ////////////////////////////////////////////////////
@@ -539,21 +582,32 @@ glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 // GLGrid::GLGrid						- 3rd Edition, Chapter 13, page 448
 //
 
-GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
-	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
+GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int squares, float squareSize, const Color &diffuseColor, const glm::mat4* pMatrix)
+	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix), m_Squares(GL_LINES, GL_DYNAMIC_DRAW), m_nSideLength(squares), m_fSquareLength(squareSize)
 {
+	GLMaterial material = m_Props.GetMaterial();
+	material.SetDiffuse(diffuseColor);
+	SetMaterial(material);
+
 	//m_bTextureHasAlpha = false;
 	//m_pVerts = NULL;
 	//m_pIndices = NULL;
 	//m_VertexArray = GLUFVertexArrayPtr(new GLUFVertexArrayPtr());
 	//m_VertexArray = GLUFBUFFERMANAGER.CreateVertexArray();
 
-	if (!m_Program)
-	{
-		//TODO: create shader Resource Loader
+	//use the predefined grid shader
+	Resource* gridProg = new Resource("Shaders/Grid.prog");
 
-		//m_Program = GLUFSHADERMANAGER.CreateProgram();
-	}
+	SceneNode::SetShader(QuicksandEngine::g_pApp->m_ResCache->GetHandle(gridProg));
+
+	GLUF::GLUFVariableLocMap varLocations = GLUFSHADERMANAGER.GetShaderAttribLocations(m_pShader->GetProgram());
+
+	GLUF::GLUFVariableLocMap::iterator it = varLocations.find(GLUF_VERTEX_ATTRIB_POSITION);
+
+	if (it != varLocations.end())
+		m_Squares.AddVertexAttrib(GLUFVertAttrib(it->second, 4, 3, GL_FLOAT));
+	else
+		LOG_ERROR("Failed to Load GLGrid Attribute Location");
 }
 
 //
@@ -611,70 +665,57 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 	//GLUFVAOData dat = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
 	
-	for (int j = 0; j<(squares + 1); j++)
+
+	//this takes one row of the grid, and then expands by the length
+	std::vector<glm::vec3> baseVertices;
+	std::vector<glm::vec3> vertices;
+
+	//yes, i do want it to go one past, because there is one more set of vertices than sides
+	for (unsigned int i = 0; i <= m_nSideLength; ++i)
 	{
-		for (int i = 0; i<(squares + 1); i++)
+		baseVertices.push_back(glm::vec3(0.0f, 0.0f, i * m_fSquareLength));
+	}
+
+	//fill the vertex array by 'extruding' this line
+	for (unsigned int i = 0; i <= m_nSideLength; ++i)
+	{
+		for (unsigned int j = 0; j < -m_nSideLength; ++i)
 		{
-			// Which vertex are we setting?
-			int index = i + (j * (squares + 1));
-			GLUFVertex vert;
-
-
-			// Default position of the grid is centered on the origin, flat on
-			// the XZ plane.
-			float x = (float)i - (squares / 2.0f);
-			float y = (float)j - (squares / 2.0f);
-			vert.mPosition = (x * glm::vec3(1.f, 0.f, 0.f)) + (y * glm::vec3(0.f, 0.f, 1.f));
-			vert.mColor = m_Props.GetMaterial().GetDiffuse();
-
-			// The texture coordinates are set to x,y to make the
-			// texture tile along with units - 1.0, 2.0, 3.0, etc.
-			vert.mUV.x = x;
-			vert.mUV.y = y;
+			vertices.push_back(baseVertices[j] + glm::vec3(i * m_fSquareLength, 0.0f, 0.0f));
 		}
 	}
 
-	// The number of indicies equals the number of polygons times 3
-	// since there are 3 indicies per polygon. Each grid square contains
-	// two polygons. The indicies are 16 bit, since our grids won't
-	// be that big!
-	/*m_numPolys = squares * squares * 2;
-	if (FAILED(DXUTGetD3D9Device()->CreateIndexBuffer(sizeof(WORD) * m_numPolys * 3,
-		D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pIndices, NULL)))
+	//two vertices per line.
+	std::vector<glm::u32vec2> Lines;
+
+	//lines going in the z direction
+	for (unsigned int i = 0; i < m_nSideLength; ++i)
 	{
-		return E_FAIL;
-	}*/
-
-	WORD *pIndices = (WORD*)malloc(m_numPolys * 6);
-	//if (FAILED(m_pIndices->Lock(0, 0, (void**)&pIndices, 0)))
-	//	return E_FAIL;
-
-	// Loop through the grid squares and calc the values
-	// of each index. Each grid square has two triangles:
-	//
-	//		A - B
-	//		| / |
-	//		C - D
-
-	for (int j = 0; j<squares; j++)
-	{
-		for (int i = 0; i<squares; i++)
+		for (unsigned int j = 0; j < m_nSideLength; ++j)
 		{
-			// Triangle #1  ACB
-			*(pIndices) = WORD(i + (j*(squares + 1)));
-			*(pIndices + 1) = WORD(i + ((j + 1)*(squares + 1)));
-			*(pIndices + 2) = WORD((i + 1) + (j*(squares + 1)));
-
-			// Triangle #2  BCD
-			*(pIndices + 3) = WORD((i + 1) + (j*(squares + 1)));
-			*(pIndices + 4) = WORD(i + ((j + 1)*(squares + 1)));
-			*(pIndices + 5) = WORD((i + 1) + ((j + 1)*(squares + 1)));
-			pIndices += 6;
+			Lines.push_back(glm::u32vec2(j + i, j + i + 1));
 		}
 	}
-	GLUFBUFFERMANAGER.UnMapVertexArray(m_VertexArray);
 
-	free(pIndices);
+	//lines going in the x direction
+	for (unsigned int i = 0; i < m_nSideLength; ++i)
+	{
+		for (unsigned int j = 0; j < m_nSideLength; ++j)
+		{
+			//remember to add the stride when doing it this way
+			Lines.push_back(glm::u32vec2(j * m_nSideLength + i, j * m_nSideLength + i + 1));
+		}
+	}
+
+	//center this
+	glm::vec3 pos = GetPosition();
+	this->SetPosition(pos + glm::vec3(-(m_fSquareLength * m_nSideLength) / 2, 0.0f, -(m_fSquareLength * m_nSideLength) / 2));
+
+
+	//buffer the data
+	m_Squares.BufferData(GLUF_VERTEX_ATTRIB_POSITION, vertices.size(), &vertices[0]);
+
+	m_Squares.BufferIndices(&Lines[0][0], Lines.size());
 
 	return S_OK;
 }
@@ -688,26 +729,19 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 //
 HRESULT GLGrid::VRender(Scene *pScene)
 {
-	//DWORD oldLightMode;
-	//DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &oldLightMode);
-	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-	//DWORD oldCullMode;
-	//DXUTGetD3D9Device()->GetRenderState(D3DRS_CULLMODE, &oldCullMode);
-	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	// Setup our texture. Using textures introduces the texture stage states,
 	// which govern how textures get blended together (in the case of multiple
 	// textures) and lighting information. In this case, we are modulating
 	// (blending) our texture with the diffuse color of the vertices.
 
-	GridRenderComponent* grc = static_cast<GridRenderComponent*>(m_RenderComponent);
+	/*GridRenderComponent* grc = static_cast<GridRenderComponent*>(m_RenderComponent);
 
 	Resource resource(grc->GetTextureResource());
 	shared_ptr<ResHandle> texture = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);
 	shared_ptr<GLTextureResourceExtraData> extra = static_pointer_cast<GLTextureResourceExtraData>(texture->GetExtra());
 	//DXUTGetD3D9Device()->SetTexture(0, extra->GetTexture());
-	GLUFBUFFERMANAGER.UseTexture(extra->GetTexture(), 0, GL_TEXTURE0);
+	GLUFBUFFERMANAGER.UseTexture(extra->GetTexture(), 0, GL_TEXTURE0);*/
 	/*
 	if (m_bTextureHasAlpha)
 	{
@@ -740,6 +774,10 @@ HRESULT GLGrid::VRender(Scene *pScene)
 	//DXUTGetD3D9Device()->SetTexture(0, NULL);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, oldLightMode);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, oldCullMode);
+	
+	//this is GREATLY simplified
+	m_Squares.Draw();
+
 
 	return S_OK;
 }
@@ -750,22 +788,21 @@ HRESULT GLGrid::VPick(Scene *pScene, RayCast *pRayCast)
 	if (SceneNode::VPick(pScene, pRayCast) == E_FAIL)
 		return E_FAIL;
 
-	pScene->PushAndSetMatrix(m_Props.ToWorld());
+	/*pScene->PushAndSetMatrix(m_Props.ToWorld());
 
-	GLUFVAOData data = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
 
 	ActorId id = m_Props.ActorId();
 	HRESULT hr = pRayCast->Pick(pScene, id, *data.mPositions, *data.mIndicies);
 
-	pScene->PopMatrix();
+	pScene->PopMatrix();*/
 
-	return hr;
+	return E_FAIL;
 }
 
 
 
 
-
+/*
 GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, const glm::mat4* pMatrix)
 	: SceneNode(actorId, renderComponent, RenderPass_0, pMatrix)
 {
@@ -924,7 +961,7 @@ HRESULT GLGrid::VRender(Scene *pScene)
 	DXUTGetD3D11DeviceContext()->DrawIndexed(m_numPolys * 3, 0, 0);
 
 	return S_OK;
-}
+}*/
 
 
 

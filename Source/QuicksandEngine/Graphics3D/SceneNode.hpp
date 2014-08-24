@@ -2,6 +2,7 @@
 #define QSE_SCENENODE_HPP
 
 #include "../Application/Interfaces.hpp"
+#include "ShaderResource.hpp"
 
 #include "Geometry.hpp"
 #include "Material.hpp"
@@ -117,10 +118,16 @@ protected:
 	SceneNodeProperties		m_Props;
 	WeakBaseRenderComponentPtr	m_RenderComponent;
 
+	shared_ptr<GLProgramResourceExtraData> m_pShader;
+
 public:
 	SceneNode(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, RenderPass renderPass, const glm::mat4 *to, const glm::mat4 *from = NULL);
 
 	virtual ~SceneNode();
+
+	shared_ptr<GLProgramResourceExtraData> GetShader();
+
+	void ApplyTransformUniforms();
 
 	virtual const SceneNodeProperties* const VGet() const { return &m_Props; }
 
@@ -139,6 +146,8 @@ public:
 	virtual bool VRemoveChild(ActorId id);
 	virtual HRESULT VOnLostDevice(Scene *pScene);
 	virtual HRESULT VPick(Scene *pScene, RayCast *pRayCast);
+
+	void SetShader(shared_ptr<ResHandle> pShader);
 
 	void SetAlpha(float alpha);
 	float GetAlpha() const { return m_Props.Alpha(); }
@@ -307,17 +316,22 @@ protected:
 class GLGrid : public SceneNode
 {
 protected:
-	//    int                     m_squares;
+
+	//this is the number of squares on each side, ie 2 would be a 2x2 grid
+	int								m_nSideLength;
+
+	//the length of each square
+	float							m_fSquareLength;
 
 	GLUF::GLUFVertexArray			m_Squares;
 	glm::mat4						m_ModelMatrix;
 
-	static GLUF::GLUFProgramPtr		m_Program;
-
 public:
 	//bool					m_bTextureHasAlpha;
 
-	GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, /* const string& name, const char* textureResource, int squares, const Color &diffuseColor, */ const glm::mat4* pMatrix);
+	GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, 
+		/* const string& name, const char* textureResource,*/ 
+		int squares, float squareSize, const Color &diffuseColor,  const glm::mat4* pMatrix);
 	virtual ~GLGrid();
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VRender(Scene *pScene);

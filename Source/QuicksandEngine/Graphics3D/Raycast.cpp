@@ -8,7 +8,7 @@
 #include "SceneNode.hpp"
 
 template <class T>
-void InitIntersection(Intersection &intersection, DWORD faceIndex, FLOAT dist, FLOAT u, FLOAT v, ActorId actorId, WORD* pIndices, T* pVertices, const glm::mat4 &matWorld)
+void InitIntersection(Intersection &intersection, GLuint faceIndex, GLfloat dist, GLfloat u, GLfloat v, ActorId actorId, GLuint* pIndices, T* pVertices, const glm::mat4 &matWorld)
 {
 	intersection.m_dwFace = faceIndex;
 	intersection.m_fDist = dist;
@@ -54,7 +54,7 @@ RayCast::RayCast(Point point, DWORD maxIntersections)
 	m_Point = point;
 }
 
-HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
+HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUF::GLUFMeshBarebones* pMesh)
 {
 	if (!m_bAllHits && m_NumIntersections > 0)
 		return S_OK;
@@ -86,11 +86,11 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 	m_vPickRayOrig.y = m[4][2];
 	m_vPickRayOrig.z = m[4][3];
 
-	Vec3Array pVB = pMesh->mVertices;
-	IndexArray pIB = pMesh->mIndices;
+	//Vec3Array pVB = pMesh->mVertices;
+	//IndexArray pIB = pMesh->mIndices;
 	//TODO: READ THIS NOW: i must calculate my own intersect method
 
-	DWORD intersections = 0;
+	GLuint intersections = 0;
 
 	// When calling D3DXIntersect, one can get just the closest intersection and not
 	// need to work with a D3DXBUFFER.  Or, to get all intersections between the ray and 
@@ -99,16 +99,16 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 	if (!m_bAllHits)
 	{
 		// Collect only the closest intersection
-		BOOL bHit;
-		DWORD dwFace;
-		FLOAT fBary1, fBary2, fDist;
+		bool bHit;
+		GLuint dwFace;
+		GLfloat fBary1, fBary2, fDist;
 		//Why is this an error
 		RayIntersect(*pMesh, m_vPickRayOrig, m_vPickRayDir, &bHit, &dwFace, &fBary1, &fBary2, &fDist);
 		if (bHit)
 		{
 			m_NumIntersections = 1;
 			m_IntersectionArray.resize(1);
-			InitIntersection(m_IntersectionArray[0], dwFace, fDist, fBary1, fBary2, actorId, &pIB[0], &pVB[0], matWorld);
+			InitIntersection(m_IntersectionArray[0], dwFace, fDist, fBary1, fBary2, actorId, &pMesh->mIndices[0], &pMesh->mVertices[0], matWorld);
 		}
 		else
 		{
@@ -118,7 +118,7 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 	else
 	{
 		// Collect all intersections
-		BOOL bHit;
+		bool bHit;
 		IntersectionArray pBuffer;
 		if (!RayIntersect(*pMesh, m_vPickRayOrig, m_vPickRayDir, &bHit, nullptr, nullptr, nullptr, nullptr,
 			&pBuffer, &intersections))
@@ -142,82 +142,12 @@ HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, GLUFMeshBarebones *pMesh)
 					pBuffer[i].m_fDist,
 					pBuffer[i].m_fBary1,
 					pBuffer[i].m_fBary2,
-					actorId, pIB.data(), pVB.data(), matWorld);
+					actorId, &pMesh->mIndices[0], &pMesh->mVertices[0], matWorld);
 			}
 		}
 	}
 
 	m_NumIntersections += intersections;
-
-	return S_OK;
-}
-
-
-
-
-HRESULT RayCast::Pick(Scene *pScene, ActorId actorId, Vec3Array pVB, IndexArray pIB)
-{
-	if (!m_bAllHits && m_NumIntersections > 0)
-		return S_OK;
-
-
-
-	// Get the inverse view matrix
-	const glm::mat4 matView = pScene->GetCamera()->GetView();
-	const glm::mat4 matWorld = pScene->GetTopMatrix();
-	const glm::mat4 proj = pScene->GetCamera()->GetProjection();
-
-	// Compute the vector of the Pick ray in screen space
-	glm::vec3 v;
-	v.x = (((2.0f * m_Point.x) / QuicksandEngine::g_pApp->GetScreenSize().x) - 1) / proj[1][1];
-	v.y = -(((2.0f * m_Point.y) / QuicksandEngine::g_pApp->GetScreenSize().y) - 1) / proj[2][2];
-	v.z = 1.0f;
-
-
-	glm::mat4 mWorldView = matWorld * matView;
-	glm::mat4 m;
-	m = glm::inverse(mWorldView);
-
-	// Transform the screen space Pick ray into 3D space
-	m_vPickRayDir.x = v.x * m[1][1] + v.y * m[2][1] + v.z * m[3][1];
-	m_vPickRayDir.y = v.x * m[1][2] + v.y * m[2][2] + v.z * m[3][2];
-	m_vPickRayDir.z = v.x * m[1][3] + v.y * m[2][3] + v.z * m[3][3];
-	m_vPickRayOrig.x = m[4][1];
-	m_vPickRayOrig.y = m[4][2];
-	m_vPickRayOrig.z = m[4][3];
-
-	FLOAT fBary1, fBary2;
-	FLOAT fDist;
-	for (DWORD i = 0; i < pIB.size(); i++)
-	{
-		glm::vec3 v0 = pVB[pIB[3 * i + 0]];
-		glm::vec3 v1 = pVB[pIB[3 * i + 1]];
-		glm::vec3 v2 = pVB[pIB[3 * i + 2]];
-
-		// Check if the Pick ray passes through this point
-		if (IntersectTriangle(m_vPickRayOrig, m_vPickRayDir, v0, v1, v2,
-			&fDist, &fBary1, &fBary2))
-		{
-			if (m_bAllHits || m_NumIntersections == 0 || fDist < m_IntersectionArray[0].m_fDist)
-			{
-
-				if (!m_bAllHits)
-					m_NumIntersections = 0;
-
-				++m_NumIntersections;
-
-				m_IntersectionArray.resize(m_NumIntersections);
-
-				Intersection* pIntersection;
-				pIntersection = &m_IntersectionArray[m_NumIntersections - 1];
-
-				InitIntersection(*pIntersection, i, fDist, fBary1, fBary2, actorId, pIB.data(), pVB.data(), matWorld);
-
-				if (m_NumIntersections == m_MaxIntersections)
-					break;
-			}
-		}
-	}
 
 	return S_OK;
 }
@@ -233,7 +163,8 @@ void RayCast::Sort()
 
 
 
-bool RayIntersect(GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, BOOL *hit, DWORD *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits, DWORD *pCountOfHits)
+
+bool RayIntersect(GLUF::GLUFMeshBarebones mesh, glm::vec3 rayPos, glm::vec3 rayDir, bool *hit, GLuint *pFaceIndex, GLfloat *baryU, GLfloat *baryV, GLfloat *pDist, IntersectionArray* pAllHits = nullptr, GLuint *pCountOfHits = nullptr)
 {
 	bool hasSucceeded = false;
 	bool hasSucceeded1 = false;

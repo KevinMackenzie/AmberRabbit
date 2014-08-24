@@ -112,6 +112,11 @@ inline glm::vec4 AssimpToGlm(aiColor4D v)
 	return glm::vec4(v.r, v.g, v.b, v.a);
 }
 
+inline GLUF::Color AssimpToGlm4_3u8(aiColor4D)
+{
+
+}
+
 #endif
 
 
@@ -208,7 +213,7 @@ OBJGLUF_API char* GLUFLoadFileIntoMemory(const wchar_t* path, unsigned long* raw
 typedef std::vector<glm::vec4> Vec4Array;
 typedef std::vector<glm::vec3> Vec3Array;
 typedef std::vector<glm::vec2> Vec2Array;
-typedef std::vector<GLushort>  IndexArray;
+typedef std::vector<GLuint>    IndexArray;
 
 class OBJGLUF_API GLUFMatrixStack
 {
@@ -301,6 +306,12 @@ template<typename T>
 OBJGLUF_API inline size_t GLUFGetVectorSize(std::vector<T> vec)
 {
 	return vec.size();
+}
+
+template<typename T>
+OBJGLUF_API inline std::vector<T> GLUFArrToVec(T* arr)
+{
+	return std::vector<T>(std::begin(arr), std::end(arr));
 }
 
 //used for getting vertices from rects 0,0 is bottom left
@@ -475,6 +486,11 @@ GLuint OBJGLUF_API LoadTextureFromMemory(char* data, unsigned int length, GLUFTe
 
 
 
+struct GLUFMeshBarebones
+{
+	Vec3Array mVertices;
+	IndexArray mIndices;
+};
 
 ////////////////////////////////////////////////////////////////
 // these are buffer helpers, they are meant to be flexible 
@@ -564,6 +580,8 @@ public:
 	~GLUFVertexArraySoA();
 	GLUFVertexArraySoA(const GLUFVertexArraySoA& other);
 
+
+	GLUFMeshBarebones GetBarebonesMesh();
 	void BufferData(GLUFAttribLoc loc, GLuint VertexCount, void* data);
 	void BufferSubData(GLUFAttribLoc loc, GLuint VertexOffsetCount, GLuint VertexCount, void* data);
 

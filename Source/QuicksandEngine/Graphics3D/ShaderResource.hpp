@@ -30,6 +30,8 @@ public:
 	virtual ~GLProgramResourceExtraData(){}
 	virtual std::string VToString(){ return "GLProgramResourceExtraData"; }
 
+	GLUF::GLUFProgramPtr GetProgram(){ return m_pProgram; }
+
 protected:
 
 	GLUF::GLUFProgramPtr m_pProgram;

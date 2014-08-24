@@ -1378,6 +1378,29 @@ GLUFVertexArraySoA::~GLUFVertexArraySoA()
 		glDeleteBuffers(1, &it.second);
 }
 
+GLUFMeshBarebones GLUFVertexArraySoA::GetBarebonesMesh()
+{
+	BindVertexArray();
+
+	std::map<GLUFAttribLoc, GLuint>::iterator it = mDataBuffers.find(GLUF_VERTEX_ATTRIB_POSITION);
+	if (mIndexBuffer == 0 || it == mDataBuffers.end())
+	{
+		return GLUFMeshBarebones();
+	}
+
+	GLUFMeshBarebones ret;
+	
+	glBindBuffer(GL_ARRAY_BUFFER, it->second);
+	glm::vec3* pVerts = (glm::vec3*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+
+	ret.mVertices = GLUFArrToVec(pVerts);
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+	GLuint* pIndices = (GLuint*)glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
+	ret.mIndices = GLUFArrToVec(pIndices);
+}
+
 void GLUFVertexArraySoA::BufferData(GLUFAttribLoc loc, GLuint VertexCount, void* data)
 {
 	BindVertexArray();

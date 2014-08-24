@@ -1,0 +1,5 @@
+-uniforms have the following requried names:
+	-_model
+	-_view
+	-_mv
+	-_mvp
