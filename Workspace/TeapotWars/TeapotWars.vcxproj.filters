@@ -73,5 +73,11 @@
     <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotResources.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\TeapotWars\TeapotWars.h">
+      <Filter>TeapotWars</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

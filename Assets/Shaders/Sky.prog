@@ -1,0 +1,18 @@
+<PROGRAM>
+	<GLSL version = 330>
+		<VERTEX>
+			<SHADER>Shaders/Sky/330/vert.glsl</SHADER>
+		</VERTEX>
+		<FRAGMENT>
+			<SHADER>Shaders/Sky/330/frag.glsl</SHADER>
+		</FRAGMENT>
+	</GLSL>
+	<GLSL version = 120>
+		<VERTEX>
+			<SHADER>Shaders/Sky/120/vert.glsl</SHADER>
+		</VERTEX>
+		<FRAGMENT>
+			<SHADER>Shaders/Sky/120/frag.glsl</SHADER>
+		</FRAGMENT>
+	</GLSL>
+</PROGRAM>

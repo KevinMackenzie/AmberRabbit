@@ -38,7 +38,7 @@
 
 #include "../QuicksandEngine/Stdafx.hpp"
 
-#include "../QuicksandEngine/Application/QuicksandEngine.hpp"
+#include "../QuicksandEngine/Application/QuicksandEngineApp.hpp"
 #include "../QuicksandEngine/Audio/Audio.hpp"
 #include "../QuicksandEngine/Audio/SoundProcess.hpp"
 #include "../QuicksandEngine/Graphics3D/GLRenderer.hpp"
@@ -94,42 +94,48 @@ extern TeapotWarsApp g_TeapotWarsApp;
 const int g_SampleUIWidth = 600;
 const int g_SampleUIHeight = 600;
 
+unsigned int g_ArielFontLocation;
+
 MainMenuUI::MainMenuUI()
 {
 	// This line was added to comply with DirectX 9c (June 2005) 
-	m_SampleUI.Init( &D3DRenderer::g_DialogResourceManager );
+	m_SampleUI.Init( &GLRenderer_Base::g_DialogResourceManager );
     m_SampleUI.SetCallback( OnGUIEvent, this ); 
 
-	int iY = 10; 
-	int iX = 35;
-	int iX2 = g_SampleUIWidth / 2;
-	int width = (g_SampleUIWidth/2)-10;
-	int height = 25;
-	int lineHeight = height + 2;
+	float fY = GLUF_NORMALIZE_COORD(10);
+	float fX = GLUF_NORMALIZE_COORD(35);
+	float fX2 = GLUF_NORMALIZE_COORD(g_SampleUIWidth / 2);
+	float fwidth = GLUF_NORMALIZE_COORD((g_SampleUIWidth / 2) - 10);
+	float fheight = GLUF_NORMALIZE_COORD(25);
+	float flineHeight = GLUF_NORMALIZE_COORD(fheight + 2);
 
 	// grab defaults from the game options.
-	m_NumAIs = g_pApp->m_Options.m_numAIs;
-	m_NumPlayers = g_pApp->m_Options.m_expectedPlayers;
-	m_HostName = g_pApp->m_Options.m_gameHost;
-	m_HostListenPort = g_pApp->m_Options.m_listenPort;
-	m_ClientAttachPort = g_pApp->m_Options.m_listenPort;
+	m_NumAIs = GET_CONFIG_ELEMENT_I("NUM_AI");
+	m_NumPlayers = GET_CONFIG_ELEMENT_I("EXPECTED_PLAYERS");
+	m_HostName = GET_CONFIG_ELEMENT_STR("HOST_NAME");
+	m_HostListenPort = GET_CONFIG_ELEMENT_STR("LISTEN_PORT");
+	m_ClientAttachPort = GET_CONFIG_ELEMENT_STR("LISTEN_PORT");
 
 	m_bCreatingGame = true;
 
-	D3DCOLOR color = 0x50505050;
-	m_SampleUI.SetBackgroundColors(color);
+	GLUF::Color color = GLUF::Color(80, 80, 80, 80);
+	m_SampleUI.SetBackgroundColor(color);
 
-	m_SampleUI.SetFont(0, L"Ariel", height, 0);
+	Resource ariel("Fonts/Ariel.ttf");
+	m_ArielFont = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&ariel);
+	g_ArielFontLocation = GLRenderer_Base::g_DialogResourceManager.AddFont(static_pointer_cast<TTFResourceExtraData>(m_ArielFont->GetExtra())->GetFont(), FONT_WEIGHT_NORMAL);
+	m_SampleUI.SetFont(g_ArielFontLocation, g_ArielFontLocation);
+	//m_SampleUI.SetFont(0, L"Ariel", height, 0);
 
-	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", iX-20, iY, g_SampleUIWidth, height * 2);
-	iY += (lineHeight * 3);
+	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", fX - GLUF_NORMALIZE_COORD(20), fY, GLUF_NORMALIZE_COORD(g_SampleUIWidth), fheight * 2);
+	fY += (flineHeight * 3);
 
-    m_SampleUI.AddRadioButton( CID_CREATE_GAME_RADIO, 1, L"Create Game", iX, iY, g_SampleUIWidth, height);
-	iY += lineHeight;
+	m_SampleUI.AddRadioButton(CID_CREATE_GAME_RADIO, 1, L"Create Game", fX, fY, GLUF_NORMALIZE_COORD(g_SampleUIWidth), fheight);
+	fY += flineHeight;
 
-	m_SampleUI.AddStatic(CID_LEVEL_LABEL, L"Level", iX, iY, width, height);
-	m_SampleUI.AddListBox(CID_LEVEL_LISTBOX, iX2, iY, width, lineHeight*5);
-	std::vector<Level> levels = g_pApp->GetGameLogic()->GetLevelManager()->GetLevels();
+	m_SampleUI.AddStatic(CID_LEVEL_LABEL, L"Level", fX, fY, fwidth, fheight);
+	m_SampleUI.AddListBox(CID_LEVEL_LISTBOX, fX2, fY, fwidth, flineHeight * 5);
+	std::vector<Level> levels = QuicksandEngine::g_pApp->GetGameLogic()->GetLevelManager()->GetLevels();
 	m_Levels.reserve(levels.size());
 	int count = 0;
 	for (std::vector<Level>::iterator i = levels.begin(); i != levels.end(); ++i, ++count)
@@ -137,41 +143,41 @@ MainMenuUI::MainMenuUI()
 		m_Levels.push_back(s2ws(*i));
 		m_SampleUI.GetListBox ( CID_LEVEL_LISTBOX )->AddItem(m_Levels[count].c_str(), NULL);
 	}
-	iY += (lineHeight * 5);
+	fY += (flineHeight * 5);
 	//m_SampleUI.GetListBox(CID_LEVEL_LISTBOX)->GetElement(0)->SetFont(0, 0x0);
 
-	m_SampleUI.AddStatic(CID_NUM_AI_LABEL, L"", iX, iY, width, height);
-	m_SampleUI.AddSlider( CID_NUM_AI_SLIDER, iX2, iY, width, height);
-	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetRange(0, g_pApp->m_Options.m_maxAIs);
+	m_SampleUI.AddStatic(CID_NUM_AI_LABEL, L"", fX, fY, fwidth, fheight);
+	m_SampleUI.AddSlider(CID_NUM_AI_SLIDER, fX2, fY, fwidth, fheight);
+	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_F("MAX_AI"));
 	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetValue(m_NumAIs); // should be ai options default
-	iY += lineHeight;
+	fY += flineHeight;
 
-	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", iX, iY, width, height);
-	m_SampleUI.AddSlider( CID_NUM_PLAYER_SLIDER, iX2, iY, width, height);
-	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(1, g_pApp->m_Options.m_maxPlayers);
+	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", fX, fY, fwidth, fheight);
+	m_SampleUI.AddSlider( CID_NUM_PLAYER_SLIDER, fX2, fY, fwidth, fheight);
+	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(1, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
 	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue(m_NumPlayers);  // should be player options default
-	iY += lineHeight;
+	fY += flineHeight;
 
-	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", iX, iY, width, height);
-	m_SampleUI.AddEditBox( CID_HOST_LISTEN_PORT, L"57", iX2, iY, width, height * 2);
-	CDXUTEditBox *eb = m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT );
+	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", fX, fY, fwidth, fheight);
+	m_SampleUI.AddEditBox( CID_HOST_LISTEN_PORT, L"57", fX2, fY, fwidth, fheight * 2);
+	GLUFEditBox *eb = m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT );
 	eb->SetVisible(false);
-	iY += lineHeight * 3;
+	fY += flineHeight * 3;
 
-    m_SampleUI.AddRadioButton( CID_JOIN_GAME_RADIO, 1, L"Join Game", iX, iY, width, height);
+    m_SampleUI.AddRadioButton( CID_JOIN_GAME_RADIO, 1, L"Join Game", fX, fY, fwidth, fheight);
     m_SampleUI.GetRadioButton( CID_JOIN_GAME_RADIO )->SetChecked( true ); 
-	iY += lineHeight;
+	fY += flineHeight;
 
-	m_SampleUI.AddStatic(CID_CLIENT_ATTACH_PORT_LABEL, L"Host Attach Port", iX, iY, width, height);
-	m_SampleUI.AddEditBox( CID_CLIENT_ATTACH_PORT, L"57", iX2, iY, width, height * 2);
-	iY += lineHeight * 3;
+	m_SampleUI.AddStatic(CID_CLIENT_ATTACH_PORT_LABEL, L"Host Attach Port", fX, fY, fwidth, fheight);
+	m_SampleUI.AddEditBox( CID_CLIENT_ATTACH_PORT, L"57", fX2, fY, fwidth, fheight * 2);
+	fY += flineHeight * 3;
 
 
-	m_SampleUI.AddStatic(CID_HOST_NAME_LABEL, L"Host Name", iX, iY, width, height);
-	m_SampleUI.AddEditBox( CID_HOST_NAME, L"sunshine", iX2, iY, width, height * 2);
-	iY += lineHeight;
+	m_SampleUI.AddStatic(CID_HOST_NAME_LABEL, L"Host Name", fX, fY, fwidth, fheight);
+	m_SampleUI.AddEditBox( CID_HOST_NAME, L"sunshine", fX2, fY, fwidth, fheight * 2);
+	fY += flineHeight;
 
-	m_SampleUI.AddButton(CID_START_BUTTON, L"Start Game",  (g_SampleUIWidth-(width/2))/2, iY += lineHeight, width/2, height);
+	m_SampleUI.AddButton(CID_START_BUTTON, L"Start Game", (GLUF_NORMALIZE_COORD(g_SampleUIWidth) - (fwidth / 2)) / 2, fY += flineHeight, fwidth / 2, fheight);
 
     m_SampleUI.GetRadioButton( CID_CREATE_GAME_RADIO )->SetChecked(true);
 
@@ -257,7 +263,7 @@ LRESULT CALLBACK MainMenuUI::VOnMsgProc( AppMsg msg )
 //--------------------------------------------------------------------------------------
 //    Note: pUserContext added to comply with DirectX 9c - June 2005 Update
 //
-void CALLBACK MainMenuUI::_OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext )
+void MainMenuUI::_OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
 {
     switch (nControlID)
     {
@@ -321,7 +327,7 @@ void CALLBACK MainMenuUI::_OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl
 	Set();
 }
 
-void CALLBACK MainMenuUI::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext )
+void MainMenuUI::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
 {
 	MainMenuUI *ui = static_cast<MainMenuUI *>(pUserContext);
 	ui->_OnGUIEvent(nEvent, nControlID, pControl, pUserContext);
@@ -381,14 +387,14 @@ LRESULT CALLBACK MainMenuView::VOnMsgProc( AppMsg msg )
 //--------------------------------------------------------------------------------------
 //    Note: pUserContext added to comply with DirectX 9c - June 2005 Update
 //
-void CALLBACK StandardHUD::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext )
+void StandardHUD::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
 {
-    switch( nControlID )
+    /*switch( nControlID )
     {
         case IDC_TOGGLEFULLSCREEN: DXUTToggleFullScreen(); break;
         case IDC_TOGGLEREF:        DXUTToggleREF(); break;
 //        case IDC_CHANGEDEVICE:     DXUTSetShowSettingsDialog( !DXUTGetShowSettingsDialog() ); break;
-    }
+    }*/
 }
 
 

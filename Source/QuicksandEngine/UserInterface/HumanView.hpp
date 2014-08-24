@@ -153,4 +153,37 @@ protected:
 };
 
 
+
+//for font resource loading
+class TTFResourceExtraData : public IResourceExtraData
+{
+	friend class TTFResourceLoader;
+
+public:
+	TTFResourceExtraData() : m_pFont(nullptr) {};
+	virtual ~TTFResourceExtraData(){}
+	virtual std::string VToString() { return "TTFResourceExtraData"; }
+
+	GLUFFontPtr GetFont(){ return m_pFont; }
+
+protected:
+
+	GLUFFontPtr m_pFont;
+
+	// m_pTextureResource;
+
+	//GLUFVertexArrayPtr mData;
+	//GLUFUniformBufferPtr mUniforms;
+};
+
+class TTFResourceLoader : public IResourceLoader
+{
+public:
+	virtual bool VUseRawFile() { return false; }
+	virtual bool VDiscardRawBufferAfterLoad() { return false; }
+	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize){ return 0; }
+	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
+	virtual std::string VGetPattern() { return "*.ttf"; }
+};
+
 #endif

@@ -22,6 +22,8 @@
     <ProjectGuid>{CA126387-3EC7-40CB-94EA-85E25C187199}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TeapotWars</RootNamespace>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,7 +67,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>94763d8d</NuGetPackageImportStamp>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -107,7 +111,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -124,7 +128,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -163,6 +167,7 @@
     <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotController.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotEvents.h" />
+    <ClInclude Include="..\..\Source\TeapotWars\TeapotWars.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotWarsNetwork.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotWarsView.h" />
   </ItemGroup>
@@ -171,7 +176,31 @@
       <Project>{76f97a8b-c1c5-4294-b716-d3fd3aacb099}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+    <Import Project="..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets" Condition="Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" />
+    <Import Project="..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets" Condition="Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" />
+    <Import Project="..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets" Condition="Exists('..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets')" />
+    <Import Project="..\packages\glfw.3.0.4.3\build\native\glfw.targets" Condition="Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" />
+    <Import Project="..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets" Condition="Exists('..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets')" />
+    <Import Project="..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets" Condition="Exists('..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets')" />
+    <Import Project="..\packages\glm.0.9.5.4\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.5.4\build\native\glm.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets'))" />
+    <Error Condition="!Exists('..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.redist.3.0.4.3\build\native\glfw.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.3.0.4.3\build\native\glfw.targets'))" />
+    <Error Condition="!Exists('..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets'))" />
+    <Error Condition="!Exists('..\packages\glm.0.9.5.4\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.5.4\build\native\glm.targets'))" />
+  </Target>
 </Project>

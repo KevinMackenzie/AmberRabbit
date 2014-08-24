@@ -37,18 +37,19 @@
 //
 //========================================================================
 
+#include "../ObjGLUF/GLUFGui.h"
 
-#include <DXUTGui.h>
+#include "../QuicksandEngine/Graphics3D/SceneNode.hpp"
+#include "../QuicksandEngine/EventManager/EventManager.hpp"
+#include "../QuicksandEngine/UserInterface/HumanView.hpp"
+#include "../QuicksandEngine/UserInterface/UserInterface.hpp"
 
-#include "../GCC4/Graphics3D/SceneNodes.h"
-#include "../GCC4/EventManager/EventManager.h"
-#include "../GCC4/UserInterface/HumanView.h"
-
+extern unsigned int g_ArielFontLocation;
 
 class MainMenuUI : public BaseUI
 {
 protected:
-	CDXUTDialog m_SampleUI;					// dialog for sample specific controls
+	GLUFDialog m_SampleUI;					// dialog for sample specific controls
 	void Set();
 	bool m_bCreatingGame;
 	int m_NumAIs;
@@ -58,6 +59,8 @@ protected:
 	std::string m_HostName;
 	std::string m_HostListenPort;
 	std::string m_ClientAttachPort;
+
+	shared_ptr<ResHandle> m_ArielFont;
 
 public:
 	MainMenuUI();
@@ -70,15 +73,15 @@ public:
 	virtual void VSetZOrder(int const zOrder) { }
 
 	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
-	static void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext );
-	void CALLBACK _OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext );
+	static void OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
+	void _OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
 };
 
 
 class StandardHUD : public BaseUI
 {
 protected:
-	CDXUTDialog m_HUD;                  // dialog for standard controls
+	GLUFDialog m_HUD;                  // dialog for standard controls
 
 public:
 	StandardHUD();
@@ -91,7 +94,7 @@ public:
 	virtual void VSetZOrder(int const zOrder) { }
 
 	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
-	static void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void *pUserContext );
+	static void  OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
 };
 
 class IEventManager;
@@ -133,7 +136,7 @@ public:
 	virtual void VOnAttach(GameViewId vid, ActorId aid);
 
 	virtual void VSetControlledActor(ActorId actorId);
-	virtual bool VLoadGameDelegate(TiXmlElement* pLevelData) override;
+	virtual bool VLoadGameDelegate(tinyxml2::XMLElement* pLevelData) override;
 
     // event delegates
     void GameplayUiUpdateDelegate(IEventDataPtr pEventData);

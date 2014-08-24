@@ -61,6 +61,11 @@ enum GLUF_MESSAGE_TYPE
 
 #define GLUF_POINTS_PER_PIXEL 1.333333f
 #define GLUF_POINTS_TO_PIXELS(points) (GLUFFontSize)((float)points * GLUF_POINTS_PER_PIXEL)
+#define GLUF_NORMALIZE_COORD(value)(value / (g_WndHeight > g_WndWidth) ? g_WndWidth : g_WndHeight)
+
+//DON'T SET THESE
+extern unsigned short g_WndWidth;
+extern unsigned short g_WndHeight;
 
 //this is because when rendered the actual font height will be cut in half.  Use this when using font in NDC space
 #define GLUF_FONT_HEIGHT_NDC(size) (size * 2) 
@@ -82,7 +87,7 @@ bool OBJGLUF_API GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK c
 typedef std::shared_ptr<GLUFFont> GLUFFontPtr;
 typedef float GLUFFontSize;//this is in normalized screencoords
 
-//NOTE: i am no longer using freetype, it is just more than is necisary right now
+
 OBJGLUF_API GLUFFontPtr GLUFLoadFont(char* rawData, uint64_t rawSize, float fontHeight);
 OBJGLUF_API GLUFFontSize GLUFGetFontHeight(GLUFFontPtr font);
 

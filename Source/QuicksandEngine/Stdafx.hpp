@@ -116,6 +116,7 @@ using namespace GLUF;
 #include <GLFW/glfw3native.h>
 
 #include <tinyxml2.h>
+#include "Types.hpp"
 //using namespace tinyxml2;
 
 // fast delegate stuff

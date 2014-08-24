@@ -143,6 +143,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	extern shared_ptr<IResourceLoader> CreateWAVResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateDDSResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateTTFResourceLoader();
 	//extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateObjMeshResourceLoader();
@@ -153,6 +154,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	m_ResCache->RegisterLoader(CreateWAVResourceLoader());
 	m_ResCache->RegisterLoader(CreateOGGResourceLoader());
 	m_ResCache->RegisterLoader(CreateDDSResourceLoader());
+	m_ResCache->RegisterLoader(CreateTTFResourceLoader());
 	//m_ResCache->RegisterLoader(CreateJPGResourceLoader());
 	m_ResCache->RegisterLoader(CreateXmlResourceLoader());
 	m_ResCache->RegisterLoader(CreateObjMeshResourceLoader());
@@ -257,6 +259,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWN
 	m_ResCache->Preload("*.ogg", NULL);
 	m_ResCache->Preload("*.dds", NULL);
 	m_ResCache->Preload("*.model.obj", NULL);
+	m_ResCache->Preload("*.ttf", NULL);
 
 	CheckForJoystick(GetHwnd());
 
