@@ -15,7 +15,7 @@
 
 #undef FAR
 #define FAR
-#include <zlib.h>
+#include "../../ZLib/zlib.h"
 #include <string.h>
 
 

@@ -148,7 +148,7 @@ void UnprotectedProcess::VThreadProc( void )
 int g_ThreadCount = 50;
 DWORD g_ThreadLoops = 100000;
 
-void testThreading(ProcessManager* procMgr, bool runProtected)
+QSE_API void testThreading(ProcessManager* procMgr, bool runProtected)
 {
 			shared_ptr<Process> proc(QSE_NEW UnprotectedProcess(g_ThreadLoops));
 			procMgr->AttachProcess(proc);
@@ -277,7 +277,7 @@ void EventReaderProcess::VThreadProc(void)
 }
 
 
-void testRealtimeEvents(ProcessManager *procMgr)
+QSE_API void testRealtimeEvents(ProcessManager *procMgr)
 {
     for ( int idx = 0; idx < THREADS_COUNT; ++idx)
     {
@@ -369,7 +369,7 @@ void DecompressionProcess::VThreadProc( )
 	Succeed();
 }
 
-void testRealtimeDecompression(ProcessManager *procMgr)
+QSE_API void testRealtimeDecompression(ProcessManager *procMgr)
 {
 	static void *buffer = NULL;
 	SAFE_DELETE (buffer);

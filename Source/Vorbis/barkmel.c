@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 #include "scales.h"
-int main(){
+/*int main(){
   int i;
   double rate;
   for(i=64;i<32000;i*=2){
@@ -62,3 +62,4 @@ int main(){
   return(0);
 }
 
+*/

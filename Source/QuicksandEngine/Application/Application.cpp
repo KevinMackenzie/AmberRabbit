@@ -7,7 +7,7 @@ void glufErrorMethod(const char* message, const char* funcName, const char* sour
 
 INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
-	LPWSTR    lpCmdLine,
+	LPSTR    lpCmdLine,
 	int       nCmdShow)
 {
 	// Set up checks for memory leaks.

@@ -61,7 +61,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 
 #include "../EventManager/EventManager.hpp"
-#include "../LuaPlus/LuaPlus.h"
+#include "../../LuaPlus/LuaPlus.h"
 
 
 class ScriptEvent;

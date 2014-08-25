@@ -8,7 +8,7 @@ void usage(){
   exit(1);
 }
 
-int main (int argc,char *argv[]){
+/*int main (int argc,char *argv[]){
   int i,j;
   double *f;
   double *amp;
@@ -50,5 +50,5 @@ int main (int argc,char *argv[]){
             (char)((ival>>8)&0xff));
   }
   return(0);
-}
+}*/
 

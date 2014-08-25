@@ -440,12 +440,12 @@ long vorbis_book_codelen(codebook *book,int entry){
     return book->c->lengthlist[entry];
   return -1;
 }
-
+/*
 #ifdef _V_SELFTEST
 
 /* Unit tests of the dequantizer; this stuff will be OK
    cross-platform, I simply want to be sure that special mapping cases
-   actually work properly; a bug could go unnoticed for a while */
+   actually work properly; a bug could go unnoticed for a while 
 
 #include <stdio.h>
 
@@ -457,12 +457,12 @@ long vorbis_book_codelen(codebook *book,int entry){
 
    nonsequential
    sequential
-*/
+
 
 static long full_quantlist1[]={0,1,2,3,    4,5,6,7, 8,3,6,1};
 static long partial_quantlist1[]={0,7,2};
 
-/* no mapping */
+/* no mapping 
 static_codebook test1={
   4,16,
   NULL,
@@ -473,7 +473,7 @@ static_codebook test1={
 };
 static float *test1_result=NULL;
 
-/* linear, full mapping, nonsequential */
+/* linear, full mapping, nonsequential 
 static_codebook test2={
   4,3,
   NULL,
@@ -484,7 +484,7 @@ static_codebook test2={
 };
 static float test2_result[]={-3,-2,-1,0, 1,2,3,4, 5,0,3,-2};
 
-/* linear, full mapping, sequential */
+/* linear, full mapping, sequential 
 static_codebook test3={
   4,3,
   NULL,
@@ -495,7 +495,7 @@ static_codebook test3={
 };
 static float test3_result[]={-3,-5,-6,-6, 1,3,6,10, 5,5,8,6};
 
-/* linear, algorithmic mapping, nonsequential */
+/* linear, algorithmic mapping, nonsequential 
 static_codebook test4={
   3,27,
   NULL,
@@ -514,7 +514,7 @@ static float test4_result[]={-3,-3,-3, 4,-3,-3, -1,-3,-3,
                               -3, 4,-1, 4, 4,-1, -1, 4,-1,
                               -3,-1,-1, 4,-1,-1, -1,-1,-1};
 
-/* linear, algorithmic mapping, sequential */
+/* linear, algorithmic mapping, sequential 
 static_codebook test5={
   3,27,
   NULL,
@@ -560,7 +560,7 @@ void run_test(static_codebook *b,float *comp){
 }
 
 int main(){
-  /* run the nine dequant tests, and compare to the hand-rolled results */
+  /* run the nine dequant tests, and compare to the hand-rolled results 
   fprintf(stderr,"Dequant test 1... ");
   run_test(&test1,test1_result);
   fprintf(stderr,"OK\nDequant test 2... ");
@@ -577,3 +577,4 @@ int main(){
 }
 
 #endif
+*/

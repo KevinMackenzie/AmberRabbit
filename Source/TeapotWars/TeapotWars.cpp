@@ -72,12 +72,13 @@ TeapotWarsApp g_TeapotWarsApp;
 //========================================================================
 
 
-INT WINAPI wWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPWSTR    lpCmdLine,
-                     int       nCmdShow)
+INT WINAPI WinMain(
+	_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPSTR lpCmdLine,
+	_In_ int nShowCmd)
 {
-	return QuicksandEngineWinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+	return QuicksandEngineWinMain(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
 }
 
 //========================================================================

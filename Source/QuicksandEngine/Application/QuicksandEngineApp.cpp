@@ -72,7 +72,7 @@ HWND QuicksandEngineApp::GetHwnd()
 //
 //===================================================================
 
-bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWND hWnd, int screenWidth, int screenHeight)
+bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND hWnd, int screenWidth, int screenHeight)
 {
 	// Check for existing instance of the same window
 	// 

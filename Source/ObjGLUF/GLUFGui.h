@@ -64,8 +64,8 @@ enum GLUF_MESSAGE_TYPE
 #define GLUF_NORMALIZE_COORD(value)(value / ((float)(GLUF::g_WndHeight > GLUF::g_WndWidth) ? GLUF::g_WndWidth : GLUF::g_WndHeight))
 
 //DON'T SET THESE
-extern unsigned short g_WndWidth;
-extern unsigned short g_WndHeight;
+extern unsigned short OBJGLUF_API g_WndWidth;
+extern unsigned short OBJGLUF_API g_WndHeight;
 
 //this is because when rendered the actual font height will be cut in half.  Use this when using font in NDC space
 #define GLUF_FONT_HEIGHT_NDC(size) (size * 2) 
@@ -82,7 +82,7 @@ typedef bool(*PGLUFCALLBACK)(GLUF_MESSAGE_TYPE, int, int, int, int);
 // a callback does not use the parameter, it will be 0, but this does not mean 0 is an invalid parameter for callbacks
 // that use it.  Other notes: when specifying hotkeys, always use the GLFW macros for specifying them.  Consult the GLFW
 // input documentation for more information.
-bool OBJGLUF_API GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex);
+OBJGLUF_API bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex);
 
 typedef std::shared_ptr<GLUFFont> GLUFFontPtr;
 typedef float GLUFFontSize;//this is in normalized screencoords

@@ -27,26 +27,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -68,34 +68,34 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>8fe96b08</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>17a1e9fb</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -104,12 +104,12 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -117,6 +117,24 @@
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
     </BuildLog>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)copydeps.bat" $(Platform) $(Configuration)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy the dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -124,11 +142,11 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -136,6 +154,24 @@
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
     </BuildLog>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)copydeps.bat" $(Platform) $(Configuration)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy the dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -145,11 +181,11 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
@@ -159,6 +195,24 @@
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
     </BuildLog>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)copydeps.bat" $(Platform) $(Configuration)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy the dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -168,11 +222,11 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
@@ -182,6 +236,24 @@
     <BuildLog>
       <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
     </BuildLog>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)copydeps.bat" $(Platform) $(Configuration)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy the dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\QuicksandEngine\Actor\Actor.hpp" />
@@ -222,49 +294,6 @@
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\ShaderResource.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.hpp" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaAutoBlock.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaFunction.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper_Object.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaHelper_StackObject.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaLink.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusCD.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusInternal.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateCD.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\luathread.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\pt.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldebug.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldo.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lfunc.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lgc.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\llex.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\llimits.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmem.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lobject.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lopcodes.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lparser.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstate.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstring.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lua.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\luaconf.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lualib.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.h" />
-    <ClInclude Include="..\..\Source\QuicksandEngine\LuaPlus\srm.h" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.hpp" />
     <ClInclude Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.hpp" />
@@ -330,50 +359,6 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\SceneNode.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\ShaderResource.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\Graphics3D\Sky.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusAddons.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlusFunctions.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaPlus_Libs.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStateOutFile.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState_DumpObject.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\LuaTableIterator.cpp" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\luathread.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\lwstrlib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\popen.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\pt.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lapi.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lauxlib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lbaselib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lcode.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldblib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldebug.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldo.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ldump.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lfunc.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lgc.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\linit.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\liolib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\llex.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmathlib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lmem.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\loadlib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lobject.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lopcodes.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\loslib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lparser.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstate.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstring.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lstrlib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltable.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltablib.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\ltm.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lundump.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lvm.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\lzio.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\src\print.c" />
-    <ClCompile Include="..\..\Source\QuicksandEngine\LuaPlus\srm.c" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\LuaStateManager.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptEvent.cpp" />
     <ClCompile Include="..\..\Source\QuicksandEngine\LUAScripting\ScriptExports.cpp" />
@@ -400,12 +385,6 @@
     <ClCompile Include="..\..\Source\QuicksandEngine\Utilities\String.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaCall.inl" />
-    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaObject.inl" />
-    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackObject.inl" />
-    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaStackTableIterator.inl" />
-    <None Include="..\..\Source\QuicksandEngine\LuaPlus\LuaState.inl" />
-    <None Include="..\..\Source\QuicksandEngine\LuaPlus\premake.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -427,11 +406,17 @@
     <ProjectReference Include="..\Bullet\LinearMath.vcxproj">
       <Project>{25a1937a-d0f1-a348-82a6-bf1036c32f4c}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\LuaPlus\LuaPlus.vcxproj">
+      <Project>{5f29389d-00d0-41bc-b961-99bd2dfb5822}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ObjGLUF\ObjGLUF.vcxproj">
       <Project>{06ddd1c2-d673-4a97-aba7-c5c1dd72c875}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Vorbis\Vorbis.vcxproj">
       <Project>{e18cc76f-eef9-4501-9806-bedf995dd6e8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\zlib\zlib.vcxproj">
+      <Project>{8492550d-6f90-4b04-ba35-b9dcbd25c1fa}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -444,8 +429,6 @@
     <Import Project="..\packages\glfw.3.0.4.3\build\native\glfw.targets" Condition="Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" />
     <Import Project="..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets" Condition="Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" />
     <Import Project="..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets" Condition="Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" />
-    <Import Project="..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets" Condition="Exists('..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" />
-    <Import Project="..\packages\zlib.1.2.8.6\build\native\zlib.targets" Condition="Exists('..\packages\zlib.1.2.8.6\build\native\zlib.targets')" />
     <Import Project="..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets" Condition="Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" />
     <Import Project="..\packages\DevIL.1.7.8\build\native\DevIL.targets" Condition="Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" />
     <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
@@ -468,8 +451,6 @@
     <Error Condition="!Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.3.0.4.3\build\native\glfw.targets'))" />
     <Error Condition="!Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets'))" />
     <Error Condition="!Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib.1.2.8.6\build\native\zlib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.1.2.8.6\build\native\zlib.targets'))" />
     <Error Condition="!Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets'))" />
     <Error Condition="!Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.1.7.8\build\native\DevIL.targets'))" />
     <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />

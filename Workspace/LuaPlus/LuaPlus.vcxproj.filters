@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="luac">
+      <UniqueIdentifier>{9d513e0b-d0a0-477f-a32e-7928e583f6be}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaPlusFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaState_DumpObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaStateOutFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaTableIterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\luathread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\lwstrlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\popen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\pt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\srm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaPlus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaPlus_Libs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\LuaPlusAddons.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lapi.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lauxlib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lbaselib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lcode.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ldblib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ldebug.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ldo.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ldump.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lfunc.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lgc.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\linit.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\liolib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\llex.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lmathlib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lmem.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\loadlib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lobject.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lopcodes.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\loslib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lparser.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lstate.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lstring.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lstrlib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ltable.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ltablib.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\ltm.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lua.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lundump.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lvm.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\lzio.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaPlus\src\print.c">
+      <Filter>luac</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaPlusInternal.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaStackObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaStackTableIterator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaState.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaStateCD.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaStateOutFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaTableIterator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\luathread.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\pt.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\srm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaAutoBlock.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaCall.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\luace.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaFunction.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaHelper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaHelper_Object.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaHelper_StackObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaLink.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaPlus.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\LuaPlusCD.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lapi.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lauxlib.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lcode.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\ldebug.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\ldo.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lfunc.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lgc.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\llex.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\llimits.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lmem.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lobject.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lopcodes.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lparser.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lstate.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lstring.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\ltable.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\ltm.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lua.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\luaconf.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lualib.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lundump.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lvm.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaPlus\src\lzio.h">
+      <Filter>luac</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Source\LuaPlus\LuaStackObject.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\Source\LuaPlus\LuaStackTableIterator.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\Source\LuaPlus\LuaState.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\Source\LuaPlus\LuaCall.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\Source\LuaPlus\LuaObject.inl">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

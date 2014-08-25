@@ -6,40 +6,40 @@
 typedef std::vector<string> StringVec;
 
 // Removes characters up to the first '\n'
-extern void RemoveFirstLine(std::wstring &src, std::wstring &result);
+extern QSE_API void RemoveFirstLine(std::wstring &src, std::wstring &result);
 
 // Removes leading white space
-extern void TrimLeft(std::wstring &s);
+extern QSE_API void TrimLeft(std::wstring &s);
 
 // Counts the number of lines in a block of text
-extern int CountLines(const std::wstring &s);
+extern QSE_API int CountLines(const std::wstring &s);
 
 // Does a classic * & ? pattern match on a file name - this is case sensitive!
-extern BOOL WildcardMatch(const char *pat, const char *str);
+extern QSE_API BOOL WildcardMatch(const char *pat, const char *str);
 
 // converts a regular string to a wide string
-extern void StringToWideString(const string& source, std::wstring& outDest);
+extern QSE_API void StringToWideString(const string& source, std::wstring& outDest);
 
-extern std::string ConcatStringLog(std::string str1, std::string str2);
+extern QSE_API std::string ConcatStringLog(std::string str1, std::string str2);
 #define ConcatString ConcatStringLog
 
-extern HRESULT AnsiToWideCch( WCHAR* dest, const CHAR* src, int charCount);  
-extern HRESULT WideToAnsiCch( CHAR* dest, const WCHAR* src, int charCount);  
-extern HRESULT GenericToAnsiCch( CHAR* dest, const TCHAR* src, int charCount); 
-extern HRESULT GenericToWideCch( WCHAR* dest, const TCHAR* src, int charCount); 
-extern HRESULT AnsiToGenericCch( TCHAR* dest, const CHAR* src, int charCount); 
-extern HRESULT WideToGenericCch( TCHAR* dest, const WCHAR* src, int charCount);
+extern QSE_API HRESULT AnsiToWideCch(WCHAR* dest, const CHAR* src, int charCount);
+extern QSE_API HRESULT WideToAnsiCch(CHAR* dest, const WCHAR* src, int charCount);
+extern QSE_API HRESULT GenericToAnsiCch(CHAR* dest, const TCHAR* src, int charCount);
+extern QSE_API HRESULT GenericToWideCch(WCHAR* dest, const TCHAR* src, int charCount);
+extern QSE_API HRESULT AnsiToGenericCch(TCHAR* dest, const CHAR* src, int charCount);
+extern QSE_API HRESULT WideToGenericCch(TCHAR* dest, const WCHAR* src, int charCount);
 
-extern string ToStr(int num, int base = 10);
-extern string ToStr(unsigned int num, int base = 10);
-extern string ToStr(unsigned long num, int base = 10);
-extern string ToStr(float num);
-extern string ToStr(double num);
-extern string ToStr(bool val);
-extern string ToStr(const glm::vec3& vec);
+extern QSE_API string ToStr(int num, int base = 10);
+extern QSE_API string ToStr(unsigned int num, int base = 10);
+extern QSE_API string ToStr(unsigned long num, int base = 10);
+extern QSE_API string ToStr(float num);
+extern QSE_API string ToStr(double num);
+extern QSE_API string ToStr(bool val);
+extern QSE_API string ToStr(const glm::vec3& vec);
 
-extern string ws2s(const std::wstring& s);
-extern std::wstring s2ws(const string &s);
+extern QSE_API string ws2s(const std::wstring& s);
+extern QSE_API std::wstring s2ws(const string &s);
 
 // Splits a string by the delimeter into a vector of strings.  For example, say you have the following string:
 // string test("one,two,three");

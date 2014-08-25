@@ -68,7 +68,7 @@ public:
 	// Win32 Specific Stuff
 	HWND GetHwnd();
 	HINSTANCE GetInstance() { return m_hInstance; }
-	virtual bool InitInstance(HINSTANCE hInstance, LPWSTR lpCmdLine, HWND hWnd = NULL, int screenWidth = SCREEN_WIDTH, int screenHeight = SCREEN_HEIGHT);
+	virtual bool InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND hWnd = NULL, int screenWidth = SCREEN_WIDTH, int screenHeight = SCREEN_HEIGHT);
 
 	static bool MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, int param3, int param4);
 	bool HasModalDialog() { return m_HasModalDialog != 0; }
@@ -175,7 +175,7 @@ private:
 
 namespace QuicksandEngine
 {
-	extern  QuicksandEngineApp *g_pApp;
+	extern  QSE_API QuicksandEngineApp *g_pApp;
 }
 
 #endif
