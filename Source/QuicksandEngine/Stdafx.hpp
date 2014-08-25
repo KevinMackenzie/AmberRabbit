@@ -23,6 +23,17 @@
 #endif
 
 #endif
+
+#ifdef _WIN32
+#ifdef QUICKSAND_ENGINE_EXPORTS
+#define  QSE_API __declspec(dllexport)
+#else
+#define  QSE_API __declspec(dllimport)
+#endif
+#else
+#define QSE_API
+#endif
+
 // [rez] I am saddened that Visual Studio 2010 doesn't support the new C++0x final keyword.  It does support 
 // the override keyword as well as a special Microsoft-specific sealed keyword.  The override keyword works 
 // exactly as the C++0x spec says it does and the sealed keyword acts like the C++0x final keyword.  I toyed 
@@ -58,7 +69,7 @@ using std::string;
 using std::static_pointer_cast;
 using std::dynamic_pointer_cast;
 
-class GCC_noncopyable
+class QSE_API GCC_noncopyable
 {
 private:
 	GCC_noncopyable(const GCC_noncopyable& x);
@@ -108,8 +119,6 @@ using namespace GLUF;
 #include <GL/glew.h>
 #include <GL/GL.h>
 #include <GLFW/glfw3.h>
-#include <IL/il.h>
-
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
@@ -223,6 +232,160 @@ extern INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	int       nCmdShow);
 
 
+//linking
+class QSE_API AStar;
+class QSE_API Actor;
+class QSE_API ActorComponent;
+class QSE_API ActorFactory;
+class QSE_API AmmoPickup;
+class QSE_API Audio;
+class QSE_API AudioBuffer;
+class QSE_API AudioComponent;
+class QSE_API BaseEventData;
+class QSE_API BaseGameLogic;
+class QSE_API BaseRenderComponent;
+class QSE_API BaseScriptComponent;
+class QSE_API BaseSocketManager;
+class QSE_API BaseUI;
+class QSE_API BinaryPacket;
+class QSE_API BulletDebugDrawer;
+class QSE_API BulletPhysics;
+class QSE_API CameraNode;
+class QSE_API ClientSocketManager;
+class QSE_API Configuration;
+class QSE_API CriticalSection;
+class QSE_API DefaultResourceLoader;
+class QSE_API DevelopmentResourceZipFile;
+class QSE_API EventManager;
+class QSE_API EvtData_Decompress_Request;
+class QSE_API EvtData_Decompression_Progress;
+class QSE_API EvtData_Destroy_Actor;
+class QSE_API EvtData_Environment_Loaded;
+class QSE_API EvtData_Game_State;
+class QSE_API EvtData_Modified_Render_Component;
+class QSE_API EvtData_MoveActor;
+class QSE_API EvtData_Network_Player_Actor_Assignment;
+class QSE_API EvtData_New_Actor;
+class QSE_API EvtData_New_Render_Component;
+class QSE_API EvtData_PhysCollision;
+class QSE_API EvtData_PhysSeperation;
+class QSE_API EvtData_PhysTrigger_Enter;
+class QSE_API EvtData_PhysTrigger_Leave;
+class QSE_API EvtData_Play_Sound;
+class QSE_API EvtData_RemoteEnvironment_Loaded;
+class QSE_API EvtData_Remote_Client;
+class QSE_API EvtData_Request_Start_Game;
+class QSE_API EvtData_Update_Tick;
+class QSE_API ExplosionProcess;
+class QSE_API FadeProcess;
+class QSE_API FontHandler;
+class QSE_API Frustum;
+class QSE_API GCCRandom;
+class QSE_API GLCtrlShaderResourceLoader;
+class QSE_API GLEvalShaderResourceLoader;
+class QSE_API GLFragShaderResourceLoader;
+class QSE_API GLGeomShaderResourceLoader;
+class QSE_API GLGrid;
+class QSE_API GLLightNode;
+class QSE_API GLLineDrawer;
+class QSE_API GLMaterial;
+class QSE_API GLMeshNode;
+class QSE_API GLMessageBox;
+class QSE_API GLObjMeshResourceExtraData;
+class QSE_API GLObjMeshResourceLoader;
+class QSE_API GLProgramResourceExtraData;
+class QSE_API GLProgramResourceLoader;
+class QSE_API GLRenderPass;
+class QSE_API GLRenderSkyBox;
+class QSE_API GLRenderSkyBoxPass;
+class QSE_API GLRenderer;
+class QSE_API GLRendererAlphaPass;
+class QSE_API GLRenderer_Base;
+class QSE_API GLShaderResourceExtraData;
+class QSE_API GLShaderResourceLoader;
+class QSE_API GLSkyNode;
+class QSE_API GLTextureResourceExtraData;
+class QSE_API GLVertShaderResourceLoader;
+class QSE_API GridRenderComponent;
+class QSE_API HashedString;
+class QSE_API HealthPickup;
+class QSE_API HumanView;
+class QSE_API IAudio;
+class QSE_API IAudioBuffer;
+class QSE_API IEventData;
+class QSE_API IEventManager;
+class QSE_API IGameLogic;
+class QSE_API IGamePhysics;
+class QSE_API IGameView;
+class QSE_API IGamepadHandler;
+class QSE_API IJoystickHandler;
+class QSE_API IKeyboardHandler;
+class QSE_API IPacket;
+class QSE_API IPointerHandler;
+class QSE_API IRenderState;
+class QSE_API IRenderer;
+class QSE_API IResourceExtraData;
+class QSE_API IResourceFile;
+class QSE_API IResourceLoader;
+class QSE_API ISceneNode;
+class QSE_API IScreenElement;
+class QSE_API IScriptManager;
+class QSE_API Intersection;
+class QSE_API LevelManager;
+class QSE_API LightManager;
+class QSE_API LightNode;
+class QSE_API LightRenderComponent;
+class QSE_API LuaStateManager;
+class QSE_API Math;
+class QSE_API MeshRenderComponent;
+class QSE_API MovementController;
+class QSE_API NetSocket;
+class QSE_API NetworkEventForwarder;
+class QSE_API NetworkGameView;
+class QSE_API NullPhysics;
+class QSE_API OggResourceLoader;
+class QSE_API PathPlanNode;
+class QSE_API PathingArc;
+class QSE_API PathingGraph;
+class QSE_API PathingNode;
+class QSE_API PhysicsComponent;
+class QSE_API PickupInterface;
+class QSE_API Plane;
+class QSE_API PrimeSearch;
+class QSE_API Process;
+class QSE_API ProcessManager;
+class QSE_API QuicksandEngineApp;
+class QSE_API RayCast;
+class QSE_API RealtimeProcess;
+class QSE_API RemoteEventSocket;
+class QSE_API RenderComponent;
+class QSE_API RenderComponentInterface;
+class QSE_API ResCache;
+class QSE_API ResHandle;
+class QSE_API Resource;
+class QSE_API ResourceZipFile;
+class QSE_API RootNode;
+class QSE_API SFMLSoundAudio;
+class QSE_API SFMLSoundBuffer;
+class QSE_API Scene;
+class QSE_API SceneNode;
+class QSE_API SceneNodeProperties;
+class QSE_API ScopedCriticalSection;
+class QSE_API ScreenElementScene;
+class QSE_API ScriptComponentInterface;
+class QSE_API ScriptEvent;
+class QSE_API SkyNode;
+class QSE_API SoundProcess;
+class QSE_API SoundResourceExtraData;
+class QSE_API SphereRenderComponent;
+class QSE_API StringsManager;
+class QSE_API TextPacket;
+class QSE_API TextureResourceLoader;
+class QSE_API TransformComponent;
+class QSE_API WaveResourceLoader;
+class QSE_API XmlResourceExtraData;
+class QSE_API XmlResourceLoader;
+class QSE_API ZipFile;
 
 
 #endif

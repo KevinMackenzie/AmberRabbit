@@ -10,7 +10,7 @@
 // [rez] This component isn't actually used in Teapot wars.  It was used as an example for describing components in 
 // the book.  I decided to include it here to give you a starting point to add health drops in your game.  :)
 //---------------------------------------------------------------------------------------------------------------------
-class HealthPickup : public PickupInterface
+class  HealthPickup : public PickupInterface
 {
 public:
 	static const char* g_Name;

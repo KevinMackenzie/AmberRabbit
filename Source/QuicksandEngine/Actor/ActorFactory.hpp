@@ -5,7 +5,7 @@
 // ActorFactory class
 // Chapter 6, page 161
 //---------------------------------------------------------------------------------------------------------------------
-class ActorFactory
+class  ActorFactory
 {
     ActorId m_lastActorId;
 

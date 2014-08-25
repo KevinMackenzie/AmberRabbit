@@ -24,6 +24,7 @@ public:
 	//ALL of them will throw an exception in the case of an invalid config key
 
 	string GetElement(string key);
+	void SetElement(string key, string value);
 	
 };
 

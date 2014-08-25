@@ -14,3 +14,12 @@ string Configuration::GetElement(string key)
 		throw INVALID_CONFIG_KEY;
 	}
 }
+
+void Configuration::SetElement(string key, string value)
+{
+	std::map<string, string>::iterator it = mConfigOptions.find(key);
+	if (it != mConfigOptions.end())
+	{
+		it->second = value;
+	}
+}

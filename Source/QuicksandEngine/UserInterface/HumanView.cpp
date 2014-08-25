@@ -500,7 +500,7 @@ void HumanView::Console::Render( )
 		return;	//Bail!
 	}
 
-	GLRenderer_Base::g_pTextHelper->Begin(0,0.025f,FONT_WEIGHT_NORMAL);//TODO: custom console font
+	GLRenderer_Base::g_pTextHelper->Begin(0,FONT_WEIGHT_NORMAL);//TODO: custom console font
 	//const glm::vec4 white( 1.0f, 1.0f, 1.0f, 1.0f );
 	//const glm::vec4 black( 0.0f, 0.0f, 0.0f, 1.0f );
 	GLUFRect inputTextRect, outputTextRect, shadowRect;
@@ -591,6 +591,11 @@ bool TTFResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, sha
 	shared_ptr<TTFResourceExtraData> extra = static_pointer_cast<TTFResourceExtraData>(handle->GetExtra());
 
 	extra->m_pFont = GLUFLoadFont(rawBuffer, rawSize, 0.25f);//default font size
+
+	if (extra->m_pFont)
+		return true;
+	else
+		return false;
 }
 
 shared_ptr<IResourceLoader> CreateTTFResourceLoader()

@@ -9,7 +9,7 @@
 // BaseScriptComponent class
 // Chapter 12, page 337
 //---------------------------------------------------------------------------------------------------------------------
-class BaseScriptComponent : public ScriptComponentInterface
+class  BaseScriptComponent : public ScriptComponentInterface
 {
 	string m_scriptObjectName;
     string m_constructorName;

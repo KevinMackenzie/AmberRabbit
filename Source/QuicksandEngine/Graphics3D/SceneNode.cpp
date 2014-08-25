@@ -651,7 +651,7 @@ GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int 
 
 	if (!m_pGridProgram)
 	{
-		Resource* gridProg = new Resource("Shaders/Grid.prog");
+		Resource* gridProg = new Resource("Shaders/Lines.prog");
 		m_pGridProgram = QuicksandEngine::g_pApp->m_ResCache->GetHandle(gridProg);
 	}
 

@@ -5,7 +5,7 @@
 
 //this loads configuration from an xml, and puts it into the global config 
 //NOTE:LOADING ELEMENTS MUST ONLY BE CALLED BY MAIN THREAD
-class StringsManager
+class  StringsManager
 {
 	Configuration gConfig;
 
@@ -32,6 +32,8 @@ public:
 	string GetElementStr(string key);
 
 	void ModifyElement(string key, string element);
+
+	void AddElement(string key, string element);
 
 	//these functions ARE MUTABLE 
 
@@ -72,7 +74,7 @@ public:
 #define GET_CONFIG_ELEMENT_D(key)	QuicksandEngine::g_pApp->mConfigManager.GetElementd(key)
 #define GET_CONFIG_ELEMENT_LD(key)	QuicksandEngine::g_pApp->mConfigManager.GetElementld(key)
 
-#define MODIFY_CONFIG_ELEMENT(key, value) QuicksandEngine::g_pApp->mConfigManager.ModifyElement(key, value);
+#define MODIFY_CONFIG_ELEMENT(key, value) {std::stringstream ss; ss << value; QuicksandEngine::g_pApp->mConfigManager.ModifyElement(key, ss.str());}
 
 
 #define GET_STRING(key) QuicksandEngine::g_pApp->mStringsManager.GetElementStr(key)

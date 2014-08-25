@@ -4,7 +4,7 @@
 #include "ActorComponent.hpp"
 
 
-class PhysicsComponent : public ActorComponent
+class  PhysicsComponent : public ActorComponent
 {
 public:
 	const static char *g_Name;

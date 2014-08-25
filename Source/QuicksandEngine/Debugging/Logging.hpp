@@ -24,7 +24,7 @@ namespace AwLogging
 		MEMLEAK //TODO: custom memory manager
 	};
 
-	struct LogInfo
+	struct QSE_API LogInfo
 	{
 	private:
 
@@ -55,7 +55,7 @@ namespace AwLogging
 
 	//the last three paramters can be disabled in the config (Debug/Release) 
 	//NEVER call this directly
-	void WriteLog(LogType logType, string logText, const char* funcName, const char* sourceFile, unsigned int lineNum);
+	QSE_API void WriteLog(LogType logType, string logText, const char* funcName, const char* sourceFile, unsigned int lineNum);
 
 	//some utilities for WriteLog, but can be used in other places
 	string LogTypeToString(LogType logType);

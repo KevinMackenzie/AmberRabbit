@@ -6,7 +6,7 @@
 // Actor class
 // Chapter 6, page 165
 //---------------------------------------------------------------------------------------------------------------------
-class Actor
+class  Actor
 {
     friend class ActorFactory;
 

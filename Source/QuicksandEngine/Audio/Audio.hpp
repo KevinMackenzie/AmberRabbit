@@ -36,7 +36,7 @@ extern char *gSoundExtentions[];
 // the same source data - such as two explosions in two different places.
 //////////////////////////////////////////////////////////////////////
 
-class IAudioBuffer
+class  IAudioBuffer
 {
 public:
 	virtual ~IAudioBuffer() { }
@@ -66,7 +66,7 @@ public:
 //
 //////////////////////////////////////////////////////////////////////
 
-class AudioBuffer : public IAudioBuffer
+class  AudioBuffer : public IAudioBuffer
 {
 public: 
 	virtual shared_ptr<ResHandle> VGetResource() { return m_Resource; }
@@ -100,7 +100,7 @@ protected:
 // a game's audio system. 
 //////////////////////////////////////////////////////////////////////
 
-class IAudio
+class  IAudio
 {
 public:
 	virtual bool VActive()=0;
@@ -124,7 +124,7 @@ public:
 // 
 //////////////////////////////////////////////////////////////////////
 
-class Audio : public IAudio
+class  Audio : public IAudio
 {
 public:
 	Audio();

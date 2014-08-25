@@ -91,8 +91,8 @@ extern TeapotWarsApp g_TeapotWarsApp;
 #define CID_LEVEL_LISTBOX				(16)
 
 
-const int g_SampleUIWidth = 600;
-const int g_SampleUIHeight = 600;
+const float g_fSampleUIWidth = 0.7f;
+const float g_fSampleUIHeight = 0.7f;
 
 unsigned int g_ArielFontLocation;
 
@@ -102,17 +102,17 @@ MainMenuUI::MainMenuUI()
 	m_SampleUI.Init( &GLRenderer_Base::g_DialogResourceManager );
     m_SampleUI.SetCallback( OnGUIEvent, this ); 
 
-	float fY = GLUF_NORMALIZE_COORD(10);
-	float fX = GLUF_NORMALIZE_COORD(35);
-	float fX2 = GLUF_NORMALIZE_COORD(g_SampleUIWidth / 2);
-	float fwidth = GLUF_NORMALIZE_COORD((g_SampleUIWidth / 2) - 10);
-	float fheight = GLUF_NORMALIZE_COORD(25);
-	float flineHeight = GLUF_NORMALIZE_COORD(fheight + 2);
+	float fY = GLUF_NORMALIZE_COORD(10.0f);
+	float fX = GLUF_NORMALIZE_COORD(35.0f);
+	float fX2 = g_fSampleUIWidth / 2.0f;
+	float fwidth = (g_fSampleUIWidth / 2.0f) - GLUF_NORMALIZE_COORD(10.0f);
+	float fheight = GLUF_NORMALIZE_COORD(25.0f);
+	float flineHeight = fheight + GLUF_NORMALIZE_COORD(2.0f);
 
 	// grab defaults from the game options.
 	m_NumAIs = GET_CONFIG_ELEMENT_I("NUM_AI");
 	m_NumPlayers = GET_CONFIG_ELEMENT_I("EXPECTED_PLAYERS");
-	m_HostName = GET_CONFIG_ELEMENT_STR("HOST_NAME");
+	m_HostName = GET_CONFIG_ELEMENT_STR("GAME_HOST");
 	m_HostListenPort = GET_CONFIG_ELEMENT_STR("LISTEN_PORT");
 	m_ClientAttachPort = GET_CONFIG_ELEMENT_STR("LISTEN_PORT");
 
@@ -127,10 +127,10 @@ MainMenuUI::MainMenuUI()
 	m_SampleUI.SetFont(g_ArielFontLocation, g_ArielFontLocation);
 	//m_SampleUI.SetFont(0, L"Ariel", height, 0);
 
-	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", fX - GLUF_NORMALIZE_COORD(20), fY, GLUF_NORMALIZE_COORD(g_SampleUIWidth), fheight * 2);
+	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", fX - GLUF_NORMALIZE_COORD(20), fY, g_fSampleUIWidth, fheight * 2);
 	fY += (flineHeight * 3);
 
-	m_SampleUI.AddRadioButton(CID_CREATE_GAME_RADIO, 1, L"Create Game", fX, fY, GLUF_NORMALIZE_COORD(g_SampleUIWidth), fheight);
+	m_SampleUI.AddRadioButton(CID_CREATE_GAME_RADIO, 1, L"Create Game", fX, fY, g_fSampleUIWidth, fheight);
 	fY += flineHeight;
 
 	m_SampleUI.AddStatic(CID_LEVEL_LABEL, L"Level", fX, fY, fwidth, fheight);
@@ -149,13 +149,13 @@ MainMenuUI::MainMenuUI()
 	m_SampleUI.AddStatic(CID_NUM_AI_LABEL, L"", fX, fY, fwidth, fheight);
 	m_SampleUI.AddSlider(CID_NUM_AI_SLIDER, fX2, fY, fwidth, fheight);
 	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_F("MAX_AI"));
-	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetValue(m_NumAIs); // should be ai options default
+	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetValue((float)m_NumAIs); // should be ai options default
 	fY += flineHeight;
 
 	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", fX, fY, fwidth, fheight);
 	m_SampleUI.AddSlider( CID_NUM_PLAYER_SLIDER, fX2, fY, fwidth, fheight);
 	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(1, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
-	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue(m_NumPlayers);  // should be player options default
+	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue((float)m_NumPlayers);  // should be player options default
 	fY += flineHeight;
 
 	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", fX, fY, fwidth, fheight);
@@ -177,7 +177,7 @@ MainMenuUI::MainMenuUI()
 	m_SampleUI.AddEditBox( CID_HOST_NAME, L"sunshine", fX2, fY, fwidth, fheight * 2);
 	fY += flineHeight;
 
-	m_SampleUI.AddButton(CID_START_BUTTON, L"Start Game", (GLUF_NORMALIZE_COORD(g_SampleUIWidth) - (fwidth / 2)) / 2, fY += flineHeight, fwidth / 2, fheight);
+	m_SampleUI.AddButton(CID_START_BUTTON, L"Start Game", (g_fSampleUIWidth - (fwidth / 2)) / 2, fY += flineHeight, fwidth / 2, fheight);
 
     m_SampleUI.GetRadioButton( CID_CREATE_GAME_RADIO )->SetChecked(true);
 
@@ -187,7 +187,7 @@ MainMenuUI::MainMenuUI()
 
 MainMenuUI::~MainMenuUI()
 { 
-	D3DRenderer::g_DialogResourceManager.UnregisterDialog(&m_SampleUI);
+	GLRenderer_Base::g_DialogResourceManager.UnregisterDialog(&m_SampleUI);
 }
 
 void MainMenuUI::Set()
@@ -198,14 +198,14 @@ void MainMenuUI::Set()
 	m_LevelIndex = m_SampleUI.GetListBox ( CID_LEVEL_LISTBOX)->GetSelectedIndex();
 	m_SampleUI.GetListBox ( CID_LEVEL_LISTBOX)->SetVisible(m_bCreatingGame);
 
-	m_NumAIs = m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->GetValue(); 
+	m_NumAIs = (int)m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->GetValue(); 
 	m_SampleUI.GetSlider(CID_NUM_AI_SLIDER)->SetVisible(m_bCreatingGame);
 
 	wsprintf( buffer, _T("%s: %d\n"), L"Number of AIs", m_NumAIs );
 	m_SampleUI.GetStatic(CID_NUM_AI_LABEL)->SetText(buffer);
 	m_SampleUI.GetStatic(CID_NUM_AI_LABEL)->SetVisible(m_bCreatingGame);
 	
-	m_NumPlayers = m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->GetValue(); 
+	m_NumPlayers = (int)m_SampleUI.GetSlider(CID_NUM_PLAYER_SLIDER)->GetValue();
 	m_SampleUI.GetSlider(CID_NUM_PLAYER_SLIDER)->SetVisible(m_bCreatingGame);
 	wsprintf( buffer, _T("%s: %d\n"), L"Number of Players", m_NumPlayers );
 	m_SampleUI.GetStatic(CID_NUM_PLAYER_LABEL)->SetText(buffer);
@@ -215,21 +215,21 @@ void MainMenuUI::Set()
 	m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT )->SetVisible(m_NumPlayers>1 && m_bCreatingGame);
 	if (m_bCreatingGame)
 	{
-		WideToAnsiCch(ansiBuffer, m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT )->GetText(), 256);
+		WideToAnsiCch(ansiBuffer, m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT )->GetText().c_str(), 256);
 		m_HostListenPort = ansiBuffer;
 	}
 
 	m_SampleUI.GetStatic( CID_HOST_NAME_LABEL )->SetVisible(!m_bCreatingGame);
 	m_SampleUI.GetEditBox( CID_HOST_NAME )->SetVisible(!m_bCreatingGame);
 
-	WideToAnsiCch(ansiBuffer, m_SampleUI.GetEditBox( CID_HOST_NAME )->GetText(), 256);
+	WideToAnsiCch(ansiBuffer, m_SampleUI.GetEditBox( CID_HOST_NAME )->GetText().c_str(), 256);
 	m_HostName = ansiBuffer;
 
 	m_SampleUI.GetStatic( CID_CLIENT_ATTACH_PORT_LABEL )->SetVisible(!m_bCreatingGame);
 	m_SampleUI.GetEditBox( CID_CLIENT_ATTACH_PORT )->SetVisible(!m_bCreatingGame);
 	if (!m_bCreatingGame)
 	{
-		WideToAnsiCch(ansiBuffer, m_SampleUI.GetEditBox( CID_CLIENT_ATTACH_PORT )->GetText(), 256);
+		WideToAnsiCch(ansiBuffer, m_SampleUI.GetEditBox( CID_CLIENT_ATTACH_PORT )->GetText().c_str(), 256);
 		m_ClientAttachPort = ansiBuffer;
 	}
 
@@ -237,23 +237,24 @@ void MainMenuUI::Set()
 
 HRESULT MainMenuUI::VOnRestore()
 {
-    m_SampleUI.SetLocation( (g_pApp->GetScreenSize().x - g_SampleUIWidth)/2, (g_pApp->GetScreenSize().y - g_SampleUIHeight) / 2  );
-    m_SampleUI.SetSize( g_SampleUIWidth, g_SampleUIHeight );
+	m_SampleUI.SetLocation((1.0f - g_fSampleUIWidth) / 2.0f, (1.0f - g_fSampleUIHeight) / 2.0f);
+    m_SampleUI.SetSize( g_fSampleUIWidth, g_fSampleUIHeight );
 	return S_OK;
 }
 
-HRESULT MainMenuUI::VOnRender(double fTime, float fElapsedTime)
+HRESULT MainMenuUI::VOnRender(double fTime, double fElapsedTime)
 {
-	HRESULT hr;
+	/*HRESULT hr;
 	DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"TeapotWarsHUD" ); // These events are to help PIX identify what the code is doing
 	V( m_SampleUI.OnRender( fElapsedTime ) );
-	DXUT_EndPerfEvent();
+	DXUT_EndPerfEvent();*/
+	m_SampleUI.OnRender((float)fElapsedTime);
 	return S_OK;
 };
 
-LRESULT CALLBACK MainMenuUI::VOnMsgProc( AppMsg msg )
+LRESULT MainMenuUI::VOnMsgProc( AppMsg msg )
 {
-	return m_SampleUI.MsgProc( msg.m_hWnd, msg.m_uMsg, msg.m_wParam, msg.m_lParam );
+	return m_SampleUI.MsgProc( msg.m_Event, msg.param1, msg.param2, msg.param3, msg.param4 );
 }
 
 
@@ -291,8 +292,8 @@ void MainMenuUI::_OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pCo
 
 		case CID_START_BUTTON:
         {
-			g_pApp->m_Options.m_numAIs = m_NumAIs;
-			g_pApp->m_Options.m_expectedPlayers = m_NumPlayers;
+			MODIFY_CONFIG_ELEMENT("NUM_AI",m_NumAIs);
+			MODIFY_CONFIG_ELEMENT("EXPECTED_PLAYERS", m_NumPlayers);
 			if (m_bCreatingGame)
 			{
 				if (m_LevelIndex == -1)
@@ -300,19 +301,19 @@ void MainMenuUI::_OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pCo
 					// FUTURE WORK - AN ERROR DIALOG WOULD BE GOOD HERE, OR JUST DEFALT THE SELECTION TO SOMETHING VALID
 					return;
 				}
-		        g_pApp->m_Options.m_Level = ws2s(m_Levels[m_LevelIndex]);
-				g_pApp->m_Options.m_gameHost = "";
-				g_pApp->m_Options.m_listenPort = atoi(m_HostListenPort.c_str());
+		        MODIFY_CONFIG_ELEMENT("LEVEL", ws2s(m_Levels[m_LevelIndex]));
+				MODIFY_CONFIG_ELEMENT("GAME_HOST", "");
+				MODIFY_CONFIG_ELEMENT("LISTEN_PORT", atoi(m_HostListenPort.c_str()));
 			}
 			else
 			{
-				g_pApp->m_Options.m_gameHost = m_HostName;
-				g_pApp->m_Options.m_listenPort = atoi(m_ClientAttachPort.c_str());
+				MODIFY_CONFIG_ELEMENT("GAME_HOST", m_HostName);
+				MODIFY_CONFIG_ELEMENT("LISTEN_PORT", atoi(m_ClientAttachPort.c_str()));
 			}
 
 			VSetVisible(false);
 
-            shared_ptr<EvtData_Request_Start_Game> pRequestStartGameEvent(GCC_NEW EvtData_Request_Start_Game());
+            shared_ptr<EvtData_Request_Start_Game> pRequestStartGameEvent(QSE_NEW EvtData_Request_Start_Game());
             IEventManager::Get()->VQueueEvent(pRequestStartGameEvent);
 
 			break;
@@ -320,23 +321,23 @@ void MainMenuUI::_OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pCo
 
 		default:
         {
-			GCC_ERROR("Unknown control.");
+			LOG_ERROR("Unknown control.");
         }
     }
 
 	Set();
 }
 
-void MainMenuUI::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
+void MainMenuUI::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext)
 {
-	MainMenuUI *ui = static_cast<MainMenuUI *>(pUserContext);
-	ui->_OnGUIEvent(nEvent, nControlID, pControl, pUserContext);
+	MainMenuUI *ui = static_cast<MainMenuUI *>(pContext);
+	ui->_OnGUIEvent(nEvent, nControlID, pControl);
 }
 
 
 MainMenuView::MainMenuView() : HumanView(shared_ptr<IRenderer>())
 {
-	m_MainMenuUI.reset(GCC_NEW MainMenuUI); 
+	m_MainMenuUI.reset(QSE_NEW MainMenuUI); 
 	VPushElement(m_MainMenuUI);
 }
 
@@ -357,7 +358,7 @@ void MainMenuView::VOnUpdate(unsigned long deltaMs)
 	HumanView::VOnUpdate( deltaMs );
 }
 
-LRESULT CALLBACK MainMenuView::VOnMsgProc( AppMsg msg )
+LRESULT MainMenuView::VOnMsgProc( AppMsg msg )
 {
 	if (m_MainMenuUI->VIsVisible() )
 	{
@@ -387,7 +388,7 @@ LRESULT CALLBACK MainMenuView::VOnMsgProc( AppMsg msg )
 //--------------------------------------------------------------------------------------
 //    Note: pUserContext added to comply with DirectX 9c - June 2005 Update
 //
-void StandardHUD::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
+void StandardHUD::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext)
 {
     /*switch( nControlID )
     {
@@ -401,10 +402,10 @@ void StandardHUD::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pCo
 StandardHUD::StandardHUD()
 {
     // Initialize dialogs
-	m_HUD.Init( &D3DRenderer::g_DialogResourceManager );
-    m_HUD.SetCallback( OnGUIEvent ); int iY = 10; 
-    m_HUD.AddButton( IDC_TOGGLEFULLSCREEN, L"Toggle full screen", 35, iY, 125, 22 );
-    m_HUD.AddButton( IDC_TOGGLEREF, L"Toggle REF (F3)", 35, iY += 24, 125, 22 );
+	m_HUD.Init( &GLRenderer_Base::g_DialogResourceManager );
+	m_HUD.SetCallback(OnGUIEvent); float fY = GLUF_NORMALIZE_COORD(10.0f);
+	m_HUD.AddButton(IDC_TOGGLEFULLSCREEN, L"Toggle full screen", GLUF_NORMALIZE_COORD(35.0f), fY, GLUF_NORMALIZE_COORD(125.0f), GLUF_NORMALIZE_COORD(22.0f));
+	m_HUD.AddButton(IDC_TOGGLEREF, L"Toggle REF (F3)", GLUF_NORMALIZE_COORD(35.0f), fY += GLUF_NORMALIZE_COORD(24.0f), GLUF_NORMALIZE_COORD(125.0f), GLUF_NORMALIZE_COORD(22.0f));
     //m_HUD.AddButton( IDC_CHANGEDEVICE, L"Change device (F2)", 35, iY += 24, 125, 22 );
 }
 
@@ -418,26 +419,26 @@ StandardHUD::~StandardHUD()
 
 HRESULT StandardHUD::VOnRestore()
 {
-    m_HUD.SetLocation( g_pApp->GetScreenSize().x - 170, 0 );
-    m_HUD.SetSize( 170, 170 );
+	m_HUD.SetLocation(GLUF_NORMALIZE_COORD(QuicksandEngine::g_pApp->GetScreenSize().x - 170.0f), GLUF_NORMALIZE_COORD(0.0f));
+	m_HUD.SetSize(GLUF_NORMALIZE_COORD(170.0f), GLUF_NORMALIZE_COORD(170.0f));
 	return S_OK;
 }
 
 
 
-HRESULT StandardHUD::VOnRender(double fTime, float fElapsedTime)
+HRESULT StandardHUD::VOnRender(double fTime, double fElapsedTime)
 {
 	HRESULT hr;
-	DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"StandardUI" ); // These events are to help PIX identify what the code is doing
-	V( m_HUD.OnRender( fElapsedTime ) );
-	DXUT_EndPerfEvent();
+	//DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"StandardUI" ); // These events are to help PIX identify what the code is doing
+	V( m_HUD.OnRender( (float)fElapsedTime ) );
+	//DXUT_EndPerfEvent();
 	return S_OK;
 };
 
 
-LRESULT CALLBACK StandardHUD::VOnMsgProc( AppMsg msg )
+LRESULT StandardHUD::VOnMsgProc( AppMsg msg )
 {
-    return m_HUD.MsgProc( msg.m_hWnd, msg.m_uMsg, msg.m_wParam, msg.m_lParam );
+    return m_HUD.MsgProc( msg.m_Event, msg.param1, msg.param2, msg.param3, msg.param4 );
 }
 
 
@@ -466,26 +467,26 @@ TeapotWarsHumanView::~TeapotWarsHumanView()
 //
 // TeapotWarsHumanView::VOnMsgProc				- Chapter 19, page 727
 //
-LRESULT CALLBACK TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
+LRESULT TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
 {
 	if (HumanView::VOnMsgProc(msg))
 		return 1;
 
-	if (msg.m_uMsg==WM_KEYDOWN)
+	if (msg.m_Event==GM_KEY && msg.param3 == GLFW_PRESS)
 	{
-		if (msg.m_wParam==VK_F1)
+		if (msg.param1==GLFW_KEY_F1)
 		{
 			m_bShowUI = !m_bShowUI;
 			//m_StandardHUD->VSetVisible(m_bShowUI);
 			return 1;
 		}
-		else if (msg.m_wParam==VK_F2)
+		else if (msg.param1 == GLFW_KEY_F2)
 		{
 			// test the picking API
 
 			POINT ptCursor;
 			GetCursorPos( &ptCursor );
-			ScreenToClient( g_pApp->GetHwnd(), &ptCursor );
+			ScreenToClient(QuicksandEngine::g_pApp->GetHwnd(), &ptCursor);
 
 			RayCast rayCast(ptCursor);
 			m_pScene->Pick(&rayCast);
@@ -497,7 +498,7 @@ LRESULT CALLBACK TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
 				int a = 0;
 			}
 		}
-		else if (msg.m_wParam==VK_F3)
+		else if (msg.param1 == GLFW_KEY_F3)
 		{
 			//extern void CreateThreads();
 			//CreateThreads();
@@ -517,27 +518,27 @@ LRESULT CALLBACK TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
 			extern void testRealtimeDecompression(ProcessManager *procMgr);
 			testRealtimeDecompression(m_pProcessManager);
 		}
-        else if (msg.m_wParam == VK_F4)
+		else if (msg.param1 == GLFW_KEY_F4)
         {
             Resource resource("scripts\\test.lua");
-            shared_ptr<ResHandle> pResourceHandle = g_pApp->m_ResCache->GetHandle(&resource);  // this actually loads the Lua file from the zip file
+			shared_ptr<ResHandle> pResourceHandle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&resource);  // this actually loads the Lua file from the zip file
         }
-        else if (msg.m_wParam == VK_F5)
+		else if (msg.param1 == GLFW_KEY_F5)
         {
-            shared_ptr<EvtData_ScriptEventTest_ToLua> pEvent(GCC_NEW EvtData_ScriptEventTest_ToLua);
+            shared_ptr<EvtData_ScriptEventTest_ToLua> pEvent(QSE_NEW EvtData_ScriptEventTest_ToLua);
             IEventManager::Get()->VQueueEvent(pEvent);
         }
-        else if (msg.m_wParam == VK_F6)
+		else if (msg.param1 == GLFW_KEY_F6)
         {
             LuaStateManager::Get()->VExecuteString("TestProcess()");
         }
-		else if (msg.m_wParam==VK_F8)
+		else if (msg.param1 == GLFW_KEY_F8)
 		{
-			TeapotWarsLogic *twg = static_cast<TeapotWarsLogic *>(g_pApp->m_pGame);
+			TeapotWarsLogic *twg = static_cast<TeapotWarsLogic *>(QuicksandEngine::g_pApp->m_pGame);
 			twg->ToggleRenderDiagnostics();
 
 		}
-		else if (msg.m_wParam==VK_F9)
+		else if (msg.param1 == GLFW_KEY_F9)
 		{
 			m_KeyboardHandler = m_pTeapotController;
 			m_PointerHandler = m_pTeapotController;
@@ -546,20 +547,20 @@ LRESULT CALLBACK TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
 			ReleaseCapture();
 			return 1;
 		}
-		else if (msg.m_wParam==VK_F11)
+		else if (msg.param1 == GLFW_KEY_F11)
 		{
 			m_KeyboardHandler = m_pFreeCameraController;
 			m_PointerHandler = m_pFreeCameraController;
 			m_pCamera->ClearTarget();
 			//m_pTeapot->SetAlpha(fOPAQUE);
-			SetCapture(g_pApp->GetHwnd());
+			SetCapture(QuicksandEngine::g_pApp->GetHwnd());
 			return 1;
 		}
-		else if (msg.m_wParam=='Q' || msg.m_wParam==VK_ESCAPE)				// Jan 2010 - mlm - added VK_ESCAPE since it is on the onscreen help!
+		else if (msg.param1=='Q' || msg.param1==GLFW_KEY_ESCAPE)				// Jan 2010 - mlm - added VK_ESCAPE since it is on the onscreen help!
 		{
-			if (MessageBox::Ask(QUESTION_QUIT_GAME)==IDYES)
+			if (::GLMessageBox::Ask(QUESTION_QUIT_GAME)==IDYES)
 			{
-				g_pApp->SetQuitting(true);
+				QuicksandEngine::g_pApp->SetQuitting(true);
 			}
 			return 1;
 		}
@@ -574,45 +575,47 @@ LRESULT CALLBACK TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
 //
 void TeapotWarsHumanView::VRenderText()
 {
-	if (!D3DRenderer::g_pTextHelper)
+	if (!GLRenderer_Base::g_pTextHelper)
 		return;
 
 	HumanView::VRenderText();
 
-	D3DRenderer::g_pTextHelper->Begin();
+	GLRenderer_Base::g_pTextHelper->Begin(g_ArielFontLocation);
 
     // Gameplay UI (with shadow)....
     if (!m_gameplayText.empty())
     {
-	    D3DRenderer::g_pTextHelper->SetInsertionPos( g_pApp->GetScreenSize().x/2, 5 );
-	    D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 0.0f, 0.0f, 0.0f, 1.0f ) );
-	    D3DRenderer::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
-	    D3DRenderer::g_pTextHelper->SetInsertionPos( g_pApp->GetScreenSize().x/2-1, 5-1 );
-	    D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 0.25f, 1.0f, 0.25f, 1.0f ) );
-	    D3DRenderer::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint((float)QuicksandEngine::g_pApp->GetScreenSize().x / 2.0f, 5.0f)));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(GLUF::Color(0, 0, 0, 255));
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint((float)QuicksandEngine::g_pApp->GetScreenSize().x / 2.0f - 1.0f, 5.0f - 1.0f)));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(GLUF::Color(64, 255, 64, 255));
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
     }
 	// ...Gameplay UI
 
 	if( m_bShowUI )
 	{
-		// Output statistics...
-		D3DRenderer::g_pTextHelper->SetInsertionPos( 5, 5 );
-		D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 1.0f, 1.0f, 0.0f, 1.0f ) );
-		D3DRenderer::g_pTextHelper->DrawTextLine( DXUTGetFrameStats() );
-		D3DRenderer::g_pTextHelper->DrawTextLine( DXUTGetDeviceStats() );
+		// Output statistics... TODO:
+		/*GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint(5, 5)));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 255, 255, 255));
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(DXUTGetFrameStats());
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(DXUTGetDeviceStats());*/
 		//...output statistics
-		
-		D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 0.0f, 0.0f, 0.0f, 0.5f ) );
+
+
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint(5, 5)));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0, 0, 0, 128));
 
 		//Game State...
 		switch (m_BaseGameState)
 		{
 			case BGS_Initializing:
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_INITIALIZING")).c_str());
+				GLRenderer_Base::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_INITIALIZING")).c_str());
 				break;
 
 			case BGS_MainMenu:
-				D3DRenderer::g_pTextHelper->DrawTextLine(L"Main Menu");
+				GLRenderer_Base::g_pTextHelper->DrawTextLine(L"Main Menu");
 				break;
 
 //			case BGS_SpawnAI:
@@ -620,18 +623,18 @@ void TeapotWarsHumanView::VRenderText()
 //				break;
 
 			case BGS_WaitingForPlayers:
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_WAITING")).c_str());
+				GLRenderer_Base::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_WAITING")).c_str());
 				break;
 
 			case BGS_LoadingGameEnvironment:
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_LOADING")).c_str());
+				GLRenderer_Base::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_LOADING")).c_str());
 				break;
 
 			case BGS_Running:
 #ifndef DISABLE_PHYSICS
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_RUNNING")).c_str());
+				GLRenderer_Base::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_RUNNING")).c_str());
 #else
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_NOPHYSICS")).c_str());
+				D3DRenderer::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_NOPHYSICS")).c_str());
 #endif //!DISABLE_PHYSICS
 				break;
 		}
@@ -640,31 +643,31 @@ void TeapotWarsHumanView::VRenderText()
 		//Camera...
 		TCHAR buffer[256];
 		const TCHAR *s = NULL;
-		Mat4x4 toWorld;
-		Mat4x4 fromWorld;
+		glm::mat4 toWorld;
+		glm::mat4 fromWorld;
 		if (m_pCamera)
 		{	
 			m_pCamera->VGet()->Transform(&toWorld, &fromWorld);
 		}
-		swprintf(buffer, g_pApp->GetString(_T("IDS_CAMERA_LOCATION")).c_str(), toWorld.m[3][0], toWorld.m[3][1], toWorld.m[3][2]);
-		D3DRenderer::g_pTextHelper->DrawTextLine( buffer );
+		swprintf(buffer, QuicksandEngine::g_pApp->GetString(_T("IDS_CAMERA_LOCATION")).c_str(), toWorld[3][0], toWorld[3][1], toWorld[3][2]);
+		GLRenderer_Base::g_pTextHelper->DrawTextLine( buffer );
 		//...Camera
 
 		//Help text.  Right justified, lower right of screen.
-		RECT helpRect;
+		GLUFRect helpRect;
 		helpRect.left = 0;
-		helpRect.right = g_pApp->GetScreenSize().x - 10;
-		helpRect.top = g_pApp->GetScreenSize().y - 15*8;
-		helpRect.bottom = g_pApp->GetScreenSize().y;
-		D3DRenderer::g_pTextHelper->SetInsertionPos( helpRect.right, helpRect.top );
-		D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 1.0f, 0.75f, 0.0f, 1.0f ) );
-		D3DRenderer::g_pTextHelper->DrawTextLine( helpRect, DT_RIGHT, g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str() );
-		helpRect.top = g_pApp->GetScreenSize().y-15*7;
-		D3DRenderer::g_pTextHelper->DrawTextLine( helpRect, DT_RIGHT, g_pApp->GetString(_T("IDS_CONTROLS")).c_str() );
+		helpRect.right = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().x - 10.0f);
+		helpRect.top = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().y + 15.0f * 8.0f);
+		helpRect.bottom = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().y);
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(helpRect.right, helpRect.top));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 192, 0, 255));
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, DT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str());
+		helpRect.top = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().y + 15.0f * 7.0f);
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, DT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS")).c_str());
 		//...Help
 	}//end if (m_bShowUI)
 
-	D3DRenderer::g_pTextHelper->End();
+	GLRenderer_Base::g_pTextHelper->End();
 }
 
 
@@ -687,7 +690,7 @@ void TeapotWarsHumanView::VOnUpdate(unsigned long deltaMs)
 	}
 
 	//Send out a tick to listeners.
-	shared_ptr<EvtData_Update_Tick> pTickEvent(GCC_NEW EvtData_Update_Tick(deltaMs));
+	shared_ptr<EvtData_Update_Tick> pTickEvent(QSE_NEW EvtData_Update_Tick(deltaMs));
     IEventManager::Get()->VTriggerEvent(pTickEvent);
 }
 
@@ -699,18 +702,18 @@ void TeapotWarsHumanView::VOnAttach(GameViewId vid, ActorId aid)
 	HumanView::VOnAttach(vid, aid);
 }
 
-bool TeapotWarsHumanView::VLoadGameDelegate(TiXmlElement* pLevelData)
+bool TeapotWarsHumanView::VLoadGameDelegate(tinyxml2::XMLElement* pLevelData)
 {
 	if (!HumanView::VLoadGameDelegate(pLevelData))
 		return false;
 
-    m_StandardHUD.reset(GCC_NEW StandardHUD); 
+    m_StandardHUD.reset(QSE_NEW StandardHUD); 
     VPushElement(m_StandardHUD);
 
     // A movement controller is going to control the camera, 
     // but it could be constructed with any of the objects you see in this
     // function. You can have your very own remote controlled sphere. What fun...
-    m_pFreeCameraController.reset(GCC_NEW MovementController(m_pCamera, 0, 0, false));
+    m_pFreeCameraController.reset(QSE_NEW MovementController(m_pCamera, 0, 0, false));
 
     m_pScene->VOnRestore();
     return true;
@@ -721,13 +724,13 @@ void TeapotWarsHumanView::VSetControlledActor(ActorId actorId)
 	m_pTeapot = static_pointer_cast<SceneNode>(m_pScene->FindActor(actorId));
     if (!m_pTeapot)
     {
-        GCC_ERROR("Invalid teapot");
+        LOG_ERROR("Invalid teapot");
         return;
     }
 
 	HumanView::VSetControlledActor(actorId);
 
-    m_pTeapotController.reset(GCC_NEW TeapotController(m_pTeapot));
+    m_pTeapotController.reset(QSE_NEW TeapotController(m_pTeapot));
     m_KeyboardHandler = m_pTeapotController;
     m_PointerHandler = m_pTeapotController;
     m_pCamera->SetTarget(m_pTeapot);
@@ -782,5 +785,5 @@ AITeapotView::AITeapotView(shared_ptr<PathingGraph> pPathingGraph) : IGameView()
 //
 AITeapotView::~AITeapotView(void)
 {
-    GCC_LOG("AI", "Destroying AITeapotView");
+    LOG_WRITE(ConcatString("AI", "Destroying AITeapotView"));
 }

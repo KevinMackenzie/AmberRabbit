@@ -37,9 +37,9 @@
 //
 //========================================================================
 
-#include "../GCC4/EventManager/EventManager.h"
-#include "../GCC4/EventManager/Events.h"
-#include "../GCC4/LUAScripting/ScriptEvent.h"
+#include "../QuicksandEngine/EventManager/EventManager.hpp"
+#include "../QuicksandEngine/EventManager/Events.hpp"
+#include "../QuicksandEngine/LUAScripting/ScriptEvent.hpp"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr ( GCC_NEW EvtData_Fire_Weapon (m_id) );
+        return IEventDataPtr ( QSE_NEW EvtData_Fire_Weapon (m_id) );
     }
 
     virtual void VSerialize( std::ostrstream & out ) const
@@ -99,7 +99,7 @@ public:
             }
             else
             {
-                GCC_ERROR("Invalid id sent to EvtData_Fire_Weapon; type = " + std::string(temp.TypeName()));
+                LOG_ERROR("Invalid id sent to EvtData_Fire_Weapon; type = " + std::string(temp.TypeName()));
                 return false;
             }
             return true;
@@ -150,7 +150,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr (GCC_NEW EvtData_StartThrust(m_id, m_acceleration));
+        return IEventDataPtr (QSE_NEW EvtData_StartThrust(m_id, m_acceleration));
     }
 
     virtual void VSerialize(std::ostrstream & out) const
@@ -197,7 +197,7 @@ public:
             }
             else
             {
-                GCC_ERROR("Invalid id sent to EvtData_StartThrust; type = " + std::string(temp.TypeName()));
+                LOG_ERROR("Invalid id sent to EvtData_StartThrust; type = " + std::string(temp.TypeName()));
                 return false;
             }
 
@@ -246,7 +246,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr (GCC_NEW EvtData_EndThrust(m_id));
+        return IEventDataPtr (QSE_NEW EvtData_EndThrust(m_id));
     }
 
     virtual void VSerialize(std::ostrstream & out) const
@@ -286,7 +286,7 @@ public:
             }
             else
             {
-                GCC_ERROR("Invalid id sent to EvtData_EndThrust; type = " + std::string(temp.TypeName()));
+                LOG_ERROR("Invalid id sent to EvtData_EndThrust; type = " + std::string(temp.TypeName()));
                 return false;
             }
 
@@ -331,7 +331,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr(GCC_NEW EvtData_StartSteer(m_id, m_acceleration));
+        return IEventDataPtr(QSE_NEW EvtData_StartSteer(m_id, m_acceleration));
     }
 
     virtual void VSerialize(std::ostrstream & out) const
@@ -378,7 +378,7 @@ public:
             }
             else
             {
-                GCC_ERROR("Invalid id sent to EvtData_StartSteer; type = " + std::string(temp.TypeName()));
+                LOG_ERROR("Invalid id sent to EvtData_StartSteer; type = " + std::string(temp.TypeName()));
                 return false;
             }
 
@@ -427,7 +427,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr (GCC_NEW EvtData_EndThrust(m_id));
+        return IEventDataPtr (QSE_NEW EvtData_EndThrust(m_id));
     }
 
     virtual void VSerialize(std::ostrstream & out) const
@@ -467,7 +467,7 @@ public:
             }
             else
             {
-                GCC_ERROR("Invalid id sent to EvtData_EndSteer; type = " + std::string(temp.TypeName()));
+                LOG_ERROR("Invalid id sent to EvtData_EndSteer; type = " + std::string(temp.TypeName()));
                 return false;
             }
 
@@ -504,7 +504,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr(GCC_NEW EvtData_Gameplay_UI_Update(m_gameplayUiString));
+        return IEventDataPtr(QSE_NEW EvtData_Gameplay_UI_Update(m_gameplayUiString));
     }
 
     virtual void VSerialize(std::ostrstream& out) const
@@ -556,7 +556,7 @@ public:
 
     virtual IEventDataPtr VCopy() const
     {
-        return IEventDataPtr(GCC_NEW EvtData_Set_Controlled_Actor(m_id));
+        return IEventDataPtr(QSE_NEW EvtData_Set_Controlled_Actor(m_id));
     }
 
     virtual void VSerialize(std::ostrstream& out) const
@@ -602,7 +602,7 @@ public:
 
     virtual IEventDataPtr VCopy(void) const
     {
-        shared_ptr<EvtData_ScriptEventTest_ToLua> pCopy(GCC_NEW EvtData_ScriptEventTest_ToLua(m_num));
+        shared_ptr<EvtData_ScriptEventTest_ToLua> pCopy(QSE_NEW EvtData_ScriptEventTest_ToLua(m_num));
         pCopy->m_eventData = m_eventData;
         return pCopy;
     }
@@ -630,7 +630,7 @@ public:
 
     virtual IEventDataPtr VCopy(void) const
     {
-        shared_ptr<EvtData_ScriptEventTest_FromLua> pCopy(GCC_NEW EvtData_ScriptEventTest_FromLua(m_num));
+        shared_ptr<EvtData_ScriptEventTest_FromLua> pCopy(QSE_NEW EvtData_ScriptEventTest_FromLua(m_num));
         pCopy->m_eventData = m_eventData;
         return pCopy;
     }

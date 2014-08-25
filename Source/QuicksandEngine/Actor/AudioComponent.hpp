@@ -8,7 +8,7 @@
 // [rez] This component was never directly described anywhere in the book but it's used to allow actors to trigger 
 // sound effects.
 //---------------------------------------------------------------------------------------------------------------------
-class AudioComponent : public ActorComponent
+class  AudioComponent : public ActorComponent
 {
 	string m_audioResource;
 	bool m_looping;

@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 
 template <class T>
-class singleton
+class QSE_API singleton
 {
 	T m_OldValue;
 	T* m_pGlobalValue;
@@ -59,10 +59,10 @@ shared_ptr<Type> MakeStrongPtr(weak_ptr<Type> pWeakPtr)
 
 #include <new>
 
-class optional_empty { };
+class QSE_API optional_empty { };
 
 template <unsigned long size>
-class optional_base
+class QSE_API optional_base
 {
 public:
 	// Default - invalid.
@@ -89,7 +89,7 @@ protected:
 };
 
 template <class T>
-class optional : public optional_base<sizeof(T)>
+class QSE_API optional : public optional_base<sizeof(T)>
 {
 public:
 	// Default - invalid.
@@ -201,7 +201,7 @@ template <class BaseType, class SubType>
 BaseType* GenericObjectCreationFunction(void) { return new SubType; }
 
 template <class BaseClass, class IdType>
-class GenericObjectFactory
+class QSE_API GenericObjectFactory
 {
 	typedef BaseClass* (*ObjectCreationFunction)(void);
 	std::map<IdType, ObjectCreationFunction> m_creationFunctions;

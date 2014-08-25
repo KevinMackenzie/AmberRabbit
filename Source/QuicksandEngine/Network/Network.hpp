@@ -132,7 +132,7 @@ public:
 
 	void HandleException() { m_deleteFlag |= 1; }
 
-	void SetTimeOut(unsigned int ms=45*1000) { m_timeOut = timeGetTime() + ms; }
+	void SetTimeOut(unsigned int ms=45*1000) { m_timeOut = GLUFGetTimeMs() + ms; }
 
 	int GetIpAddress() { return m_ipaddr; }
 

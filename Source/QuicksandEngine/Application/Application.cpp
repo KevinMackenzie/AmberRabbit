@@ -112,6 +112,8 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 	float currentTime = GLUFGetTimef();
 	while (QuicksandEngine::g_pApp->IsRunning())
 	{
+		GLUFStats();
+
 		// Update the game views, but nothing else!
 		// Remember this is a modal screen.
 		float timeNow = GLUFGetTimef();

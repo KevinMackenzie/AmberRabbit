@@ -102,7 +102,7 @@ GLTextureResourceExtraData::~GLTextureResourceExtraData()
 {
 }
 
-ILenum GetTextureType(std::string pattern)
+/*ILenum GetTextureType(std::string pattern)
 {
 	if (pattern == "*.dds")
 		return IL_DDS;
@@ -112,7 +112,7 @@ ILenum GetTextureType(std::string pattern)
 		return IL_JPG;
 	else
 		return UNSUPPORTED_IMAGE_FORMAT;
-}
+}*/
 
 unsigned int TextureResourceLoader::VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize)
 {

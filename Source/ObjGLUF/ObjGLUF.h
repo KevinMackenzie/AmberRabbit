@@ -65,6 +65,8 @@
 #endif
 #endif
 
+//call this once per frame
+#define GLUFStats GLUF::GLUFStats_func
 
 
 
@@ -122,6 +124,8 @@ typedef unsigned long GLUFResult;
 #define GLUFTRACE_ERR(str, gr) GLUFTrace(__FILE__, __FUNCTION__, (unsigned long)__LINE__, gr, str);
 
 OBJGLUF_API GLUFResult GLUFTrace(const char*, const char*, unsigned long, GLUFResult, const char*);
+
+OBJGLUF_API void GLUFStats_func();
 
 //not defined if not windows
 #ifndef _T
@@ -189,6 +193,16 @@ struct OBJGLUF_API GLUFPoint
 	GLUFPoint(float val1, float val2) : x(val1), y(val2){}
 	GLUFPoint() : x(0), y(0){}
 };
+
+inline GLUFPoint operator /(const GLUFPoint& pt0, const GLUFPoint& pt1)
+{
+	return{ pt0.x / pt1.x, pt0.y / pt1.y };
+}
+
+inline GLUFPoint operator /(const GLUFPoint& pt0, const float& f)
+{
+	return{ pt0.x / f, pt0.y / f };
+}
 
 inline GLUFPoint operator -(const GLUFPoint& pt0, const GLUFPoint& pt1)
 {

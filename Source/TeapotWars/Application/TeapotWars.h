@@ -81,7 +81,7 @@ public:
 
 	// Update
 	virtual void VSetProxy();
-    virtual void VMoveActor(const ActorId id, Mat4x4 const &mat);
+    virtual void VMoveActor(const ActorId id, glm::mat4 const &mat);
 
 	// Overloads
 	virtual void VChangeState(BaseGameState newState);

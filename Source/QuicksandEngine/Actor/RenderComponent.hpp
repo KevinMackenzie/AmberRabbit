@@ -10,7 +10,7 @@
 // delegated to the subclass through a factory method:
 // http://en.wikipedia.org/wiki/Factory_method_pattern
 //---------------------------------------------------------------------------------------------------------------------
-class BaseRenderComponent : public RenderComponentInterface
+class  BaseRenderComponent : public RenderComponentInterface
 {
 protected:
     Color m_color;
@@ -42,7 +42,7 @@ private:
 // time towards the end of the project.  The other classes are important for testing since programming tends to move 
 // a lot faster than art in the early stages of development.
 //---------------------------------------------------------------------------------------------------------------------
-class MeshRenderComponent : public BaseRenderComponent
+class  MeshRenderComponent : public BaseRenderComponent
 {
 public:
 	static const char *g_Name;
@@ -58,7 +58,7 @@ protected:
 //---------------------------------------------------------------------------------------------------------------------
 // Spheres, which Teapot Wars uses as projectiles.
 //---------------------------------------------------------------------------------------------------------------------
-class SphereRenderComponent : public BaseRenderComponent
+class  SphereRenderComponent : public BaseRenderComponent
 {
     unsigned int m_segments;
 	float m_radius;
@@ -82,7 +82,7 @@ protected:
 // Teapots, which are the main characters in the game.  DirectX actually has a function that generates a teapot Mesh
 // so we might as well use it.  We're game programmers, not artists.  ;)
 //---------------------------------------------------------------------------------------------------------------------
-/*class TeapotRenderComponent : public BaseRenderComponent
+/*class  TeapotRenderComponent : public BaseRenderComponent
 {
 public:
 	static const char *g_Name;
@@ -99,7 +99,7 @@ protected:
 //---------------------------------------------------------------------------------------------------------------------
 // Grids, which represent the world
 //---------------------------------------------------------------------------------------------------------------------
-class GridRenderComponent : public BaseRenderComponent
+class  GridRenderComponent : public BaseRenderComponent
 {
     string m_textureResource;
     int m_squares;
@@ -124,7 +124,7 @@ protected:
 //---------------------------------------------------------------------------------------------------------------------
 // Lights
 //---------------------------------------------------------------------------------------------------------------------
-class LightRenderComponent : public BaseRenderComponent
+class  LightRenderComponent : public BaseRenderComponent
 {
 	LightProperties m_Props; 
 
@@ -143,7 +143,7 @@ protected:
 };
 
 
-class SkyRenderComponent : public BaseRenderComponent
+class  SkyRenderComponent : public BaseRenderComponent
 {
 	string m_textureResource;
 

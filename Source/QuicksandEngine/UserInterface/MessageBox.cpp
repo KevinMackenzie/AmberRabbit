@@ -8,8 +8,9 @@
 //
 // class MessageBox::OnGUIEvent					- Chapter 10, page 292 & 296
 //
-void GLMessageBox::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl)
+void GLMessageBox::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext)
 {
+	//TODO: this? what does it do and what do i change it to
 	PostMessage(QuicksandEngine::g_pApp->GetHwnd(), g_MsgEndModal, 0, nControlID);
 }
 
@@ -20,7 +21,7 @@ GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags
 {
 	// Initialize dialogs
 	m_UI.Init( &GLRenderer::g_DialogResourceManager );
-    m_UI.SetCallback( OnGUIEvent ); 
+    m_UI.SetCallback( OnGUIEvent, this); 
 
 	// Find the dimensions of the message
  	GLUFRect rc;

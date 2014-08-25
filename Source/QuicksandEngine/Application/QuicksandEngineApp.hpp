@@ -20,7 +20,7 @@ class HumanView;
 
 
 
-class QuicksandEngineApp
+class  QuicksandEngineApp
 {
 
 
@@ -175,7 +175,7 @@ private:
 
 namespace QuicksandEngine
 {
-	extern QuicksandEngineApp *g_pApp;
+	extern  QuicksandEngineApp *g_pApp;
 }
 
 #endif

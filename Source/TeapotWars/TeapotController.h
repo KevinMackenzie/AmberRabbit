@@ -37,7 +37,7 @@
 //
 //========================================================================
 
-#include "../GCC4/GameCode4/Interfaces.h"
+#include "../QuicksandEngine/Application/Interfaces.hpp"
 
 class SceneNode;
 

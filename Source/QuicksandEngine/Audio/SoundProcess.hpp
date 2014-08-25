@@ -15,7 +15,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-class SoundProcess : public Process
+class  SoundProcess : public Process
 {
 protected:
     shared_ptr<ResHandle> m_handle;			// this is the raw sound data
@@ -61,7 +61,7 @@ protected:
 //
 /////////////////////////////////////////////////////////////////////////////
 
-class ExplosionProcess : public Process
+class  ExplosionProcess : public Process
 {
 protected:
     int m_Stage;
@@ -84,7 +84,7 @@ protected:
 //
 /////////////////////////////////////////////////////////////////////////////
 
-class FadeProcess : public Process
+class  FadeProcess : public Process
 {
 protected:
 	shared_ptr<SoundProcess> m_Sound;

@@ -36,9 +36,9 @@
 //
 //========================================================================
 
-#include "TeapotWarsStd.h"
+#include "../QuicksandEngine/Stdafx.hpp"
 #include "TeapotEvents.h"
-#include "../GCC4/LUAScripting/LuaStateManager.h"
+#include "../QuicksandEngine/LUAScripting/LuaStateManager.hpp"
 
 
 // Note: these are game specific events, which really should be in TeapotEvents.cpp.

@@ -13,9 +13,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="TeapotWars.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
@@ -41,9 +38,6 @@
     <ClCompile Include="..\..\Source\TeapotWars\TeapotController.cpp">
       <Filter>TeapotWars</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\TeapotWars\TeapotEvents.h">
@@ -57,18 +51,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\TeapotWars\TeapotController.h">
       <Filter>TeapotWars</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TeapotWars\Application\Resource.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TeapotWars\Application\targetver.h">
-      <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotResources.h">
       <Filter>Application</Filter>

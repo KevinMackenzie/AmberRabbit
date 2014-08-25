@@ -35,12 +35,12 @@
 //
 //========================================================================
 
-#include "TeapotWarsStd.h"
+#include "../QuicksandEngine/Stdafx.hpp"
 
-#include "../GCC4/GameCode4/GameCode.h"
-#include "../GCC4/Graphics3D/SceneNodes.h"
-#include "../GCC4/EventManager/EventManager.h"
-#include "../GCC4/Physics/PhysicsEventListener.h"
+#include "../QuicksandEngine/Application/QuicksandEngineApp.hpp"
+#include "../QuicksandEngine/Graphics3D/SceneNode.hpp"
+#include "../QuicksandEngine/EventManager/EventManager.hpp"
+#include "../QuicksandEngine/Physics/PhysicsEventListener.hpp"
 
 #include "TeapotController.h"
 #include "TeapotEvents.h"
@@ -74,8 +74,8 @@ bool TeapotController::VOnPointerButtonDown(const Point &mousePos, const int rad
 	if (buttonName != "PointerLeft")
 		return false;
 	ActorId actorId = m_object->VGet()->ActorId();
-	GCC_ASSERT(actorId != INVALID_ACTOR_ID && _T("The teapot controller isn't attached to a valid actor!"));
-    shared_ptr<EvtData_Fire_Weapon> pFireEvent(GCC_NEW EvtData_Fire_Weapon(actorId));
+	LOG_ASSERT(actorId != INVALID_ACTOR_ID && _T("The teapot controller isn't attached to a valid actor!"));
+    shared_ptr<EvtData_Fire_Weapon> pFireEvent(QSE_NEW EvtData_Fire_Weapon(actorId));
     IEventManager::Get()->VQueueEvent(pFireEvent);
 	return true;
 }
@@ -99,7 +99,7 @@ bool TeapotController::VOnKeyDown(const BYTE c)
     if (c == 'W' || c == 'S')
     {
         const ActorId actorId = m_object->VGet()->ActorId();
-        shared_ptr<EvtData_StartThrust> pEvent(GCC_NEW EvtData_StartThrust(actorId, (c == 'W' ? ACTOR_ACCELERATION : (-ACTOR_ACCELERATION))));
+        shared_ptr<EvtData_StartThrust> pEvent(QSE_NEW EvtData_StartThrust(actorId, (c == 'W' ? ACTOR_ACCELERATION : (-ACTOR_ACCELERATION))));
         IEventManager::Get()->VQueueEvent(pEvent);
     }
 
@@ -107,7 +107,7 @@ bool TeapotController::VOnKeyDown(const BYTE c)
     if (c == 'A' || c == 'D')
     {
         const ActorId actorId = m_object->VGet()->ActorId();
-        shared_ptr<EvtData_StartSteer> pEvent(GCC_NEW EvtData_StartSteer(actorId, (c == 'D' ? ACTOR_ANGULAR_ACCELERATION : (-ACTOR_ANGULAR_ACCELERATION))));
+        shared_ptr<EvtData_StartSteer> pEvent(QSE_NEW EvtData_StartSteer(actorId, (c == 'D' ? ACTOR_ANGULAR_ACCELERATION : (-ACTOR_ANGULAR_ACCELERATION))));
         IEventManager::Get()->VQueueEvent(pEvent);
     }
 
@@ -123,7 +123,7 @@ bool TeapotController::VOnKeyUp(const BYTE c)
     if (c == 'W' || c == 'S')
     {
         const ActorId actorId = m_object->VGet()->ActorId();
-        shared_ptr<EvtData_EndThrust> pEvent(GCC_NEW EvtData_EndThrust(actorId));
+        shared_ptr<EvtData_EndThrust> pEvent(QSE_NEW EvtData_EndThrust(actorId));
         IEventManager::Get()->VQueueEvent(pEvent);
     }
 
@@ -131,7 +131,7 @@ bool TeapotController::VOnKeyUp(const BYTE c)
     if (c == 'A' || c == 'D')
     {
         const ActorId actorId = m_object->VGet()->ActorId();
-        shared_ptr<EvtData_EndSteer> pEvent(GCC_NEW EvtData_EndSteer(actorId));
+        shared_ptr<EvtData_EndSteer> pEvent(QSE_NEW EvtData_EndSteer(actorId));
         IEventManager::Get()->VQueueEvent(pEvent);
     }
 

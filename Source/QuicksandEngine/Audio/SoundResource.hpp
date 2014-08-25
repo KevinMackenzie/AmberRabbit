@@ -12,10 +12,10 @@
 //
 // class SoundResourceExtraData				- Chapter 13, page 399
 //
-class SoundResourceExtraData : public IResourceExtraData
+class  SoundResourceExtraData : public IResourceExtraData
 {
-	friend class WaveResourceLoader;
-	friend class OggResourceLoader;
+	friend class  WaveResourceLoader;
+	friend class  OggResourceLoader;
 
 public: 	
 	SoundResourceExtraData();
@@ -36,7 +36,7 @@ protected:
 //
 // class WaveResourceLoader						- Chapter 13, page 399
 //
-class WaveResourceLoader : public IResourceLoader
+class  WaveResourceLoader : public IResourceLoader
 {
 public:
 	virtual bool VUseRawFile() { return false; }
@@ -53,7 +53,7 @@ protected:
 //
 // class OggResourceLoader						- Chapter 13, page 399
 //
-class OggResourceLoader : public IResourceLoader
+class  OggResourceLoader : public IResourceLoader
 {
 public:
 	virtual bool VUseRawFile() { return false; }

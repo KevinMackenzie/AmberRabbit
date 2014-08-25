@@ -68,19 +68,27 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>94763d8d</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>31723fe3</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -94,6 +102,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -143,9 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="TeapotWars.rc" />
   </ItemGroup>
   <ItemGroup>
@@ -153,18 +161,13 @@
     <Image Include="TeapotWars.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.cpp" />
     <ClCompile Include="..\..\Source\TeapotWars\TeapotController.cpp" />
     <ClCompile Include="..\..\Source\TeapotWars\TeapotEvents.cpp" />
     <ClCompile Include="..\..\Source\TeapotWars\TeapotWars.cpp" />
     <ClCompile Include="..\..\Source\TeapotWars\TeapotWarsView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\TeapotWars\Application\Resource.h" />
-    <ClInclude Include="..\..\Source\TeapotWars\Application\targetver.h" />
     <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotResources.h" />
-    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars.h" />
-    <ClInclude Include="..\..\Source\TeapotWars\Application\TeapotWars_2010.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotController.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotEvents.h" />
     <ClInclude Include="..\..\Source\TeapotWars\TeapotWars.h" />
@@ -172,8 +175,32 @@
     <ClInclude Include="..\..\Source\TeapotWars\TeapotWarsView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bullet\BulletCollision.vcxproj">
+      <Project>{da88b8c3-bc36-0c4c-8364-f4be59a2c98e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\BulletDynamics.vcxproj">
+      <Project>{a48bec65-b241-7f4e-92bb-25328c769ace}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\BulletSoftBody.vcxproj">
+      <Project>{25913f80-4a7a-d34c-9fe4-c54db232ac6a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\ConvexDecomposition.vcxproj">
+      <Project>{9f237ae8-6f61-6249-9ac3-e797479648c8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\HACD.vcxproj">
+      <Project>{55ba09a5-0bdd-e94c-9831-893a5fc347a7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Bullet\LinearMath.vcxproj">
+      <Project>{25a1937a-d0f1-a348-82a6-bf1036c32f4c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjGLUF\ObjGLUF.vcxproj">
+      <Project>{06ddd1c2-d673-4a97-aba7-c5c1dd72c875}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\QuicksandEngine\QuicksandEngine.vcxproj">
       <Project>{76f97a8b-c1c5-4294-b716-d3fd3aacb099}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vorbis\Vorbis.vcxproj">
+      <Project>{e18cc76f-eef9-4501-9806-bedf995dd6e8}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +216,11 @@
     <Import Project="..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets" Condition="Exists('..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets')" />
     <Import Project="..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets" Condition="Exists('..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets')" />
     <Import Project="..\packages\glm.0.9.5.4\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.5.4\build\native\glm.targets')" />
+    <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
+    <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
+    <Import Project="..\packages\boost.1.56.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.56.0.0\build\native\boost.targets')" />
+    <Import Project="..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets" Condition="Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" />
+    <Import Project="..\packages\sfml.2.1.0.0\build\native\sfml.targets" Condition="Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -202,5 +234,10 @@
     <Error Condition="!Exists('..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rxd_glew.redist.1.10.0.1\build\native\rxd_glew.redist.targets'))" />
     <Error Condition="!Exists('..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rxd_glew.1.10.0.1\build\native\rxd_glew.targets'))" />
     <Error Condition="!Exists('..\packages\glm.0.9.5.4\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.5.4\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.56.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.56.0.0\build\native\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.2.1.0.0\build\native\sfml.targets'))" />
   </Target>
 </Project>

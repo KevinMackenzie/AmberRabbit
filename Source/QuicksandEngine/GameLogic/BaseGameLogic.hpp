@@ -26,7 +26,7 @@ enum BaseGameState
 typedef std::map<ActorId, StrongActorPtr> ActorMap;
 typedef std::string Level;
 
-class LevelManager
+class  LevelManager
 {
 public:
 	const std::vector<Level> &GetLevels() const { return m_Levels; }
@@ -40,7 +40,7 @@ protected:
 
 
 
-class BaseGameLogic : public IGameLogic
+class  BaseGameLogic : public IGameLogic
 {
 	friend class QuicksandEngineApp;						// This is only to gain access to the view list
 

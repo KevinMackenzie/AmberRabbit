@@ -141,7 +141,7 @@ private:
 //
 
 template<typename Data>
-class concurrent_queue
+class QSE_API concurrent_queue
 {
 private:
     std::queue<Data> the_queue;

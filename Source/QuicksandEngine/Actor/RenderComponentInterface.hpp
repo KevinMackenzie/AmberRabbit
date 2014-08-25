@@ -3,7 +3,7 @@
 
 #include "ActorComponent.hpp"
 
-class RenderComponentInterface : public ActorComponent
+class  RenderComponentInterface : public ActorComponent
 {
 public:
 //    virtual ComponentId VGetComponentId(void) const override { return COMPONENT_ID; }

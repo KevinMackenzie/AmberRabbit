@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////
 
-class SFMLSoundBuffer : public AudioBuffer
+class  SFMLSoundBuffer : public AudioBuffer
 {
 protected:
 	sf::SoundBuffer m_Sample;
@@ -58,7 +58,7 @@ private:
 // 
 //////////////////////////////////////////////////////////////////////
 
-class SFMLSoundAudio : public Audio
+class  SFMLSoundAudio : public Audio
 {
 public:
 	SFMLSoundAudio() {  }

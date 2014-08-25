@@ -3,7 +3,7 @@
 
 #include "ActorComponent.hpp"
 
-class PickupInterface : public ActorComponent
+class  PickupInterface : public ActorComponent
 {
 public:
 //    static ComponentId COMPONENT_ID;  // unique ID for this component type

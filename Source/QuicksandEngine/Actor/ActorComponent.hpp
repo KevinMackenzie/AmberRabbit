@@ -8,9 +8,9 @@
 // ActorComponent class
 // Chapter 6, page 167
 //---------------------------------------------------------------------------------------------------------------------
-class ActorComponent
+class  ActorComponent
 {
-	friend class ActorFactory;
+	friend class  ActorFactory;
 
 protected:
 	StrongActorPtr m_pOwner;

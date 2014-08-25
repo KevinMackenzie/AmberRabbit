@@ -68,12 +68,12 @@ public:
 
 	// IScreenElement Implementation
 	virtual HRESULT VOnRestore();
-	virtual HRESULT VOnRender(double fTime, float fElapsedTime);
+	virtual HRESULT VOnRender(double fTime, double fElapsedTime);
 	virtual int VGetZOrder() const { return 1; }
 	virtual void VSetZOrder(int const zOrder) { }
 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
-	static void OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
+	virtual LRESULT VOnMsgProc( AppMsg msg );
+	static void OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext);
 	void _OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
 };
 
@@ -89,12 +89,12 @@ public:
 
 	// IScreenElement Implementation
 	virtual HRESULT VOnRestore();
-	virtual HRESULT VOnRender(double fTime, float fElapsedTime);
+	virtual HRESULT VOnRender(double fTime, double fElapsedTime);
 	virtual int VGetZOrder() const { return 1; }
 	virtual void VSetZOrder(int const zOrder) { }
 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
-	static void  OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
+	virtual LRESULT VOnMsgProc( AppMsg msg );
+	static void  OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext);
 };
 
 class IEventManager;
@@ -109,7 +109,7 @@ public:
 
 	MainMenuView(); 
 	~MainMenuView(); 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );
+	virtual LRESULT VOnMsgProc( AppMsg msg );
 	virtual void VRenderText();	
 	virtual void VOnUpdate(unsigned long deltaMs);
 };
@@ -130,7 +130,7 @@ public:
 	TeapotWarsHumanView(shared_ptr<IRenderer> renderer); 
 	virtual ~TeapotWarsHumanView();
 
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg );	
+	virtual LRESULT VOnMsgProc( AppMsg msg );	
 	virtual void VRenderText();	
 	virtual void VOnUpdate(unsigned long deltaMs);
 	virtual void VOnAttach(GameViewId vid, ActorId aid);
@@ -164,13 +164,14 @@ public:
 	virtual ~AITeapotView();
 
 	virtual HRESULT VOnRestore() { return S_OK; }
-	virtual void VOnRender(double fTime, float fElapsedTime) {}
+	virtual void VOnRender(double fTime, double fElapsedTime) {}
 	virtual HRESULT VOnLostDevice() { return S_OK; }
 	virtual GameViewType VGetType() { return GameView_AI; }
 	virtual GameViewId VGetId() const { return m_ViewId; }
-	virtual void VOnAttach(GameViewId vid, ActorId actorId) { m_ViewId = vid; m_PlayerActorId = actorId; }
-	virtual LRESULT CALLBACK VOnMsgProc( AppMsg msg ) {	return 0; }
+	virtual void GameViewId(GameViewId vid, ActorId actorId) { m_ViewId = vid; m_PlayerActorId = actorId; }
+	virtual LRESULT VOnMsgProc( AppMsg msg ) {	return 0; }
 	virtual void VOnUpdate(unsigned long deltaMs) {}
-	
+	virtual void VOnAttach(::GameViewId vid, ActorId aid){}
+
 	shared_ptr<PathingGraph> GetPathingGraph(void) const { return m_pPathingGraph; }
 };

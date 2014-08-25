@@ -38,12 +38,12 @@
 //========================================================================
 
 
-class Actor;
-class ActorComponent;
+class  Actor;
+class  ActorComponent;
 
 
 template<class T>
-struct SortBy_SharedPtr_Content
+struct  SortBy_SharedPtr_Content
 {
     bool operator()(const shared_ptr<T> &lhs, const shared_ptr<T> &rhs) const
         { return *lhs < *rhs; }
@@ -52,7 +52,7 @@ struct SortBy_SharedPtr_Content
 //
 // class IScreenElement							- Chapter 10, page 285
 //
-class IScreenElement
+class  IScreenElement
 {
 public:
 	virtual HRESULT VOnRestore() = 0;
@@ -72,9 +72,9 @@ public:
 };
 
 
-class IGamePhysics;
+class  IGamePhysics;
 
-class IGameLogic
+class  IGameLogic
 {
 public:
 	virtual WeakActorPtr VGetActor(const ActorId id)=0;
@@ -100,7 +100,7 @@ enum GameViewType
 typedef unsigned int GameViewId;
 extern const GameViewId gc_InvalidGameViewId;
 
-class IGameView 
+class  IGameView
 {
 public:
 	virtual HRESULT VOnRestore()=0;
@@ -138,14 +138,14 @@ typedef std::list<shared_ptr<IGameView> > GameViewList;
 //
 ////////////////////////////////////////////////////
 
-class IKeyboardHandler
+class  IKeyboardHandler
 {
 public:
 	virtual bool VOnKeyDown(const BYTE c)=0;
 	virtual bool VOnKeyUp(const BYTE c) = 0;
 };
 
-class IPointerHandler
+class  IPointerHandler
 {
 public:
 	virtual bool VOnPointerMove(const Point &pos, const int radius) = 0;
@@ -153,14 +153,14 @@ public:
 	virtual bool VOnPointerButtonUp(const Point &pos, const int radius, const std::string &buttonName) = 0;
 };
 
-class IJoystickHandler
+class  IJoystickHandler
 {
 	virtual bool VOnButtonDown(const std::string &buttonName, int const pressure)=0;
 	virtual bool VOnButtonUp(const std::string &buttonName)=0;
 	virtual bool VOnJoystick(float const x, float const y)=0;
 };
 
-class IGamepadHandler
+class  IGamepadHandler
 {
 	virtual bool VOnTrigger(const std::string &triggerName, float const pressure)=0;
 	virtual bool VOnButtonDown(const std::string &buttonName, int const pressure)=0;
@@ -176,14 +176,14 @@ class IGamepadHandler
 // 
 ////////////////////////////////////////////////////
 
-class Resource;
-class IResourceFile;
-class ResHandle;
+class  Resource;
+class  IResourceFile;
+class  ResHandle;
 
 //
 // class IResourceLoader					- Chapter 8, page 224
 //
-class IResourceLoader
+class  IResourceLoader
 {
 public:
 	virtual std::string VGetPattern()=0;
@@ -194,7 +194,7 @@ public:
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)=0;
 };
 
-class IResourceFile
+class  IResourceFile
 {
 public:
 	virtual bool VOpen()=0;

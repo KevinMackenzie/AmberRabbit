@@ -1058,7 +1058,7 @@ void GLUFDialog::SendEvent(GLUF_EVENT nEvent, bool bTriggeredByUser, GLUFControl
 	if (!bTriggeredByUser && !m_bNonUserEvents)
 		return;
 
-	m_pCallbackEvent(nEvent, pControl->GetID(), pControl);
+	m_pCallbackEvent(nEvent, pControl->GetID(), pControl, m_pCallbackEventUserContext);
 }
 
 
@@ -8637,10 +8637,9 @@ void GLUFTextHelper::Init(GLUFFontSize fLineHeight)
 	m_nFont = 0;
 }
 
-void GLUFTextHelper::Begin(GLUFFontIndex fontToUse, GLUFFontSize size, GLUF_FONT_WEIGHT weight)
+void GLUFTextHelper::Begin(GLUFFontIndex fontToUse, GLUF_FONT_WEIGHT weight)
 {
 	m_nFont = fontToUse;
-	m_fFontSize = size;
 	m_Weight = weight;
 
 	BeginText(m_pManager->GetOrthoMatrix());

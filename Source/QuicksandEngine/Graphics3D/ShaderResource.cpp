@@ -89,7 +89,7 @@ bool GLProgramResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 	}
 
 	//get the highest suported shader version from the xml file
-	unsigned int maxVersion = 0;
+	int maxVersion = 0;
 	tinyxml2::XMLElement* shaderToUse = pRoot->FirstChildElement("GLSL");
 	tinyxml2::XMLElement* prev = nullptr;
 

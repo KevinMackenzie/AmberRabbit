@@ -35,8 +35,8 @@
 //
 //========================================================================
 
-#include "../GCC4/GameCode4/GameCode.h"
-#include "../GCC4/Network/Network.h"
+#include "../QuicksandEngine/Application/QuicksandEngineApp.hpp"
+#include "../QuicksandEngine/Network/Network.hpp"
 #include "TeapotWars.h"
 
 

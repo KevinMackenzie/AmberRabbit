@@ -36,19 +36,20 @@
 //
 //========================================================================
 
-#include "TeapotWarsStd.h"
+#include "../QuicksandEngine/Stdafx.hpp"
 
-#include "../GCC4/GameCode4/GameCode.h"
-#include "../GCC4/Physics/Physics.h"
-#include "../GCC4/Physics/PhysicsEventListener.h"
-#include "../GCC4/MainLoop/Initialization.h"
-#include "../GCC4/AI/Pathing.h"
-#include "../GCC4/EventManager/Events.h"
-#include "../GCC4/EventManager/EventManagerImpl.h"
-#include "../GCC4/Actors/Actor.h"
-#include "../GCC4/Actors/PhysicsComponent.h"
-#include "../GCC4/Actors/TransformComponent.h"
-#include "../GCC4/Utilities/String.h"
+#include "../QuicksandEngine/Application/QuicksandEngineApp.hpp"
+#include "../QuicksandEngine/Physics/Physics.hpp"
+#include "../QuicksandEngine/Physics/PhysicsEventListener.hpp"
+#include "../QuicksandEngine/MainLoop/Initialization.hpp"
+#include "../QuicksandEngine/AI/Pathing.hpp"
+#include "../QuicksandEngine/EventManager/Events.hpp"
+#include "../QuicksandEngine/EventManager/EventManagerImpl.hpp"
+#include "../QuicksandEngine/Actor/Actor.hpp"
+#include "../QuicksandEngine/Actor/PhysicsComponent.hpp"
+#include "../QuicksandEngine/Actor/TransformComponent.hpp"
+#include "../QuicksandEngine/Utilities/String.hpp"
+#include "../QuicksandEngine/Network/Network.hpp"
 
 #include "TeapotWars.h"
 #include "TeapotWarsView.h"
@@ -76,7 +77,7 @@ INT WINAPI wWinMain(HINSTANCE hInstance,
                      LPWSTR    lpCmdLine,
                      int       nCmdShow)
 {
-	return GameCode4(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+	return QuicksandEngineWinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 }
 
 //========================================================================
@@ -92,10 +93,10 @@ INT WINAPI wWinMain(HINSTANCE hInstance,
 //
 BaseGameLogic *TeapotWarsApp::VCreateGameAndView()
 {
-	m_pGame = GCC_NEW TeapotWarsLogic();
+	m_pGame = QSE_NEW TeapotWarsLogic();
     m_pGame->Init();
 
-	shared_ptr<IGameView> menuView(GCC_NEW MainMenuView());
+	shared_ptr<IGameView> menuView(QSE_NEW MainMenuView());
 	m_pGame->VAddView(menuView);
 
 	return m_pGame;
@@ -119,7 +120,7 @@ void TeapotWarsApp::VRegisterGameEvents(void)
 
 void TeapotWarsApp::VCreateNetworkEventForwarder(void)
 {
-	GameCodeApp::VCreateNetworkEventForwarder();
+	QuicksandEngineApp::VCreateNetworkEventForwarder();
     if (m_pNetworkEventForwarder != NULL)
     {
 	    IEventManager* pGlobalEventManager = IEventManager::Get();
@@ -137,7 +138,7 @@ void TeapotWarsApp::VCreateNetworkEventForwarder(void)
 
 void TeapotWarsApp::VDestroyNetworkEventForwarder(void)
 {
-	GameCodeApp::VDestroyNetworkEventForwarder();
+	QuicksandEngineApp::VDestroyNetworkEventForwarder();
     if (m_pNetworkEventForwarder)
     {
         IEventManager* pGlobalEventManager = IEventManager::Get();
@@ -197,38 +198,38 @@ public:
 
 void WatchMeProcess::VOnUpdate(unsigned long deltaMs)
 {
-    StrongActorPtr pTarget = MakeStrongPtr(g_pApp->m_pGame->VGetActor(m_target));
-	StrongActorPtr pMe = MakeStrongPtr(g_pApp->m_pGame->VGetActor(m_me));
+	StrongActorPtr pTarget = MakeStrongPtr(QuicksandEngine::g_pApp->m_pGame->VGetActor(m_target));
+	StrongActorPtr pMe = MakeStrongPtr(QuicksandEngine::g_pApp->m_pGame->VGetActor(m_me));
 
     shared_ptr<TransformComponent> pTargetTransform = MakeStrongPtr(pTarget->GetComponent<TransformComponent>(TransformComponent::g_Name));
     shared_ptr<TransformComponent> pMyTransform = MakeStrongPtr(pMe->GetComponent<TransformComponent>(TransformComponent::g_Name));
 
 	if (!pTarget || !pMe || !pTargetTransform || !pMyTransform)
 	{
-		GCC_ERROR("This shouldn't happen");
+		LOG_ERROR("This shouldn't happen");
 		Fail();
 	}
 
-	Vec3 targetPos = pTargetTransform->GetPosition();
-	Mat4x4 myTransform = pMyTransform->GetTransform();
-	Vec3 myDir = myTransform.GetDirection();
-	myDir = Vec3(0.0f, 0.0f, 1.0f);
-	Vec3 myPos = pMyTransform->GetPosition();
+	glm::vec3 targetPos = pTargetTransform->GetPosition();
+	glm::mat4 myTransform = pMyTransform->GetTransform();
+	glm::vec3 myDir = GetDirection(myTransform);
+	myDir = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 myPos = pMyTransform->GetPosition();
 
-	Vec3 toTarget = targetPos - myPos;
-	toTarget.Normalize();
+	glm::vec3 toTarget = targetPos - myPos;
+	toTarget = glm::normalize(toTarget);
 
-	float dotProduct = myDir.Dot(toTarget);
-	Vec3 crossProduct = myDir.Cross(toTarget);
+	float dotProduct = glm::dot(myDir, toTarget);
+	glm::vec3 crossProduct = glm::cross(myDir, toTarget);
 
 	float angleInRadians = acos(dotProduct);
 
 	if (crossProduct.y < 0)
 		angleInRadians = -angleInRadians;
 	
-	Mat4x4 rotation;
-	rotation.BuildRotationY(angleInRadians);
-	rotation.SetPosition(myPos);
+	glm::mat4 rotation;
+	rotation = BuildRotationY(angleInRadians);
+	SetPosition(rotation, myPos);
 	pMyTransform->SetTransform(rotation);
 }
 
@@ -247,10 +248,10 @@ void TeapotWarsLogic::VChangeState(BaseGameState newState)
 		{
 
 			// spawn all local players (should only be one, though we might support more in the future)
-			GCC_ASSERT(m_ExpectedPlayers == 1);
+			LOG_ASSERT(m_ExpectedPlayers == 1);
 			for (int i = 0; i < m_ExpectedPlayers; ++i)
 			{
-				shared_ptr<IGameView> playersView(GCC_NEW TeapotWarsHumanView(g_pApp->m_Renderer));
+				shared_ptr<IGameView> playersView(QSE_NEW TeapotWarsHumanView(QuicksandEngine::g_pApp->m_Renderer));
 				VAddView(playersView);
 
 				if (m_bProxy)
@@ -263,14 +264,14 @@ void TeapotWarsLogic::VChangeState(BaseGameState newState)
 			// spawn all remote player's views on the game
 			for (int i = 0; i < m_ExpectedRemotePlayers; ++i)
 			{
-				shared_ptr<IGameView> remoteGameView(GCC_NEW NetworkGameView);
+				shared_ptr<IGameView> remoteGameView(QSE_NEW NetworkGameView);
 				VAddView(remoteGameView);
 			}
 
 			// spawn all AI's views on the game
 			for (int i = 0; i < m_ExpectedAI; ++i)
 			{
-				shared_ptr<IGameView> aiView(GCC_NEW AITeapotView(m_pPathingGraph));
+				shared_ptr<IGameView> aiView(QSE_NEW AITeapotView(m_pPathingGraph));
 				VAddView(aiView);
 			}
 			break;
@@ -293,7 +294,7 @@ void TeapotWarsLogic::VChangeState(BaseGameState newState)
 					StrongActorPtr pActor = VCreateActor("actors\\player_teapot.xml", NULL);
 					if (pActor)
 					{
-						shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId(), pView->VGetId()));
+						shared_ptr<EvtData_New_Actor> pNewActorEvent(QSE_NEW EvtData_New_Actor(pActor->GetId(), pView->VGetId()));
                         IEventManager::Get()->VTriggerEvent(pNewActorEvent);  // [rez] This needs to happen asap because the constructor function for Lua (which is called in through VCreateActor()) queues an event that expects this event to have been handled
 					}
 				}
@@ -303,7 +304,7 @@ void TeapotWarsLogic::VChangeState(BaseGameState newState)
 					StrongActorPtr pActor = VCreateActor("actors\\remote_teapot.xml", NULL);
 					if (pActor)
 					{
-						shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId(), pNetworkGameView->VGetId()));
+						shared_ptr<EvtData_New_Actor> pNewActorEvent(QSE_NEW EvtData_New_Actor(pActor->GetId(), pNetworkGameView->VGetId()));
 						IEventManager::Get()->VQueueEvent(pNewActorEvent);
 					}
 				}
@@ -313,7 +314,7 @@ void TeapotWarsLogic::VChangeState(BaseGameState newState)
 					StrongActorPtr pActor = VCreateActor("actors\\ai_teapot.xml", NULL);
 					if (pActor)
 					{
-						shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId(), pAiView->VGetId()));
+						shared_ptr<EvtData_New_Actor> pNewActorEvent(QSE_NEW EvtData_New_Actor(pActor->GetId(), pAiView->VGetId()));
 						IEventManager::Get()->VQueueEvent(pNewActorEvent);
 					}
 				}
@@ -346,7 +347,7 @@ void TeapotWarsLogic::VAddView(shared_ptr<IGameView> pView, ActorId actor)
 }
 
 
-void TeapotWarsLogic::VMoveActor(const ActorId id, Mat4x4 const &mat)
+void TeapotWarsLogic::VMoveActor(const ActorId id, glm::mat4 const &mat)
 {
     BaseGameLogic::VMoveActor(id, mat);
 
@@ -362,7 +363,7 @@ void TeapotWarsLogic::VMoveActor(const ActorId id, Mat4x4 const &mat)
         shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pActor->GetComponent<TransformComponent>(TransformComponent::g_Name));
         if (pTransformComponent && pTransformComponent->GetPosition().y < -25)
         {
-            shared_ptr<EvtData_Destroy_Actor> pDestroyActorEvent(GCC_NEW EvtData_Destroy_Actor(id));
+            shared_ptr<EvtData_Destroy_Actor> pDestroyActorEvent(QSE_NEW EvtData_Destroy_Actor(id));
             IEventManager::Get()->VQueueEvent(pDestroyActorEvent);
         }
     }
@@ -437,7 +438,7 @@ void TeapotWarsLogic::NetworkPlayerActorAssignmentDelegate(IEventDataPtr pEventD
 		}
 	}
 
-	GCC_ERROR("Could not find HumanView to attach actor to!");
+	LOG_ERROR("Could not find HumanView to attach actor to!");
 }
 
 void TeapotWarsLogic::StartThrustDelegate(IEventDataPtr pEventData)
@@ -499,7 +500,7 @@ void TeapotWarsLogic::EndSteerDelegate(IEventDataPtr pEventData)
 void TeapotWarsLogic::TestScriptDelegate(IEventDataPtr pEventData)
 {
     shared_ptr<EvtData_ScriptEventTest_FromLua> pCastEventData = static_pointer_cast<EvtData_ScriptEventTest_FromLua>(pEventData);
-    GCC_LOG("Lua", "Event received in C++ from Lua: " + ToStr(pCastEventData->GetNum()));
+    LOG_WRITE(ConcatString("Lua", "Event received in C++ from Lua: " + ToStr(pCastEventData->GetNum())));
 }
 
 void TeapotWarsLogic::RegisterAllDelegates(void)
@@ -548,7 +549,7 @@ void TeapotWarsLogic::RemoveAllDelegates(void)
 
 void TeapotWarsLogic::CreateNetworkEventForwarder(const int socketId)
 {
-    NetworkEventForwarder* pNetworkEventForwarder = GCC_NEW NetworkEventForwarder(socketId);
+    NetworkEventForwarder* pNetworkEventForwarder = QSE_NEW NetworkEventForwarder(socketId);
 
     IEventManager* pGlobalEventManager = IEventManager::Get();
 
@@ -587,7 +588,7 @@ void TeapotWarsLogic::DestroyAllNetworkEventForwarders(void)
     m_networkEventForwarders.clear();
 }
 
-bool TeapotWarsLogic::VLoadGameDelegate(TiXmlElement* pLevelData)
+bool TeapotWarsLogic::VLoadGameDelegate(tinyxml2::XMLElement* pLevelData)
 {
     RegisterTeapotScriptEvents();
     return true;

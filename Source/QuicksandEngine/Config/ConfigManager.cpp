@@ -80,6 +80,16 @@ void StringsManager::FlushConfig()
 	gConfig.mConfigOptions.clear();
 }
 
+void StringsManager::ModifyElement(string key, string element)
+{
+	gConfig.SetElement(key, element);
+}
+
+void StringsManager::AddElement(string key, string element)
+{
+	gConfig.mConfigOptions.insert(std::pair<string, string>(key, element));
+}
+
 string StringsManager::GetElementStr(string key)
 {
 	string ret = "";

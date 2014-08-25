@@ -24,7 +24,7 @@ public:
 	virtual void VSetZOrder(int const zOrder) { }
 
 	virtual LRESULT  VOnMsgProc( AppMsg msg );
-	static void  OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl);
+	static void  OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext);
 	static int Ask(MessageBox_Questions question);
 
 };

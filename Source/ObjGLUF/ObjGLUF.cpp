@@ -83,6 +83,11 @@ bool GLUFInit()
 	return true;
 }
 
+void GLUFStats_func()
+{
+
+}
+
 bool GLUFInitOpenGLExtentions()
 {
 	GLenum err = glewInit();
