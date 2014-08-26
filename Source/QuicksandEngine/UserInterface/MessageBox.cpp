@@ -20,7 +20,7 @@ void GLMessageBox::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pC
 GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags)
 {
 	// Initialize dialogs
-	m_UI.Init( &GLRenderer::g_DialogResourceManager );
+	m_UI.Init( GLRenderer::g_pDialogResourceManager );
     m_UI.SetCallback( OnGUIEvent, this); 
 
 	// Find the dimensions of the message

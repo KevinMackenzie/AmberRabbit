@@ -90,6 +90,7 @@ extern TeapotWarsApp g_TeapotWarsApp;
 #define CID_LEVEL_LABEL					(15)
 #define CID_LEVEL_LISTBOX				(16)
 
+#define ARIEL_FONT_DIALOG_LOCATION (1)
 
 const float g_fSampleUIWidth = 0.7f;
 const float g_fSampleUIHeight = 0.7f;
@@ -99,7 +100,7 @@ unsigned int g_ArielFontLocation;
 MainMenuUI::MainMenuUI()
 {
 	// This line was added to comply with DirectX 9c (June 2005) 
-	m_SampleUI.Init( &GLRenderer_Base::g_DialogResourceManager );
+	m_SampleUI.Init( GLRenderer_Base::g_pDialogResourceManager );
     m_SampleUI.SetCallback( OnGUIEvent, this ); 
 
 	float fY = GLUF_NORMALIZE_COORD(10.0f);
@@ -123,8 +124,8 @@ MainMenuUI::MainMenuUI()
 
 	Resource ariel("Fonts/Ariel.ttf");
 	m_ArielFont = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&ariel);
-	g_ArielFontLocation = GLRenderer_Base::g_DialogResourceManager.AddFont(static_pointer_cast<TTFResourceExtraData>(m_ArielFont->GetExtra())->GetFont(), FONT_WEIGHT_NORMAL);
-	m_SampleUI.SetFont(g_ArielFontLocation, g_ArielFontLocation);
+	g_ArielFontLocation = GLRenderer_Base::g_pDialogResourceManager->AddFont(static_pointer_cast<TTFResourceExtraData>(m_ArielFont->GetExtra())->GetFont(), FONT_WEIGHT_NORMAL);
+	m_SampleUI.SetFont(ARIEL_FONT_DIALOG_LOCATION, g_ArielFontLocation);
 	//m_SampleUI.SetFont(0, L"Ariel", height, 0);
 
 	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", fX - GLUF_NORMALIZE_COORD(20), fY, g_fSampleUIWidth, fheight * 2);
@@ -187,7 +188,7 @@ MainMenuUI::MainMenuUI()
 
 MainMenuUI::~MainMenuUI()
 { 
-	GLRenderer_Base::g_DialogResourceManager.UnregisterDialog(&m_SampleUI);
+	GLRenderer_Base::g_pDialogResourceManager->UnregisterDialog(&m_SampleUI);
 }
 
 void MainMenuUI::Set()
@@ -402,7 +403,7 @@ void StandardHUD::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pCo
 StandardHUD::StandardHUD()
 {
     // Initialize dialogs
-	m_HUD.Init( &GLRenderer_Base::g_DialogResourceManager );
+	m_HUD.Init( GLRenderer_Base::g_pDialogResourceManager );
 	m_HUD.SetCallback(OnGUIEvent); float fY = GLUF_NORMALIZE_COORD(10.0f);
 	m_HUD.AddButton(IDC_TOGGLEFULLSCREEN, L"Toggle full screen", GLUF_NORMALIZE_COORD(35.0f), fY, GLUF_NORMALIZE_COORD(125.0f), GLUF_NORMALIZE_COORD(22.0f));
 	m_HUD.AddButton(IDC_TOGGLEREF, L"Toggle REF (F3)", GLUF_NORMALIZE_COORD(35.0f), fY += GLUF_NORMALIZE_COORD(24.0f), GLUF_NORMALIZE_COORD(125.0f), GLUF_NORMALIZE_COORD(22.0f));
@@ -413,7 +414,7 @@ StandardHUD::StandardHUD()
 StandardHUD::~StandardHUD() 
 { 
 //  [mrmike] - this causes a "memory written after freed error" so I commented it out.
-//	D3DRenderer::g_DialogResourceManager.UnregisterDialog(&m_HUD); 
+//	D3DRenderer::g_pDialogResourceManager.UnregisterDialog(&m_HUD); 
 }
 
 

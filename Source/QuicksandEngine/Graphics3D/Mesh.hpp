@@ -69,7 +69,7 @@ public:
 	virtual bool VDiscardRawBufferAfterLoad() { return false; }
 	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize);
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
-	virtual std::string VGetPattern() { return "*.model.obj"; }
+	virtual std::string VGetPattern() { return "*.obj.model"; }
 };
 
 //////////////////////////////////////////////////////////////////////////////////

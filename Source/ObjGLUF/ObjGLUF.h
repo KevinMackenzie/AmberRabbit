@@ -161,6 +161,9 @@ OBJGLUF_API void GLUFTerminate();
 
 //this loads an entire file into a binary array, path is input, rawSize and rawData are outputs
 OBJGLUF_API char* GLUFLoadFileIntoMemory(const wchar_t* path, unsigned long* rawSize);
+OBJGLUF_API long GLUFLoadFileIntoMemory(const wchar_t* path, char* buffer, long len = -1);
+OBJGLUF_API char* GLUFLoadFileIntoMemory(const char* path, unsigned long* rawSize);
+OBJGLUF_API long GLUFLoadFileIntoMemory(const char* path, char* buffer, long len = -1);
 
 typedef std::vector<glm::vec4> Vec4Array;
 typedef std::vector<glm::vec3> Vec3Array;

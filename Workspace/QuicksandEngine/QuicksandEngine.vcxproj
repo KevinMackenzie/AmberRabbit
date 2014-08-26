@@ -68,34 +68,34 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>17a1e9fb</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>2633dbbe</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -438,6 +438,9 @@
     <Import Project="..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets" Condition="Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" />
     <Import Project="..\packages\sfml.2.1.0.0\build\native\sfml.targets" Condition="Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" />
     <Import Project="..\packages\boost.1.56.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.56.0.0\build\native\boost.targets')" />
+    <Import Project="..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets" Condition="Exists('..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets')" />
+    <Import Project="..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets" Condition="Exists('..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets')" />
+    <Import Project="..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets" Condition="Exists('..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -460,5 +463,8 @@
     <Error Condition="!Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets'))" />
     <Error Condition="!Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.2.1.0.0\build\native\sfml.targets'))" />
     <Error Condition="!Exists('..\packages\boost.1.56.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.56.0.0\build\native\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets'))" />
   </Target>
 </Project>

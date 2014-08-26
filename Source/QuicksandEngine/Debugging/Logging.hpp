@@ -64,7 +64,7 @@ namespace AwLogging
 
 
 	//to initialize the system
-	void Init();
+	bool Init();
 
 	//this saves the file
 	void Destroy();
@@ -72,7 +72,6 @@ namespace AwLogging
 
 
 //some preprocessors for easier logging
-
 
 #define LOG_ERROR(logMessage) \
 	AwLogging::WriteLog(AwLogging::LogType::ERROR_, logMessage, __FUNCTION__, __FILE__, __LINE__);

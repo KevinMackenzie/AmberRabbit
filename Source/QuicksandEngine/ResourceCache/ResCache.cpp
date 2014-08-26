@@ -100,8 +100,8 @@ DevelopmentResourceZipFile::DevelopmentResourceZipFile(const std::wstring resFil
 	GetCurrentDirectory(MAX_PATH, dir);
 
 	m_AssetsDir = dir;
-	int lastSlash = m_AssetsDir.find_last_of(L"\\");
-	m_AssetsDir = m_AssetsDir.substr(0, lastSlash);
+	//int lastSlash = m_AssetsDir.find_last_of(L"\\");
+	//m_AssetsDir = m_AssetsDir.substr(0, lastSlash);
 	m_AssetsDir +=  L"\\Assets\\";
 }
 
@@ -166,11 +166,13 @@ int DevelopmentResourceZipFile::VGetRawResource(const Resource &r, char *buffer)
 		if (num == -1)
 			return -1;
 
-		string fullFileSpec = ws2s(m_AssetsDir) + r.m_name.c_str(); 
-		FILE *f = fopen(fullFileSpec.c_str(), "rb");
+		std::string fullFileSpec = ws2s(m_AssetsDir) + r.m_name.c_str(); 
+		/*FILE *f = fopen(fullFileSpec.c_str(), "rb");
 		size_t bytes = fread(buffer, 1, m_AssetFileInfo[num].nFileSizeLow, f);
-		fclose(f);
-		return bytes;
+		fclose(f);*/
+
+
+		return (int)GLUF::GLUFLoadFileIntoMemory(fullFileSpec.c_str(), buffer);
 	}
 
 	return ResourceZipFile::VGetRawResource(r, buffer);
@@ -380,12 +382,13 @@ shared_ptr<ResHandle> ResCache::Load(Resource *r)
 	else
 	{
 		size = loader->VGetLoadedResourceSize(rawBuffer, rawSize);
-        buffer = Allocate(size);
-		if (rawBuffer==NULL || buffer==NULL)
+		buffer = Allocate(size);
+		if (rawBuffer==NULL/* || buffer==NULL*/)
 		{
 			// resource cache out of memory
 			return shared_ptr<ResHandle>();
 		}
+		//[Kevin] Although this is just allocating and loading garbage, that still fills up memory in the pool, so we want that
 		handle = shared_ptr<ResHandle>(QSE_NEW ResHandle(*r, buffer, size, this));
 		bool success = loader->VLoadResource(rawBuffer, rawSize, handle);
 		

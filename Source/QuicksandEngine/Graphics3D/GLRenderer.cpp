@@ -6,7 +6,7 @@
 #include "../UserInterface/HumanView.hpp"
 
 
-GLUFDialogResourceManager GLRenderer_Base::g_DialogResourceManager;
+GLUFDialogResourceManager *GLRenderer_Base::g_pDialogResourceManager;
 GLUFTextHelper *GLRenderer_Base::g_pTextHelper;
 
 shared_ptr<ResHandle> GLLineDrawer::m_LineDrawerShader(nullptr);
@@ -231,7 +231,7 @@ HRESULT D3DRenderer9::VOnRestore()
 {
 	HRESULT hr;
 	V_RETURN(D3DRenderer::VOnRestore());
-	V_RETURN(D3DRenderer::g_DialogResourceManager.OnD3D9ResetDevice());
+	V_RETURN(D3DRenderer::g_pDialogResourceManager.OnD3D9ResetDevice());
 
 	SAFE_DELETE(D3DRenderer::g_pTextHelper);
 
@@ -422,7 +422,7 @@ HRESULT GLRenderer::VOnRestore()
 	HRESULT hr;
 	V_RETURN(GLRenderer_Base::VOnRestore());
 	//SAFE_DELETE(GLRenderer_Base::g_pTextHelper);
-	//GLRenderer_Base::g_pTextHelper = QSE_NEW CGLUTTextHelper(&g_DialogResourceManager, 15);
+	//GLRenderer_Base::g_pTextHelper = QSE_NEW CGLUTTextHelper(&g_pDialogResourceManager, 15);
 
 	return S_OK;
 }

@@ -138,10 +138,11 @@ char* GLUFLoadFileIntoMemory(const wchar_t* path, unsigned long* rawSize)
 	GLUF_ASSERT(rawSize);
 
 	std::ifstream inFile(path, std::ios::binary);
+	if (!inFile)
+		return false;
+
 	inFile.seekg(0, std::ios::end);
-#pragma warning(disable : 4244)
-	*rawSize = inFile.tellg();
-#pragma warning(default : 4244)
+	*rawSize = (unsigned long)inFile.tellg();
 	inFile.seekg(0, std::ios::beg);
 
 	char* rawData = (char*)malloc(*rawSize);
@@ -161,6 +162,93 @@ char* GLUFLoadFileIntoMemory(const wchar_t* path, unsigned long* rawSize)
 		return nullptr;
 	}
 	
+}
+
+long GLUFLoadFileIntoMemory(const wchar_t* path, char* buffer, long len)
+{
+	GLUF_ASSERT(path);
+	GLUF_ASSERT(buffer);
+
+	std::ifstream inFile(path, std::ios::binary);
+	if (!inFile)
+		return -1;
+	
+	std::streamsize streamLen = std::streamsize(len);
+	if (len == -1)
+	{
+		inFile.seekg(0, std::ios::end);
+		streamLen = inFile.tellg();
+		inFile.seekg(0, std::ios::beg);
+	}
+
+	//if (sizeof(rawData) != *rawSize)
+	//	return false;
+
+	if (!inFile.read(buffer, streamLen))
+	{
+		GLUF_ERROR("Failed to load file into memory");
+	}
+
+	return (unsigned long)streamLen;
+}
+
+char* GLUFLoadFileIntoMemory(const char* path, unsigned long* rawSize)
+{
+	GLUF_ASSERT(path);
+	GLUF_ASSERT(rawSize);
+
+	std::ifstream inFile(path, std::ios::binary);
+	if (!inFile)
+		return false;
+
+	inFile.seekg(0, std::ios::end);
+	*rawSize = (unsigned long)inFile.tellg();
+	inFile.seekg(0, std::ios::beg);
+
+	char* rawData = new char[*rawSize];
+	//if (sizeof(rawData) != *rawSize)
+	//	return false;
+
+	if (inFile.read(rawData, *rawSize))
+	{
+		return rawData;
+	}
+	else
+	{
+		GLUF_ERROR("Failed to load file into memory");
+		free(rawData);
+		rawData = nullptr;
+		*rawSize = 0;
+		return nullptr;
+	}
+}
+
+long GLUFLoadFileIntoMemory(const char* path, char* buffer, long len)
+{
+	GLUF_ASSERT(path);
+	GLUF_ASSERT(buffer);
+
+	std::ifstream inFile(path, std::ios::binary);
+	if (!inFile)
+		return -1;
+
+	std::streamsize streamLen = std::streamsize(len);
+	if (len == -1)
+	{
+		inFile.seekg(0, std::ios::end);
+		streamLen = inFile.tellg();
+		inFile.seekg(0, std::ios::beg);
+	}
+
+	//if (sizeof(rawData) != *rawSize)
+	//	return false;
+
+	if (!inFile.read(buffer, streamLen))
+	{
+		GLUF_ERROR("Failed to load file into memory");
+	}
+
+	return (unsigned long)streamLen;
 }
 
 void GLUFMatrixStack::Push(const glm::mat4& matrix)

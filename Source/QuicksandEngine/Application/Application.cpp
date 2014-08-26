@@ -29,12 +29,15 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 
 	_CrtSetDbgFlag(tmpDbgFlag);
 
+	//g_pApp->m_Options.Init("PlayerOptions.xml", lpCmdLine);
+	//well, load the logging system first TO SET THE LOG LOCATION... LOL again
+	QuicksandEngine::g_pApp->mConfigManager.AddConfigElements("PlayerOptions.xml");
+
 	// [rez] Initialize the logging system as the very first thing you ever do!
 	// [mrmike] LOL after the memory system flags are set, that is!
-	AwLogging::Init();
+	if (!AwLogging::Init())
+		return 1;//fail
 
-	//g_pApp->m_Options.Init("PlayerOptions.xml", lpCmdLine);
-	QuicksandEngine::g_pApp->mConfigManager.AddConfigElements("PlayerOptions.xml");
 
 	// Set the callback functions. These functions allow the sample framework to notify
 	// the application about device changes, user input, and windows messages.  The 

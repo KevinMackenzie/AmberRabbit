@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <chrono>
+#include <boost/filesystem.hpp>
 
 namespace AwLogging
 {
@@ -52,7 +53,7 @@ namespace AwLogging
 		ss << " --" << funcName << "-- ";
 
 		//if it is debug, add some extra stuff
-		if (GET_CONFIG_ELEMENT_STR("APPLICATION_MODE") == "DEBUG")
+		if (GET_CONFIG_ELEMENT_STR("MODE") == "DEBUG")
 		{
 			ss << "--" << sourceFile << "-- --" << lineNum << "-- ";
 		}
@@ -64,43 +65,47 @@ namespace AwLogging
 		std::cout << ss.str();
 
 		//now depending on the type, increment the correct value
+		IncrementProperLogTypes(logType);
 		
-		switch (logType)
+		if (logType == ERROR_)
 		{
-		case STDOUT:
-			gLogInfo.IncrementLogEntryCount();
-			break;
-		case ERROR_:
-			gLogInfo.IncrementErrorCount();
-			gLogInfo.IncrementLogEntryCount();
-			break;
-		case WARNING:
-			gLogInfo.IncrementWarningCount();
-			gLogInfo.IncrementLogEntryCount();
-			break;
-		case MEMLEAK:
-			gLogInfo.IncrementMemLeakCount();
-			gLogInfo.IncrementLogEntryCount();
-			break;
+#ifdef _WIN32
+			ss.seekg(ss.end);
+			unsigned int size = (unsigned int)ss.tellg();
+			wchar_t *wstr = new wchar_t[size];
+			mbstowcs(wstr, ss.str().c_str(), size);
+			::MessageBox(NULL, wstr, L"Error!", MB_OK);
+#endif
+			QuicksandEngine::g_pApp->SetQuitting(true);
 		}
-		
+
 		//finally write it to the log stream
 		SCOPED_CS(gCritSec);
 		gLog << ss.str();
 	}
 
 
-	void Init()
+	bool Init()
 	{
+		boost::filesystem::path logDir(GET_CONFIG_ELEMENT_STR("LOG_LOCATION"));
+		if (!boost::filesystem::exists(logDir))
+		{
+			if (!boost::filesystem::create_directory(logDir))
+				return false;
+		}
+
+
 		//the name of the file will be the data added to the time
 		std::stringstream ss;
 
 		time_t t = time(0);
 		struct tm * now = localtime(&t);
-		ss << now->tm_mon + 1 << "/" << now->tm_mday << "/" << now->tm_year + 1900 << " " << now->tm_hour + 1 << "-" << now->tm_min << "-" << now->tm_sec;
+		ss << GET_CONFIG_ELEMENT_STR("LOG_LOCATION") << now->tm_mon + 1 << "." << now->tm_mday << "." << now->tm_year + 1900 << " " << now->tm_hour + 1 << "-" << now->tm_min << "-" << now->tm_sec << ".log";
 
 		gLog.open(ss.str().c_str());
 		gLog << "=====================\tHeader\t=====================\n";
+
+		return true;
 	}
 
 	void Destroy()

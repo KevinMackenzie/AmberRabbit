@@ -52,7 +52,7 @@ class GLRenderer_Base : public IRenderer
 public:
 	//TODO: make my own dialog manager and text helper
 	// You should leave this global - it does wacky things otherwise.
-	static GLUFDialogResourceManager g_DialogResourceManager;
+	static GLUFDialogResourceManager *g_pDialogResourceManager;
 	static GLUFTextHelper* g_pTextHelper;
 
 	virtual void VSetWorldTransform(const glm::mat4 *m){};

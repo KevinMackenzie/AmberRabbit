@@ -10,25 +10,24 @@ bool StringsManager::AddConfigElements(string pathToXml)
 {
 	
 	//make sure the file exists
-	std::ifstream file(pathToXml.c_str());
+	std::ifstream file(pathToXml.c_str(), std::ifstream::in);
 	if (!file)
-	{
 		return false;
-	}
 
 	file.close();
 
 	gConfig.pDoc = new tinyxml2::XMLDocument();
 	gConfig.pDoc->LoadFile(pathToXml.c_str());
-	//TODO: make username/password a config element but secure it in a good way
 
-	tinyxml2::XMLElement *root = gConfig.pDoc->FirstChildElement("ROOT");//this is manditory
-	
-	//now loop through all of the iterators
-	//this is a map, so to MYSQL->PORT will be MYSQL_PORT and so forth
+	tinyxml2::XMLElement *root = gConfig.pDoc->FirstChildElement();//this is manditory
+	if (!root)
+		return false;
+
+	if (!root->FirstChildElement())
+		return false;
 
 	//now recursively load the elements
-	LoadConfigElements(root->FirstChildElement());
+	LoadConfigElements(root);
 
 	return true;
 }
@@ -40,37 +39,41 @@ void StringsManager::LoadConfigElements(tinyxml2::XMLElement *root)
 	//as long as it is not the root element
 	if (root->GetText() != "ROOT")
 	{
-		mCurrPrefix += root->GetText();
-		mCurrPrefix += "_";
+		//mCurrPrefix += root->GetText();
+		//mCurrPrefix += "_";
 	}
 
 	for (tinyxml2::XMLElement* child = root->FirstChildElement(); child != nullptr; child = child->NextSiblingElement())
 	{
+		
 		//is there a child element?
 		if (child->FirstChildElement() != nullptr)
 		{
 			//recurse
 			LoadConfigElements(child);
+			
+			//NOTE: this keeps anything with a child element from loading config stuffs
+			continue;
 		}
 
-		std::stringstream childName;
+		//std::stringstream childName;
 		//first the prefix, then the actual name
-		childName << mCurrPrefix;
-		childName << child->Name();
+		//childName << mCurrPrefix;
+		//childName << child->Name();
 
 		//add each one to the config options AS LONG AS THE KEY DOESN"T ALREADY EXIST
 		if (gConfig.mConfigOptions.find(child->Name()) != gConfig.mConfigOptions.end())
 		{
 			//log this as an error, becuase this will be important to fix to ensure there are no conflicting configurations.
 			std::stringstream ss;
-			ss << "Redundent Configuration Key, not adding key \'" << childName.str() << "\' and value \'" << child->GetText() << "\'";
+			ss << "Redundent Configuration Key, not adding key \'" << child->Name() << "\' and value \'" << child->GetText() << "\'";
 			LOG_ERROR(ss.str());
 		}
 
 		
 
 		//finally insert the element
-		gConfig.mConfigOptions.insert(std::pair<string, string>(childName.str(), child->GetText()));
+		gConfig.mConfigOptions.insert(std::pair<string, string>(child->Name(), child->GetText()));
 	}
 }
 

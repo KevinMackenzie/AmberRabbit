@@ -80,7 +80,11 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	// Note - it can be really useful to debug network code to have
 	// more than one instance of the game up at one time - so
 	// feel free to comment these lines in or out as you wish!
-	if (!IsOnlyInstance(VGetGameTitle()))
+
+	char* title = VGetGameTitle();
+	wchar_t *wTitle = new wchar_t[strlen(title)];
+	mbstowcs(wTitle, title, strlen(title));
+	if (!IsOnlyInstance(wTitle));
 		return false;
 #endif
 
@@ -126,7 +130,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	//    that actually reads directly from the source asset files, rather than the ZIP file. This is MUCH better during development, since
 	//    you don't want to have to rebuild the ZIP file every time you make a minor change to an asset.
 	//
-	IResourceFile *zipFile = (m_bIsEditorRunning || GET_CONFIG_ELEMENT_STR("APPLICATION_USE_DEV_DIRECTORIES") == "TRUE") ?
+	IResourceFile *zipFile = (m_bIsEditorRunning || GET_CONFIG_ELEMENT_STR("USE_DEVELOPMENT_DIRECTORIES") == "TRUE") ?
 		QSE_NEW DevelopmentResourceZipFile(L"Assets.zip", DevelopmentResourceZipFile::Editor) :
 		QSE_NEW ResourceZipFile(L"Assets.zip");
 
@@ -160,7 +164,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->RegisterLoader(CreateObjMeshResourceLoader());
 	m_ResCache->RegisterLoader(CreateScriptResourceLoader());
 
-	if (!LoadStrings("English"))
+	if (!LoadStrings("en_US"))
 	{
 		LOG_ERROR("Failed to load strings");
 		return false;
@@ -208,6 +212,9 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	
 	if (!GLUFInitOpenGLExtentions())
 		return false;
+
+	GLRenderer_Base::g_pDialogResourceManager = new GLUFDialogResourceManager();
+	GLRenderer_Base::g_pTextHelper = new GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 0.25f);
 
 	/*if (hWnd == NULL)
 	{
@@ -258,7 +265,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	//    Preload calls are discussed in Chapter 5, page 148
 	m_ResCache->Preload("*.ogg", NULL);
 	m_ResCache->Preload("*.dds", NULL);
-	m_ResCache->Preload("*.model.obj", NULL);
+	m_ResCache->Preload("*.obj.model", NULL);
 	m_ResCache->Preload("*.ttf", NULL);
 
 	CheckForJoystick(GetHwnd());
@@ -291,7 +298,7 @@ void QuicksandEngineApp::RegisterEngineEvents(void)
 //
 bool QuicksandEngineApp::LoadStrings(std::string language)
 {
-	std::string languageFile = "Strings\\";
+	std::string languageFile = "Lang\\";
 	languageFile += language;
 	languageFile += ".xml";
 
@@ -378,7 +385,7 @@ bool QuicksandEngineApp::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, 
 	//TODO:
 	
 	bool *pbNoFurtherProcessing = new bool;
-	*pbNoFurtherProcessing = GLRenderer::g_DialogResourceManager.MsgProc(GLUF_PASS_CALLBACK_PARAM);
+	*pbNoFurtherProcessing = GLRenderer::g_pDialogResourceManager->MsgProc(GLUF_PASS_CALLBACK_PARAM);
 	if (*pbNoFurtherProcessing)
 		return 0;
 	
@@ -1027,7 +1034,7 @@ bool CALLBACK QuicksandEngineApp::IsD3D9DeviceAcceptable(D3DCAPS9* pCaps, D3DFOR
 //--------------------------------------------------------------------------------------
 void CALLBACK QuicksandEngineApp::OnD3D9LostDevice(void* pUserContext)
 {
-	D3DRenderer::g_DialogResourceManager.OnD3D9LostDevice();
+	D3DRenderer::g_pDialogResourceManager.OnD3D9LostDevice();
 
 	if (g_pApp->m_pGame)
 	{
@@ -1059,7 +1066,7 @@ HRESULT CALLBACK QuicksandEngineApp::OnD3D11CreateDevice(ID3D11Device* pd3dDevic
 	HRESULT hr;
 
 	ID3D11DeviceContext* pd3dImmediateContext = DXUTGetD3D11DeviceContext();
-	V_RETURN(D3DRenderer::g_DialogResourceManager.OnD3D11CreateDevice(pd3dDevice, pd3dImmediateContext));
+	V_RETURN(D3DRenderer::g_pDialogResourceManager.OnD3D11CreateDevice(pd3dDevice, pd3dImmediateContext));
 
 	return S_OK;
 }
@@ -1073,7 +1080,7 @@ HRESULT CALLBACK QuicksandEngineApp::OnD3D11ResizedSwapChain(ID3D11Device* pd3dD
 {
 	HRESULT hr;
 
-	V_RETURN(D3DRenderer::g_DialogResourceManager.OnD3D11ResizedSwapChain(pd3dDevice, pBackBufferSurfaceDesc));
+	V_RETURN(D3DRenderer::g_pDialogResourceManager.OnD3D11ResizedSwapChain(pd3dDevice, pBackBufferSurfaceDesc));
 
 	if (g_pApp->m_pGame)
 	{
@@ -1111,7 +1118,7 @@ void CALLBACK QuicksandEngineApp::OnD3D11FrameRender(ID3D11Device* pd3dDevice, I
 //--------------------------------------------------------------------------------------
 void CALLBACK QuicksandEngineApp::OnD3D11ReleasingSwapChain(void* pUserContext)
 {
-	D3DRenderer::g_DialogResourceManager.OnD3D11ReleasingSwapChain();
+	D3DRenderer::g_pDialogResourceManager.OnD3D11ReleasingSwapChain();
 }
 
 
@@ -1122,7 +1129,7 @@ void CALLBACK QuicksandEngineApp::OnD3D11DestroyDevice(void* pUserContext)
 {
 	if (g_pApp->m_Renderer)  // [rez] Fix for multi-monitor issue when target monitor is portrait; posted by Kl1X
 		g_pApp->m_Renderer->VShutdown();
-	D3DRenderer::g_DialogResourceManager.OnD3D11DestroyDevice();
+	D3DRenderer::g_pDialogResourceManager.OnD3D11DestroyDevice();
 	g_pApp->m_Renderer = shared_ptr<IRenderer>(NULL);
 }
 
@@ -1250,7 +1257,7 @@ HRESULT CALLBACK QuicksandEngineApp::OnD3D9CreateDevice(IDirect3DDevice9* pd3dDe
 {
 	HRESULT hr;
 
-	V_RETURN(D3DRenderer::g_DialogResourceManager.OnD3D9CreateDevice(pd3dDevice));
+	V_RETURN(D3DRenderer::g_pDialogResourceManager.OnD3D9CreateDevice(pd3dDevice));
 
 	return S_OK;
 }
@@ -1262,7 +1269,7 @@ HRESULT CALLBACK QuicksandEngineApp::OnD3D9CreateDevice(IDirect3DDevice9* pd3dDe
 void CALLBACK QuicksandEngineApp::OnD3D9DestroyDevice(void* pUserContext)
 {
 	g_pApp->m_Renderer->VShutdown();
-	D3DRenderer::g_DialogResourceManager.OnD3D9DestroyDevice();
+	D3DRenderer::g_pDialogResourceManager.OnD3D9DestroyDevice();
 	g_pApp->m_Renderer = shared_ptr<IRenderer>(NULL);
 }
 

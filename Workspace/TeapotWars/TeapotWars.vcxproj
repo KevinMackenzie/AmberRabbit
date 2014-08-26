@@ -124,6 +124,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;QuicksandEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -142,6 +145,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;QuicksandEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -160,6 +166,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;QuicksandEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)\..\..\Log\$(Platform)\$(Configuration)\$(ProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="TeapotWars.rc" />
