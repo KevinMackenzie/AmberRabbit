@@ -588,9 +588,11 @@ void HumanView::Console::HandleKeyboardInput(int key)
 
 bool TTFResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	shared_ptr<TTFResourceExtraData> extra = static_pointer_cast<TTFResourceExtraData>(handle->GetExtra());
+	auto extra = shared_ptr<TTFResourceExtraData>(QSE_NEW TTFResourceExtraData());
 
 	extra->m_pFont = GLUFLoadFont(rawBuffer, rawSize, 0.25f);//default font size
+
+	handle->SetExtra(extra);
 
 	if (extra->m_pFont)
 		return true;

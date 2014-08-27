@@ -147,6 +147,8 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	extern shared_ptr<IResourceLoader> CreateWAVResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateDDSResourceLoader();
+	extern shared_ptr<IResourceLoader> CreatePNGResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateTTFResourceLoader();
 	//extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
@@ -158,6 +160,8 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->RegisterLoader(CreateWAVResourceLoader());
 	m_ResCache->RegisterLoader(CreateOGGResourceLoader());
 	m_ResCache->RegisterLoader(CreateDDSResourceLoader());
+	m_ResCache->RegisterLoader(CreatePNGResourceLoader());
+	m_ResCache->RegisterLoader(CreateJPGResourceLoader());
 	m_ResCache->RegisterLoader(CreateTTFResourceLoader());
 	//m_ResCache->RegisterLoader(CreateJPGResourceLoader());
 	m_ResCache->RegisterLoader(CreateXmlResourceLoader());
@@ -201,16 +205,25 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	// DXUTInit, DXUTCreateWindow - Chapter 5, page 145	
 	//DXUTInit(true, true, lpCmdLine, true); // Parse the command line, handle the default hotkeys, and show msgboxes
 
-	m_pWindow = glfwCreateWindow(GET_CONFIG_ELEMENT_S("WINDOW_WIDTH"), GET_CONFIG_ELEMENT_S("WINDOW_HEIGHT"), VGetGameTitle(), (GET_CONFIG_ELEMENT_STR("WINDOW_FULLSCREEN") == "TRUE") ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	m_pWindow = glfwCreateWindow(GET_CONFIG_ELEMENT_S("WIDTH"), GET_CONFIG_ELEMENT_S("HEIGHT"), VGetGameTitle(), (GET_CONFIG_ELEMENT_STR("FULLSCREEN") == "TRUE") ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!m_pWindow)
 	{
-		LOG_ERROR("GLFW window creation failed!")
+		LOG_ERROR("GLFW window creation failed!");
+		return false;
 	}
 
 	glfwMakeContextCurrent(m_pWindow);
 	
 	if (!GLUFInitOpenGLExtentions())
+		return false;
+
+	Resource ctrlRes("Art\\" + GET_CONFIG_ELEMENT_STR("CONTROL_TEXTURE"));
+	shared_ptr<ResHandle> pCtrlHandle = m_ResCache->GetHandle(&ctrlRes);
+	Resource defFontRes("Art\\Font\\" + GET_CONFIG_ELEMENT_STR("DEFAULT_FONT"));
+	shared_ptr<ResHandle> pDefFontHandle = m_ResCache->GetHandle(&defFontRes);
+
+	if (!GLUFInitGui(m_pWindow, QuicksandEngineApp::MsgProc, static_pointer_cast<GLTextureResourceExtraData>(pCtrlHandle->GetExtra())->GetTexture()), static_pointer_cast<TTFResourceExtraData>(pDefFontHandle->GetExtra())->GetFont())
 		return false;
 
 	GLRenderer_Base::g_pDialogResourceManager = new GLUFDialogResourceManager();
@@ -265,8 +278,10 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	//    Preload calls are discussed in Chapter 5, page 148
 	m_ResCache->Preload("*.ogg", NULL);
 	m_ResCache->Preload("*.dds", NULL);
+	m_ResCache->Preload("*.png", NULL);
+	m_ResCache->Preload("*.jpg", NULL);
 	m_ResCache->Preload("*.obj.model", NULL);
-	m_ResCache->Preload("*.ttf", NULL);
+	m_ResCache->Preload("*.ttff", NULL);
 
 	CheckForJoystick(GetHwnd());
 

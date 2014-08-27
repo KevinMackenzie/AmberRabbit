@@ -2,6 +2,8 @@
 #include "Material.hpp"
 #include "../ResourceCache/ResCache.hpp"
 #include "SceneNode.hpp"
+#include <png.h>
+#include <jpeglib.h>
 //#include "../GLI/gli.hpp"
 
 
@@ -67,10 +69,11 @@ shared_ptr<IResourceLoader> CreateDDSResourceLoader()
 //
 // class JpgResourceLoader					- creates an interface with the Resource cache to load JPG files
 //
-/*class JpgResourceLoader : public TextureResourceLoader
+class JpgResourceLoader : public TextureResourceLoader
 {
 public:
 	virtual std::string VGetPattern() { return "*.jpg"; }
+	virtual bool VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
 };
 
 shared_ptr<IResourceLoader> CreateJPGResourceLoader()
@@ -85,12 +88,13 @@ class PngResourceLoader : public TextureResourceLoader
 {
 public:
 	virtual std::string VGetPattern() { return "*.png"; }
+	virtual bool VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
 };
 
 shared_ptr<IResourceLoader> CreatePNGResourceLoader()
 {
 	return shared_ptr<IResourceLoader>(QSE_NEW PngResourceLoader());
-}*/
+}
 
 
 GLTextureResourceExtraData::GLTextureResourceExtraData()
@@ -100,140 +104,247 @@ GLTextureResourceExtraData::GLTextureResourceExtraData()
 
 GLTextureResourceExtraData::~GLTextureResourceExtraData()
 {
+	glDeleteBuffers(1, &m_pTexture);
 }
 
-/*ILenum GetTextureType(std::string pattern)
-{
-	if (pattern == "*.dds")
-		return IL_DDS;
-	else if (pattern == "*.png")
-		return IL_PNG;
-	else if (pattern == "*.jpg")
-		return IL_JPG;
-	else
-		return UNSUPPORTED_IMAGE_FORMAT;
-}*/
 
 unsigned int TextureResourceLoader::VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize)
 {
 	// This will keep the resource cache from allocating memory for the texture, so DirectX can manage it on it's own.
 	return 0;
 }
-/*
+
 //
 // TextureResourceLoader::VLoadResource				- Chapter 14, page 492
 //
-bool TextureResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
+
+bool PngResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	shared_ptr<GLTextureResourceExtraData> extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
+	auto extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
 
-	// Load the Texture
+	//header for testing if it is a png
+	png_byte header[8];
 
-		//everything else can just have standard flat images with no mipmaps
-		
-		
-	//------ Generate an image name to use.
-	ILuint ImgId = 0;
-	ilGenImages(1, &ImgId);
-
-	//------ Bind this image name.
-	ilBindImage(ImgId);
-
-
-	if (!ilLoadL(GetTextureType(VGetPattern()), rawBuffer, rawSize))
+	//open file as binary
+	FILE *fp = fopen("DO_NOT_DELETE", "rb");
+	if (!fp) 
 	{
-		LOG_ERROR("Loading image failed. Invalid filename.");
+		LOG_ERROR("Dummy File Deleted!")
 		return false;
 	}
 
-	unsigned int texWidth = ilGetInteger(IL_IMAGE_WIDTH);
-	unsigned int texHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+	//my hack
+	setbuf(fp, rawData);
 
-	int bytesPerPixel = ilGetInteger(IL_IMAGE_BPP);
-	if (!(bytesPerPixel == 3 || bytesPerPixel == 4))
+	//read the header
+	fread(header, 1, 8, fp);
+
+	//test if png
+	int is_png = !png_sig_cmp(header, 0, 8);
+	if (!is_png) 
 	{
-		LOG_ERROR("Loading image failed. Must be 24/32 bits/pixels.");
+		fclose(fp);
 		return false;
 	}
 
-	//------ Allocate a buffer to store the bitmap data.
+	//create png struct
+	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL,
+		NULL, NULL);
+	if (!png_ptr) 
+	{
+		fclose(fp);
+		return false;
+	}
 
-	char* data = "";
+	//create png info struct
+	png_infop info_ptr = png_create_info_struct(png_ptr);
+	if (!info_ptr) 
+	{
+		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+		fclose(fp);
+		return false;
+	}
 
+	//create png info struct
+	png_infop end_info = png_create_info_struct(png_ptr);
+	if (!end_info) 
+	{
+		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+		fclose(fp);
+		return false;
+	}
 
-	//------ Copy data from DevIL to our pixmap.
-	ilCopyPixels(0, 0, 0, texHeight, texWidth, 1, IL_RGBA/*ALWAYS load in RGBA space, becuase everything but JPG and a couple others support it, IL_UNSIGNED_BYTE, data);
+	//png error stuff, not sure libpng man suggests this.
+	if (setjmp(png_jmpbuf(png_ptr))) 
+	{
+		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+		fclose(fp);
+		return false;
+	}
 
-	//------ Unbound image name and frees DevIL image memory.  I am only using DevIL to load to memory, I am loading to OpenGL Manuall
-	ilBindImage(0);
-	ilDeleteImage(ImgId);
+	//init png reading
+	png_init_io(png_ptr, fp);
 
-	// Create the sampler state?
-	//NO, there will be ONE... ONE sampler that is in the renderer
+	//let libpng know you already read the first 8 bytes
+	png_set_sig_bytes(png_ptr, 8);
 
-	//make this openGL
+	// read all the info up to the image data
+	png_read_info(png_ptr, info_ptr);
 
-	glGenBufferBindBuffer(GL_TEXTURE_2D, &extra->m_pTexture);
-	gl
-	
+	//variables to pass to get info
+	int bit_depth, color_type;
+	png_uint_32 twidth, theight;
+
+	// get info about png
+	png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type,
+		NULL, NULL, NULL);
+
+	//update width and height based on png info
+	//width = twidth;
+	//height = theight;
+
+	// Update the png info struct.
+	png_read_update_info(png_ptr, info_ptr);
+
+	// Row size in bytes.
+	int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+
+	// Allocate the image_data as a big block, to be given to opengl
+	png_byte *image_data = new png_byte[rowbytes * theight];
+	if (!image_data) 
+	{
+		//clean up memory and close stuff
+		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+		fclose(fp);
+		return false;
+	}
+
+	//row_pointers is for pointing to image_data for reading the png with libpng
+	png_bytep *row_pointers = new png_bytep[theight];
+	if (!row_pointers) {
+		//clean up memory and close stuff
+		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+		delete[] image_data;
+		fclose(fp);
+		return false;
+	}
+	// set the individual row_pointers to point at the correct offsets of image_data
+	for (unsigned int i = 0; i < theight; ++i)
+		row_pointers[theight - 1 - i] = image_data + i * rowbytes;
+
+	//read the png into image_data through row_pointers
+	png_read_image(png_ptr, row_pointers);
+
+	//Now generate the OpenGL texture object
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, twidth, theight, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)image_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	//clean up memory and close stuff
+	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+	delete[] image_data;
+	delete[] row_pointers;
+	fclose(fp);
+
+	extra->m_pTexture = texture;
 
 	handle->SetExtra(extra);
+
+	/* That's it */
 	return true;
-}*/
+}
+
+bool JpgResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, shared_ptr<ResHandle> handle)
+{
+	auto extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
+	GLuint texture;
+
+	FILE *fd;
+	struct jpeg_decompress_struct cinfo;
+	struct jpeg_error_mgr jerr;
+
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_decompress(&cinfo);
+
+	if (0 == (fd = fopen("DO_NOT_DELETE", "rb")))
+	{
+		LOG_ERROR("Dummy File Deleted!")
+		return false;
+	}
+
+	//a little hack
+	setbuf(fd, rawData);
+
+	jpeg_stdio_src(&cinfo, fd);
+	jpeg_read_header(&cinfo, TRUE);
+	
+	if (!jpeg_start_decompress(&cinfo))
+	{
+		LOG_ERROR("Failed to start jpeg decompression");
+		return false;
+	}
+
+
+	//JPG can be grayscale OR RGB
+	unsigned int offset = cinfo.out_color_space == JCS_GRAYSCALE ? 1 : 3;
+
+	//the bitmap data
+	unsigned char* bitmap = (unsigned char*)malloc(cinfo.output_width * cinfo.output_height * offset);
+
+	//loop through and get each line
+	unsigned char* line;
+	while (cinfo.output_scanline < cinfo.output_height)
+	{
+		line = bitmap +
+			offset * cinfo.output_width * cinfo.output_scanline;
+		jpeg_read_scanlines(&cinfo, &line, 1);
+	}
+	
+	if (!jpeg_finish_decompress(&cinfo))
+	{
+		LOG_ERROR("Failed to finish jpeg decompression");
+		return false;
+	}
+
+	//buffer the data
+	glGenBuffers(1, &texture);
+	glBindBuffer(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0,
+		offset == 1 ? GL_LUMINANCE : GL_RGB, 
+		cinfo.output_width,
+		cinfo.output_height, 0, 
+		offset == 1 ? GL_LUMINANCE : GL_RGB, 
+		GL_UNSIGNED_BYTE, 
+		bitmap);
+
+	//clean up
+	free(bitmap);
+	fclose(fd);
+	line = nullptr;
+
+
+	extra->m_pTexture = texture;
+
+	handle->SetExtra(extra);
+
+	/* That's it */
+	return true;
+}
 
 bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
-	shared_ptr<GLTextureResourceExtraData> extra = static_pointer_cast<GLTextureResourceExtraData>(handle->GetExtra());
+	auto extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
 	//GLI only does .dds's
 
-	//make a special exception for .dds's, let them load themselves 
+	extra->m_pTexture = GLUF::LoadTextureFromMemory(rawData, rawSize, GLUF::TFF_DDS);
 
-	GLuint texId;
-	gli::texture2D Texture(gli::load_dds_memory(rawData, rawSize));
-	assert(!Texture.empty());
-	glGenTextures(1, &texId);
-	glBindTexture(GL_TEXTURE_2D, texId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, GLint(Texture.levels() - 1));
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_GREEN);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_BLUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_ALPHA);
-	glTexStorage2D(GL_TEXTURE_2D,
-		GLint(Texture.levels()),
-		GLenum(gli::internal_format(Texture.format())),
-		GLsizei(Texture.dimensions().x),
-		GLsizei(Texture.dimensions().y));
-	if (gli::is_compressed(Texture.format()))
-	{
-		for (gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			glCompressedTexSubImage2D(GL_TEXTURE_2D,
-				GLint(Level),
-				0, 0,
-				GLsizei(Texture[Level].dimensions().x),
-				GLsizei(Texture[Level].dimensions().y),
-				GLenum(gli::internal_format(Texture.format())),
-				GLsizei(Texture[Level].size()),
-				Texture[Level].data());
-		}
-	}
-	else
-	{
-		for (gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			glTexSubImage2D(GL_TEXTURE_2D,
-				GLint(Level),
-				0, 0,
-				GLsizei(Texture[Level].dimensions().x),
-				GLsizei(Texture[Level].dimensions().y),
-				GLenum(gli::external_format(Texture.format())),
-				GLenum(gli::type_format(Texture.format())),
-				Texture[Level].data());
-		}
-	}
-	extra->m_pTexture = texId;
-
+	handle->SetExtra(extra);
 	return true;
 }
 

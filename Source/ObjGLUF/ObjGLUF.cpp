@@ -477,16 +477,24 @@ GLuint LoadTextureDDS(char* rawData, unsigned int size)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_GREEN);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_BLUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_ALPHA);
+	glTexImage2D(GL_TEXTURE_2D, 0,
+		GLenum(gli::internal_format(Texture.format())),
+		GLsizei(Texture.dimensions().x),
+		GLsizei(Texture.dimensions().y), 0,
+		GLenum(gli::external_format(Texture.format())),
+		GLenum(gli::type_format(Texture.format())),
+		nullptr);
+
 	if (gli::is_compressed(Texture.format()))
 	{
 		for (gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 		{
-			glCompressedTexImage2D(GL_TEXTURE_2D,
-				GLint(Level),
-				GLenum(gli::internal_format(Texture.format())),
+			glCompressedTexSubImage2D(GL_TEXTURE_2D,
+				GLint(Level), 0, 0,
 				GLsizei(Texture[Level].dimensions().x),
-				GLsizei(Texture[Level].dimensions().y), 0,
-				GLsizei(Texture[Level].size()),
+				GLsizei(Texture[Level].dimensions().y),
+				GLenum(gli::external_format(Texture.format())),
+				GLenum(Texture[Level].size()),
 				Texture[Level].data());
 		}
 	}
@@ -494,18 +502,15 @@ GLuint LoadTextureDDS(char* rawData, unsigned int size)
 	{
 		for (gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 		{
-			glTexImage2D(GL_TEXTURE_2D,
-				GLint(Level),
-				GLenum(gli::internal_format(Texture.format())),
+			glTexSubImage2D(GL_TEXTURE_2D,
+				GLint(Level), 0, 0,
 				GLsizei(Texture[Level].dimensions().x),
-				GLsizei(Texture[Level].dimensions().y), 0,
+				GLsizei(Texture[Level].dimensions().y),
 				GLenum(gli::external_format(Texture.format())),
 				GLenum(gli::type_format(Texture.format())),
 				Texture[Level].data());
 		}
 	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return tex;
 }

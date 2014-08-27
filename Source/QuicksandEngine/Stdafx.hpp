@@ -1,6 +1,8 @@
 #ifndef AR_STDAFX_HPP
 #define AR_STDAFX_HPP
 
+#pragma warning(disable : 4005)
+#pragma warning(disable : 4099)
 
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
@@ -389,6 +391,8 @@ extern QSE_API INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 
 
 
-
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #endif

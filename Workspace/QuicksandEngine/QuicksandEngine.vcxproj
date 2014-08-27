@@ -68,34 +68,34 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>2633dbbe</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>bf5f1971</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -104,14 +104,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_WIN32_WINNT=_WIN32_WINNT_WIN7;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -142,13 +142,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_WIN32_WINNT=_WIN32_WINNT_WIN7;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -181,7 +181,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_WIN32_WINNT=_WIN32_WINNT_WIN7;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -189,7 +189,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -222,7 +222,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=_WIN32_WINNT_WIN7;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QUICKSAND_ENGINE_EXPORTS;_WIN32_WINNT=_WIN32_WINNT_WIN7;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -230,7 +230,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -441,6 +441,12 @@
     <Import Project="..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets" Condition="Exists('..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets')" />
     <Import Project="..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets" Condition="Exists('..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets')" />
     <Import Project="..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets" Condition="Exists('..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets')" />
+    <Import Project="..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets" Condition="Exists('..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" />
+    <Import Project="..\packages\zlib.1.2.8.6\build\native\zlib.targets" Condition="Exists('..\packages\zlib.1.2.8.6\build\native\zlib.targets')" />
+    <Import Project="..\packages\libpng.redist.1.5.10.11\build\native\libpng.redist.targets" Condition="Exists('..\packages\libpng.redist.1.5.10.11\build\native\libpng.redist.targets')" />
+    <Import Project="..\packages\libpng.1.5.10.11\build\native\libpng.targets" Condition="Exists('..\packages\libpng.1.5.10.11\build\native\libpng.targets')" />
+    <Import Project="..\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets" Condition="Exists('..\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets')" />
+    <Import Project="..\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets" Condition="Exists('..\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -466,5 +472,11 @@
     <Error Condition="!Exists('..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem.1.56.0.0\build\native\boost_filesystem.targets'))" />
     <Error Condition="!Exists('..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc120.1.56.0.0\build\native\boost_filesystem-vc120.targets'))" />
     <Error Condition="!Exists('..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc120.1.56.0.0\build\native\boost_system-vc120.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib.1.2.8.6\build\native\zlib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.1.2.8.6\build\native\zlib.targets'))" />
+    <Error Condition="!Exists('..\packages\libpng.redist.1.5.10.11\build\native\libpng.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpng.redist.1.5.10.11\build\native\libpng.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\libpng.1.5.10.11\build\native\libpng.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpng.1.5.10.11\build\native\libpng.targets'))" />
+    <Error Condition="!Exists('..\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets'))" />
   </Target>
 </Project>

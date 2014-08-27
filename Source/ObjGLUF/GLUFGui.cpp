@@ -211,6 +211,7 @@ FT_Library g_FtLib;
 unsigned short g_WndWidth = 0;
 unsigned short g_WndHeight = 0;
 
+GLUFFontPtr g_DefaultFont = nullptr;
 GLUFProgramPtr g_UIProgram = nullptr;
 GLUFProgramPtr g_UIProgramUntex = nullptr;
 GLUFProgramPtr g_TextProgram = nullptr;
@@ -324,8 +325,9 @@ const char* g_TextShaderFrag =
 
 
 
-bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLuint controltex)
+bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLuint controltex, GLUFFontPtr pDefFont)
 {
+	g_DefaultFont = pDefFont;
 	g_pGLFWWindow = pInitializedGLFWWindow;
 	g_pCallback = callback;
 	
@@ -2412,20 +2414,30 @@ bool GLUFDialog::OnCycleFocus(bool bForward)
 	return false;
 }
 
-
+GLUFFontPtr g_ArielDefault = nullptr;
 //--------------------------------------------------------------------------------------
 void GLUFDialog::InitDefaultElements()
 {
-	char* rawData;
-	unsigned long rawSize = 0;
+	//this makes it more efficient
+	if (g_DefaultFont == nullptr)
+	{
+		if (g_ArielDefault == nullptr)
+		{
+			char* rawData;
+			unsigned long rawSize = 0;
 
-	rawData = GLUFLoadFileIntoMemory(_T("Arial.ttf"), &rawSize);
-	GLUFFontPtr font = GLUFLoadFont(rawData, rawSize, 0.02f);
-	//free(rawData); DON'T FREE
+			rawData = GLUFLoadFileIntoMemory(_T("Arial.ttf"), &rawSize);
+			g_ArielDefault = GLUFLoadFont(rawData, rawSize, 0.02f);
+			//free(rawData); DON'T FREE
+		}
 
-	int fontIndex = m_pManager->AddFont(font, FONT_WEIGHT_NORMAL);
-	SetFont(0, fontIndex);
-
+		int fontIndex = m_pManager->AddFont(g_ArielDefault, FONT_WEIGHT_NORMAL);
+		SetFont(0, fontIndex);
+	}
+	else
+	{
+		int fontIndex = m_pManager->AddFont(g_DefaultFont, FONT_WEIGHT_NORMAL);
+	}
 
 	GLUFElement Element;
 	GLUFRect rcTexture;

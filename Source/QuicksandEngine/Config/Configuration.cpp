@@ -11,7 +11,7 @@ string Configuration::GetElement(string key)
 	else
 	{
 		//throw an exception, this should be cought by the class accessing this key
-		throw INVALID_CONFIG_KEY;
+		LOG_ERROR("Invalid Configuration Key!");
 	}
 }
 
