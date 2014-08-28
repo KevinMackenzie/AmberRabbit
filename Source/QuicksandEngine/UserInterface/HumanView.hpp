@@ -180,10 +180,10 @@ class TTFResourceLoader : public IResourceLoader
 {
 public:
 	virtual bool VUseRawFile() { return false; }
-	virtual bool VDiscardRawBufferAfterLoad() { return true; }
+	virtual bool VDiscardRawBufferAfterLoad() { return false; }//DON"T do this, because the interface in OBJGLUF holds onto the data for when the window resizes
 	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize){ return 0; }
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
-	virtual std::string VGetPattern() { return "*.ttff"; }
+	virtual std::string VGetPattern() { return "*.font"; }
 };
 
 #endif

@@ -21,7 +21,8 @@ unsigned int GLObjMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, un
 bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
 	//since we are only loading one object, only load the first of all
-	shared_ptr<GLObjMeshResourceExtraData> extraData = static_pointer_cast<GLObjMeshResourceExtraData>(handle->GetExtra());
+	//shared_ptr<GLObjMeshResourceExtraData> extraData = static_pointer_cast<GLObjMeshResourceExtraData>(handle->GetExtra());
+	auto extraData = shared_ptr<GLObjMeshResourceExtraData>(QSE_NEW GLObjMeshResourceExtraData());
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_SortByPType, "");
@@ -73,12 +74,6 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_SPECULAR, &tempColor))
 			extraData->m_pMaterial->SetSpecular(AssimpToGlm4_3u8(tempColor), power);
 
-		aiString path;
-		pMat->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-
-		Resource res(path.C_Str());
-		shared_ptr<ResHandle> tex = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
-		extraData->m_pMaterial->SetTexture(tex);
 
 		/*
 		if (scene->mNumMeshes > 1)
@@ -166,6 +161,7 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		GLUFBUFFERMANAGER.ModifyUniformMaterial(extraData->mUniforms, mat);
 		*/
 		//delete scene;
+		handle->SetExtra(extraData);
 		return true;
 	}
 	else
@@ -189,12 +185,32 @@ GLMeshNode::GLMeshNode(const ActorId actorId,
 	if (mat)
 		SetMaterial(*mat);
 
-
+	Resource shaderResource("Shaders\\BasicLighting.prog");
+	m_pBasicShading = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+	SetShader(m_pBasicShading);
 }
 
 HRESULT GLMeshNode::VOnRestore(Scene* pScene)
 {
 	//nothing
+	return S_OK;
+}
+
+HRESULT GLMeshNode::VPreRender(Scene* pScene)
+{
+	HRESULT hr = S_OK;
+	V_RETURN(SceneNode::VPreRender(pScene));
+
+
+	//GLUFVariableLocMap uniformLocations = GLUFSHADERMANAGER.GetShaderUniformLocations(static_pointer_cast<GLProgramResourceExtraData>(GetShader()->GetExtra())->GetProgram());
+
+	//auto it = uniformLocations.find("_light_position");
+	//if (it != uniformLocations.end())
+	//	glUniform3f(it->second, 4.0f, 4.0f, 4.0f);//TODO: set this up with an actual light node
+
+
+	//setup with the lighting uniform
+
 	return S_OK;
 }
 

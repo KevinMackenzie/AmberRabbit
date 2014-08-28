@@ -11,9 +11,14 @@ in VS_OUT
 } fs_in;
 
 // Values that stay constant for the whole mesh.
-uniform sampler2D _ts0;
+uniform sampler2D mat_tex0;
 //uniform mat4 MV;
-uniform vec3 LightPosition_worldspace;
+uniform vec3 _light_position;
+
+uniform vec4 mat_diffuse;
+uniform vec4 mat_ambient;
+uniform vec4 mat_specular;
+uniform float mat_power;
 
 void main(){
 
@@ -23,9 +28,15 @@ void main(){
 	float LightPower = 50.0f;
 	
 	// Material properties
-	vec3 MaterialDiffuseColor = texture2D( _ts0, fs_in.uvCoord ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
+	vec3 MaterialDiffuseColor = texture2D( mat_tex0, fs_in.uvCoord ).rgb;
+	//this is if there is no texture;
+	if(MaterialDiffuseColor.a == 0.0f)
+	{
+		MaterialDiffuseColor = mat_diffuse;
+	}
+	
+	vec3 MaterialAmbientColor = mat_ambient * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = mat_specular;
 
 	// Distance to the light
 	float distance = length( LightPosition_worldspace - fs_in.Position_worldspace );
@@ -57,7 +68,7 @@ void main(){
 		// Diffuse : "color" of the object
 		MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
 		// Specular : reflective highlight, like a mirror
-		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance), 1.0);
+		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,mat_power) / (distance*distance), 1.0);
 	
 	//_Color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }

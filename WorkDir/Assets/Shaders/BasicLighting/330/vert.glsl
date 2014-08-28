@@ -23,7 +23,7 @@ uniform mat4 _view;
 uniform mat4 _mv;
 uniform mat4 _mvp;
 
-layout(location = 3) uniform vec3 LightPosition_worldspace;
+uniform vec3 _light_position = vec3(4.0f, 4.0f, 4.0f);
 
 void main(){
 
@@ -39,7 +39,7 @@ void main(){
 	vs_out.EyeDirection_cameraspace = vec3(0,0,0) - vertexPosition_cameraspace;
 
 	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
-	vec3 LightPosition_cameraspace = ( _view * vec4(LightPosition_worldspace,1)).xyz;
+	vec3 LightPosition_cameraspace = ( _view * vec4(_light_position,1)).xyz;
 	vs_out.LightDirection_cameraspace = LightPosition_cameraspace + EyeDirection_cameraspace;
 	
 	// Normal of the the vertex, in camera space

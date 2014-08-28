@@ -119,13 +119,13 @@ MainMenuUI::MainMenuUI()
 
 	m_bCreatingGame = true;
 
-	GLUF::Color color = GLUF::Color(80, 80, 80, 80);
+	GLUF::Color color = GLUF::Color(200, 0, 0, 80);
 	m_SampleUI.SetBackgroundColor(color);
 
-	Resource ariel("Fonts/Ariel.ttf");
+	/*Resource ariel("Fonts/Ariel.ttf");
 	m_ArielFont = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&ariel);
 	g_ArielFontLocation = GLRenderer_Base::g_pDialogResourceManager->AddFont(static_pointer_cast<TTFResourceExtraData>(m_ArielFont->GetExtra())->GetFont(), FONT_WEIGHT_NORMAL);
-	m_SampleUI.SetFont(ARIEL_FONT_DIALOG_LOCATION, g_ArielFontLocation);
+	m_SampleUI.SetFont(ARIEL_FONT_DIALOG_LOCATION, g_ArielFontLocation);*/
 	//m_SampleUI.SetFont(0, L"Ariel", height, 0);
 
 	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", fX - GLUF_NORMALIZE_COORD(20), fY, g_fSampleUIWidth, fheight * 2);

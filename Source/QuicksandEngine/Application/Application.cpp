@@ -90,7 +90,7 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 
 
 	// Perform application initialization
-	if (!QuicksandEngine::g_pApp->InitInstance(hInstance, lpCmdLine, 0, GET_CONFIG_ELEMENT_S("WINDOW_XPOS"), GET_CONFIG_ELEMENT_S("WINDOW_YPOS")))
+	if (!QuicksandEngine::g_pApp->InitInstance(hInstance, lpCmdLine, 0, GET_CONFIG_ELEMENT_S("WIDTH"), GET_CONFIG_ELEMENT_S("HEIGHT")))
 	{
 		// [rez] Note: Fix memory leaks if we hit this branch.  Also, print an error.
 		return FALSE;
@@ -112,20 +112,23 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 
 	//return RegisterClassEx(&wcex);
 
-	float currentTime = GLUFGetTimef();
+	double currentTime = GLUFGetTime();
 	while (QuicksandEngine::g_pApp->IsRunning())
 	{
 		GLUFStats();
 
 		// Update the game views, but nothing else!
 		// Remember this is a modal screen.
-		float timeNow = GLUFGetTimef();
-		float deltaMilliseconds = timeNow - currentTime;
+		double timeNow = GLUFGetTime();
+		float deltatime = float(timeNow - currentTime);
 
 		currentTime = timeNow;
 
-		QuicksandEngine::g_pApp->OnUpdateGame(timeNow, deltaMilliseconds);
-		QuicksandEngine::g_pApp->GLFrameRender(timeNow, deltaMilliseconds);
+		QuicksandEngine::g_pApp->OnUpdateGame(timeNow, deltatime);
+		QuicksandEngine::g_pApp->GLFrameRender(timeNow, deltatime);
+
+		glfwSwapBuffers(QuicksandEngine::g_pApp->GetWindow());
+		glfwPollEvents();
 	}
 	//DXUTMainLoop();
 	//DXUTShutdown();

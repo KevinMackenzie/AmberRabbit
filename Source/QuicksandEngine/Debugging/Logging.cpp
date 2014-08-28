@@ -1,4 +1,7 @@
 #include "../Stdafx.hpp"
+#ifdef _WIN32
+#include <ntddkbd.h>
+#endif
 #include "Logging.hpp"
 #include "../Config/ConfigManager.hpp"
 #include <string>
@@ -59,24 +62,30 @@ namespace AwLogging
 		}
 
 		//now output the actual message
-		ss << "\'" << LogToString(logType) << "\'\n";
+		ss << "\'" << logMessage << "\'\n";
 
 		//always output everything to the console until I impliment variable verbosity
 		std::cout << ss.str();
 
 		//now depending on the type, increment the correct value
 		IncrementProperLogTypes(logType);
-		
+
 		if (logType == ERROR_)
 		{
 #ifdef _WIN32
-			ss.seekg(ss.end);
-			unsigned int size = (unsigned int)ss.tellg();
-			wchar_t *wstr = new wchar_t[size];
-			mbstowcs(wstr, ss.str().c_str(), size);
+			wchar_t *wstr = new wchar_t[MAXLEN];
+			mbstowcs(wstr, ss.str().c_str(), MAXLEN);
 			::MessageBox(NULL, wstr, L"Error!", MB_OK);
 #endif
 			QuicksandEngine::g_pApp->SetQuitting(true);
+		}
+		else if (logType == ASSERTION)
+		{
+#ifdef _WIN32
+			wchar_t *wstr = new wchar_t[MAXLEN];
+			mbstowcs(wstr, ss.str().c_str(), MAXLEN);
+			::MessageBox(NULL, wstr, L"Assertion Failure!", MB_OK);
+#endif
 		}
 
 		//finally write it to the log stream

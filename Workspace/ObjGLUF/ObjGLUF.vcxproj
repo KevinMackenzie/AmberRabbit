@@ -72,25 +72,26 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\dynamic\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
+    <Linkage-freetype>static</Linkage-freetype>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\dynamic\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\dynamic\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(SolutionDir)/packages/freetype.2.4.2.1/build/native/bin/$(Platform)/v110/dynamic/$(Configuration)/;$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\static\$(Configuration)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\freetype.2.4.2.1\build\native\lib\$(Platform)\v110\dynamic\$(Configuration)</LibraryPath>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>

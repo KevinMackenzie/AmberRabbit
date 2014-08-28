@@ -59,6 +59,8 @@ enum GLUF_MESSAGE_TYPE
 // Funcs and Enums for using fonts
 //--------------------------------------------------------------------------------------
 
+typedef std::shared_ptr<GLUFFont> GLUFFontPtr;
+
 #define GLUF_POINTS_PER_PIXEL 1.333333f
 #define GLUF_POINTS_TO_PIXELS(points) (GLUFFontSize)((float)points * GLUF_POINTS_PER_PIXEL)
 #define GLUF_NORMALIZE_COORD(value)(value / ((float)(GLUF::g_WndHeight > GLUF::g_WndWidth) ? GLUF::g_WndWidth : GLUF::g_WndHeight))
@@ -75,6 +77,7 @@ typedef bool(*PGLUFCALLBACK)(GLUF_MESSAGE_TYPE, int, int, int, int);
 #define GLUF_GUI_CALLBACK_PARAM GLUF_MESSAGE_TYPE msg, int param1, int param2, int param3, int param4
 #define GLUF_PASS_CALLBACK_PARAM msg, param1, param2, param3, param4
 
+
 //this must be called AFTER GLUFInitOpenGLExtentions();  callbackFunc may do whatever it pleases, however;
 // callbackFunc must explicitly call the callback methods of the dialog manager and the dialog classes (and whatever else)
 // for full documentation on what each parameter is, consult the glfw input/window documentation.  For each value,
@@ -82,13 +85,15 @@ typedef bool(*PGLUFCALLBACK)(GLUF_MESSAGE_TYPE, int, int, int, int);
 // a callback does not use the parameter, it will be 0, but this does not mean 0 is an invalid parameter for callbacks
 // that use it.  Other notes: when specifying hotkeys, always use the GLFW macros for specifying them.  Consult the GLFW
 // input documentation for more information.
-typedef std::shared_ptr<GLUFFont> GLUFFontPtr;
-OBJGLUF_API bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex, GLUFFontPtr pDefFont = nullptr);
+OBJGLUF_API bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex);
+
+
+OBJGLUF_API void GLUFSetDefaultFont(GLUFFontPtr pDefFont);
 
 typedef float GLUFFontSize;//this is in normalized screencoords
 
 
-OBJGLUF_API GLUFFontPtr GLUFLoadFont(char* rawData, uint64_t rawSize, float fontHeight);
+OBJGLUF_API GLUFFontPtr GLUFLoadFont(void* rawData, uint64_t rawSize, float fontHeight);
 OBJGLUF_API GLUFFontSize GLUFGetFontHeight(GLUFFontPtr font);
 
 //NOTE: not all fonts support all of these weights! the closest available will be chosen (ALSO this does not work well with preinstalled fonts)

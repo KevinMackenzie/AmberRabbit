@@ -1,9 +1,11 @@
 IF "%2" == "Debug" (
 copy "%~dp0\packages\sfml.redist.2.1.0.0\build\native\bin\%1\v110\%2\Desktop\sfml-audio-d-2.dll" "%~dp0\..\Bin\%1\%2\" /Y
 copy "%~dp0\packages\sfml.redist.2.1.0.0\build\native\bin\%1\v110\%2\Desktop\sfml-system-d-2.dll" "%~dp0\..\Bin\%1\%2\" /Y
+copy "%~dp0\packages\freetype.redist.2.4.2.1\build\native\bin\%1\v110\dynamic\%2\freetype246_D.dll" "%~dp0\..\Bin\%1\%2\" /Y
 ) ELSE (
 copy "%~dp0\packages\sfml.redist.2.1.0.0\build\native\bin\%1\v110\%2\Desktop\sfml-audio-2.dll" "%~dp0\..\Bin\%1\%2\" /Y
 copy "%~dp0\packages\sfml.redist.2.1.0.0\build\native\bin\%1\v110\%2\Desktop\sfml-system-2.dll" "%~dp0\..\Bin\%1\%2\" /Y
+copy "%~dp0\packages\freetype.redist.2.4.2.1\build\native\bin\%1\v110\dynamic\%2\freetype246.dll" "%~dp0\..\Bin\%1\%2\" /Y
 )
 
 copy "%~dp0\packages\sfml.redist.2.1.0.0\build\native\bin\%1\v110\%2\Desktop\openal32.dll" "%~dp0\..\Bin\%1\%2\" /Y

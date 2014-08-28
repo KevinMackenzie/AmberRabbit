@@ -325,9 +325,8 @@ const char* g_TextShaderFrag =
 
 
 
-bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLuint controltex, GLUFFontPtr pDefFont)
+bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLuint controltex)
 {
-	g_DefaultFont = pDefFont;
 	g_pGLFWWindow = pInitializedGLFWWindow;
 	g_pCallback = callback;
 	
@@ -395,11 +394,6 @@ bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLu
 
 	glBindVertexArray(0);
 
-
-	//load the texture for the controls
-	g_pControlTexturePtr = controltex;
-
-
 	//initialize the freetype library.
 	FT_Error err = FT_Init_FreeType(&g_FtLib);
 	if (err)
@@ -407,6 +401,10 @@ bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLu
 		GLUF_ERROR("Failed to Initialize the Freetype Library!");
 		return false;
 	}
+
+	//load the texture for the controls
+	g_pControlTexturePtr = controltex;
+
 
 	int w, h;
 	glfwGetWindowSize(g_pGLFWWindow, &w, &h);
@@ -416,6 +414,17 @@ bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLu
 	return true;
 }
 
+void GLUFSetDefaultFont(GLUFFontPtr pDefFont)
+{
+	g_DefaultFont = pDefFont;
+}
+
+bool GLUFInitFont()
+{
+
+
+	return true;
+}
 
 GLUFResult GLUFTrace(const char* file, const char* function, unsigned long lineNum, GLUFResult value, const char* message)
 {
@@ -681,10 +690,14 @@ float GLUFFont::GetStringWidthNDC(std::wstring str)
 }
 
 
-GLUFFontPtr GLUFLoadFont(char* rawData, uint64_t rawSize, float fontHeight)
+GLUFFontPtr GLUFLoadFont(void* rawData, uint64_t rawSize, float fontHeight)
 {
 	GLUFFontPtr ret(new GLUFFont());
-	ret->Init(rawData, rawSize, fontHeight);
+	if (!ret->Init(rawData, rawSize, fontHeight))
+	{
+		GLUF_ERROR("Failed to load font!");
+		return nullptr;
+	}
 	return ret;
 }
 
@@ -2419,6 +2432,7 @@ GLUFFontPtr g_ArielDefault = nullptr;
 void GLUFDialog::InitDefaultElements()
 {
 	//this makes it more efficient
+	int fontIndex = 0;
 	if (g_DefaultFont == nullptr)
 	{
 		if (g_ArielDefault == nullptr)
@@ -2431,13 +2445,14 @@ void GLUFDialog::InitDefaultElements()
 			//free(rawData); DON'T FREE
 		}
 
-		int fontIndex = m_pManager->AddFont(g_ArielDefault, FONT_WEIGHT_NORMAL);
-		SetFont(0, fontIndex);
+		fontIndex = m_pManager->AddFont(g_ArielDefault, FONT_WEIGHT_NORMAL);
 	}
 	else
 	{
-		int fontIndex = m_pManager->AddFont(g_DefaultFont, FONT_WEIGHT_NORMAL);
+		fontIndex = m_pManager->AddFont(g_DefaultFont, FONT_WEIGHT_NORMAL);
 	}
+
+	SetFont(0, fontIndex);
 
 	GLUFElement Element;
 	GLUFRect rcTexture;
@@ -6910,7 +6925,10 @@ void GLUFEditBox::PlaceCaret( int nCP)
 		int rendCaret = GetStrRenderIndexFromStrIndex(nCP);
 		if (rendCaret == -2)
 		{
-			rendCaret = m_strRenderBuffer.back();
+			if (m_strRenderBuffer.size() == 0)
+				rendCaret = 0;
+			else
+				rendCaret = m_strRenderBuffer.back();
 		}
 
 		while (rendCaret == -1)

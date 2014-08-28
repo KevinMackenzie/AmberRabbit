@@ -592,12 +592,12 @@ bool TTFResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, sha
 
 	extra->m_pFont = GLUFLoadFont(rawBuffer, rawSize, 0.25f);//default font size
 
+	if (extra->m_pFont == nullptr)
+		return false;
+
 	handle->SetExtra(extra);
 
-	if (extra->m_pFont)
-		return true;
-	else
-		return false;
+	return true;
 }
 
 shared_ptr<IResourceLoader> CreateTTFResourceLoader()

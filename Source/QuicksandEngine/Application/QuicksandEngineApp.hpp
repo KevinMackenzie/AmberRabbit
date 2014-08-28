@@ -45,6 +45,8 @@ public:
 	StringsManager mStringsManager;//this is used for strings (language)
 	const Point &GetScreenSize()  { return m_screenSize; }
 
+	GLFWwindow* GetWindow(){ return m_pWindow; }
+
 protected:
 	std::map<std::wstring, std::wstring> m_textResource;
 	std::map<std::wstring, UINT> m_hotkeys;

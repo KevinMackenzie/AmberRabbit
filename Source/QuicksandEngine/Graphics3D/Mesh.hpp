@@ -109,6 +109,7 @@ public:
 
 	virtual HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VOnLostDevice(Scene *pScene) { return S_OK; }
+	virtual HRESULT VPreRender(Scene* pScene);
 	virtual HRESULT VRender(Scene *pScene);
 	virtual HRESULT VPick(Scene *pScene, RayCast *pRayCast);
 
@@ -116,6 +117,9 @@ protected:
 	shared_ptr<ResHandle> m_Data;
 
 	//GLUFProgramPtr m_ShadingProgram;
+
+	//for a default, just have a single shader that does basic lighting
+	shared_ptr<ResHandle> m_pBasicShading;
 
 	float CalcBoundingSphere();
 };

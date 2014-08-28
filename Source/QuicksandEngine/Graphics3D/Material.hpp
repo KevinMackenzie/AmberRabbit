@@ -78,7 +78,7 @@ class TextureResourceLoader : public IResourceLoader
 public:
 	virtual bool VUseRawFile() { return false; }
 	virtual bool VDiscardRawBufferAfterLoad() { return true; }
-	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize);
+	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize){ return 0; }
 	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle) = 0;
 };
 

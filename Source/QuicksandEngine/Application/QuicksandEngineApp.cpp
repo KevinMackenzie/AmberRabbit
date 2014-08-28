@@ -205,7 +205,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	// DXUTInit, DXUTCreateWindow - Chapter 5, page 145	
 	//DXUTInit(true, true, lpCmdLine, true); // Parse the command line, handle the default hotkeys, and show msgboxes
 
-	m_pWindow = glfwCreateWindow(GET_CONFIG_ELEMENT_S("WIDTH"), GET_CONFIG_ELEMENT_S("HEIGHT"), VGetGameTitle(), (GET_CONFIG_ELEMENT_STR("FULLSCREEN") == "TRUE") ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	m_pWindow = glfwCreateWindow(screenWidth, screenHeight, VGetGameTitle(), (GET_CONFIG_ELEMENT_STR("FULLSCREEN") == "TRUE") ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!m_pWindow)
 	{
@@ -220,14 +220,18 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 
 	Resource ctrlRes("Art\\" + GET_CONFIG_ELEMENT_STR("CONTROL_TEXTURE"));
 	shared_ptr<ResHandle> pCtrlHandle = m_ResCache->GetHandle(&ctrlRes);
-	Resource defFontRes("Art\\Font\\" + GET_CONFIG_ELEMENT_STR("DEFAULT_FONT"));
-	shared_ptr<ResHandle> pDefFontHandle = m_ResCache->GetHandle(&defFontRes);
 
-	if (!GLUFInitGui(m_pWindow, QuicksandEngineApp::MsgProc, static_pointer_cast<GLTextureResourceExtraData>(pCtrlHandle->GetExtra())->GetTexture()), static_pointer_cast<TTFResourceExtraData>(pDefFontHandle->GetExtra())->GetFont())
+	if (!GLUFInitGui(m_pWindow, QuicksandEngineApp::MsgProc, static_pointer_cast<GLTextureResourceExtraData>(pCtrlHandle->GetExtra())->GetTexture()))
 		return false;
 
+	//since GLUFInitGui initializes the freetype library, this must be called afterwards
+	Resource defFontRes("Art\\Font\\" + GET_CONFIG_ELEMENT_STR("DEFAULT_FONT"));
+	shared_ptr<ResHandle> pDefFontHandle = m_ResCache->GetHandle(&defFontRes);
+	GLUFSetDefaultFont(static_pointer_cast<TTFResourceExtraData>(pDefFontHandle->GetExtra())->GetFont());
+
+
 	GLRenderer_Base::g_pDialogResourceManager = new GLUFDialogResourceManager();
-	GLRenderer_Base::g_pTextHelper = new GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 0.25f);
+	GLRenderer_Base::g_pTextHelper = new GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 0.02f);
 
 	/*if (hWnd == NULL)
 	{
@@ -249,6 +253,9 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 
 	// DXUTCreateDevice - Chapter 5 - page 139
 	m_screenSize = Point(screenWidth, screenHeight);
+
+	//set the screen position
+	glfwSetWindowPos(m_pWindow, GET_CONFIG_ELEMENT_I("WINDOW_XPOS"), GET_CONFIG_ELEMENT_I("WINDOW_YPOS"));
 
 	//If you have an older video card that only supports D3D9, comment in the next line, and make sure 
 	//the renderer setting in Game\PlayerOptions.xml is set to "Direct3D 9"
@@ -280,8 +287,9 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->Preload("*.dds", NULL);
 	m_ResCache->Preload("*.png", NULL);
 	m_ResCache->Preload("*.jpg", NULL);
+	m_ResCache->Preload("*.prog", NULL);
 	m_ResCache->Preload("*.obj.model", NULL);
-	m_ResCache->Preload("*.ttff", NULL);
+	m_ResCache->Preload("*.font", NULL);
 
 	CheckForJoystick(GetHwnd());
 

@@ -350,7 +350,7 @@ shared_ptr<ResHandle> ResCache::Load(Resource *r)
 
 	if (!loader)
 	{
-		LOG_ASSERT(loader && _T("Default resource loader not found!"));
+		LOG_ASSERT(loader && "Default resource loader not found!");
 		return handle;		// Resource not loaded!
 	}
 
@@ -415,7 +415,7 @@ shared_ptr<ResHandle> ResCache::Load(Resource *r)
 		m_resources[r->m_name] = handle;
 	}
 
-	LOG_ASSERT(loader && _T("Default resource loader not found!"));
+	LOG_ASSERT(loader && "Default resource loader not found!");
 	return handle;		// ResCache is out of memory!
 }
 
