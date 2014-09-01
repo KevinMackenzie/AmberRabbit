@@ -112,7 +112,7 @@ public:
 	virtual void VSetProxy();
 
 	// Logic Update
-	virtual void VOnUpdate(float time, float elapsedTime);
+	virtual void VOnUpdate(double time, float elapsedTime);
 
 	// Changing Game Logic State
 	virtual void VChangeState(BaseGameState newState);

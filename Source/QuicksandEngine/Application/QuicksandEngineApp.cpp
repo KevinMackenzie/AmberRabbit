@@ -141,8 +141,6 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 		LOG_ERROR("Failed to initialize resource cache!  Are your paths set up correctly?");
 		return false;
 	}
-	
-	//TODO: make sure to setup DevIL: ilutRenderer(ILUT_OPENGL);
 
 	extern shared_ptr<IResourceLoader> CreateWAVResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
@@ -230,8 +228,8 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	GLUFSetDefaultFont(static_pointer_cast<TTFResourceExtraData>(pDefFontHandle->GetExtra())->GetFont());
 
 
-	GLRenderer_Base::g_pDialogResourceManager = new GLUFDialogResourceManager();
-	GLRenderer_Base::g_pTextHelper = new GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 20);
+	GLRenderer_Base::g_pDialogResourceManager = QSE_NEW GLUFDialogResourceManager();
+	GLRenderer_Base::g_pTextHelper = QSE_NEW GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 20);
 
 	/*if (hWnd == NULL)
 	{
@@ -469,7 +467,6 @@ bool QuicksandEngineApp::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, 
 			{
 				*pbNoFurtherProcessing = true;
 			}
-			break;
 		}
 	}
 	case GM_UNICODE_CHAR:
@@ -642,6 +639,7 @@ bool QuicksandEngineApp::OnSysCommand(GLUF_MESSAGE_TYPE msg, int param1, int par
 		//}
 
 		m_bQuitting = true;
+		m_bIsRunning = false;
 
 		// Is there a game modal dialog up?
 		if (HasModalDialog())
@@ -884,8 +882,9 @@ int QuicksandEngineApp::Modal(shared_ptr<IScreenElement> pModalScreen, int defau
 	//LPARAM lParam = 0;
 	//int result = PumpUntilMessage(g_MsgEndModal, nullptr, &lParam);
 
+	BaseGameLogic *pGame = m_pGame;
 	int buttonResult = 0;
-	int currentTime = GLUFGetTimeMs();
+	double currentTime = GLUFGetTime();
 	for (;;)
 	{
 		buttonResult = g_Modal->GetButtonPressed();
@@ -896,19 +895,19 @@ int QuicksandEngineApp::Modal(shared_ptr<IScreenElement> pModalScreen, int defau
 
 		// Update the game views, but nothing else!
 		// Remember this is a modal screen.
-		if (m_pGame)
-		{
-			int timeNow = GLUFGetTimeMs();
-			int deltaMilliseconds = timeNow - currentTime;
-			for (GameViewList::iterator i = m_pGame->m_gameViews.begin(); i != m_pGame->m_gameViews.end(); ++i)
-			{
-				(*i)->VOnUpdate(deltaMilliseconds);
-			}
-			currentTime = timeNow;
-			//TODO:
-			//DXUTRender3DEnvironment();
-		}
-		glfwSwapBuffers(m_pWindow);
+		// [Kevin] although this is a modal dialog, we still want to update everything!
+		GLUFStats();
+
+
+		double timeNow = GLUFGetTime();
+		float deltatime = float(timeNow - currentTime);
+
+		currentTime = timeNow;
+
+		OnUpdateGame(timeNow, deltatime);
+		GLFrameRender(timeNow, deltatime);
+
+		glfwSwapBuffers(QuicksandEngine::g_pApp->GetWindow());
 		glfwPollEvents();
 	}
 

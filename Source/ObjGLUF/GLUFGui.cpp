@@ -1231,7 +1231,7 @@ bool GLUFDialog::MsgProc(GLUF_MESSAGE_TYPE msg, int32_t param1, int32_t param2, 
 		m_pManager->EnableKeyboardInputForAllDialogs();
 	}*/
 
-	if (!m_bKeyboardInput && msg == GM_KEY)
+	if (!m_bKeyboardInput && (msg == GM_KEY || msg == GM_UNICODE_CHAR))
 		return false;
 
 	// If caption is enable, check for clicks in the caption area.
@@ -1674,12 +1674,12 @@ GLUFElement* GLUFDialog::GetDefaultElement(GLUF_CONTROL_TYPE nControlType, unsig
 
 //--------------------------------------------------------------------------------------
 
-GLUFResult GLUFDialog::AddStatic(int ID, std::wstring strText, long x, long y, long width, long height, bool bIsDefault,
+GLUFResult GLUFDialog::AddStatic(int ID, std::wstring strText, long x, long y, long width, long height, unsigned int dwTextFlags, bool bIsDefault,
 GLUFStatic** ppCreated)
 {
 	GLUFResult hr = GR_SUCCESS;
 
-	GLUFStatic* pStatic = new (std::nothrow)GLUFStatic(this);
+	GLUFStatic* pStatic = new (std::nothrow)GLUFStatic(dwTextFlags, this);
 
 	if (ppCreated)
 		*ppCreated = pStatic;
@@ -1863,12 +1863,12 @@ bool bIsDefault, GLUFSlider** ppCreated)
 
 //--------------------------------------------------------------------------------------
 
-GLUFResult GLUFDialog::AddEditBox(int ID, std::wstring strText, long x, long y, long width, long height, unsigned int dwTextFlags, bool bIsDefault,
+GLUFResult GLUFDialog::AddEditBox(int ID, std::wstring strText, long x, long y, long width, long height, Charset charset, unsigned int dwTextFlags, bool bIsDefault,
 GLUFEditBox** ppCreated)
 {
 	GLUFResult hr = GR_SUCCESS;
 
-	GLUFEditBox* pEditBox = new (std::nothrow) GLUFEditBox((dwTextFlags & GT_MULTI_LINE) == GT_MULTI_LINE, this);
+	GLUFEditBox* pEditBox = new (std::nothrow) GLUFEditBox(charset, (dwTextFlags & GT_MULTI_LINE) == GT_MULTI_LINE, this);
 
 	if (ppCreated)
 		*ppCreated = pEditBox;
@@ -3533,11 +3533,11 @@ void GLUFControl::UpdateRects()
 //======================================================================================
 
 //--------------------------------------------------------------------------------------
-GLUFStatic::GLUFStatic(GLUFDialog* pDialog)
+GLUFStatic::GLUFStatic(unsigned int dwTextFlags, GLUFDialog* pDialog)
 {
 	m_Type = GLUF_CONTROL_STATIC;
 	m_pDialog = pDialog;
-
+	m_dwTextFlags = dwTextFlags;
 	//ZeroMemory(&m_strText, sizeof(m_strText));
 
 	for (auto it = m_Elements.begin(); it != m_Elements.end(); ++it)
@@ -3562,6 +3562,7 @@ void GLUFStatic::Render(float fElapsedTime)
 		iState = GLUF_STATE_DISABLED;
 
 	GLUFElement* pElement = m_Elements[0];
+	pElement->dwTextFormat = m_dwTextFlags;
 
 	pElement->FontColor.Blend(iState, fElapsedTime);
 
@@ -3597,7 +3598,7 @@ GLUFResult GLUFStatic::SetText(std::wstring strText)
 // GLUFButton class
 //======================================================================================
 
-GLUFButton::GLUFButton(GLUFDialog* pDialog)
+GLUFButton::GLUFButton(GLUFDialog* pDialog) : GLUFStatic(GT_CENTER | GT_VCENTER)
 {
 	m_Type = GLUF_CONTROL_BUTTON;
 	m_pDialog = pDialog;
@@ -6710,6 +6711,32 @@ void GLUFListBox::Render( float fElapsedTime)
 }
 
 
+const wchar_t *g_Charsets[] = { 
+	L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+	L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ",
+	L"0123456789",
+	L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+	L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"};
+
+const unsigned int g_CharsetLengths[] = { 96, 223, 10, 52, 62 };
+
+bool CharsetContains(unsigned int codepoint, Charset charset)
+{
+	switch (charset)
+	{
+	case Unicode:
+		return true;
+	default:
+		for (unsigned int i = 0; i < g_CharsetLengths[charset]; ++i)
+		{
+			if (g_Charsets[charset][i] == codepoint)
+				return true;
+		}
+		return false;
+	}
+}
+
+
 //======================================================================================
 // GLUFEditBox class
 //======================================================================================
@@ -6722,7 +6749,7 @@ bool GLUFEditBox::s_bHideCaret;   // If true, we don't render the caret.
 #define EDITBOX_SCROLLEXTENT 4
 
 //--------------------------------------------------------------------------------------
-GLUFEditBox::GLUFEditBox(bool isMultiline, GLUFDialog* pDialog) : GLUFControl(pDialog), m_ScrollBar(pDialog), m_bMultiline(isMultiline)
+GLUFEditBox::GLUFEditBox(Charset charset, bool isMultiline, GLUFDialog* pDialog) : GLUFControl(pDialog), m_ScrollBar(pDialog), m_bMultiline(isMultiline), m_Charset(charset)
 {
 	m_Type = GLUF_CONTROL_EDITBOX;
 	m_pDialog = pDialog;
@@ -7054,6 +7081,11 @@ void GLUFEditBox::PasteFromClipboard()
 
 void GLUFEditBox::InsertString(int pos, std::wstring str)
 {
+	for (auto it : str)
+	{
+		if (!CharsetContains(it, m_Charset))
+			return;
+	}
 	//GLUF_ASSERT(pos < GetTextLength() - 1);
 	if (pos < 0)
 	{
@@ -7095,6 +7127,8 @@ void GLUFEditBox::RemoveString(int pos, int len)
 
 void GLUFEditBox::InsertChar(int pos, wchar_t ch)
 {
+	if (!CharsetContains(ch, m_Charset))
+		return;
 	//GLUF_ASSERT(pos < GetTextLength() - 1);
 	if (pos < 0)
 	{
@@ -7532,6 +7566,14 @@ bool GLUFEditBox::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, int par
 		bHandled = true;
 		break;
 	case GM_UNICODE_CHAR:
+
+		//is it within the charset?
+		if (!CharsetContains(param1, m_Charset))
+		{
+			bHandled = true;
+			break;
+		}
+
 		m_bAnalyseRequired = true;
 		//printible chars
 
@@ -8473,7 +8515,7 @@ void DrawTextGLUF(GLUFFontNode font, std::wstring strText, GLUFRect rcScreen, Co
 		CurX = rcScreen.left + centerOffset * 2;
 	}
 
-	unsigned int numLines = 1;//always have one to get the GT_VCENTER correct
+	int numLines = 1;//always have one to get the GT_VCENTER correct
 	for (auto it : strText)
 	{
 		if (it == L'\n')
@@ -8482,7 +8524,10 @@ void DrawTextGLUF(GLUFFontNode font, std::wstring strText, GLUFRect rcScreen, Co
 
 	if (dwTextFlags & GT_VCENTER)
 	{
-		CurY -= (GLUFRectHeight(rcScreen) - numLines * font.m_pFontType->mHeight) / 2;
+		long value = GLUFRectHeight(rcScreen);
+		value = value - numLines * font.m_pFontType->mHeight;
+		value /= 2;
+		CurY -= (GLUFRectHeight(rcScreen) - (long)numLines * (long)font.m_pFontType->mHeight) / 2;
 	}
 	else if (dwTextFlags & GT_BOTTOM)
 	{

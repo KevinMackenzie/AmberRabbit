@@ -130,6 +130,9 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 		glfwSwapBuffers(QuicksandEngine::g_pApp->GetWindow());
 		glfwPollEvents();
 	}
+
+	QuicksandEngine::g_pApp->OnClose();
+
 	//DXUTMainLoop();
 	//DXUTShutdown();
 
@@ -143,4 +146,3 @@ INT WINAPI QuicksandEngineWinMain(HINSTANCE hInstance,
 
 	return QuicksandEngine::g_pApp->GetExitCode();
 }
-

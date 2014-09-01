@@ -274,7 +274,7 @@ void BaseGameLogic::VModifyActor(const ActorId actorId, tinyxml2::XMLElement* ov
 	}
 }
 
-void BaseGameLogic::VOnUpdate(float time, float elapsedTime)
+void BaseGameLogic::VOnUpdate(double time, float elapsedTime)
 {
 	int deltaMilliseconds = int(elapsedTime * 1000.0f);
 	m_Lifetime += elapsedTime;

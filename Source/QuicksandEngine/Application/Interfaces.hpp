@@ -82,7 +82,7 @@ public:
     virtual void VDestroyActor(const ActorId actorId)=0;
 	virtual bool VLoadGame(const char* levelResource)=0;
 	virtual void VSetProxy()=0;				
-	virtual void VOnUpdate(float time, float elapsedTime)=0;
+	virtual void VOnUpdate(double time, float elapsedTime)=0;
 	virtual void VChangeState(enum BaseGameState newState)=0;
 	virtual void VMoveActor(const ActorId id, glm::mat4 const &mat)=0;
 	virtual shared_ptr<IGamePhysics> VGetGamePhysics(void) = 0;

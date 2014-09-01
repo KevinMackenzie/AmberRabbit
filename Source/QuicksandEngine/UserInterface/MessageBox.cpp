@@ -60,16 +60,16 @@ GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags
 	m_UI.SetSize( m_Width, m_Height );
 	//m_UI.SetBackgroundColors(g_Gray40);
 
-	Color red = Color(255,0,0,255);
-	m_UI.SetBackgroundColor(red);
+	Color blue = Color(0,128,80,255);
+	m_UI.SetBackgroundColor(blue);
 
-	int nY = border; 
-	int nX = (m_Width - msgWidth) / 2; 
+	int nY = m_Height - 5;
+	int nX = (m_Width - msgWidth) / 2;
 
-	m_UI.AddStatic( 0, msg.c_str(), nX, nY, msgWidth, msgHeight);
+	m_UI.AddStatic(0, msg.c_str(), 5, nY, msgWidth, msgHeight, GT_LEFT | GT_TOP);
 
 	nX = (m_Width - btnWidth) / 2;
-	nY = m_Height - btnHeight - border;
+	nY = m_Height - btnHeight - 2 * border;
 
 	buttonFlags &= 0xF;
 	if ( (buttonFlags == MB_ABORTRETRYIGNORE) ||
@@ -78,40 +78,41 @@ GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags
 	{
 		// The message box contains three push buttons: Cancel, Try Again, Continue. 
 		// This is the new standard over Abort,Retry,Ignore
-		m_UI.AddButton(IDCONTINUE, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTINUE")).c_str(), nX, nY - (2 * border), btnWidth, btnHeight);
+		m_UI.AddButton(IDCONTINUE, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTINUE")).c_str(), nX, nY , btnWidth, btnHeight);
 		m_UI.AddButton(IDTRYAGAIN, QuicksandEngine::g_pApp->GetString(_T("IDS_TRYAGAIN")).c_str(), nX, nY - border, btnWidth, btnHeight);
-		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY, btnWidth- (2 * border), btnHeight);
 	}
 	else if (buttonFlags == MB_OKCANCEL)
 	{
 		//The message box contains two push buttons: OK and Cancel.
-		m_UI.AddButton(IDOK, QuicksandEngine::g_pApp->GetString(_T("IDS_OK")).c_str(), nX, nY - border, btnWidth, btnHeight);
-		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY, btnWidth, btnHeight);
+		m_UI.AddButton(IDOK, QuicksandEngine::g_pApp->GetString(_T("IDS_OK")).c_str(), nX, nY, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY - border, btnWidth, btnHeight);
 	}
 	else if (buttonFlags == MB_RETRYCANCEL)
 	{
 		//The message box contains two push buttons: Retry and Cancel.
-		m_UI.AddButton(IDRETRY, QuicksandEngine::g_pApp->GetString(_T("IDS_RETRY")).c_str(), nX, nY - border, btnWidth, btnHeight);
-		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY, btnWidth, btnHeight);
+		m_UI.AddButton(IDRETRY, QuicksandEngine::g_pApp->GetString(_T("IDS_RETRY")).c_str(), nX, nY, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY - border, btnWidth, btnHeight);
 	}
 	else if (buttonFlags == MB_YESNO)
 	{
 		//The message box contains two push buttons: Yes and No.
-		m_UI.AddButton(IDYES, QuicksandEngine::g_pApp->GetString(_T("IDS_YES")).c_str(), nX, nY - border, btnWidth, btnHeight, 0x59);
-		m_UI.AddButton(IDNO, QuicksandEngine::g_pApp->GetString(_T("IDS_NO")).c_str(), nX, nY, btnWidth, btnHeight, 0x4E);
+		m_UI.AddButton(IDYES, QuicksandEngine::g_pApp->GetString(_T("IDS_YES")).c_str(), nX, nY, btnWidth, btnHeight, 0x59);
+		m_UI.AddButton(IDNO, QuicksandEngine::g_pApp->GetString(_T("IDS_NO")).c_str(), nX, nY - border, btnWidth, btnHeight, 0x4E);
 	}
 	else if (buttonFlags == MB_YESNOCANCEL)
 	{
 		//The message box contains three push buttons: Yes, No, and Cancel.
-		m_UI.AddButton(IDYES, QuicksandEngine::g_pApp->GetString(_T("IDS_YES")).c_str(), nX, nY - (2 * border), btnWidth, btnHeight);
+		m_UI.AddButton(IDYES, QuicksandEngine::g_pApp->GetString(_T("IDS_YES")).c_str(), nX, nY, btnWidth, btnHeight);
 		m_UI.AddButton(IDNO, QuicksandEngine::g_pApp->GetString(_T("IDS_NO")).c_str(), nX, nY - border, btnWidth, btnHeight);
-		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY, btnWidth, btnHeight);
+		m_UI.AddButton(IDCANCEL, QuicksandEngine::g_pApp->GetString(_T("IDS_CANCEL")).c_str(), nX, nY - (2 * border), btnWidth, btnHeight);
 	}
 	else //if (buttonFlags & MB_OK)
 	{
         // The message box contains one push button: OK. This is the default.
 		m_UI.AddButton(IDOK, QuicksandEngine::g_pApp->GetString(_T("IDS_OK")).c_str(), nX, nY, btnWidth, btnHeight);
 	}
+
 }
 
 GLMessageBox::~GLMessageBox()

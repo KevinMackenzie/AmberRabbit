@@ -99,9 +99,9 @@ unsigned int g_ArielFontLocation;
 
 MainMenuUI::MainMenuUI()
 {
-	// This line was added to comply with DirectX 9c (June 2005) 
 	m_SampleUI.Init( GLRenderer_Base::g_pDialogResourceManager );
     m_SampleUI.SetCallback( OnGUIEvent, this ); 
+	m_SampleUI.EnableKeyboardInput(true);
 
 	int nY = 10;
 	int nX = 35;
@@ -160,7 +160,7 @@ MainMenuUI::MainMenuUI()
 	nY += nLineHeight;
 
 	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", nX, nY, nWidth, nHeight);
-	m_SampleUI.AddEditBox(CID_HOST_LISTEN_PORT, L"57", nX2, nY, nWidth, nHeight * 2);
+	m_SampleUI.AddEditBox(CID_HOST_LISTEN_PORT, L"57", nX2, nY, nWidth, nHeight * 2, Numeric);
 	GLUFEditBox *eb = m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT );
 	eb->SetVisible(false);
 	nY += nLineHeight * 3;
@@ -170,7 +170,7 @@ MainMenuUI::MainMenuUI()
 	nY += nLineHeight;
 
 	m_SampleUI.AddStatic(CID_CLIENT_ATTACH_PORT_LABEL, L"Host Attach Port", nX, nY, nWidth, nHeight);
-	m_SampleUI.AddEditBox(CID_CLIENT_ATTACH_PORT, L"57", nX2, nY, nWidth, nHeight * 2);
+	m_SampleUI.AddEditBox(CID_CLIENT_ATTACH_PORT, L"57", nX2, nY, nWidth, nHeight * 2, Numeric);
 	nY += nLineHeight * 3;
 
 

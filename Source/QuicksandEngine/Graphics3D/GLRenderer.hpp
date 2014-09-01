@@ -49,15 +49,25 @@ struct ConstantBuffer_Lighting
 //
 class GLRenderer_Base : public IRenderer
 {
+protected:
+	Color  m_BackgroundColor;
 public:
 	//TODO: make my own dialog manager and text helper
 	// You should leave this global - it does wacky things otherwise.
 	static GLUFDialogResourceManager *g_pDialogResourceManager;
 	static GLUFTextHelper* g_pTextHelper;
 
+	Color GetColor(){ return m_BackgroundColor; }
 	virtual void VSetWorldTransform(const glm::mat4 *m){};
 	virtual void VSetViewTransform(const glm::mat4 *m){};
 	virtual void VSetProjectionTransform(const glm::mat4 *m){};
+
+	virtual void VSetBackgroundColor(glm::u8 bgA, glm::u8 bgR, glm::u8 bgG, glm::u8 bgB)
+	{
+		m_BackgroundColor = Color(bgR, bgG, bgB, bgA);
+	}
+
+	virtual void VSetBackgroundColor(Color col){ m_BackgroundColor = col; }
 
 	virtual HRESULT VOnRestore() { return S_OK; }
 	virtual void VShutdown() { SAFE_DELETE(g_pTextHelper); }
@@ -125,10 +135,6 @@ public:
 	GLRenderer() { m_pLineDrawer = NULL; }
 	virtual void VShutdown()  { GLRenderer_Base::VShutdown(); SAFE_DELETE(m_pLineDrawer); }
 
-	virtual void VSetBackgroundColor(glm::u8 bgA, glm::u8 bgR, glm::u8 bgG, glm::u8 bgB)
-	{
-		m_BackgroundColor = Color(bgR, bgG, bgB, bgA);
-	}
 
 	virtual bool VPreRender();
 	virtual bool VPostRender();
@@ -144,7 +150,6 @@ public:
 	//GLBufferManager mBufferManager;
 
 protected:
-	Color  m_BackgroundColor;
 
 	GLLineDrawer						*m_pLineDrawer;
 };
