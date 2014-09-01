@@ -231,7 +231,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 
 
 	GLRenderer_Base::g_pDialogResourceManager = new GLUFDialogResourceManager();
-	GLRenderer_Base::g_pTextHelper = new GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 0.02f);
+	GLRenderer_Base::g_pTextHelper = new GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 20);
 
 	/*if (hWnd == NULL)
 	{
@@ -430,7 +430,6 @@ bool QuicksandEngineApp::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, 
 		//int height = (int)HIWORD(lParam);
 
 		result = QuicksandEngine::g_pApp->OnDisplayChange(16/*TODO*/, param1, param2);
-		break;
 	}
 
 	case GM_CLOSE:
@@ -441,7 +440,6 @@ bool QuicksandEngineApp::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, 
 		{
 			*pbNoFurtherProcessing = true;
 		}
-		break;
 	}
 
 	/*case WM_SYSKEYDOWN:
@@ -477,6 +475,7 @@ bool QuicksandEngineApp::MsgProc(GLUF_MESSAGE_TYPE msg, int param1, int param2, 
 	case GM_UNICODE_CHAR:
 	case GM_CURSOR_POS:
 	case GM_MB:
+	case GM_POS:
 	//case MM_JOY1BUTTONDOWN:
 	//case MM_JOY1BUTTONUP:
 	//case MM_JOY1MOVE:
@@ -1300,7 +1299,7 @@ void CALLBACK QuicksandEngineApp::OnD3D9DestroyDevice(void* pUserContext)
 
 bool QuicksandEngineApp::AttachAsClient()
 {
-	ClientSocketManager *pClient = QSE_NEW ClientSocketManager(GET_CONFIG_ELEMENT_STR("GAME_NETWORK_HOST"), GET_CONFIG_ELEMENT_US("GAME_NETWORK_LISTENER_PORT"));
+	ClientSocketManager *pClient = QSE_NEW ClientSocketManager(GET_CONFIG_ELEMENT_STR("GAME_HOST"), GET_CONFIG_ELEMENT_US("LISTEN_PORT"));
 	if (!pClient->Connect())
 	{
 		return false;

@@ -92,8 +92,8 @@ extern TeapotWarsApp g_TeapotWarsApp;
 
 #define ARIEL_FONT_DIALOG_LOCATION (1)
 
-const float g_fSampleUIWidth = 0.7f;
-const float g_fSampleUIHeight = 0.7f;
+const int g_SampleUIWidth = 800;
+const int g_SampleUIHeight = 800;
 
 unsigned int g_ArielFontLocation;
 
@@ -103,12 +103,12 @@ MainMenuUI::MainMenuUI()
 	m_SampleUI.Init( GLRenderer_Base::g_pDialogResourceManager );
     m_SampleUI.SetCallback( OnGUIEvent, this ); 
 
-	float fY = GLUF_NORMALIZE_COORD(10.0f);
-	float fX = GLUF_NORMALIZE_COORD(35.0f);
-	float fX2 = g_fSampleUIWidth / 2.0f;
-	float fwidth = (g_fSampleUIWidth / 2.0f) - GLUF_NORMALIZE_COORD(10.0f);
-	float fheight = GLUF_NORMALIZE_COORD(25.0f);
-	float flineHeight = fheight + GLUF_NORMALIZE_COORD(2.0f);
+	int nY = 10;
+	int nX = 35;
+	int nX2 = g_SampleUIWidth / 2;
+	int nWidth = (g_SampleUIWidth / 2) - 10;
+	int nHeight = 25;
+	int nLineHeight = nHeight + 2;
 
 	// grab defaults from the game options.
 	m_NumAIs = GET_CONFIG_ELEMENT_I("NUM_AI");
@@ -128,14 +128,14 @@ MainMenuUI::MainMenuUI()
 	m_SampleUI.SetFont(ARIEL_FONT_DIALOG_LOCATION, g_ArielFontLocation);*/
 	//m_SampleUI.SetFont(0, L"Ariel", height, 0);
 
-	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", fX - GLUF_NORMALIZE_COORD(20), fY, g_fSampleUIWidth, fheight * 2);
-	fY += (flineHeight * 3);
+	m_SampleUI.AddStatic(0, L"Teapot Wars Main Menu", nX - 20, nY, g_SampleUIWidth, nHeight * 2);
+	nY += (nLineHeight * 3);
 
-	m_SampleUI.AddRadioButton(CID_CREATE_GAME_RADIO, 1, L"Create Game", fX, fY, g_fSampleUIWidth, fheight);
-	fY += flineHeight;
+	m_SampleUI.AddRadioButton(CID_CREATE_GAME_RADIO, 1, L"Create Game", nX, nY, g_SampleUIWidth, nHeight);
+	nY += nLineHeight;
 
-	m_SampleUI.AddStatic(CID_LEVEL_LABEL, L"Level", fX, fY, fwidth, fheight);
-	m_SampleUI.AddListBox(CID_LEVEL_LISTBOX, fX2, fY, fwidth, flineHeight * 5);
+	m_SampleUI.AddStatic(CID_LEVEL_LABEL, L"Level", nX, nY, nWidth, nHeight);
+	m_SampleUI.AddListBox(CID_LEVEL_LISTBOX, nX2, nY, nWidth, nLineHeight * 5);
 	std::vector<Level> levels = QuicksandEngine::g_pApp->GetGameLogic()->GetLevelManager()->GetLevels();
 	m_Levels.reserve(levels.size());
 	int count = 0;
@@ -144,41 +144,41 @@ MainMenuUI::MainMenuUI()
 		m_Levels.push_back(s2ws(*i));
 		m_SampleUI.GetListBox ( CID_LEVEL_LISTBOX )->AddItem(m_Levels[count].c_str(), NULL);
 	}
-	fY += (flineHeight * 5);
+	nY += (nLineHeight * 5);
 	//m_SampleUI.GetListBox(CID_LEVEL_LISTBOX)->GetElement(0)->SetFont(0, 0x0);
 
-	m_SampleUI.AddStatic(CID_NUM_AI_LABEL, L"", fX, fY, fwidth, fheight);
-	m_SampleUI.AddSlider(CID_NUM_AI_SLIDER, fX2, fY, fwidth, fheight);
+	m_SampleUI.AddStatic(CID_NUM_AI_LABEL, L"", nX, nY, nWidth, nHeight);
+	m_SampleUI.AddSlider(CID_NUM_AI_SLIDER, nX2, nY, nWidth, nHeight);
 	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_F("MAX_AI"));
 	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetValue((float)m_NumAIs); // should be ai options default
-	fY += flineHeight;
+	nY += nLineHeight;
 
-	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", fX, fY, fwidth, fheight);
-	m_SampleUI.AddSlider( CID_NUM_PLAYER_SLIDER, fX2, fY, fwidth, fheight);
+	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", nX, nY, nWidth, nHeight);
+	m_SampleUI.AddSlider(CID_NUM_PLAYER_SLIDER, nX2, nY, nWidth, nHeight);
 	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(1, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
 	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue((float)m_NumPlayers);  // should be player options default
-	fY += flineHeight;
+	nY += nLineHeight;
 
-	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", fX, fY, fwidth, fheight);
-	m_SampleUI.AddEditBox( CID_HOST_LISTEN_PORT, L"57", fX2, fY, fwidth, fheight * 2);
+	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", nX, nY, nWidth, nHeight);
+	m_SampleUI.AddEditBox(CID_HOST_LISTEN_PORT, L"57", nX2, nY, nWidth, nHeight * 2);
 	GLUFEditBox *eb = m_SampleUI.GetEditBox( CID_HOST_LISTEN_PORT );
 	eb->SetVisible(false);
-	fY += flineHeight * 3;
+	nY += nLineHeight * 3;
 
-    m_SampleUI.AddRadioButton( CID_JOIN_GAME_RADIO, 1, L"Join Game", fX, fY, fwidth, fheight);
+	m_SampleUI.AddRadioButton(CID_JOIN_GAME_RADIO, 1, L"Join Game", nX, nY, nWidth, nHeight);
     m_SampleUI.GetRadioButton( CID_JOIN_GAME_RADIO )->SetChecked( true ); 
-	fY += flineHeight;
+	nY += nLineHeight;
 
-	m_SampleUI.AddStatic(CID_CLIENT_ATTACH_PORT_LABEL, L"Host Attach Port", fX, fY, fwidth, fheight);
-	m_SampleUI.AddEditBox( CID_CLIENT_ATTACH_PORT, L"57", fX2, fY, fwidth, fheight * 2);
-	fY += flineHeight * 3;
+	m_SampleUI.AddStatic(CID_CLIENT_ATTACH_PORT_LABEL, L"Host Attach Port", nX, nY, nWidth, nHeight);
+	m_SampleUI.AddEditBox(CID_CLIENT_ATTACH_PORT, L"57", nX2, nY, nWidth, nHeight * 2);
+	nY += nLineHeight * 3;
 
 
-	m_SampleUI.AddStatic(CID_HOST_NAME_LABEL, L"Host Name", fX, fY, fwidth, fheight);
-	m_SampleUI.AddEditBox( CID_HOST_NAME, L"sunshine", fX2, fY, fwidth, fheight * 2);
-	fY += flineHeight;
+	m_SampleUI.AddStatic(CID_HOST_NAME_LABEL, L"Host Name", nX, nY, nWidth, nHeight);
+	m_SampleUI.AddEditBox(CID_HOST_NAME, L"sunshine", nX2, nY, nWidth, nHeight * 2);
+	nY += nLineHeight;
 
-	m_SampleUI.AddButton(CID_START_BUTTON, L"Start Game", (g_fSampleUIWidth - (fwidth / 2)) / 2, fY += flineHeight, fwidth / 2, fheight);
+	m_SampleUI.AddButton(CID_START_BUTTON, L"Start Game", (g_SampleUIWidth - (nWidth / 2)) / 2, nY += nLineHeight, nWidth / 2, nHeight);
 
     m_SampleUI.GetRadioButton( CID_CREATE_GAME_RADIO )->SetChecked(true);
 
@@ -238,8 +238,8 @@ void MainMenuUI::Set()
 
 HRESULT MainMenuUI::VOnRestore()
 {
-	m_SampleUI.SetLocation((1.0f - g_fSampleUIWidth) / 2.0f, (1.0f - g_fSampleUIHeight) / 2.0f);
-    m_SampleUI.SetSize( g_fSampleUIWidth, g_fSampleUIHeight );
+	m_SampleUI.SetLocation(100, 100);
+    m_SampleUI.SetSize( g_SampleUIWidth, g_SampleUIHeight );
 	return S_OK;
 }
 
@@ -404,9 +404,9 @@ StandardHUD::StandardHUD()
 {
     // Initialize dialogs
 	m_HUD.Init( GLRenderer_Base::g_pDialogResourceManager );
-	m_HUD.SetCallback(OnGUIEvent); float fY = GLUF_NORMALIZE_COORD(10.0f);
-	m_HUD.AddButton(IDC_TOGGLEFULLSCREEN, L"Toggle full screen", GLUF_NORMALIZE_COORD(35.0f), fY, GLUF_NORMALIZE_COORD(125.0f), GLUF_NORMALIZE_COORD(22.0f));
-	m_HUD.AddButton(IDC_TOGGLEREF, L"Toggle REF (F3)", GLUF_NORMALIZE_COORD(35.0f), fY += GLUF_NORMALIZE_COORD(24.0f), GLUF_NORMALIZE_COORD(125.0f), GLUF_NORMALIZE_COORD(22.0f));
+	m_HUD.SetCallback(OnGUIEvent); float nY = 10;
+	m_HUD.AddButton(IDC_TOGGLEFULLSCREEN, L"Toggle full screen", 35, nY, 125, 22);
+	m_HUD.AddButton(IDC_TOGGLEREF, L"Toggle REF (F3)", 35, nY += 24, 125, 22);
     //m_HUD.AddButton( IDC_CHANGEDEVICE, L"Change device (F2)", 35, iY += 24, 125, 22 );
 }
 
@@ -420,8 +420,8 @@ StandardHUD::~StandardHUD()
 
 HRESULT StandardHUD::VOnRestore()
 {
-	m_HUD.SetLocation(GLUF_NORMALIZE_COORD(QuicksandEngine::g_pApp->GetScreenSize().x - 170.0f), GLUF_NORMALIZE_COORD(0.0f));
-	m_HUD.SetSize(GLUF_NORMALIZE_COORD(170.0f), GLUF_NORMALIZE_COORD(170.0f));
+	m_HUD.SetLocation(QuicksandEngine::g_pApp->GetScreenSize().x - 170, 0);
+	m_HUD.SetSize(170, 170);
 	return S_OK;
 }
 
@@ -586,11 +586,11 @@ void TeapotWarsHumanView::VRenderText()
     // Gameplay UI (with shadow)....
     if (!m_gameplayText.empty())
     {
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint((float)QuicksandEngine::g_pApp->GetScreenSize().x / 2.0f, 5.0f)));
-		GLRenderer_Base::g_pTextHelper->SetForegroundColor(GLUF::Color(0, 0, 0, 255));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2, 5));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint((float)QuicksandEngine::g_pApp->GetScreenSize().x / 2.0f - 1.0f, 5.0f - 1.0f)));
-		GLRenderer_Base::g_pTextHelper->SetForegroundColor(GLUF::Color(64, 255, 64, 255));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2 - 1, 5 - 1));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0.25f, 1.0f, 0.25f, 1.0f));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
     }
 	// ...Gameplay UI
@@ -598,14 +598,14 @@ void TeapotWarsHumanView::VRenderText()
 	if( m_bShowUI )
 	{
 		// Output statistics... TODO:
-		/*GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint(5, 5)));
-		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 255, 255, 255));
-		GLRenderer_Base::g_pTextHelper->DrawTextLine(DXUTGetFrameStats());
-		GLRenderer_Base::g_pTextHelper->DrawTextLine(DXUTGetDeviceStats());*/
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(5, 5));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(1.0f, 1.0f, 0.0f, 1.0f));
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetFrameStats());
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetDeviceStats());
 		//...output statistics
 
 
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF_NORMALIZE_COORD(GLUF::GLUFPoint(5, 5)));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF::GLUFPoint(5, 5));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0, 0, 0, 128));
 
 		//Game State...
@@ -657,13 +657,13 @@ void TeapotWarsHumanView::VRenderText()
 		//Help text.  Right justified, lower right of screen.
 		GLUFRect helpRect;
 		helpRect.left = 0;
-		helpRect.right = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().x - 10.0f);
-		helpRect.top = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().y + 15.0f * 8.0f);
-		helpRect.bottom = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().y);
+		helpRect.right = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
+		helpRect.top = QuicksandEngine::g_pApp->GetScreenSize().y + 15 * 8;
+		helpRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y;
 		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(helpRect.right, helpRect.top));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 192, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, DT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str());
-		helpRect.top = GLUF_NORMALIZE_COORD((float)QuicksandEngine::g_pApp->GetScreenSize().y + 15.0f * 7.0f);
+		helpRect.top = QuicksandEngine::g_pApp->GetScreenSize().y + 15 * 7;
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, DT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS")).c_str());
 		//...Help
 	}//end if (m_bShowUI)

@@ -367,7 +367,7 @@ void BaseGameLogic::VChangeState(BaseGameState newState)
 		// Note: Split screen support would require this to change!
 		m_ExpectedPlayers = 1;
 		m_ExpectedRemotePlayers = GET_CONFIG_ELEMENT_S("EXPECTED_PLAYERS") - 1;
-		m_ExpectedAI = GET_CONFIG_ELEMENT_S("EXPECTED_AIS");
+		m_ExpectedAI = GET_CONFIG_ELEMENT_S("NUM_AI");
 
 		if (!(GET_CONFIG_ELEMENT_STR("GAME_HOST_EMPTY") == "TRUE"))
 		{
@@ -392,7 +392,7 @@ void BaseGameLogic::VChangeState(BaseGameState newState)
 				return;
 			}
 
-			pServer->AddSocket(new GameServerListenSocket(GET_CONFIG_ELEMENT_S("LISTENER_PORT")));
+			pServer->AddSocket(new GameServerListenSocket(GET_CONFIG_ELEMENT_S("LISTEN_PORT")));
 			QuicksandEngine::g_pApp->m_pBaseSocketManager = pServer;
 		}
 	}

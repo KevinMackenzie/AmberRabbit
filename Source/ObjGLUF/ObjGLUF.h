@@ -30,7 +30,6 @@
 #include <GLFW/glfw3.h>
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
-#include "GLI/gli.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -125,7 +124,11 @@ typedef unsigned long GLUFResult;
 
 OBJGLUF_API GLUFResult GLUFTrace(const char*, const char*, unsigned long, GLUFResult, const char*);
 
+
+//statistics methods
 OBJGLUF_API void GLUFStats_func();
+OBJGLUF_API const wchar_t* GLUFGetFrameStats();
+OBJGLUF_API const wchar_t* GLUFGetDeviceStats();
 
 //not defined if not windows
 #ifndef _T
@@ -165,6 +168,7 @@ OBJGLUF_API long GLUFLoadFileIntoMemory(const wchar_t* path, char* buffer, long 
 OBJGLUF_API char* GLUFLoadFileIntoMemory(const char* path, unsigned long* rawSize);
 OBJGLUF_API long GLUFLoadFileIntoMemory(const char* path, char* buffer, long len = -1);
 
+
 typedef std::vector<glm::vec4> Vec4Array;
 typedef std::vector<glm::vec3> Vec3Array;
 typedef std::vector<glm::vec2> Vec2Array;
@@ -185,16 +189,32 @@ public:
 //this rect is supposed to be used where the origin is bottom left, and upper left corner is (1,1)
 struct OBJGLUF_API GLUFRect
 {
+	long left, top, right, bottom;
+
+
+
+};
+
+struct OBJGLUF_API GLUFRectf
+{
 	float left, top, right, bottom;
 };
 
 struct OBJGLUF_API GLUFPoint
 {
-	union{ float x, width;  };
-	union{ float y, height; };
+	union{ long x, width;  };
+	union{ long y, height; };
 
-	GLUFPoint(float val1, float val2) : x(val1), y(val2){}
-	GLUFPoint() : x(0), y(0){}
+	GLUFPoint(long val1, long val2) : x(val1), y(val2){}
+	GLUFPoint() : x(0L), y(0L){}
+};
+
+struct OBJGLUF_API MemStreamBuf : std::streambuf
+{
+	MemStreamBuf(char* data, std::ptrdiff_t length)
+	{
+		setg(data, data, data + length);
+	}
 };
 
 inline GLUFPoint operator /(const GLUFPoint& pt0, const GLUFPoint& pt1)
@@ -202,7 +222,7 @@ inline GLUFPoint operator /(const GLUFPoint& pt0, const GLUFPoint& pt1)
 	return{ pt0.x / pt1.x, pt0.y / pt1.y };
 }
 
-inline GLUFPoint operator /(const GLUFPoint& pt0, const float& f)
+inline GLUFPoint operator /(const GLUFPoint& pt0, const long& f)
 {
 	return{ pt0.x / f, pt0.y / f };
 }
@@ -212,19 +232,29 @@ inline GLUFPoint operator -(const GLUFPoint& pt0, const GLUFPoint& pt1)
 	return { pt0.x - pt1.x, pt0.y - pt1.y };
 }
 
+inline bool operator ==(const GLUFRect& rc0, const GLUFRect& rc1)
+{
+	return
+		(
+		rc0.left == rc1.left && rc0.right  == rc1.right &&
+		rc0.top  == rc1.top  && rc0.bottom == rc1.bottom
+		);
+}
+
+inline bool operator !=(const GLUFRect& rc0, const GLUFRect& rc1)
+{
+	return !(rc0 == rc1);
+}
+
 OBJGLUF_API bool		GLUFPtInRect(GLUFRect rect, GLUFPoint pt);
 OBJGLUF_API void		GLUFSetRectEmpty(GLUFRect& rect);
-OBJGLUF_API void		GLUFSetRect(GLUFRect& rect, float left, float top, float right, float bottom);
-OBJGLUF_API void		GLUFOffsetRect(GLUFRect& rect, float x, float y);
-OBJGLUF_API float		GLUFRectHeight(GLUFRect rect);
-OBJGLUF_API float		GLUFRectWidth(GLUFRect rect);
-OBJGLUF_API void		GLUFInflateRect(GLUFRect& rect, float dx, float dy);
+OBJGLUF_API void		GLUFSetRect(GLUFRect& rect, long left, long top, long right, long bottom);
+OBJGLUF_API void		GLUFSetRect(GLUFRectf& rect, float left, float top, float right, float bottom);
+OBJGLUF_API void		GLUFOffsetRect(GLUFRect& rect, long x, long y);
+OBJGLUF_API long		GLUFRectHeight(GLUFRect rect);
+OBJGLUF_API long		GLUFRectWidth(GLUFRect rect);
+OBJGLUF_API void		GLUFInflateRect(GLUFRect& rect, long dx, long dy);
 OBJGLUF_API bool		GLUFIntersectRect(GLUFRect rect0, GLUFRect rect1, GLUFRect& rectIntersect);
-OBJGLUF_API GLUFRect	GLUFScreenToClipspace(GLUFRect screenCoords);//this is used to tranlate screen coordinates (where origin is bottom left and 1,1 is upper left) to clip space (where origin is the middle, and 1,1 is still upper left)
-OBJGLUF_API glm::vec3	GLUFScreenToClipspace(glm::vec3 vec);//same as above
-OBJGLUF_API void		GLUFFlipPoint(GLUFPoint& pt);//this expects a normalized value
-OBJGLUF_API void		GLUFNormPoint(GLUFPoint& pt, GLUFPoint max);//max is a point that contains the values to normalize by.  i.e. screen size
-OBJGLUF_API void		GLUFNormRect(GLUFRect& rect, float xClamp, float yClamp);
 OBJGLUF_API GLUFPoint	GLUFMultPoints(GLUFPoint pt0, GLUFPoint pt1);
 
 OBJGLUF_API inline std::vector<std::wstring> &GLUFSplitStr(const std::wstring &s, wchar_t delim, std::vector<std::wstring> &elems, bool keepDelim = false)
@@ -281,6 +311,7 @@ OBJGLUF_API inline std::vector<T> GLUFArrToVec(T* arr, unsigned long len)
 
 //used for getting vertices from rects 0,0 is bottom left
 OBJGLUF_API glm::vec2 GLUFGetVec2FromRect(GLUFRect rect, bool x, bool y);
+OBJGLUF_API glm::vec2 GLUFGetVec2FromRect(GLUFRectf rect, bool x, bool y);
 
 //used for getting vertices from rects 0,0 is bottom left
 OBJGLUF_API GLUFPoint GLUFGetPointFromRect(GLUFRect rect, bool x, bool y);

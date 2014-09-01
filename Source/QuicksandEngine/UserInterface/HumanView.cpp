@@ -495,57 +495,57 @@ void HumanView::Console::Update( const int deltaMilliseconds )
 void HumanView::Console::Render( )
 {
 	//Don't do anything if not active.
-	if ( !m_bActive )
+	if (!m_bActive)
 	{
 		return;	//Bail!
 	}
 
-	GLRenderer_Base::g_pTextHelper->Begin(0,FONT_WEIGHT_NORMAL);//TODO: custom console font
-	//const glm::vec4 white( 1.0f, 1.0f, 1.0f, 1.0f );
-	//const glm::vec4 black( 0.0f, 0.0f, 0.0f, 1.0f );
+	GLRenderer_Base::g_pTextHelper->Begin(0);
+	const Color white(255, 255, 255, 255);
+	const Color black(0.0f, 0.0f, 0.0f, 1.0f);
 	GLUFRect inputTextRect, outputTextRect, shadowRect;
 
 	//Display the console text at screen top, below the other text displayed.
-	const std::string finalInputString = std::string( ">" ) + m_CurrentInputString + ( m_bCursorOn ? '\xa0' : '_' );
-	inputTextRect.left = 10.0f / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
-	inputTextRect.right = (float)(QuicksandEngine::g_pApp->GetScreenSize().x - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
-	inputTextRect.top = 100.0f / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
-	inputTextRect.bottom = (float)(QuicksandEngine::g_pApp->GetScreenSize().y - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
+	const std::string finalInputString = std::string(">") + m_CurrentInputString + (m_bCursorOn ? '\xa0' : '_');
+	inputTextRect.left = 10;
+	inputTextRect.right = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
+	inputTextRect.top = 100;
+	inputTextRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y - 10;
 
 	const int kNumWideChars = 4096;
-	wchar_t wideBuffer[ kNumWideChars ];
-	AnsiToWideCch( wideBuffer, finalInputString.c_str(), kNumWideChars );
+	wchar_t wideBuffer[kNumWideChars];
+	AnsiToWideCch(wideBuffer, finalInputString.c_str(), kNumWideChars);
 
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP | DT_CALCRECT, wideBuffer);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine(inputTextRect, GT_LEFT | GT_TOP, wideBuffer);
 
 	//Draw with shadow first.
 	shadowRect = inputTextRect;
 	++shadowRect.left;
 	++shadowRect.top;
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_Black );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor(black);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine(shadowRect, GT_LEFT | GT_TOP, wideBuffer);
 
 	//Now bright text.
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_White );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( inputTextRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor(white);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine(inputTextRect, GT_LEFT | GT_TOP, wideBuffer);
 
 	//Now display the output text just below the input text.
-	outputTextRect.left = inputTextRect.left + (15.0f / QuicksandEngine::g_pApp->GetScreenSize().x);
-	outputTextRect.top = inputTextRect.bottom + (15.0f / QuicksandEngine::g_pApp->GetScreenSize().y);
-	outputTextRect.right = (float)(QuicksandEngine::g_pApp->GetScreenSize().x - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().x;
-	outputTextRect.bottom = (float)(QuicksandEngine::g_pApp->GetScreenSize().y - 10) / (float)QuicksandEngine::g_pApp->GetScreenSize().y;
-	AnsiToWideCch( wideBuffer, m_CurrentOutputString.c_str(), kNumWideChars );
+	outputTextRect.left = inputTextRect.left + 15;
+	outputTextRect.top = inputTextRect.bottom + 15;
+	outputTextRect.right = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
+	outputTextRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y - 10;
+	AnsiToWideCch(wideBuffer, m_CurrentOutputString.c_str(), kNumWideChars);
 
 	//Draw with shadow first.
 	shadowRect = outputTextRect;
 	++shadowRect.left;
 	++shadowRect.top;
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_Black );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( shadowRect, DT_LEFT | DT_TOP, wideBuffer);
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor(black);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine(shadowRect, GT_LEFT | GT_TOP, wideBuffer);
 
 	//Now bright text.
-	GLRenderer_Base::g_pTextHelper->SetForegroundColor( g_White );
-	GLRenderer_Base::g_pTextHelper->DrawTextLine( outputTextRect, DT_LEFT | DT_TOP, wideBuffer );
+	GLRenderer_Base::g_pTextHelper->SetForegroundColor(white);
+	GLRenderer_Base::g_pTextHelper->DrawTextLine(outputTextRect, GT_LEFT | GT_TOP, wideBuffer);
 
 	GLRenderer_Base::g_pTextHelper->End();
 }
@@ -590,7 +590,7 @@ bool TTFResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, sha
 {
 	auto extra = shared_ptr<TTFResourceExtraData>(QSE_NEW TTFResourceExtraData());
 
-	extra->m_pFont = GLUFLoadFont(rawBuffer, rawSize, 0.25f);//default font size
+	extra->m_pFont = GLUFLoadFont(rawBuffer, rawSize, 16);//default font size
 
 	if (extra->m_pFont == nullptr)
 		return false;

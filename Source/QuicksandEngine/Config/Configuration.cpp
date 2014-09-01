@@ -11,7 +11,7 @@ string Configuration::GetElement(string key)
 	else
 	{
 		//throw an exception, this should be cought by the class accessing this key
-		LOG_ERROR("Invalid Configuration Key!");
+		LOG_ERROR("Invalid Configuration Key!" + key);
 
 #ifdef _DEBUG
 		//throw this just to have an unhandled exception during debugging, so I can add config elements easier

@@ -38,12 +38,12 @@ class BaseUI;
 class BaseUI : public IScreenElement
 {
 protected:
-	float					m_PosX, m_PosY;
-	float					m_Width, m_Height;
+	int					m_PosX, m_PosY;
+	int					m_Width, m_Height;
 	optional<int>		m_Result;
 	bool				m_bIsVisible;
 public:
-	BaseUI() { m_bIsVisible = true; m_PosX = m_PosY = 0.0f; m_Width = 0.1f; m_Height = 0.1f; }
+	BaseUI() { m_bIsVisible = true; m_PosX = m_PosY = 0; m_Width = 0; m_Height = 0; }
 	virtual void VOnUpdate(int) { };
 	virtual HRESULT VOnLostDevice() { return S_OK; }
 	virtual bool VIsVisible() const { return m_bIsVisible; }
