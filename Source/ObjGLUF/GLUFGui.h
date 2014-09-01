@@ -88,6 +88,9 @@ typedef bool(*PGLUFCALLBACK)(GLUF_MESSAGE_TYPE, int, int, int, int);
 // input documentation for more information.
 OBJGLUF_API bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callbackFunc, GLuint controltex);
 
+//this is good for swapping callback methods, because it returns the old one
+OBJGLUF_API PGLUFCALLBACK GLUFChangeCallbackFunc(PGLUFCALLBACK newCallback);
+
 
 OBJGLUF_API void GLUFSetDefaultFont(GLUFFontPtr pDefFont);
 

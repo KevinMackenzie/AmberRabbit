@@ -11,7 +11,11 @@
 void GLMessageBox::OnGUIEvent(GLUF_EVENT nEvent, int nControlID, GLUFControl* pControl, void* pContext)
 {
 	//TODO: this? what does it do and what do i change it to
-	PostMessage(QuicksandEngine::g_pApp->GetHwnd(), g_MsgEndModal, 0, nControlID);
+	//PostMessage(QuicksandEngine::g_pApp->GetHwnd(), g_MsgEndModal, 0, nControlID);
+	if (nEvent == GLUF_EVENT_BUTTON_CLICKED)
+	{
+		((GLMessageBox*)pContext)->m_ButtonPressed = nControlID;
+	}
 }
 
 //
@@ -56,7 +60,7 @@ GLMessageBox::GLMessageBox(std::wstring msg, std::wstring title, int buttonFlags
 	m_UI.SetSize( m_Width, m_Height );
 	//m_UI.SetBackgroundColors(g_Gray40);
 
-	Color red = Color(255,0,0,200);
+	Color red = Color(255,0,0,255);
 	m_UI.SetBackgroundColor(red);
 
 	int nY = border; 
@@ -132,8 +136,7 @@ HRESULT GLMessageBox::VOnRestore()
 //
 HRESULT GLMessageBox::VOnRender(double fTime, double fElapsedTime)
 {
-	HRESULT hr;
-	V( m_UI.OnRender( (float)fElapsedTime ) );
+	m_UI.OnRender((float)fElapsedTime);
 	return S_OK;
 };
 

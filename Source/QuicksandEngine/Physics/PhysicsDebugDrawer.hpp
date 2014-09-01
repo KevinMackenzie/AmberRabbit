@@ -10,6 +10,7 @@
 //   of btIDebugDraw uses direct3D lines to represent the current state
 //   of the physics simulation 
 //
+#pragma warning(disable : 4275)
 class BulletDebugDrawer : public btIDebugDraw
 {
 	DebugDrawModes               m_DebugModes;
@@ -25,6 +26,7 @@ public:
 	// [mrmike] Added post press to read PlayerOptions.xml to turn on physics debug options.
 	void ReadOptions(void);
 };
+#pragma warning(default : 4275)
 
 
 #endif

@@ -37,7 +37,7 @@ QuicksandEngineApp::QuicksandEngineApp()
 	QuicksandEngine::g_pApp = this;
 	m_pGame = NULL;
 
-	m_rcDesktop.bottom = m_rcDesktop.left = m_rcDesktop.right = m_rcDesktop.top = 0;
+	//m_rcDesktop.bottom = m_rcDesktop.left = m_rcDesktop.right = m_rcDesktop.top = 0;
 	m_screenSize.x = m_screenSize.y = 0;
 	m_iColorDepth = 32;
 
@@ -552,10 +552,8 @@ bool QuicksandEngineApp::OnNcCreate(LPCREATESTRUCT cs)
 
 bool QuicksandEngineApp::OnDisplayChange(int colorDepth, int width, int height)
 {
-	m_rcDesktop.left = 0;
-	m_rcDesktop.top = 0;
-	m_rcDesktop.right = width;
-	m_rcDesktop.bottom = height;
+	m_screenSize.x = width;
+	m_screenSize.y = height;
 	m_iColorDepth = colorDepth;
 	return 0;
 }
@@ -824,6 +822,13 @@ HumanView* QuicksandEngineApp::GetHumanView()
 	return pView;
 }
 
+shared_ptr<GLMessageBox> g_Modal = nullptr;
+bool ModalSysCallback(GLUF_GUI_CALLBACK_PARAM)
+{
+	//call the callback of the modal ONLY (NOTE: this only returns true or false anyway, so the conversion is OK)
+	return (bool)g_Modal->VOnMsgProc({ msg, param1, param2, param3, param4 });
+}
+
 //
 // class QuicksandEngineApp::Modal						- Chapter 10, page 293
 //
@@ -846,6 +851,7 @@ int QuicksandEngineApp::Modal(shared_ptr<IScreenElement> pModalScreen, int defau
 	}
 	***/
 
+
 	HumanView* pView = GetHumanView();
 
 	if (!pView)
@@ -866,27 +872,63 @@ int QuicksandEngineApp::Modal(shared_ptr<IScreenElement> pModalScreen, int defau
 		FlashWhileMinimized();
 	}
 
+
+	PGLUFCALLBACK old = GLUFChangeCallbackFunc(ModalSysCallback);
+
 	m_HasModalDialog <<= 1;
 	m_HasModalDialog |= 1;
 
 	pView->VPushElement(pModalScreen);
 
-	LPARAM lParam = 0;
-	int result = PumpUntilMessage(g_MsgEndModal, NULL, &lParam);
+	g_Modal = static_pointer_cast<GLMessageBox>(pModalScreen);
+	//LPARAM lParam = 0;
+	//int result = PumpUntilMessage(g_MsgEndModal, nullptr, &lParam);
 
-	if (lParam != 0)
+	int buttonResult = 0;
+	int currentTime = GLUFGetTimeMs();
+	for (;;)
+	{
+		buttonResult = g_Modal->GetButtonPressed();
+		if (buttonResult)
+		{
+			break;
+		}
+
+		// Update the game views, but nothing else!
+		// Remember this is a modal screen.
+		if (m_pGame)
+		{
+			int timeNow = GLUFGetTimeMs();
+			int deltaMilliseconds = timeNow - currentTime;
+			for (GameViewList::iterator i = m_pGame->m_gameViews.begin(); i != m_pGame->m_gameViews.end(); ++i)
+			{
+				(*i)->VOnUpdate(deltaMilliseconds);
+			}
+			currentTime = timeNow;
+			//TODO:
+			//DXUTRender3DEnvironment();
+		}
+		glfwSwapBuffers(m_pWindow);
+		glfwPollEvents();
+	}
+
+	
+	/*if (lParam != 0)
 	{
 		if (lParam == g_QuitNoPrompt)
 			result = defaultAnswer;
 		else
 			result = (int)lParam;
-	}
+	}*/
 
 	pView->VRemoveElement(pModalScreen);
 	m_HasModalDialog >>= 1;
 
-	return result;
+	GLUFChangeCallbackFunc(old);
+
+	return buttonResult;
 }
+
 
 //
 // class QuicksandEngineApp::PumpUntilMessage			- Chapter 10, page 295
@@ -895,6 +937,7 @@ int QuicksandEngineApp::PumpUntilMessage(UINT msgEnd, WPARAM* pWParam, LPARAM* p
 {
 	int currentTime = GLUFGetTimeMs();
 	MSG msg;
+	PGLUFCALLBACK old = GLUFChangeCallbackFunc(::ModalSysCallback);
 	for (;;)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
@@ -935,8 +978,11 @@ int QuicksandEngineApp::PumpUntilMessage(UINT msgEnd, WPARAM* pWParam, LPARAM* p
 				//TODO:
 				//DXUTRender3DEnvironment();
 			}
+			glfwSwapBuffers(m_pWindow);
 		}
 	}
+	GLUFChangeCallbackFunc(old);
+
 	if (pLParam)
 		*pLParam = msg.lParam;
 	if (pWParam)

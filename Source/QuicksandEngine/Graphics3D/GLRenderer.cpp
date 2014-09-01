@@ -206,117 +206,6 @@ GLRenderSkyBox::~GLRenderSkyBox()
 }
 
 
-
-////////////////////////////////////////////////////
-// D3DRenderer9 Implementation
-//
-//    Not described in the book - but it abstracts 
-//    some of the calls to get the game engine to run
-//    under DX9.
-////////////////////////////////////////////////////
-/*
-bool D3DRenderer9::VPreRender()
-{
-	// Clear the render target and the zbuffer 
-	if (SUCCEEDED(DXUTGetD3D9Device()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, m_backgroundColor, 1.0f, 0)))
-	{
-		// Render the scene
-		return (SUCCEEDED(DXUTGetD3D9Device()->BeginScene()));
-	}
-
-	return false;
-}
-
-HRESULT D3DRenderer9::VOnRestore()
-{
-	HRESULT hr;
-	V_RETURN(D3DRenderer::VOnRestore());
-	V_RETURN(D3DRenderer::g_pDialogResourceManager.OnD3D9ResetDevice());
-
-	SAFE_DELETE(D3DRenderer::g_pTextHelper);
-
-	SAFE_RELEASE(m_pFont);
-	V_RETURN(D3DXCreateFont(DXUTGetD3D9Device(), 15, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET,
-		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-		L"Arial", &m_pFont));
-
-	SAFE_RELEASE(m_pTextSprite);
-	V_RETURN(D3DXCreateSprite(DXUTGetD3D9Device(), &m_pTextSprite));
-
-	D3DRenderer::g_pTextHelper = QSE_NEW CDXUTTextHelper(m_pFont, m_pTextSprite, 15);
-	return S_OK;
-}
-
-
-
-bool D3DRenderer9::VPostRender(void)
-{
-	return SUCCEEDED(DXUTGetD3D9Device()->EndScene());
-}
-
-
-shared_ptr<IRenderState> D3DRenderer9::VPrepareAlphaPass()
-{
-	return shared_ptr<IRenderState>(QSE_NEW D3DRendererAlphaPass9());
-}
-
-shared_ptr<IRenderState> D3DRenderer9::VPrepareSkyBoxPass()
-{
-	return shared_ptr<IRenderState>(QSE_NEW GLRenderSkyBoxPass());
-}
-
-
-void D3DRenderer9::VCalcLighting(Lights *lights, int maximumLights)
-{
-	int count = 1;
-	if (lights && lights->size() > 0)
-	{
-		for (Lights::iterator i = lights->begin(); i != lights->end(); ++i, ++count)
-		{
-			shared_ptr<LightNode> light = *i;
-			shared_ptr<D3DLightNode9> light9 = static_pointer_cast<D3DLightNode9>(light);
-			D3DLIGHT9 *m_pLight = &(light9->m_d3dLight9);
-			DXUTGetD3D9Device()->SetLight(count, m_pLight);
-			DXUTGetD3D9Device()->LightEnable(count, TRUE);
-		}
-		DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, TRUE);
-	}
-	else
-	{
-		DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
-	}
-
-	// turn off the other lights if they were on
-	for (; count<maximumLights; ++count)
-	{
-		DXUTGetD3D9Device()->LightEnable(count, FALSE);
-	}
-}
-
-
-void D3DRenderer9::VDrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color)
-{
-	DWORD oldLightingState;
-	DXUTGetD3D9Device()->GetRenderState(D3DRS_LIGHTING, &oldLightingState);
-
-	// disable lighting for the lines
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-	D3D9Vertex_Colored verts[2];
-
-	verts[0].position = from;
-	verts[0].color = color;
-	verts[1].position = to;
-	verts[1].color = verts[0].color;
-
-	DXUTGetD3D9Device()->SetFVF(D3D9Vertex_Colored::FVF);
-	DXUTGetD3D9Device()->DrawPrimitiveUP(D3DPT_LINELIST, 1, verts, sizeof(D3D9Vertex_Colored));
-
-	// restore original lighting state
-	DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, oldLightingState);
-}
-*/
-
 GLLineDrawer::GLLineDrawer() : m_pVertexBuffer(GL_LINES, GL_STREAM_DRAW, false) 
 { 
 	if (m_LineDrawerShader == nullptr)
@@ -431,26 +320,11 @@ HRESULT GLRenderer::VOnRestore()
 bool GLRenderer::VPreRender()
 {
 
-	//DXUTGetD3D11DeviceContext()->ClearRenderTargetView(DXUTGetD3D11RenderTargetView(), m_backgroundColor);
-
-	int *width  = new int, 
-		*height = new int, 
-		*x      = new int, 
-		*y      = new int;
-
-	glfwGetWindowSize(QuicksandEngine::g_pApp->GLFWWindow(), width, height);
-	glfwGetWindowPos(QuicksandEngine::g_pApp->GLFWWindow(), x, y);
-
-	glViewport(*x, *y, *width, *height);
-
-	//
-	// Clear the depth buffer to 1.0 (max depth)
-	//
-	//DXUTGetD3D11DeviceContext()->ClearDepthStencilView(DXUTGetD3D11DepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, QuicksandEngine::g_pApp->GetScreenSize().x, QuicksandEngine::g_pApp->GetScreenSize().y);
 
 	Color4f col = GLUFColorToFloat(m_BackgroundColor);
 	glClearBufferfv(GL_COLOR, 0, &col[0]);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	return true;
 }

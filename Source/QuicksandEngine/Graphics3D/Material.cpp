@@ -404,7 +404,7 @@ bool JpgResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 
 	//buffer the data
 	glGenBuffers(1, &texture);
-	glBindBuffer(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

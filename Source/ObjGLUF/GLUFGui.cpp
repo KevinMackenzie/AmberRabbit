@@ -414,16 +414,16 @@ bool GLUFInitGui(GLFWwindow* pInitializedGLFWWindow, PGLUFCALLBACK callback, GLu
 	return true;
 }
 
+PGLUFCALLBACK GLUFChangeCallbackFunc(PGLUFCALLBACK newCallback)
+{
+	PGLUFCALLBACK tmp = g_pCallback;
+	g_pCallback = newCallback;
+	return tmp;
+}
+
 void GLUFSetDefaultFont(GLUFFontPtr pDefFont)
 {
 	g_DefaultFont = pDefFont;
-}
-
-bool GLUFInitFont()
-{
-
-
-	return true;
 }
 
 GLUFResult GLUFTrace(const char* file, const char* function, unsigned long lineNum, GLUFResult value, const char* message)
@@ -2220,7 +2220,7 @@ GLUFResult GLUFDialog::DrawText(std::wstring strText, GLUFElement* pElement, GLU
 
 	// If caption is enabled, offset the Y position by its height.
 	//if (m_bCaption)
-	//	GLUFOffsetRect(rcScreen, 0, m_nCaptionHeight);
+	GLUFOffsetRect(rcScreen, 0, m_nCaptionHeight);
 
 	//float fBBWidth = (float)m_pManager->m_nBackBufferWidth;
 	//float fBBHeight = (float)m_pManager->m_nBackBufferHeight;

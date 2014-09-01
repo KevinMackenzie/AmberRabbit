@@ -92,8 +92,8 @@ extern TeapotWarsApp g_TeapotWarsApp;
 
 #define ARIEL_FONT_DIALOG_LOCATION (1)
 
-const int g_SampleUIWidth = 800;
-const int g_SampleUIHeight = 800;
+const int g_SampleUIWidth = 700;
+const int g_SampleUIHeight = 700;
 
 unsigned int g_ArielFontLocation;
 
@@ -119,7 +119,7 @@ MainMenuUI::MainMenuUI()
 
 	m_bCreatingGame = true;
 
-	GLUF::Color color = GLUF::Color(200, 0, 0, 80);
+	GLUF::Color color = GLUF::Color(200, 0, 0, 255);
 	m_SampleUI.SetBackgroundColor(color);
 
 	/*Resource ariel("Fonts/Ariel.ttf");
@@ -149,14 +149,14 @@ MainMenuUI::MainMenuUI()
 
 	m_SampleUI.AddStatic(CID_NUM_AI_LABEL, L"", nX, nY, nWidth, nHeight);
 	m_SampleUI.AddSlider(CID_NUM_AI_SLIDER, nX2, nY, nWidth, nHeight);
-	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_F("MAX_AI"));
-	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetValue((float)m_NumAIs); // should be ai options default
+	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_I("MAX_AI"));
+	m_SampleUI.GetSlider( CID_NUM_AI_SLIDER )->SetValue(m_NumAIs); // should be ai options default
 	nY += nLineHeight;
 
 	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", nX, nY, nWidth, nHeight);
 	m_SampleUI.AddSlider(CID_NUM_PLAYER_SLIDER, nX2, nY, nWidth, nHeight);
-	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(1, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
-	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue((float)m_NumPlayers);  // should be player options default
+	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
+	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue(m_NumPlayers);  // should be player options default
 	nY += nLineHeight;
 
 	m_SampleUI.AddStatic(CID_HOST_LISTEN_PORT_LABEL, L"Host Listen Port", nX, nY, nWidth, nHeight);
@@ -238,7 +238,8 @@ void MainMenuUI::Set()
 
 HRESULT MainMenuUI::VOnRestore()
 {
-	m_SampleUI.SetLocation(100, 100);
+	m_SampleUI.SetCaptionHeight(0);
+	m_SampleUI.SetLocation(50, 50);
     m_SampleUI.SetSize( g_SampleUIWidth, g_SampleUIHeight );
 	return S_OK;
 }
@@ -404,7 +405,7 @@ StandardHUD::StandardHUD()
 {
     // Initialize dialogs
 	m_HUD.Init( GLRenderer_Base::g_pDialogResourceManager );
-	m_HUD.SetCallback(OnGUIEvent); float nY = 10;
+	m_HUD.SetCallback(OnGUIEvent); int nY = 10;
 	m_HUD.AddButton(IDC_TOGGLEFULLSCREEN, L"Toggle full screen", 35, nY, 125, 22);
 	m_HUD.AddButton(IDC_TOGGLEREF, L"Toggle REF (F3)", 35, nY += 24, 125, 22);
     //m_HUD.AddButton( IDC_CHANGEDEVICE, L"Change device (F2)", 35, iY += 24, 125, 22 );
