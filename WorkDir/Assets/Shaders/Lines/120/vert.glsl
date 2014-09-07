@@ -1,4 +1,4 @@
-#version 120 core
+#version 120
 
 attribute vec3 _position;
 attribute vec4 _color0;
@@ -9,6 +9,6 @@ uniform mat4 _mvp;
 
 void main(void)
 {
-	gl_Position = _position * _mvp;
+	gl_Position = vec4(_position, 1.0f) * _mvp;
 	color = _color0;
 }

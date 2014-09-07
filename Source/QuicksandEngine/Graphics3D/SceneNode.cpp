@@ -467,6 +467,11 @@ RootNode::RootNode()
 {
 	m_Children.reserve(RenderPass_Last);
 
+	//make sure there is always something to fall back on.
+	Resource res("Shaders\\DefaultShading.prog");
+	shared_ptr<ResHandle> defaultShading = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+	SetShader(defaultShading);
+
 	shared_ptr<SceneNode> staticGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Static, &glm::mat4()));
 	m_Children.push_back(staticGroup);	// RenderPass_Static = 0
 

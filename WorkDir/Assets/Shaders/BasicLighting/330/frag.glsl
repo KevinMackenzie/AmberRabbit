@@ -15,9 +15,11 @@ uniform sampler2D mat_tex0;
 //uniform mat4 MV;
 uniform vec3 _light_position;
 
-uniform vec4 mat_diffuse;
-uniform vec4 mat_ambient;
-uniform vec4 mat_specular;
+out vec4 _Color;
+
+uniform vec3 mat_diffuse;
+uniform vec3 mat_ambient;
+uniform vec3 mat_specular;
 uniform float mat_power;
 
 void main(){
@@ -30,7 +32,7 @@ void main(){
 	// Material properties
 	vec3 MaterialDiffuseColor = texture2D( mat_tex0, fs_in.uvCoord ).rgb;
 	//this is if there is no texture;
-	if(MaterialDiffuseColor.a == 0.0f)
+	if(MaterialDiffuseColor == vec3(0.0f, 0.0f, 0.0f))
 	{
 		MaterialDiffuseColor = mat_diffuse;
 	}
@@ -39,7 +41,7 @@ void main(){
 	vec3 MaterialSpecularColor = mat_specular;
 
 	// Distance to the light
-	float distance = length( LightPosition_worldspace - fs_in.Position_worldspace );
+	float distance = length( _light_position - fs_in.Position_worldspace );
 
 	// Normal of the computed fragment, in camera space
 	vec3 n = normalize( fs_in.Normal_cameraspace );
@@ -62,7 +64,7 @@ void main(){
 	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp( dot( E,R ), 0,1 );
 	
-	gl_FragColor = vec4(
+	_Color = vec4(
 		// Ambient : simulates indirect lighting
 		MaterialAmbientColor +
 		// Diffuse : "color" of the object

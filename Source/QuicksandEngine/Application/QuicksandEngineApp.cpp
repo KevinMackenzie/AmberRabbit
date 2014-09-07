@@ -148,6 +148,12 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	extern shared_ptr<IResourceLoader> CreatePNGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateTTFResourceLoader();
+	extern shared_ptr<IResourceLoader> CreatePROGResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateVERTResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateCTRLResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateEVALResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateGEOMResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateFRAGResourceLoader();
 	//extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateObjMeshResourceLoader();
@@ -161,7 +167,12 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->RegisterLoader(CreatePNGResourceLoader());
 	m_ResCache->RegisterLoader(CreateJPGResourceLoader());
 	m_ResCache->RegisterLoader(CreateTTFResourceLoader());
-	//m_ResCache->RegisterLoader(CreateJPGResourceLoader());
+	m_ResCache->RegisterLoader(CreatePROGResourceLoader());
+	m_ResCache->RegisterLoader(CreateVERTResourceLoader());
+	m_ResCache->RegisterLoader(CreateCTRLResourceLoader());
+	m_ResCache->RegisterLoader(CreateEVALResourceLoader());
+	m_ResCache->RegisterLoader(CreateGEOMResourceLoader());
+	m_ResCache->RegisterLoader(CreateFRAGResourceLoader());
 	m_ResCache->RegisterLoader(CreateXmlResourceLoader());
 	m_ResCache->RegisterLoader(CreateObjMeshResourceLoader());
 	m_ResCache->RegisterLoader(CreateScriptResourceLoader());

@@ -11,6 +11,11 @@ varying vec3 LightDirection_cameraspace;
 uniform sampler2D _ts0;
 uniform vec3 LightPosition_worldspace;
 
+uniform vec3 mat_diffuse;
+uniform vec3 mat_ambient;
+uniform vec3 mat_specular;
+uniform float mat_power;
+
 void main(){
 
 	// Light emission properties
@@ -19,9 +24,15 @@ void main(){
 	float LightPower = 50.0f;
 	
 	// Material properties
-	vec3 MaterialDiffuseColor = texture2D( _ts0, UV ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
+	vec3 MaterialDiffuseColor = texture2D( mat_tex0, fs_in.uvCoord ).rgb;
+	//this is if there is no texture;
+	if(MaterialDiffuseColor == vec3(0.0f, 0.0f, 0.0f))
+	{
+		MaterialDiffuseColor = mat_diffuse;
+	}
+	
+	vec3 MaterialAmbientColor = mat_ambient * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = mat_specular;
 
 	// Distance to the light
 	float distance = length( LightPosition_worldspace - Position_worldspace );

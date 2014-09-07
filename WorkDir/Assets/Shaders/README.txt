@@ -19,3 +19,5 @@
 	-mat_tex0-mat_tex7
 	
 //the shader loading system chooses the maximum support version of the shader
+
+//In the .prog file, the GLSL version attributes must be in ascending order

@@ -40,7 +40,7 @@ void main(){
 
 	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
 	vec3 LightPosition_cameraspace = ( _view * vec4(_light_position,1)).xyz;
-	vs_out.LightDirection_cameraspace = LightPosition_cameraspace + EyeDirection_cameraspace;
+	vs_out.LightDirection_cameraspace = LightPosition_cameraspace + vs_out.EyeDirection_cameraspace;
 	
 	// Normal of the the vertex, in camera space
 	vs_out.Normal_cameraspace = ( _mv * vec4(_normal,0)).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.

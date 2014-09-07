@@ -13,7 +13,7 @@
 // Scene Implementation
 ////////////////////////////////////////////////////
 
-shared_ptr<GLUFMatrixStack> g_pMatrixStack = shared_ptr<GLUFMatrixStack>(new GLUFMatrixStack());
+shared_ptr<GLUFMatrixStack> g_pMatrixStack = nullptr;
 
 //
 // Scene::Scene						- Chapter 16, page 539
@@ -23,11 +23,15 @@ shared_ptr<GLUFMatrixStack> g_pMatrixStack = shared_ptr<GLUFMatrixStack>(new GLU
 //
 Scene::Scene(shared_ptr<IRenderer> renderer)
 {
+	if (!g_pMatrixStack)
+	{
+		g_pMatrixStack = shared_ptr<GLUFMatrixStack>(QSE_NEW GLUFMatrixStack);
+	}
 	m_Root.reset(QSE_NEW RootNode());
 	m_Renderer = renderer;
 	m_LightManager = QSE_NEW LightManager;
 
-	m_MatrixStack = m_MatrixStack;
+	m_MatrixStack = g_pMatrixStack;
 
 	// [mrmike] - event delegates were added post-press
 	IEventManager* pEventMgr = IEventManager::Get();

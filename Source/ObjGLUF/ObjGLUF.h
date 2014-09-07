@@ -168,6 +168,7 @@ OBJGLUF_API long GLUFLoadFileIntoMemory(const wchar_t* path, char* buffer, long 
 OBJGLUF_API char* GLUFLoadFileIntoMemory(const char* path, unsigned long* rawSize);
 OBJGLUF_API long GLUFLoadFileIntoMemory(const char* path, char* buffer, long len = -1);
 
+OBJGLUF_API std::string GLUFLoadBinaryArrayIntoString(char* data, long len);
 
 typedef std::vector<glm::vec4> Vec4Array;
 typedef std::vector<glm::vec3> Vec3Array;
@@ -402,7 +403,8 @@ public:
 	//for creating things
 
 	GLUFShaderPtr CreateShaderFromFile(std::wstring filePath, GLUFShaderType type);
-	GLUFShaderPtr CreateShaderFromMemory(const char* text, GLUFShaderType type);
+	GLUFShaderPtr CreateShaderFromText(const char* str, GLUFShaderType type);
+	GLUFShaderPtr CreateShaderFromMemory(char* data, long len, GLUFShaderType type);
 
 	GLUFProgramPtr CreateProgram(GLUFShaderPtrList shaders, bool seperate = false);
 	GLUFProgramPtr CreateProgram(GLUFShaderSourceList shaderSources, bool seperate = false);

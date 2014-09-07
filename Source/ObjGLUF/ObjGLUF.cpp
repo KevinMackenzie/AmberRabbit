@@ -279,7 +279,19 @@ long GLUFLoadFileIntoMemory(const char* path, char* buffer, long len)
 		GLUF_ERROR("Failed to load file into memory");
 	}
 
-	return (unsigned long)streamLen;
+	return len;
+}
+
+std::string GLUFLoadBinaryArrayIntoString(char* data, long len)
+{
+	std::istream indata(new MemStreamBuf(data, len));
+	char ch = ' ';
+
+	std::string inString;
+	while (indata.get(ch))
+		inString += ch;
+
+	return inString;
 }
 
 void GLUFMatrixStack::Push(const glm::mat4& matrix)
@@ -1040,15 +1052,13 @@ GLUFShaderPtr GLUFShaderManager::CreateShaderFromFile(std::wstring filePath, GLU
 	return shader;
 }
 
-
-GLUFShaderPtr GLUFShaderManager::CreateShaderFromMemory(const char* text, GLUFShaderType type)
+GLUFShaderPtr GLUFShaderManager::CreateShaderFromText(const char* str, GLUFShaderType type)
 {
 	//return CreateShader(text, type, false);
 	GLUFShaderPtr shader(new GLUFShader());
 	shader->Init(type);
 
-	//(file) ? shader->LoadFromFile(shad.c_str()) : shader->Load(shad.c_str());
-	shader->Load(text);
+	shader->Load(str);
 
 	GLUFShaderInfoStruct output;
 	shader->Compile(output);
@@ -1063,6 +1073,11 @@ GLUFShaderPtr GLUFShaderManager::CreateShaderFromMemory(const char* text, GLUFSh
 	}
 
 	return shader;
+}
+
+GLUFShaderPtr GLUFShaderManager::CreateShaderFromMemory(char* data, long len, GLUFShaderType type)
+{
+	return CreateShaderFromText((GLUFLoadBinaryArrayIntoString(data, len) + "\n").c_str(), type);
 }
 
 GLUFProgramPtr GLUFShaderManager::CreateProgram(GLUFShaderPtrList shaders, bool seperate)
@@ -1096,7 +1111,7 @@ GLUFProgramPtr GLUFShaderManager::CreateProgram(GLUFShaderSourceList shaderSourc
 	for (auto it : shaderSources)
 	{
 		//use the counter global to get a unique name  This is temperary anyway
-		shaders.push_back(CreateShaderFromMemory(it.second, it.first));
+		shaders.push_back(CreateShaderFromText(const_cast<char*>(it.second), it.first));
 
 		//make sure it didn't fail
 		if (!GetShaderLog(shaders[shaders.size()-1]))

@@ -98,6 +98,11 @@ void HumanView::VOnRender(double fTime, double fElapsedTime )
 
             VRenderText();
 
+			//TODO: is this right?
+			if (m_pScene)
+				if (m_pScene->VIsVisible())
+					m_pScene->OnRender();
+
 			// Let the console render.
 			m_Console.Render();
 

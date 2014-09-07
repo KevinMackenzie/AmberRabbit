@@ -1,10 +1,10 @@
 <PROGRAM>
-	<GLSL version = 120>
+	<GLSL version = "120">
 		<VERTEX>
-			<SHADER>Shaders/Grid/120/vert.glsl</SHADER>
+			<SHADER>Shaders\Lines\120\vert.glsl</SHADER>
 		</VERTEX>
 		<FRAGMENT>
-			<SHADER>Shaders/Grid/120/frag.glsl</SHADER>
+			<SHADER>Shaders\Lines\120\frag.glsl</SHADER>
 		</FRAGMENT>
 	</GLSL>
 </PROGRAM>

@@ -12,7 +12,7 @@ class XmlResourceExtraData : public IResourceExtraData
 
 public:
     virtual string VToString() { return "XmlResourceExtraData"; }
-    void ParseXml(char* pRawBuffer);
+    void ParseXml(char* pRawBuffer, long len);
 	tinyxml2::XMLElement* GetRoot(void) { return XmlDocument.RootElement(); }
 };
 

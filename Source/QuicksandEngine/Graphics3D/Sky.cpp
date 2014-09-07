@@ -7,6 +7,7 @@
 #include "SceneNode.hpp"
 #include "Scene.hpp"
 #include "Sky.hpp"
+#include "ShaderResource.hpp"
 
 
 shared_ptr<ResHandle> GLSkyNode::m_pSkyProgram(nullptr);
@@ -51,7 +52,7 @@ GLSkyNode::GLSkyNode(const char *pTextureBaseName)
 {
 	if (!m_pSkyProgram)
 	{
-		Resource res("Shaders/Sky.prog");
+		Resource res("Shaders\\Sky.prog");
 		m_pSkyProgram = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
 	}
 
@@ -294,6 +295,7 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 		Resource res(GetTextureName(side));
 		shared_ptr<GLTextureResourceExtraData> tex = static_pointer_cast<GLTextureResourceExtraData>(QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res)->GetExtra());
 		
+
 		//bind the texture, but the uniform for the texture is already set up
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex->GetTexture());

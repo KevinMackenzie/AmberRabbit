@@ -106,8 +106,6 @@ class QSE_API GLRenderSkyBoxPass;
 class QSE_API GLRenderer;
 class QSE_API GLRendererAlphaPass;
 class QSE_API GLRenderer_Base;
-class QSE_API GLShaderResourceExtraData;
-class QSE_API GLShaderResourceLoader;
 class QSE_API GLSkyNode;
 class QSE_API GLTextureResourceExtraData;
 class QSE_API GLVertShaderResourceLoader;

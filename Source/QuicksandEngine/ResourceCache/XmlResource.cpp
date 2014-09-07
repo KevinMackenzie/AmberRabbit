@@ -3,9 +3,10 @@
 
 using namespace tinyxml2;
 
-void XmlResourceExtraData::ParseXml(char* pRawBuffer)
+void XmlResourceExtraData::ParseXml(char* pRawBuffer, long len)
 {
-    XmlDocument.Parse(pRawBuffer);
+	std::string text = GLUFLoadBinaryArrayIntoString(pRawBuffer, len);
+	XmlDocument.Parse(text.c_str());
 }
 
 
@@ -15,7 +16,7 @@ bool XmlResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, sha
         return false;
 
     shared_ptr<XmlResourceExtraData> pExtraData = shared_ptr<XmlResourceExtraData>(QSE_NEW XmlResourceExtraData());
-    pExtraData->ParseXml(rawBuffer);
+    pExtraData->ParseXml(rawBuffer, rawSize);
 
     handle->SetExtra(shared_ptr<XmlResourceExtraData>(pExtraData));
 
