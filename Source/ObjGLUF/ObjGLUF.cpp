@@ -294,6 +294,9 @@ std::string GLUFLoadBinaryArrayIntoString(char* data, long len)
 	return inString;
 }
 
+
+glm::mat4 GLUFMatrixStack::mIdentity = glm::mat4();
+
 void GLUFMatrixStack::Push(const glm::mat4& matrix)
 {
 	if (mStack.size() != 0)
@@ -317,6 +320,10 @@ void GLUFMatrixStack::Pop(void)
 
 const glm::mat4& GLUFMatrixStack::Top(void)
 {
+	//if it is empty, then we want to return the identity
+	if (mStack.size() == 0)
+		return mIdentity;
+
 	return mStack.top();
 }
 

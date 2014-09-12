@@ -223,14 +223,18 @@ HRESULT Scene::OnUpdate(const int deltaMilliseconds)
 	if (!m_Root)
 		return S_OK;
 
-	static double lastTime = glfwGetTime();
+	/*static double lastTime = glfwGetTime();
 	double elapsedTime = 0.0f;
 	double now = glfwGetTime();
 
 	elapsedTime = now - lastTime;
-	lastTime = now;
+	lastTime = now;*/
 
-	return m_Root->VOnUpdate(this, elapsedTime);
+	//calcaulte the camera projeciton
+	Point pt = QuicksandEngine::g_pApp->GetScreenSize();
+	m_Camera->m_Projection = glm::perspective(GET_CONFIG_ELEMENT_F("FOV"), (float)pt.x / (float)pt.y, GET_CONFIG_ELEMENT_F("CLIP_PLANE_NEAR"), GET_CONFIG_ELEMENT_F("CLIP_PLANE_FAR"));
+
+	return m_Root->VOnUpdate(this, (float)deltaMilliseconds / 1000.0f);
 }
 
 //

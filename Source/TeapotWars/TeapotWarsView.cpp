@@ -455,7 +455,8 @@ LRESULT StandardHUD::VOnMsgProc( AppMsg msg )
 // TeapotWarsHumanView::TeapotWarsHumanView	- Chapter 19, page 724
 //
 TeapotWarsHumanView::TeapotWarsHumanView(shared_ptr<IRenderer> renderer) : HumanView(renderer)
-{ 
+{
+	GLRenderer_Base::g_pTextHelper->Init(20);//make sure to set this up initially, because the engine does not do this by default
 	m_bShowUI = true; 
     RegisterAllDelegates();
 }

@@ -138,7 +138,7 @@ public:
 
 	virtual HRESULT VPreRender(Scene *pScene);
 	virtual bool VIsVisible(Scene *pScene) const;
-	virtual HRESULT VRender(Scene *pScene) { return S_OK; }
+	virtual HRESULT VRender(Scene *pScene);
 	virtual HRESULT VRenderChildren(Scene *pScene);
 	virtual HRESULT VPostRender(Scene *pScene);
 
@@ -268,6 +268,7 @@ public:
 
 class CameraNode : public SceneNode
 {
+	friend Scene;
 public:
 	CameraNode(glm::mat4 const *t, Frustum const &frustum)
 		: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_0, t),
@@ -277,6 +278,7 @@ public:
 		m_pTarget(shared_ptr<SceneNode>()),
 		m_CamOffsetVector(0.0f, 1.0f, -10.0f, 0.0f)
 	{
+		VOnRestore(nullptr);
 	}
 
 	virtual HRESULT VRender(Scene *pScene);

@@ -178,6 +178,7 @@ typedef std::vector<GLuint>    IndexArray;
 class OBJGLUF_API GLUFMatrixStack
 {
 	std::stack<glm::mat4> mStack;
+	static glm::mat4 mIdentity;
 public:
 	void Push(const glm::mat4& matrix);
 	void Pop(void);

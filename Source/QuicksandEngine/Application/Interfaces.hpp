@@ -219,9 +219,9 @@ public:
 enum RenderPass
 {
 	RenderPass_0,
-	RenderPass_Sky, //render the sky first
-	RenderPass_Static = RenderPass_Sky + 1,
+	RenderPass_Static,
 	RenderPass_Actor,
+	RenderPass_Sky, //render the sky last
 	RenderPass_NotRendered,
 	RenderPass_Last
 };
@@ -258,9 +258,9 @@ public:
 	virtual bool VPreRender()=0;
 	virtual bool VPostRender()=0;
 	virtual void VCalcLighting(Lights *lights, int maximumLights)=0;
-	virtual void VSetWorldTransform(const glm::mat4 *m)=0;
-	virtual void VSetViewTransform(const glm::mat4 *m)=0;
-	virtual void VSetProjectionTransform(const glm::mat4 *m)=0;
+	//virtual void VSetWorldTransform(const glm::mat4 *m)=0;
+	//virtual void VSetViewTransform(const glm::mat4 *m)=0;
+	//virtual void VSetProjectionTransform(const glm::mat4 *m)=0;
 	virtual shared_ptr<IRenderState> VPrepareAlphaPass()=0;
 	virtual shared_ptr<IRenderState> VPrepareSkyBoxPass()=0;
 	virtual void VDrawLine(const glm::vec3& from,const glm::vec3& to,const Color& color)=0;

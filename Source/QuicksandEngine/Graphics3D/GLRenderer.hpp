@@ -58,9 +58,9 @@ public:
 	static GLUFTextHelper* g_pTextHelper;
 
 	Color GetColor(){ return m_BackgroundColor; }
-	virtual void VSetWorldTransform(const glm::mat4 *m){};
-	virtual void VSetViewTransform(const glm::mat4 *m){};
-	virtual void VSetProjectionTransform(const glm::mat4 *m){};
+	//virtual void VSetWorldTransform(const glm::mat4 *m){};
+	//virtual void VSetViewTransform(const glm::mat4 *m){};
+	//virtual void VSetProjectionTransform(const glm::mat4 *m){};
 
 	virtual void VSetBackgroundColor(glm::u8 bgA, glm::u8 bgR, glm::u8 bgG, glm::u8 bgB)
 	{
@@ -72,37 +72,6 @@ public:
 	virtual HRESULT VOnRestore() { return S_OK; }
 	virtual void VShutdown() { SAFE_DELETE(g_pTextHelper); }
 };
-
-
-/*
-class D3DRenderer9 : public D3DRenderer
-{
-public:
-	D3DRenderer9() { m_pFont = NULL; m_pTextSprite = NULL; }
-
-	virtual void VSetBackgroundColor(BYTE bgA, BYTE bgR, BYTE bgG, BYTE bgB) { m_backgroundColor = D3DCOLOR_ARGB(bgA, bgR, bgG, bgB); }
-	virtual bool VPreRender();
-	virtual bool VPostRender();
-	virtual HRESULT VOnRestore();
-	virtual void VCalcLighting(Lights *lights, int maximumLights);
-
-	virtual void VShutdown() { D3DRenderer::VShutdown(); SAFE_RELEASE(m_pFont); SAFE_RELEASE(m_pTextSprite); }
-
-	virtual void VSetWorldTransform(const glm::mat4 *m) { DXUTGetD3D9Device()->SetTransform(D3DTS_WORLD, m); }
-	virtual void VSetViewTransform(const glm::mat4 *m) { DXUTGetD3D9Device()->SetTransform(D3DTS_VIEW, m); }
-	virtual void VSetProjectionTransform(const glm::mat4 *m) { DXUTGetD3D9Device()->SetTransform(D3DTS_PROJECTION, m); }
-
-	virtual shared_ptr<IRenderState> VPrepareAlphaPass();
-	virtual shared_ptr<IRenderState> VPrepareSkyBoxPass();
-
-	virtual void VDrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color);
-
-protected:
-	D3DCOLOR m_backgroundColor;		// the color that the view is cleared to each frame
-
-	ID3DXFont*			        m_pFont;
-	ID3DXSprite*				m_pTextSprite;
-};*/
 
 
 
@@ -145,9 +114,6 @@ public:
 
 	virtual shared_ptr<IRenderState> VPrepareAlphaPass();
 	virtual shared_ptr<IRenderState> VPrepareSkyBoxPass();
-
-	//GLShaderManager mShaderManager;//this should NEVER have to be copied
-	//GLBufferManager mBufferManager;
 
 protected:
 

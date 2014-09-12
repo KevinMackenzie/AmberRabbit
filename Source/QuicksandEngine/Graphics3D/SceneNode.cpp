@@ -266,6 +266,11 @@ bool SceneNode::VIsVisible(Scene *pScene) const
 	return isVisible;
 }
 
+HRESULT SceneNode::VRender(Scene* pScene)
+{
+	return S_OK;
+}
+
 //
 // SceneNode::GetWorldPosition			- not described in the book
 //
@@ -473,16 +478,20 @@ RootNode::RootNode()
 	SetShader(defaultShading);
 
 	shared_ptr<SceneNode> staticGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Static, &glm::mat4()));
-	m_Children.push_back(staticGroup);	// RenderPass_Static = 0
+	//m_Children.push_back(staticGroup);	// RenderPass_Static = 0
+	SceneNode::VAddChild(staticGroup);//[Kevin] This was not here, but for the shading to work correctly, these have to have a parent
 
 	shared_ptr<SceneNode> actorGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Actor, &glm::mat4()));
-	m_Children.push_back(actorGroup);	// RenderPass_Actor = 1
+	//m_Children.push_back(actorGroup);	// RenderPass_Actor = 1
+	SceneNode::VAddChild(staticGroup);
 
 	shared_ptr<SceneNode> skyGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &glm::mat4()));
-	m_Children.push_back(skyGroup);	// RenderPass_Sky = 2
+	//m_Children.push_back(skyGroup);	// RenderPass_Sky = 2
+	SceneNode::VAddChild(staticGroup);
 
 	shared_ptr<SceneNode> invisibleGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_NotRendered, &glm::mat4()));
-	m_Children.push_back(invisibleGroup);	// RenderPass_NotRendered = 3
+	//m_Children.push_back(invisibleGroup);	// RenderPass_NotRendered = 3
+	SceneNode::VAddChild(staticGroup);
 }
 
 //
@@ -582,7 +591,7 @@ HRESULT CameraNode::VOnRestore(Scene *pScene)
 	glfwGetWindowSize(QuicksandEngine::g_pApp->GLFWWindow(), &windowWidth, &windowHeight);
 	m_Frustum.SetAspect((FLOAT)windowWidth / (FLOAT)windowHeight);
 	m_Projection = glm::perspective(m_Frustum.m_Fov, m_Frustum.m_Aspect, m_Frustum.m_Near, m_Frustum.m_Far);
-	pScene->GetRenderer()->VSetProjectionTransform(&m_Projection);
+	//pScene->GetRenderer()->VSetProjectionTransform(&m_Projection);
 	return S_OK;
 }
 
@@ -607,7 +616,7 @@ HRESULT CameraNode::SetViewTransform(Scene *pScene)
 
 	m_View = VGet()->FromWorld();
 
-	pScene->GetRenderer()->VSetViewTransform(&m_View);
+	//pScene->GetRenderer()->VSetViewTransform(&m_View);
 	return S_OK;
 }
 

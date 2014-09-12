@@ -34,7 +34,7 @@ GLRendererAlphaPass::GLRendererAlphaPass()
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_ZWRITEENABLE, false);
 	
 	//TODO: is this correct?
-	glDisable(GL_DEPTH_BUFFER_BIT);
+	//glDisable(GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -53,7 +53,7 @@ GLRendererAlphaPass::~GLRendererAlphaPass()
 
 
 	*g_pMatrixStack = m_oldWorld;
-	glEnable(GL_DEPTH_BUFFER_BIT);
+	//glEnable(GL_DEPTH_BUFFER_BIT);
 }
 
 
@@ -85,7 +85,7 @@ GLRenderPass::GLRenderPass()
 	//ZeroMemory(&BlendState, sizeof(D3D11_BLEND_DESC));
 
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_BLEND_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 
 	/*BlendState.AlphaToCoverageEnable = false;
@@ -183,8 +183,8 @@ GLRenderSkyBox::GLRenderSkyBox()
 	DXUTGetD3D11Device()->CreateDepthStencilState(&DSDesc, &m_pSkyboxDepthStencilState);
 	DXUT_SetDebugName(m_pSkyboxDepthStencilState, "SkyboxDepthStencil");*/
 
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_STENCIL);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	
 	/*
 	UINT StencilRef;
@@ -201,8 +201,6 @@ GLRenderSkyBox::~GLRenderSkyBox()
 	//SAFE_RELEASE(m_pOldDepthStencilState);
 	//SAFE_RELEASE(m_pSkyboxDepthStencilState);
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_STENCIL);
 }
 
 
@@ -333,69 +331,6 @@ bool GLRenderer::VPostRender(void)
 {
 	return true;
 }
-
-/*
-
-//--------------------------------------------------------------------------------------
-// Helper for compiling shaders with D3DX11
-//--------------------------------------------------------------------------------------
-HRESULT GLRenderer::CompileShader(LPCSTR pSrcData, SIZE_T SrcDataLen, LPCSTR pFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
-{
-	HRESULT hr = S_OK;
-
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined( DEBUG ) || defined( _DEBUG )
-	// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-	// Setting this flag improves the shader debugging experience, but still allows 
-	// the shaders to be optimized and to run exactly the way they will run in 
-	// the release configuration of this program.
-	dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-	ID3DBlob* pErrorBlob;
-	hr = D3DX11CompileFromMemory(pSrcData, SrcDataLen, pFileName, NULL, NULL, szEntryPoint, szShaderModel,
-		dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
-	if (FAILED(hr))
-	{
-		if (pErrorBlob != NULL)
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-		if (pErrorBlob) pErrorBlob->Release();
-		return hr;
-	}
-	if (pErrorBlob) pErrorBlob->Release();
-
-	return S_OK;
-}
-
-
-HRESULT GLRenderer::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
-{
-	HRESULT hr = S_OK;
-
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined( DEBUG ) || defined( _DEBUG )
-	// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-	// Setting this flag improves the shader debugging experience, but still allows 
-	// the shaders to be optimized and to run exactly the way they will run in 
-	// the release configuration of this program.
-	dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-	ID3DBlob* pErrorBlob;
-	hr = D3DX11CompileFromFile(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
-		dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
-	if (FAILED(hr))
-	{
-		if (pErrorBlob != NULL)
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-		if (pErrorBlob) pErrorBlob->Release();
-		return hr;
-	}
-	if (pErrorBlob) pErrorBlob->Release();
-
-	return S_OK;
-}
-*/
 
 void GLRenderer::VDrawLine(const glm::vec3& from, const glm::vec3& to, const Color& color)
 {

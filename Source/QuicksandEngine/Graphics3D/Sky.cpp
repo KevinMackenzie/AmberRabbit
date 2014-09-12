@@ -295,7 +295,7 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 		Resource res(GetTextureName(side));
 		shared_ptr<GLTextureResourceExtraData> tex = static_pointer_cast<GLTextureResourceExtraData>(QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res)->GetExtra());
 		
-
+		//TODO: setup with cube map
 		//bind the texture, but the uniform for the texture is already set up
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex->GetTexture());

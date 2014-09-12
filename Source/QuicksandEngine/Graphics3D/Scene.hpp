@@ -73,13 +73,9 @@ public:
 
 	void PushAndSetMatrix(const glm::mat4 &toWorld)
 	{
-		// Note this code carefully!!!!! It is COMPLETELY different
-		// from some DirectX 9 documentation out there....
-		// Scene::PushAndSetMatrix - Chapter 16, page 541
-
 		m_MatrixStack->Push(toWorld);
 		glm::mat4 mat = GetTopMatrix();
-		m_Renderer->VSetWorldTransform(&mat);
+		//m_Renderer->VSetWorldTransform(&mat);
 	}
 
 	void PopMatrix()
@@ -87,7 +83,7 @@ public:
 		// Scene::PopMatrix - Chapter 16, page 541
 		m_MatrixStack->Pop();
 		glm::mat4 mat = GetTopMatrix();
-		m_Renderer->VSetWorldTransform(&mat);
+		//m_Renderer->VSetWorldTransform(&mat);
 	}
 
 	const glm::mat4 GetTopMatrix()
