@@ -1175,7 +1175,7 @@ protected:
 class OBJGLUF_API GLUFTextHelper
 {
 public:
-	GLUFTextHelper(GLUFDialogResourceManager* pManager, GLUFFontSize fLineHeight);
+	GLUFTextHelper(GLUFDialogResourceManager* pManager);
 	~GLUFTextHelper(){};
 
 	//line height = leadding
@@ -1200,7 +1200,6 @@ protected:
 	GLUF::Color m_clr;
 	GLUF::GLUFPoint m_pt;
 	GLUFFontSize m_fLineHeight;
-
 
 	GLUFDialogResourceManager* m_pManager;
 

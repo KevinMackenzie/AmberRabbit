@@ -83,6 +83,25 @@ string ResourceZipFile::VGetResourceName(int num) const
 	return resName;
 }
 
+string ResourceZipFile::DumpResourceList()
+{
+	string ret = "";
+
+	std::wstring filename = m_resFileName + L"\\";
+	char* filePath = new char[filename.length()];
+	strset(filePath, 0);
+
+	wcstombs(filePath, filename.c_str(), filename.length());
+	for (auto it : this->m_pZipFile->m_ZipContentsMap)
+	{
+		ret += filePath;
+		ret += it.first;
+		ret += '\n';
+	}
+
+	return ret;
+}
+
 
 //========================================================================
 // class DevelopmentResourceZipFile					- not discussed in the book
@@ -236,7 +255,27 @@ void DevelopmentResourceZipFile::ReadAssetsDirectory(std::wstring fileSpec)
 }
 
 
+string DevelopmentResourceZipFile::DumpResourceList()
+{
+	string ret = "";
 
+	char* filePath = new char[m_AssetsDir.length()];
+	strset(filePath, 0);
+
+	wcstombs(filePath, m_AssetsDir.c_str(), m_AssetsDir.length());
+	for (auto it : m_AssetFileInfo)
+	{
+		char* tmp = (char*)malloc(260);
+
+		wcstombs(tmp, it.cFileName, 260);
+		ret += filePath;
+		ret += tmp;
+		ret += '\n';
+
+		free(tmp);
+	}
+	return ret;
+}
 
 
 //
@@ -494,6 +533,21 @@ void ResCache::Flush()
 		Free(handle);
 		m_lru.pop_front();
 	}
+}
+
+void ResCache::DumpFilePaths()
+{
+
+	std::stringstream ss;
+	time_t t = time(0);
+	struct tm * now = localtime(&t);
+	ss << "Logs/ResourcePathDump_" << "_" << now->tm_mon + 1 << "_" << now->tm_mday << "_" << now->tm_year + 1900 << " " << now->tm_hour + 1 << "-" << now->tm_min << "-" << now->tm_sec << ".txt";
+
+	std::ofstream outfile(ss.str());
+
+	outfile << m_file->DumpResourceList();
+
+	outfile.close();
 }
 
 

@@ -240,7 +240,8 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 
 
 	GLRenderer_Base::g_pDialogResourceManager = QSE_NEW GLUFDialogResourceManager();
-	GLRenderer_Base::g_pTextHelper = QSE_NEW GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager, 20);
+	GLRenderer_Base::g_pTextHelper = QSE_NEW GLUFTextHelper(GLRenderer_Base::g_pDialogResourceManager);
+	GLRenderer_Base::g_pTextHelper->Init(20);
 
 	/*if (hWnd == NULL)
 	{
@@ -299,6 +300,8 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->Preload("*.prog", NULL);
 	m_ResCache->Preload("*.obj.model", NULL);
 	m_ResCache->Preload("*.font", NULL);
+
+	m_ResCache->DumpFilePaths();
 
 	CheckForJoystick(GetHwnd());
 

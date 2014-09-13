@@ -204,6 +204,7 @@ public:
 	virtual std::string VGetResourceName(int num) const = 0;
     virtual bool VIsUsingDevelopmentDirectories(void) const = 0;
 	virtual ~IResourceFile() { }
+	virtual std::string DumpResourceList() = 0;
 };
 
 

@@ -49,6 +49,7 @@ public:
 	virtual int VGetNumResources() const;
 	virtual string VGetResourceName(int num) const;
     virtual bool VIsUsingDevelopmentDirectories(void) const { return false; }
+	virtual std::string DumpResourceList();
 };
 
 //
@@ -79,6 +80,7 @@ public:
 	virtual int VGetNumResources() const;
 	virtual string VGetResourceName(int num) const;
     virtual bool VIsUsingDevelopmentDirectories(void) const { return true; }
+	virtual string DumpResourceList();
 
 	int Find(const string &path);
 
@@ -177,6 +179,8 @@ public:
 	void Flush(void);
 
     bool IsUsingDevelopmentDirectories(void) const { LOG_ASSERT(m_file); return m_file->VIsUsingDevelopmentDirectories(); }
+
+	void DumpFilePaths();
 
 };
 

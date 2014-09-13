@@ -432,7 +432,7 @@ HRESULT StandardHUD::VOnRender(double fTime, double fElapsedTime)
 {
 	HRESULT hr;
 	//DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"StandardUI" ); // These events are to help PIX identify what the code is doing
-	V( m_HUD.OnRender( (float)fElapsedTime ) );
+	V(m_HUD.OnRender((float)fElapsedTime));
 	//DXUT_EndPerfEvent();
 	return S_OK;
 };
@@ -456,7 +456,6 @@ LRESULT StandardHUD::VOnMsgProc( AppMsg msg )
 //
 TeapotWarsHumanView::TeapotWarsHumanView(shared_ptr<IRenderer> renderer) : HumanView(renderer)
 {
-	GLRenderer_Base::g_pTextHelper->Init(20);//make sure to set this up initially, because the engine does not do this by default
 	m_bShowUI = true; 
     RegisterAllDelegates();
 }
@@ -588,11 +587,11 @@ void TeapotWarsHumanView::VRenderText()
     // Gameplay UI (with shadow)....
     if (!m_gameplayText.empty())
     {
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2, 5));
-		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2, 250));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 0, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2 - 1, 5 - 1));
-		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0.25f, 1.0f, 0.25f, 1.0f));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2 - 1, 225));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(64, 64, 64, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
     }
 	// ...Gameplay UI
@@ -600,14 +599,14 @@ void TeapotWarsHumanView::VRenderText()
 	if( m_bShowUI )
 	{
 		// Output statistics... TODO:
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(5, 5));
-		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(1.0f, 1.0f, 0.0f, 1.0f));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(5, 200));
+		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 255, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetFrameStats());
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetDeviceStats());
 		//...output statistics
 
 
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF::GLUFPoint(5, 5));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF::GLUFPoint(5, 175));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0, 0, 0, 128));
 
 		//Game State...
@@ -664,9 +663,9 @@ void TeapotWarsHumanView::VRenderText()
 		helpRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y;
 		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(helpRect.right, helpRect.top));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 192, 0, 255));
-		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, DT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str());
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, GT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str());
 		helpRect.top = QuicksandEngine::g_pApp->GetScreenSize().y + 15 * 7;
-		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, DT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS")).c_str());
+		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, GT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS")).c_str());
 		//...Help
 	}//end if (m_bShowUI)
 

@@ -166,7 +166,9 @@ bool GLUFInitOpenGLExtentions()
 char* GLUFLoadFileIntoMemory(const wchar_t* path, unsigned long* rawSize)
 {
 	GLUF_ASSERT(path);
-	GLUF_ASSERT(rawSize);
+	//GLUF_ASSERT(rawSize);
+	if (!rawSize)
+		rawSize = new unsigned long;
 
 	std::ifstream inFile(path, std::ios::binary);
 	if (!inFile)
@@ -782,7 +784,7 @@ void GLUFShader::Load(const char* shaderText, bool append)
 	if (!append)
 		mTmpShaderText.clear();
 
-	mTmpShaderText = shaderText;
+	mTmpShaderText.append(shaderText);
 }
 
 bool GLUFShader::LoadFromFile(const wchar_t* filePath, bool append)

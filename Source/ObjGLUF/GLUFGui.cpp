@@ -547,8 +547,8 @@ void GLUFFont::Refresh()
 	//float fLargest = 0.0f;
 	//glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fLargest);
 	//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fLargest);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// Stop chararcters from bleeding over edges
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -8683,6 +8683,9 @@ void EndText(GLUFFontPtr font)
 	glEnableVertexAttribArray(g_TextShaderLocations.position);//positions
 	glEnableVertexAttribArray(g_TextShaderLocations.uv);//uvs
 
+	//make sure to enable this with text
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_TRIANGLES, 0, g_TextVerticies.size());
 
 	g_TextVerticies.clear();
@@ -8694,9 +8697,9 @@ void EndText(GLUFFontPtr font)
 
 
 //GLUFTextHelper
-GLUFTextHelper::GLUFTextHelper(GLUFDialogResourceManager* pManager, GLUFFontSize fLineHeight) : 
+GLUFTextHelper::GLUFTextHelper(GLUFDialogResourceManager* pManager) : 
 m_pManager(pManager), m_clr(0, 0, 0, 255), m_pt(0L, 0L), 
-m_fLineHeight(fLineHeight), m_nFont(0), m_fFontSize(0L), m_Weight(FONT_WEIGHT_NORMAL)
+m_fLineHeight(20L), m_nFont(0), m_fFontSize(15L), m_Weight(FONT_WEIGHT_NORMAL)
 {
 	GLUF_ASSERT(pManager);
 }
@@ -8712,6 +8715,7 @@ void GLUFTextHelper::Init(GLUFFontSize fLineHeight)
 void GLUFTextHelper::Begin(GLUFFontIndex fontToUse, GLUF_FONT_WEIGHT weight)
 {
 	m_nFont = fontToUse;
+
 	m_Weight = weight;
 
 	BeginText(m_pManager->GetOrthoMatrix());
@@ -8732,9 +8736,10 @@ GLUFResult GLUFTextHelper::DrawFormattedTextLine(const wchar_t* strMsg, size_t s
 
 GLUFResult GLUFTextHelper::DrawTextLine(const wchar_t* strMsg)
 {
+	m_pManager->GetFontNode(m_nFont)->m_Leading = m_fLineHeight;
 	std::wstring sMsg = strMsg;
 
-	DrawTextGLUF(*m_pManager->GetFontNode(m_nFont), sMsg, { m_pt.x, m_pt.y, 0L, 0L }, m_clr, 0);
+	DrawTextGLUF(*m_pManager->GetFontNode(m_nFont), sMsg, { m_pt.x, m_pt.y, m_pt.x + 50L, m_pt.y - 50L }, m_clr, GT_LEFT | GT_TOP);
 
 	//set the point down however many lines were drawn
 	for (auto it : sMsg)
@@ -8760,6 +8765,7 @@ GLUFResult GLUFTextHelper::DrawFormattedTextLine(const GLUFRect& rc, unsigned in
 
 GLUFResult GLUFTextHelper::DrawTextLine(const GLUFRect& rc, unsigned int dwFlags, const wchar_t* strMsg)
 {
+	m_pManager->GetFontNode(m_nFont)->m_Leading = m_fLineHeight;
 	DrawTextGLUF(*m_pManager->GetFontNode(m_nFont), strMsg, rc, m_clr, dwFlags, true);
 
 	return GR_SUCCESS;
