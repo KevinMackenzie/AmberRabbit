@@ -1,8 +1,5 @@
 #ifndef QSE_NETWORK_HPP
 #define QSE_NETWORK_HPP
-
-#undef FAR
-#define FAR 
 #include <sys/types.h>
 //#include <winsock.h>
 #include <WinSock2.h>

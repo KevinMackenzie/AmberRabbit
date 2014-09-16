@@ -590,7 +590,7 @@ void TeapotWarsHumanView::VRenderText()
 		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2, 250));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 0, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2 - 1, 225));
+		//GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(QuicksandEngine::g_pApp->GetScreenSize().x / 2 - 1, 225));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(64, 64, 64, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
     }
@@ -602,11 +602,12 @@ void TeapotWarsHumanView::VRenderText()
 		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(5, 200));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 255, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetFrameStats());
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(5, 175));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetDeviceStats());
 		//...output statistics
 
 
-		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF::GLUFPoint(5, 175));
+		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUF::GLUFPoint(5, 150));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(0, 0, 0, 128));
 
 		//Game State...

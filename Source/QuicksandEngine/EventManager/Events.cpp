@@ -1,7 +1,7 @@
 #include "../Stdafx.hpp"
 
 #include "Events.hpp"
-//TODO: #include "../Physics/PhysicsEventListener.hpp"
+#include "../Physics/PhysicsEventListener.hpp"
 #include "../LUAScripting/ScriptEvent.hpp"
 
 // To define a new event - you need a 32-bit GUID. 

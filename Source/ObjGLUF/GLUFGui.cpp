@@ -8747,6 +8747,7 @@ GLUFResult GLUFTextHelper::DrawTextLine(const wchar_t* strMsg)
 		if (it == '\n')
 			m_pt.y += m_fLineHeight;
 	}
+	m_pt.y -= m_fLineHeight;//once no matter what because we are drawing a LINE of text
 
 	return GR_SUCCESS;
 }

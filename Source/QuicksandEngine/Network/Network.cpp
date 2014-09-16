@@ -760,7 +760,7 @@ bool BaseSocketManager::IsInternal(unsigned int ipaddr)
 //
 unsigned int BaseSocketManager::GetHostByName(const std::string &hostName)
 {
-   //This will retrieve the ip details and put it into pHostEnt structure
+    //This will retrieve the ip details and put it into pHostEnt structure
 	struct hostent *pHostEnt = gethostbyname(hostName.c_str());
     struct sockaddr_in tmpSockAddr; //placeholder for the ip address
 
@@ -770,7 +770,9 @@ unsigned int BaseSocketManager::GetHostByName(const std::string &hostName)
         return 0;
     }
 
-    memcpy(&tmpSockAddr.sin_addr,pHostEnt->h_addr,pHostEnt->h_length);
+	tmpSockAddr.sin_addr.s_addr = *(u_long *)pHostEnt->h_addr;
+	//char* test = inet_ntoa(tmpSockAddr.sin_addr);
+    //memcpy(&tmpSockAddr.sin_addr,pHostEnt->h_addr,pHostEnt->h_length);
 	return ntohl(tmpSockAddr.sin_addr.s_addr);
 }
 

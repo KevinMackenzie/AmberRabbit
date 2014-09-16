@@ -369,7 +369,7 @@ void BaseGameLogic::VChangeState(BaseGameState newState)
 		m_ExpectedRemotePlayers = GET_CONFIG_ELEMENT_S("EXPECTED_PLAYERS") - 1;
 		m_ExpectedAI = GET_CONFIG_ELEMENT_S("NUM_AI");
 
-		if (!(GET_CONFIG_ELEMENT_STR("GAME_HOST_EMPTY") == "TRUE"))
+		if (GET_CONFIG_ELEMENT_STR("GAME_HOST_EMPTY") == "TRUE")
 		{
 			VSetProxy();
 			m_ExpectedAI = 0;				// the server will create these

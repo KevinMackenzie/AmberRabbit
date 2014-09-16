@@ -154,7 +154,6 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	extern shared_ptr<IResourceLoader> CreateEVALResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateGEOMResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateFRAGResourceLoader();
-	//extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateObjMeshResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateScriptResourceLoader();
@@ -300,8 +299,6 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->Preload("*.prog", NULL);
 	m_ResCache->Preload("*.obj.model", NULL);
 	m_ResCache->Preload("*.font", NULL);
-
-	m_ResCache->DumpFilePaths();
 
 	CheckForJoystick(GetHwnd());
 
