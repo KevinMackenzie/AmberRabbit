@@ -37,6 +37,7 @@ public:
 
 	//these functions ARE MUTABLE 
 
+	bool GetElementb(string key);//ANYTHING BUT TRUE will return false
 	char GetElementc(string key);//THIS IS THE NUMBER (0-255)
 	unsigned char GetElementuc(string key);
 	short GetElements(string key);
@@ -59,6 +60,7 @@ public:
 
 #define GET_CONFIG_ELEMENT_STR(key) QuicksandEngine::g_pApp->mConfigManager.GetElementStr(key)
 
+#define GET_CONFIG_ELEMENT_B(key)   QuicksandEngine::g_pApp->mConfigManager.GetElementb(key)
 #define GET_CONFIG_ELEMENT_C(key)	QuicksandEngine::g_pApp->mConfigManager.GetElementc(key)
 #define GET_CONFIG_ELEMENT_UC(key)	QuicksandEngine::g_pApp->mConfigManager.GetElementuc(key)
 #define GET_CONFIG_ELEMENT_S(key)	QuicksandEngine::g_pApp->mConfigManager.GetElements(key)

@@ -36,7 +36,7 @@
 --
 --========================================================================
 
-require("scripts\\Events.lua");
+require("Scripts\\Events.lua");
 
 RegisterListeners();
 

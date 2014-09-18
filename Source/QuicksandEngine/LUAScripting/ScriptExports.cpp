@@ -205,7 +205,8 @@ bool InternalScriptExports::LoadAndExecuteScriptResource(const char* scriptResou
     {
         // If we're using development directories, have Lua execute the file directly instead of going through 
         // the resource cache.  This allows Decoda to see the file for debugging purposes.
-        string path("..\\Assets\\");
+        //string path("..\\..\\Assets\\");
+		string path("Assets\\");
         path += scriptResource;
         LuaStateManager::Get()->VExecuteFile(path.c_str());
         return true;

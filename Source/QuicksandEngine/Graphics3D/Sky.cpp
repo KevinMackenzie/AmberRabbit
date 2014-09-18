@@ -118,8 +118,8 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	SkyVertices data;
 	data.mPositions.resize(m_numVerts);
 
-	LOG_ASSERT(data.mPositions.size() != m_numVerts && "Out of memory in GLSkyNode::VOnRestore()");
-	if (data.mPositions.size() != m_numVerts)
+	//LOG_ASSERT(data.mPositions.size() != m_numVerts && "Out of memory in GLSkyNode::VOnRestore()");
+	if (data.mPositions.size() != (size_t)m_numVerts)
 		return E_FAIL;
 
 	// Loop through the grid squares and calc the values
@@ -160,6 +160,7 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 
 	//glm::vec3 skyVerts[4] = {};
 	data.mPositions.resize(m_sides * 4);
+	data.mUVCoords.resize(m_sides * 4);
 	for (DWORD side = 0; side < m_sides; side++)
 	{
 		for (DWORD v = 0; v < 4; v++)
@@ -173,10 +174,11 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 			}
 			else
 			{
-				data.mUVCoords[sv]     = glm::vec2(1.0f, 1.0f);
-				data.mUVCoords[sv + 1] = glm::vec2(1.0f, 1.0f);
-				data.mUVCoords[sv + 2] = glm::vec2(1.0f, 1.0f);
-				data.mUVCoords[sv + 3] = glm::vec2(1.0f, 1.0f);
+				DWORD ssv = (side * 4);
+				data.mUVCoords[ssv]     = glm::vec2(1.0f, 1.0f);
+				data.mUVCoords[ssv + 1] = glm::vec2(1.0f, 0.0f);
+				data.mUVCoords[ssv + 2] = glm::vec2(0.0f, 1.0f);
+				data.mUVCoords[ssv + 3] = glm::vec2(0.0f, 0.0f);
 
 				temp = Xform(rotX, data.mPositions[sv]);
 			}

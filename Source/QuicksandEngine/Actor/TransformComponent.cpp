@@ -36,9 +36,9 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
         double yaw = 0;
         double pitch = 0;
 		double roll = 0;
-		yaw = std::stod(pOrientationElement->Attribute("yaw"));
-		pitch = std::stod(pOrientationElement->Attribute("pitch"));
-		roll = std::stod(pOrientationElement->Attribute("roll"));
+		yaw = std::stod(pOrientationElement->Attribute("x"));
+		pitch = std::stod(pOrientationElement->Attribute("y"));
+		roll = std::stod(pOrientationElement->Attribute("z"));
 		yawPitchRoll = glm::vec3(yaw, pitch, roll);
 	}
 

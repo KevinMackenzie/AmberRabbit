@@ -219,12 +219,12 @@ public:
 
 enum RenderPass
 {
-	RenderPass_0,
-	RenderPass_Static,
-	RenderPass_Actor,
-	RenderPass_Sky, //render the sky last
-	RenderPass_NotRendered,
-	RenderPass_Last
+	RenderPass_0 = 0,
+	RenderPass_Static = 0,
+	RenderPass_Actor = RenderPass_Static + 1,
+	RenderPass_Sky = RenderPass_Actor + 1, //render the sky last
+	RenderPass_NotRendered = RenderPass_Sky	+ 1,
+	RenderPass_Last = RenderPass_NotRendered + 1
 };
 
 

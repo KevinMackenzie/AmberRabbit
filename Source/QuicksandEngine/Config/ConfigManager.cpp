@@ -129,6 +129,11 @@ string StringsManager::GetElementStr(string key)
 //
 //
 
+bool StringsManager::GetElementb(string key)
+{
+	return (GetElementStr(key) == "TRUE");
+}
+
 char StringsManager::GetElementc(string key)
 {
 	return static_cast<char>(std::stoi(GetElementStr(key)));

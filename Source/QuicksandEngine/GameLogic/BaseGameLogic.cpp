@@ -314,15 +314,16 @@ void BaseGameLogic::VOnUpdate(double time, float elapsedTime)
 		break;
 
 	case BGS_WaitingForPlayers:
-		if (m_ExpectedPlayers + m_ExpectedRemotePlayers == m_HumanPlayersAttached)
-		{
+		//TODO: get this to work, possibly a max remote players too?
+		//if (m_ExpectedPlayers + m_ExpectedRemotePlayers == m_HumanPlayersAttached)
+		//{
 			// The server sends us the level name as a part of the login message. 
 			// We have to wait until it arrives before loading the level
-			if (!(GET_CONFIG_ELEMENT_STR("LEVEL_ISEMPTY") == "TRUE"))
+			if (!(GET_CONFIG_ELEMENT_STR("LEVEL") == ""))
 			{
 				VChangeState(BGS_LoadingGameEnvironment);
 			}
-		}
+		//}
 		break;
 
 	case BGS_Running:

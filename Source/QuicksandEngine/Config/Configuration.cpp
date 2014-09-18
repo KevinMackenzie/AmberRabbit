@@ -28,4 +28,8 @@ void Configuration::SetElement(string key, string value)
 	{
 		it->second = value;
 	}
+	else
+	{
+		mConfigOptions.insert(std::pair<string, string>(key, value));
+	}
 }

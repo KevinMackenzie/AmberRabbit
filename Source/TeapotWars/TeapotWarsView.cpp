@@ -637,7 +637,7 @@ void TeapotWarsHumanView::VRenderText()
 #ifndef DISABLE_PHYSICS
 				GLRenderer_Base::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_RUNNING")).c_str());
 #else
-				D3DRenderer::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_NOPHYSICS")).c_str());
+				GLRenderer_Base::g_pTextHelper->DrawTextLine(QuicksandEngine::g_pApp->GetString(_T("IDS_NOPHYSICS")).c_str());
 #endif //!DISABLE_PHYSICS
 				break;
 		}

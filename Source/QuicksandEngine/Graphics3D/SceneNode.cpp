@@ -483,15 +483,15 @@ RootNode::RootNode()
 
 	shared_ptr<SceneNode> actorGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Actor, &glm::mat4()));
 	//m_Children.push_back(actorGroup);	// RenderPass_Actor = 1
-	SceneNode::VAddChild(staticGroup);
+	SceneNode::VAddChild(actorGroup);
 
 	shared_ptr<SceneNode> skyGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &glm::mat4()));
 	//m_Children.push_back(skyGroup);	// RenderPass_Sky = 2
-	SceneNode::VAddChild(staticGroup);
+	SceneNode::VAddChild(skyGroup);
 
 	shared_ptr<SceneNode> invisibleGroup(QSE_NEW SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_NotRendered, &glm::mat4()));
 	//m_Children.push_back(invisibleGroup);	// RenderPass_NotRendered = 3
-	SceneNode::VAddChild(staticGroup);
+	SceneNode::VAddChild(invisibleGroup);
 }
 
 //
@@ -504,7 +504,7 @@ bool RootNode::VAddChild(shared_ptr<ISceneNode> kid)
 	// render pass member variable.
 
 	RenderPass pass = kid->VGet()->RenderPass();
-	if ((unsigned)pass >= m_Children.size() || !m_Children[pass])
+	if ((unsigned)pass > m_Children.size() || !m_Children[pass])
 	{
 		LOG_ASSERT(0 && _T("There is no such render pass"));
 		return false;
@@ -665,7 +665,7 @@ GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int 
 
 	if (!m_pGridProgram)
 	{
-		Resource* gridProg = new Resource("Shaders/Lines.prog");
+		Resource* gridProg = new Resource("Shaders\\Lines.prog");
 		m_pGridProgram = QuicksandEngine::g_pApp->m_ResCache->GetHandle(gridProg);
 	}
 
@@ -675,7 +675,7 @@ GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int 
 
 	GLUFVariableLocMap varLocations = GLUFSHADERMANAGER.GetShaderAttribLocations(static_pointer_cast<GLProgramResourceExtraData>(m_pShader->GetExtra())->GetProgram());
 
-	GLUFVariableLocMap::iterator it = varLocations.find(GLUF_VERTEX_ATTRIB_POSITION);
+	GLUFVariableLocMap::iterator it = varLocations.find("_position");
 
 	if (it != varLocations.end())
 		m_Squares.AddVertexAttrib(GLUFVertAttrib(it->second, 4, 3, GL_FLOAT));
@@ -711,6 +711,20 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 	int squares = grc->GetDivision();
 
+	GLuint positionLocation = 0;
+	{
+		shared_ptr<GLProgramResourceExtraData> progExtra = static_pointer_cast<GLProgramResourceExtraData>(GetShader()->GetExtra());
+		GLUFVariableLocMap shadLocs = GLUFSHADERMANAGER.GetShaderAttribLocations(progExtra->GetProgram());
+		GLUFVariableLocMap::iterator shadLocIt = shadLocs.find("_position");
+
+		if (shadLocIt == shadLocs.end())
+		{
+			GLUF_ERROR("Corrupt or invalid shader for grid");
+			return E_FAIL;
+		}
+
+		positionLocation = shadLocIt->second;
+	}
 	//SAFE_RELEASE(m_pVerts);
 	//SAFE_RELEASE(m_pIndices);
 
@@ -752,7 +766,7 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	//fill the vertex array by 'extruding' this line
 	for (int i = 0; i <= m_nSideLength; ++i)
 	{
-		for (int j = 0; j < -m_nSideLength; ++i)
+		for (int j = 0; j < m_nSideLength; ++j)
 		{
 			vertices.push_back(baseVertices[j] + glm::vec3(i * m_fSquareLength, 0.0f, 0.0f));
 		}
@@ -786,7 +800,7 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 
 	//buffer the data
-	m_Squares.BufferData(GLUF_VERTEX_ATTRIB_POSITION, vertices.size(), &vertices[0]);
+	m_Squares.BufferData(positionLocation, vertices.size(), &vertices[0]);
 
 	m_Squares.BufferIndices(&Lines[0][0], Lines.size());
 
