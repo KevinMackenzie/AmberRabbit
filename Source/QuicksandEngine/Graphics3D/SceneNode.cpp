@@ -224,7 +224,7 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 		glUniform1f(it->second, power);
 
 	it = uniformLocations.find("mat_tex0");
-	if (it != uniformLocations.end())
+	if (it != uniformLocations.end() && mat.GetTexture())//make sure the there is a sampler, and we have a texture
 	{
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, static_pointer_cast<GLTextureResourceExtraData>(mat.GetTexture()->GetExtra())->GetTexture());

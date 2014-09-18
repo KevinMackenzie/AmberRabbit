@@ -128,7 +128,7 @@ IAudioBuffer *SFMLSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle)/
     if( ! m_pSound )
         return NULL;*/
 
-	switch(extra->GetSoundType())
+	/*switch(extra->GetSoundType())
 	{
 		case SOUND_TYPE_OGG:
 		case SOUND_TYPE_WAVE:
@@ -145,8 +145,7 @@ IAudioBuffer *SFMLSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle)/
 			LOG_ASSERT(false && "Unknown sound type");
 			return NULL;
 	}//end switch
-
-    sf::SoundBuffer sampleHandle;
+	*/
 
     // Create the direct sound buffer, and only request the flags needed
     // since each requires some overhead and limits if the buffer can 
@@ -167,7 +166,7 @@ IAudioBuffer *SFMLSoundAudio::VInitAudioBuffer(shared_ptr<ResHandle> resHandle)/
     }*/
 
 	// Add handle to the list
-	IAudioBuffer *audioBuffer = QSE_NEW SFMLSoundBuffer(sampleHandle, resHandle);
+	IAudioBuffer *audioBuffer = QSE_NEW SFMLSoundBuffer(resHandle);
 	m_AllSamples.push_front( audioBuffer);
 	
 	return audioBuffer;
@@ -188,13 +187,11 @@ void SFMLSoundAudio::VReleaseAudioBuffer(IAudioBuffer *sampleHandle)//const
 // SFMLSoundBuffer::SFMLSoundBuffer	- Chapter 13, page 420
 //
 SFMLSoundBuffer::SFMLSoundBuffer(
-	sf::SoundBuffer sample, 
 	shared_ptr<ResHandle> resource)
  : AudioBuffer(resource) 
 { 
-	m_Sample = sample; 
-	FillBufferWithSound();
-	m_pSound->setBuffer(m_Sample);
+	m_pSound = shared_ptr<sf::Sound>(QSE_NEW sf::Sound);
+	m_pSound->setBuffer(*static_pointer_cast<SoundResourceExtraData>(resource->GetExtra())->GetSoundBuffer());
 }
 
 //
@@ -445,7 +442,7 @@ bool SFMLSoundBuffer::VOnRestore()
 //
 // SFMLSoundBuffer::FillBufferWithSound				- Chapter 13, page 425
 //
-HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
+/*HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
 {
     //HRESULT hr; 
 	//VOID	*pDSLockedBuffer = NULL;	 // a pointer to the DirectSound buffer
@@ -461,7 +458,7 @@ HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
 	{
 		LOG_ERROR("RestoreBuffer");
 		return E_FAIL;
-	}*/
+	}
 
 	int pcmBufferSize = m_Resource->Size();
 	shared_ptr<SoundResourceExtraData> extra = static_pointer_cast<SoundResourceExtraData>(m_Resource->GetExtra());
@@ -474,7 +471,7 @@ HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
 	{
 		LOG_ERROR("Lock");
 		return E_FAIL;
-	}*/
+	}
 
     if( pcmBufferSize == 0 )
     {
@@ -482,7 +479,7 @@ HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
         //FillMemory( (BYTE*) pDSLockedBuffer, 
         //            dwDSLockedBufferSize, 
         //            (BYTE)(extra->GetFormat()->wBitsPerSample == 8 ? 128 : 0 ) );
-		m_Sample.loadFromSamples(nullptr, 0, extra->GetFormat()->nChannels, extra->GetFormat()->nSamplesPerSec);
+		m_pSample->loadFromSamples(nullptr, 0, extra->GetFormat()->nChannels, extra->GetFormat()->nSamplesPerSec);
     }
     else 
 	{
@@ -493,8 +490,10 @@ HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
             FillMemory( (BYTE*) pDSLockedBuffer + pcmBufferSize, 
                         dwDSLockedBufferSize - pcmBufferSize, 
                         (BYTE)(extra->GetFormat()->wBitsPerSample == 8 ? 128 : 0 ) );
-        }*/
-		m_Sample.loadFromSamples((const sf::Int16*)m_Resource->Buffer(), pcmBufferSize, extra->GetFormat()->nChannels, extra->GetFormat()->nSamplesPerSec);
+        }
+		char* rawBuffer = m_Resource->Buffer();
+		m_pSample->loadFromSamples((const sf::Int16*)rawBuffer, pcmBufferSize, extra->GetFormat()->nChannels, extra->GetFormat()->nSamplesPerSec);
+		m_pSample->loadFromMemory()
     }
 
     // Unlock the buffer, we don't need it anymore.
@@ -503,7 +502,7 @@ HRESULT SFMLSoundBuffer::FillBufferWithSound( void )
 
     return S_OK;
 }
-
+*/
 
 
 

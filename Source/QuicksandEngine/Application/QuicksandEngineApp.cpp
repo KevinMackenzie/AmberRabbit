@@ -144,6 +144,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 
 	extern shared_ptr<IResourceLoader> CreateWAVResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateMP3ResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateDDSResourceLoader();
 	extern shared_ptr<IResourceLoader> CreatePNGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
@@ -162,6 +163,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	// RegisterLoader is discussed in Chapter 5, page 142
 	m_ResCache->RegisterLoader(CreateWAVResourceLoader());
 	m_ResCache->RegisterLoader(CreateOGGResourceLoader());
+	m_ResCache->RegisterLoader(CreateMP3ResourceLoader());
 	m_ResCache->RegisterLoader(CreateDDSResourceLoader());
 	m_ResCache->RegisterLoader(CreatePNGResourceLoader());
 	m_ResCache->RegisterLoader(CreateJPGResourceLoader());

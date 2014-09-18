@@ -47,7 +47,7 @@ int SoundProcess::GetLengthMilli()
 	if ( m_handle && m_handle->GetExtra())
 	{
 		shared_ptr<SoundResourceExtraData> extra = static_pointer_cast<SoundResourceExtraData>(m_handle->GetExtra());
-		return extra->GetLengthMilli();
+		return extra->GetSoundBuffer()->getDuration().asMilliseconds();
 	}
 	else
     {

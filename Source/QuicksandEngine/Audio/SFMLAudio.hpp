@@ -22,11 +22,10 @@
 class  SFMLSoundBuffer : public AudioBuffer
 {
 protected:
-	sf::SoundBuffer m_Sample;
 	shared_ptr<sf::Sound> m_pSound;
 
 public:
-	SFMLSoundBuffer(sf::SoundBuffer sample, shared_ptr<ResHandle> resource);
+	SFMLSoundBuffer(shared_ptr<ResHandle> resource);
 	virtual void *VGet();
 	virtual bool VOnRestore();
 
@@ -43,7 +42,7 @@ public:
 	virtual float VGetProgress();
 
 private:
-	HRESULT FillBufferWithSound();
+	//HRESULT FillBufferWithSound();
 	//HRESULT RestoreBuffer( BOOL* pbWasRestored );
 };
 
