@@ -837,8 +837,10 @@ HumanView* QuicksandEngineApp::GetHumanView()
 shared_ptr<GLMessageBox> g_Modal = nullptr;
 bool ModalSysCallback(GLUF_GUI_CALLBACK_PARAM)
 {
+#pragma warning (disable : 4800)
 	//call the callback of the modal ONLY (NOTE: this only returns true or false anyway, so the conversion is OK)
 	return (bool)g_Modal->VOnMsgProc({ msg, param1, param2, param3, param4 });
+#pragma warning (default : 4800)
 }
 
 //

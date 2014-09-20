@@ -42,11 +42,11 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
 		yawPitchRoll = glm::vec3(yaw, pitch, roll);
 	}
 
-	glm::mat4 translation = glm::translate(translation, position);
+	glm::mat4 translation = glm::translate(glm::mat4(), position);
 
 	glm::mat4 rotation;
 	glm::quat tmpQuat = glm::quat(glm::vec3((float)DEGREES_TO_RADIANS(yawPitchRoll.x), (float)DEGREES_TO_RADIANS(yawPitchRoll.y), (float)DEGREES_TO_RADIANS(yawPitchRoll.z)));
-	rotation = glm::rotate(rotation, tmpQuat.w, glm::vec3(tmpQuat.x, tmpQuat.y, tmpQuat.z));
+	rotation = glm::toMat4(tmpQuat);
 
 	/**
 	// This is not supported yet.
@@ -77,7 +77,7 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
     }
 	**/
 
-    m_transform = rotation * translation;
+    m_transform = translation * rotation;
     
     return true;
 }

@@ -219,9 +219,6 @@
     <ProjectReference Include="..\QuicksandEngine\QuicksandEngine.vcxproj">
       <Project>{76f97a8b-c1c5-4294-b716-d3fd3aacb099}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vorbis\Vorbis.vcxproj">
-      <Project>{e18cc76f-eef9-4501-9806-bedf995dd6e8}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

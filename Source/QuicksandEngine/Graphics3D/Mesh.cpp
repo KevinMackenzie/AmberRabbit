@@ -11,7 +11,7 @@
 #include <assimp/postprocess.h>
 #include "Material.hpp"
 
-#include <IL/ilut.h>
+//#include <IL/ilut.h>
 
 unsigned int GLObjMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
 {

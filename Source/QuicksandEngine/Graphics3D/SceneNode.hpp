@@ -322,10 +322,10 @@ class GLGrid : public SceneNode
 protected:
 
 	//this is the number of squares on each side, ie 2 would be a 2x2 grid
-	int								m_nSideLength;
+	//int								m_nSideLength;
 
 	//the length of each square
-	float							m_fSquareLength;
+	//float							m_fSquareLength;
 
 	GLUFVertexArray					m_Squares;
 	glm::mat4						m_ModelMatrix;

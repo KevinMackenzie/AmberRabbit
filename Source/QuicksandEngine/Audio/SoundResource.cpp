@@ -5,8 +5,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include    <Vorbis/vorbis/codec.h>            // from the vorbis sdk
-#include    <Vorbis/vorbis/vorbisfile.h>       // also :)
+//#include    <Vorbis/vorbis/codec.h>            // from the vorbis sdk
+//#include    <Vorbis/vorbis/vorbisfile.h>       // also :)
 
 #include "SoundResource.hpp"
 #include "Audio.hpp"
@@ -26,6 +26,10 @@ SoundResourceExtraData::SoundResourceExtraData()/*
 	// don't do anything yet - timing sound Initialization is important!
 }
 
+SoundResourceExtraData::~SoundResourceExtraData()
+{
+	SAFE_DELETE(m_pSample);
+}
 
 bool SoundResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {

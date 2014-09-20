@@ -85,13 +85,14 @@ namespace AwLogging
 #define LOG_MEMLEAK(logMessage) \
 	AwLogging::WriteLog(AwLogging::LogType::MEMLEAK, logMessage, __FUNCTION__, __FILE__, __LINE__);
 
-//TODO: for now just log it, but in the future, pull up a dialog box
+//if this fails, it pulls up a detal box, and then pulls up a debuggible dialog that the OS  makes
 #define LOG_ASSERT(expr) \
 		do \
-		{ \
+				{ \
 			if (!(expr)) \
-			{ \
+						{ \
 				AwLogging::WriteLog(AwLogging::LogType::ASSERTION, #expr, __FUNCTION__, __FILE__, __LINE__); \
+				assert(false);\
 			} \
 		} \
 			while (0) \

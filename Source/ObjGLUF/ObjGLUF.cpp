@@ -85,19 +85,23 @@ bool GLUFInit()
 
 double g_LastFrame = 0.0;
 double g_UpdateInterval = 1.0;//every second
-long  g_FrameCount = 0;//this is since the last update
+long long  g_FrameCount = 0;//this is since the last update
 float g_CurrFps = 0.0f;
 wchar_t* g_FrameStats = new wchar_t[MAXLEN];
 
 void GLUFStats_func()
 {
+	++g_FrameCount;
+
 	double thisFrame = GLUFGetTime();
 	if (thisFrame - g_LastFrame < g_UpdateInterval)
 		return;//don't update statistics
 
 	double deltaTime = thisFrame - g_LastFrame;
 
-	g_CurrFps = (float)g_FrameCount / (float)deltaTime;
+	g_CurrFps = (float)((long double)g_FrameCount / (long double)deltaTime);
+
+	g_FrameCount = 0;//reset the frame count
 
 	//update frame statistic string
 	memset(g_FrameStats, 0, MAXLEN);

@@ -253,7 +253,9 @@ bool SceneNode::VIsVisible(Scene *pScene) const
 	// transform the location of this node into the camera space 
 	// of the camera attached to the scene
 
-	glm::mat4 toWorld, fromWorld;
+	//TODO: get this to work properly, but for now render everything
+
+	/*glm::mat4 toWorld, fromWorld;
 	pScene->GetCamera()->VGet()->Transform(&toWorld, &fromWorld);
 
 	glm::vec3 pos = GetWorldPosition();
@@ -263,7 +265,8 @@ bool SceneNode::VIsVisible(Scene *pScene) const
 	Frustum const &frustum = pScene->GetCamera()->GetFrustum();
 
 	bool isVisible = frustum.Inside(fromWorldPos, VGet()->Radius());
-	return isVisible;
+	return isVisible;*/
+	return true;
 }
 
 HRESULT SceneNode::VRender(Scene* pScene)
@@ -651,8 +654,9 @@ glm::mat4 CameraNode::GetWorldViewProjection(Scene *pScene)
 //
 
 GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int squares, float squareSize, const Color &diffuseColor, const glm::mat4* pMatrix)
-	: SceneNode(actorId, renderComponent, RenderPass_Static, pMatrix), m_Squares(GL_LINES, GL_DYNAMIC_DRAW), m_nSideLength(squares), m_fSquareLength(squareSize)
+	: SceneNode(actorId, renderComponent, RenderPass_Static, pMatrix), m_Squares(GL_LINES, GL_DYNAMIC_DRAW)//, m_nSideLength(squares), m_fSquareLength(squareSize)
 {
+
 	GLMaterial material = m_Props.GetMaterial();
 	material.SetDiffuse(diffuseColor);
 	SetMaterial(material);
@@ -709,7 +713,10 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 	GridRenderComponent* grc = static_cast<GridRenderComponent*>(m_RenderComponent);
 
+	//read everything from the game logic
 	int squares = grc->GetDivision();
+	int sideLen = sqrt(squares);
+	float unitLen = grc->GetUnitLength();
 
 	GLuint positionLocation = 0;
 	{
@@ -758,17 +765,17 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	std::vector<glm::vec3> vertices;
 
 	//yes, i do want it to go one past, because there is one more set of vertices than sides
-	for (int i = 0; i <= m_nSideLength; ++i)
+	for (int i = 0; i <= sideLen; ++i)
 	{
-		baseVertices.push_back(glm::vec3(0.0f, 0.0f, i * m_fSquareLength));
+		baseVertices.push_back(glm::vec3(0.0f, 0.0f, i * unitLen));
 	}
 
 	//fill the vertex array by 'extruding' this line
-	for (int i = 0; i <= m_nSideLength; ++i)
+	for (int i = 0; i <= sideLen; ++i)
 	{
-		for (int j = 0; j < m_nSideLength; ++j)
+		for (auto bv : baseVertices)
 		{
-			vertices.push_back(baseVertices[j] + glm::vec3(i * m_fSquareLength, 0.0f, 0.0f));
+			vertices.push_back(bv + glm::vec3(i * unitLen, 0.0f, 0.0f));
 		}
 	}
 
@@ -776,27 +783,28 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	std::vector<glm::u32vec2> Lines;
 
 	//lines going in the z direction
-	for (int i = 0; i < m_nSideLength; ++i)
+	for (int i = 0; i <= sideLen; ++i)
 	{
-		for (int j = 0; j < m_nSideLength; ++j)
+		for (int j = 0; j < sideLen; ++j)
 		{
-			Lines.push_back(glm::u32vec2(j + i, j + i + 1));
+			Lines.push_back(glm::u32vec2(j + (i * (sideLen + 1)), j + (i * (sideLen + 1)) + 1));
 		}
 	}
 
 	//lines going in the x direction
-	for (int i = 0; i < m_nSideLength; ++i)
+	for (int i = 0; i <= sideLen; ++i)
 	{
-		for (int j = 0; j < m_nSideLength; ++j)
+		for (int j = 0; j < sideLen; ++j)
 		{
 			//remember to add the stride when doing it this way
-			Lines.push_back(glm::u32vec2(j * m_nSideLength + i, j * m_nSideLength + i + 1));
+			Lines.push_back(glm::u32vec2(j * (sideLen + 1) + i, (j + 1) * (sideLen + 1) + i));
 		}
 	}
 
+	
 	//center this
 	glm::vec3 pos = GetPosition();
-	this->SetPosition(pos + glm::vec3(-(m_fSquareLength * m_nSideLength) / 2, 0.0f, -(m_fSquareLength * m_nSideLength) / 2));
+	this->SetPosition(pos + glm::vec3(-(unitLen * sideLen) / 2, 0.0f, -(unitLen * sideLen) / 2));
 
 
 	//buffer the data

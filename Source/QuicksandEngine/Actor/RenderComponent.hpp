@@ -103,6 +103,7 @@ class  GridRenderComponent : public BaseRenderComponent
 {
     string m_textureResource;
     int m_squares;
+	float m_fsquareLen;
 
 public:
 	static const char *g_Name;
@@ -111,6 +112,7 @@ public:
     GridRenderComponent(void);
 	const char* GetTextureResource() { return m_textureResource.c_str(); }
 	const int GetDivision() { return m_squares; }
+	const float GetUnitLength(){ return m_fsquareLen; }
 
 protected:
     virtual bool VDelegateInit(tinyxml2::XMLElement* pData) override;

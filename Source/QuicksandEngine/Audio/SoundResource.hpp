@@ -19,7 +19,7 @@ class  SoundResourceExtraData : public IResourceExtraData
 
 public: 	
 	SoundResourceExtraData();
-	virtual ~SoundResourceExtraData() { }
+	virtual ~SoundResourceExtraData();
 	virtual std::string VToString() { return "SoundResourceExtraData"; }
 	sf::SoundBuffer* GetSoundBuffer(){ return m_pSample; }
 	//enum SoundType GetSoundType() { return m_SoundType; }

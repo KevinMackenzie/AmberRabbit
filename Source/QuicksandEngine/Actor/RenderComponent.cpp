@@ -191,6 +191,7 @@ GridRenderComponent::GridRenderComponent(void)
 {
     m_textureResource = "";
     m_squares = 0;
+	m_fsquareLen = 0.5f;
 }
 
 bool GridRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
@@ -205,6 +206,12 @@ bool GridRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
     if (pDivision)
 	{
 		m_squares = atoi(pDivision->FirstChild()->Value());
+	}
+
+	tinyxml2::XMLElement* pSquareLen = pData->FirstChildElement("UnitLength");
+	if (pSquareLen)
+	{
+		m_fsquareLen = atof(pSquareLen->FirstChild()->Value());
 	}
 
     return true;

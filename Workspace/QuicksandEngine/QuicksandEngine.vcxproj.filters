@@ -10,9 +10,6 @@
     <Filter Include="Config">
       <UniqueIdentifier>{b73de1b7-6837-4290-bd87-0d118db0e391}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Debugging">
-      <UniqueIdentifier>{c96036bd-eb90-4466-8366-f3a1e3b850fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utilities">
       <UniqueIdentifier>{9cd78221-573a-48de-89d3-f9ef5fee379d}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="Audio">
       <UniqueIdentifier>{a0338440-b831-483b-84b0-d115c543f3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugging">
+      <UniqueIdentifier>{c96036bd-eb90-4466-8366-f3a1e3b850fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

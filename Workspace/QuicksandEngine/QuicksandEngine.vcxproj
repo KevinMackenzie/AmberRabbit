@@ -68,34 +68,34 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>21c1f1f8</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>a87fd272</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\..\Temp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\libogg.1.3.0.1\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\packages\boost_filesystem-vc120.1.56.0.0\lib\native\address-model-32\lib;$(SolutionDir)\packages\sfml.2.1.0.0\build\native\lib\$(Platform)\v110\$(Configuration)\Desktop;$(SolutionDir)\packages\zlib.1.2.8.6\build\native\lib\v110\$(Platform)\$(Configuration)\dynamic\cdecl;$(SolutionDir)\..\Bin\$(Platform)\$(Configuration)\;$(SolutionDir)\packages\libpng.1.5.10.11\build\native\lib\$(Platform)\v110\static\$(Configuration)\;$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\lib\v110\$(Platform)\$(Configuration)\static\cdecl\</LibraryPath>
     <IncludePath>$(SolutionDir)/../Source/BulletPhysics;$(SolutionDir)/../Source/;$(SolutionDir)/../Source/QuicksandEngine/LuaPlus/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -111,7 +111,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -148,7 +148,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -189,7 +189,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -230,7 +230,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;libogg.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;zlib.lib;jpeg.lib;libpng15.lib;sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <BuildLog>
@@ -412,9 +412,6 @@
     <ProjectReference Include="..\ObjGLUF\ObjGLUF.vcxproj">
       <Project>{06ddd1c2-d673-4a97-aba7-c5c1dd72c875}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vorbis\Vorbis.vcxproj">
-      <Project>{e18cc76f-eef9-4501-9806-bedf995dd6e8}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\zlib\zlib.vcxproj">
       <Project>{8492550d-6f90-4b04-ba35-b9dcbd25c1fa}</Project>
     </ProjectReference>
@@ -429,12 +426,8 @@
     <Import Project="..\packages\glfw.3.0.4.3\build\native\glfw.targets" Condition="Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" />
     <Import Project="..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets" Condition="Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" />
     <Import Project="..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets" Condition="Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" />
-    <Import Project="..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets" Condition="Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" />
-    <Import Project="..\packages\DevIL.1.7.8\build\native\DevIL.targets" Condition="Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" />
     <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
     <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
-    <Import Project="..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets" Condition="Exists('..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" />
-    <Import Project="..\packages\libogg.1.3.0.1\build\native\libogg.targets" Condition="Exists('..\packages\libogg.1.3.0.1\build\native\libogg.targets')" />
     <Import Project="..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets" Condition="Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" />
     <Import Project="..\packages\sfml.2.1.0.0\build\native\sfml.targets" Condition="Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" />
     <Import Project="..\packages\boost.1.56.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.56.0.0\build\native\boost.targets')" />
@@ -460,12 +453,8 @@
     <Error Condition="!Exists('..\packages\glfw.3.0.4.3\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.3.0.4.3\build\native\glfw.targets'))" />
     <Error Condition="!Exists('..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.redist.2.1.0\build\native\tinyxml2.redist.targets'))" />
     <Error Condition="!Exists('..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tinyxml2.2.1.0\build\native\tinyxml2.targets'))" />
-    <Error Condition="!Exists('..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.redist.1.7.8\build\native\DevIL.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\DevIL.1.7.8\build\native\DevIL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DevIL.1.7.8\build\native\DevIL.targets'))" />
     <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />
     <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
-    <Error Condition="!Exists('..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\libogg.1.3.0.1\build\native\libogg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libogg.1.3.0.1\build\native\libogg.targets'))" />
     <Error Condition="!Exists('..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.redist.2.1.0.0\build\native\sfml.redist.targets'))" />
     <Error Condition="!Exists('..\packages\sfml.2.1.0.0\build\native\sfml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml.2.1.0.0\build\native\sfml.targets'))" />
     <Error Condition="!Exists('..\packages\boost.1.56.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.56.0.0\build\native\boost.targets'))" />
