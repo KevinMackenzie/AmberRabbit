@@ -8665,7 +8665,7 @@ void EndText(GLUFFontPtr font)
 	glBufferData(GL_ARRAY_BUFFER, g_TextVerticies.size() * sizeof(glm::vec2), g_TextVerticies.data_tex(), GL_STREAM_DRAW);
 
 	GLUFSHADERMANAGER.UseProgram(g_TextProgram);
-
+	
 	//first uniform: model-view matrix
 	glm::mat4 mv = g_TextOrtho;
 	glUniformMatrix4fv(g_TextShaderLocations.ortho, 1, GL_FALSE, glm::value_ptr(mv));

@@ -320,6 +320,7 @@ OBJGLUF_API GLUFPoint GLUFGetPointFromRect(GLUFRect rect, bool x, bool y);
 
 
 OBJGLUF_API Color4f GLUFColorToFloat(Color color);//takes 0-255 to 0.0f - 1.0f
+OBJGLUF_API Color3f GLUFColorToFloat3(Color color);//takes 0-255 to 0.0f - 1.0f
 
 
 

@@ -41,9 +41,9 @@ void GLMaterial::SetEmissive(const Color &color)
 	m_Emissive = color;
 }
 
-void GLMaterial::SetAlpha(float alpha)
+void GLMaterial::SetAlpha(char alpha)
 {
-	m_Diffuse.a = glm::u8(glm::clamp(alpha * 255.0f, 0.0f, 255.0f));
+	m_Diffuse.a = alpha;
 }
 
 void GLMaterial::GLUse()

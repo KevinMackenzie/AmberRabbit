@@ -554,7 +554,7 @@ LRESULT TeapotWarsHumanView::VOnMsgProc( AppMsg msg )
 			m_KeyboardHandler = m_pFreeCameraController;
 			m_PointerHandler = m_pFreeCameraController;
 			m_pCamera->ClearTarget();
-			//m_pTeapot->SetAlpha(fOPAQUE);
+			//m_pTeapot->SetAlpha(u8OPAQUE);
 			SetCapture(QuicksandEngine::g_pApp->GetHwnd());
 			return 1;
 		}

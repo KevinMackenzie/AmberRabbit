@@ -14,7 +14,7 @@
 
 	
     <TeapotRenderComponent>
-        <Color r="1.0" g="0" b="0" a="1.0"/>
+        <Color r="255" g="0" b="0" a="255"/>
     </TeapotRenderComponent>
 
 

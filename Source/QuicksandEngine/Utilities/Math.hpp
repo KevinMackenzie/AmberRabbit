@@ -230,7 +230,10 @@ inline glm::vec3 GetUp(const glm::mat4& param)
 
 inline glm::vec3 GetYawPitchRoll(const glm::mat4& param)
 {
-	float yaw, pitch, roll;
+	//use glm when we can
+	glm::quat tmpQuat = glm::toQuat(param);
+	return glm::eulerAngles(glm::toQuat(param));
+	/*float yaw, pitch, roll;
 
 	pitch = asin(-param[3][2]);
 
@@ -248,7 +251,17 @@ inline glm::vec3 GetYawPitchRoll(const glm::mat4& param)
 		yaw = 0.0;
 	}
 
-	return (glm::vec3(yaw, pitch, roll));
+	return (glm::vec3(yaw, pitch, roll));*/
+}
+
+inline glm::mat4 GetRotMat(const glm::mat4& param)
+{
+	glm::mat4 tmp;
+	for (unsigned int i = 0; i < 3; ++i)
+		for (unsigned int j = 0; j < 3; ++j)
+			tmp[i][j] = param[i][j];
+
+	return tmp;
 }
 
 

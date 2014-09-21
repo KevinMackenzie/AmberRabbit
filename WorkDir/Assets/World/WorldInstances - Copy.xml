@@ -6,7 +6,7 @@
     <StaticActors>
       <Actor resource="actors\sphere.xml">
 		<TransformComponent>
-			<Position x="-10" y="0" z="-20"/>
+			<Position x="-10" y="0" z="-50"/>
 		</TransformComponent>
 	  </Actor>
 	  

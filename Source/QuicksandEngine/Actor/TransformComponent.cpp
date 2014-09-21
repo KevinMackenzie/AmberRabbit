@@ -11,12 +11,13 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
 	// [mrmike] - this was changed post-press - because changes to the TransformComponents can come in partial definitions,
 	//            such as from the editor, its better to grab the current values rather than clear them out.
     
-	glm::vec3 yawPitchRoll = GetYawPitchRoll(m_transform);
+	/*glm::vec3 yawPitchRoll = GetYawPitchRoll(m_transform);
 	yawPitchRoll.x = RADIANS_TO_DEGREES(yawPitchRoll.x);
 	yawPitchRoll.y = RADIANS_TO_DEGREES(yawPitchRoll.y);
-	yawPitchRoll.z = RADIANS_TO_DEGREES(yawPitchRoll.z);
+	yawPitchRoll.z = RADIANS_TO_DEGREES(yawPitchRoll.z);*/
 
 	glm::vec3 position = ::GetPosition(m_transform);
+	glm::mat4 rotation = ::GetRotMat(m_transform);
 
     tinyxml2::XMLElement* pPositionElement = pData->FirstChildElement("Position");
     if (pPositionElement)
@@ -27,7 +28,8 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
 		x = std::stod(pPositionElement->Attribute("x"));
 		y = std::stod(pPositionElement->Attribute("y"));
 		z = std::stod(pPositionElement->Attribute("z"));
-        position = glm::vec3(x, y, z);
+		position = glm::vec3(x, y, z);
+
     }
 
     tinyxml2::XMLElement* pOrientationElement = pData->FirstChildElement("YawPitchRoll");
@@ -39,14 +41,11 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
 		yaw = std::stod(pOrientationElement->Attribute("x"));
 		pitch = std::stod(pOrientationElement->Attribute("y"));
 		roll = std::stod(pOrientationElement->Attribute("z"));
-		yawPitchRoll = glm::vec3(yaw, pitch, roll);
+		glm::vec3 eulers = glm::vec3(yaw, pitch, roll);
+
+		glm::quat tmpQuat = glm::quat(glm::vec3((float)DEGREES_TO_RADIANS(eulers.x), (float)DEGREES_TO_RADIANS(eulers.y), (float)DEGREES_TO_RADIANS(eulers.z)));
+		rotation = glm::toMat4(tmpQuat);
 	}
-
-	glm::mat4 translation = glm::translate(glm::mat4(), position);
-
-	glm::mat4 rotation;
-	glm::quat tmpQuat = glm::quat(glm::vec3((float)DEGREES_TO_RADIANS(yawPitchRoll.x), (float)DEGREES_TO_RADIANS(yawPitchRoll.y), (float)DEGREES_TO_RADIANS(yawPitchRoll.z)));
-	rotation = glm::toMat4(tmpQuat);
 
 	/**
 	// This is not supported yet.
@@ -77,7 +76,8 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
     }
 	**/
 
-    m_transform = translation * rotation;
+	m_transform = glm::translate(rotation, position);
+
     
     return true;
 }
@@ -88,32 +88,22 @@ tinyxml2::XMLElement* TransformComponent::VGenerateXml(tinyxml2::XMLDocument* pD
 
     // initial transform -> position
 	tinyxml2::XMLElement* pPosition = pDoc->NewElement("Position");
-    glm::vec3 pos(::GetPosition(m_transform));
+	glm::vec3 pos = ::GetPosition(m_transform);
     pPosition->SetAttribute("x", ToStr(pos.x).c_str());
-    pPosition->SetAttribute("y", ToStr(pos.y).c_str());
-    pPosition->SetAttribute("z", ToStr(pos.z).c_str());
+	pPosition->SetAttribute("y", ToStr(pos.y).c_str());
+	pPosition->SetAttribute("z", ToStr(pos.z).c_str());
     pBaseElement->LinkEndChild(pPosition);
 
     // initial transform -> LookAt
 	tinyxml2::XMLElement* pDirection = pDoc->NewElement("YawPitchRoll");
-	glm::vec3 orient(GetYawPitchRoll(m_transform));
-	orient.x = RADIANS_TO_DEGREES(orient.x);
-	orient.y = RADIANS_TO_DEGREES(orient.y);
-	orient.z = RADIANS_TO_DEGREES(orient.z);
-    pDirection->SetAttribute("x", ToStr(orient.x).c_str());
-    pDirection->SetAttribute("y", ToStr(orient.y).c_str());
-    pDirection->SetAttribute("z", ToStr(orient.z).c_str());
+	glm::vec3 eulerDegs = ::GetYawPitchRoll(m_transform);
+	eulerDegs.x = RADIANS_TO_DEGREES(eulerDegs.x);
+	eulerDegs.y = RADIANS_TO_DEGREES(eulerDegs.y);
+	eulerDegs.z = RADIANS_TO_DEGREES(eulerDegs.z);
+	pDirection->SetAttribute("x", ToStr(eulerDegs.x).c_str());
+	pDirection->SetAttribute("y", ToStr(eulerDegs.y).c_str());
+	pDirection->SetAttribute("z", ToStr(eulerDegs.z).c_str());
     pBaseElement->LinkEndChild(pDirection);
-
-	/***
-	// This is not supported yet
-    // initial transform -> position
-    tinyxml2::XMLElement* pScale = QSE_NEW tinyxml2::XMLElement("Scale");
-    pPosition->SetAttribute("x", ToStr(m_scale.x).c_str());
-    pPosition->SetAttribute("y", ToStr(m_scale.y).c_str());
-    pPosition->SetAttribute("z", ToStr(m_scale.z).c_str());
-    pBaseElement->LinkEndChild(pScale);
-	**/
 
     return pBaseElement;
 }

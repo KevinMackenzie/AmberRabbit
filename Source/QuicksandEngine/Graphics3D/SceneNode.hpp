@@ -163,6 +163,7 @@ public:
 
 	void SetRadius(const float radius) { m_Props.m_Radius = radius; }
 	void SetMaterial(const GLMaterial &mat) { m_Props.m_Material = mat; }
+	GLMaterial GetMaterial(void){ return m_Props.m_Material; }
 };
 
 //

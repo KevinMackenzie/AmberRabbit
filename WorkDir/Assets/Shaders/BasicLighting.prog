@@ -1,18 +1,18 @@
 <PROGRAM>
 	<GLSL version = "120">
 		<VERTEX>
-			<SHADER>Shaders\BasicLighting\120\vert.glsl</SHADER>
+			<SHADER>Shaders\BasicLighting\tex\120\vert.glsl</SHADER>
 		</VERTEX>
 		<FRAGMENT>
-			<SHADER>Shaders\BasicLighting\120\frag.glsl</SHADER>
+			<SHADER>Shaders\BasicLighting\tex\120\frag.glsl</SHADER>
 		</FRAGMENT>
 	</GLSL>
 	<GLSL version = "330">
 		<VERTEX>
-			<SHADER>Shaders\BasicLighting\330\vert.glsl</SHADER>
+			<SHADER>Shaders\BasicLighting\tex\330\vert.glsl</SHADER>
 		</VERTEX>
 		<FRAGMENT>
-			<SHADER>Shaders\BasicLighting\330\frag.glsl</SHADER>
+			<SHADER>Shaders\BasicLighting\tex\330\frag.glsl</SHADER>
 		</FRAGMENT>
 	</GLSL>
 </PROGRAM>

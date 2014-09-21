@@ -342,10 +342,8 @@ struct QSE_API AppMsg
 
 // Useful #defines
 
-extern const float QSE_API fOPAQUE;
-extern const int   QSE_API iOPAQUE;
-extern const float QSE_API fTRANSPARENT;
-extern const int   QSE_API iTRANSPARENT;
+extern const glm::u8  QSE_API u8OPAQUE;
+extern const glm::u8  QSE_API u8TRANSPARENT;
 
 extern const int   QSE_API MEGABYTE;
 extern const float QSE_API SIXTY_HERTZ;

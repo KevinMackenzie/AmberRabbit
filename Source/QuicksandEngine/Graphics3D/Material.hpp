@@ -36,8 +36,8 @@ public:
 	void SetEmissive(const Color &color);
 	const Color GetEmissive() { return m_Emissive; }
 
-	void SetAlpha(const float alpha);
-	bool HasAlpha() const { return GetAlpha() != fOPAQUE; }
+	void SetAlpha(const char alpha);
+	bool HasAlpha() const { return GetAlpha() != u8OPAQUE; }
 	float GetAlpha() const { return m_Diffuse.a; }
 
 	void GLUse();

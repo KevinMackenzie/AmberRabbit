@@ -12,11 +12,11 @@
 	
 //TODO: how does emissive work
 -material is as follows
-	-mat_diffuse;
-	-mat_ambient;
-	-mat_specular;
-	-mat_power;
-	-mat_tex0-mat_tex7
+	-m_diff;
+	-m_amb;
+	-m_spec;
+	-m_pow;
+	-m_tex0-mat_tex7
 	
 //the shader loading system chooses the maximum support version of the shader
 

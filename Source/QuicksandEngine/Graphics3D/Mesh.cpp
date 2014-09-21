@@ -186,7 +186,7 @@ GLMeshNode::GLMeshNode(const ActorId actorId,
 		SetMaterial(*mat);
 
 	Resource shaderResource("Shaders\\BasicLighting.prog");
-	m_pBasicShading = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+	m_pBasicShading = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shaderResource);
 	SetShader(m_pBasicShading);
 }
 
@@ -218,6 +218,20 @@ HRESULT GLMeshNode::VRender(Scene* pScene)
 {
 	//prerender does all of the work;
 	GLUFVertexArray* data = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetVertexArray();
+
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
+
+	// Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//GLUFProgramPtr prog = static_pointer_cast<GLProgramResourceExtraData>(m_pBasicShading->GetExtra())->GetProgram();
+	//GLUFSHADERMANAGER.UseProgram((prog));
 
 	if (data)
 		data->Draw();

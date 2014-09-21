@@ -459,10 +459,19 @@ bool GLUFIntersectRect(GLUFRect rect0, GLUFRect rect1, GLUFRect& rectIntersect)
 Color4f GLUFColorToFloat(Color color)
 {
 	Color4f col;
-	col.x = std::min(1.0f, (float)color.x / 255.0f);
-	col.y = std::min(1.0f, (float)color.y / 255.0f);
-	col.z = std::min(1.0f, (float)color.z / 255.0f);
-	col.w = std::min(1.0f, (float)color.w / 255.0f);
+	col.x = glm::clamp((float)color.x / 255.0f, 0.0f, 1.0f);
+	col.y = glm::clamp((float)color.y / 255.0f, 0.0f, 1.0f);
+	col.z = glm::clamp((float)color.z / 255.0f, 0.0f, 1.0f);
+	col.w = glm::clamp((float)color.w / 255.0f, 0.0f, 1.0f);
+	return col;
+}
+
+Color3f GLUFColorToFloat3(Color color)
+{
+	Color3f col;
+	col.x = glm::clamp((float)color.x / 255.0f, 0.0f, 1.0f);
+	col.y = glm::clamp((float)color.y / 255.0f, 0.0f, 1.0f);
+	col.z = glm::clamp((float)color.z / 255.0f, 0.0f, 1.0f);
 	return col;
 }
 
@@ -968,8 +977,6 @@ void GLUFProgram::Build(GLUFShaderInfoStruct& retStruct, bool seperate)
 
 		GLint maxLength;
 		glGetProgramiv(mProgramId, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
-
-		GLuint id = glGetAttribLocation(mProgramId, "_UV");
 
 		GLenum type;
 

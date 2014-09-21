@@ -7,20 +7,20 @@ in VS_OUT
 	vec3 Normal_cameraspace;
 	vec3 EyeDirection_cameraspace;
 	vec3 LightDirection_cameraspace;
-	vec2 uvCoord;
+	//vec2 uvCoord;
 } fs_in;
 
 // Values that stay constant for the whole mesh.
-uniform sampler2D mat_tex0;
+//uniform sampler2D m_tex0;
 //uniform mat4 MV;
-uniform vec3 _light_position;
+uniform vec3 _li_pos = vec3(4.0f, 4.0f, -4.0f);
 
 out vec4 _Color;
 
-uniform vec3 mat_diffuse;
-uniform vec3 mat_ambient;
-uniform vec3 mat_specular;
-uniform float mat_power;
+uniform vec3 m_diff;
+uniform vec3 m_amb;
+uniform vec3 m_spec;
+uniform float m_pow;
 
 void main(){
 
@@ -30,18 +30,18 @@ void main(){
 	float LightPower = 50.0f;
 	
 	// Material properties
-	vec3 MaterialDiffuseColor = texture2D( mat_tex0, fs_in.uvCoord ).rgb;
+	//vec3 MaterialDiffuseColor = texture2D( m_tex0, fs_in.uvCoord ).rgb;
 	//this is if there is no texture;
-	if(MaterialDiffuseColor == vec3(0.0f, 0.0f, 0.0f))
-	{
-		MaterialDiffuseColor = mat_diffuse;
-	}
+	//if(MaterialDiffuseColor == vec3(0.0f, 0.0f, 0.0f))
+	//{
+	vec3 MaterialDiffuseColor = m_diff;
+	//}
 	
-	vec3 MaterialAmbientColor = mat_ambient * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = mat_specular;
+	vec3 MaterialAmbientColor = m_amb * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = m_spec;
 
 	// Distance to the light
-	float distance = length( _light_position - fs_in.Position_worldspace );
+	float distance = length( _li_pos - fs_in.Position_worldspace );
 
 	// Normal of the computed fragment, in camera space
 	vec3 n = normalize( fs_in.Normal_cameraspace );
@@ -70,7 +70,7 @@ void main(){
 		// Diffuse : "color" of the object
 		MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
 		// Specular : reflective highlight, like a mirror
-		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,mat_power) / (distance*distance), 1.0);
+		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,m_pow) / (distance*distance), 1.0);
 	
 	//_Color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }

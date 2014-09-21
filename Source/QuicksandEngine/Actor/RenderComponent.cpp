@@ -137,7 +137,16 @@ shared_ptr<SceneNode> SphereRenderComponent::VCreateSceneNode(void)
     }
 
 	WeakBaseRenderComponentPtr wbrcp(this);
-	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.sdkmesh", RenderPass_Actor, &pTransformComponent->GetTransform()));
+	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.obj.model", RenderPass_Actor, &pTransformComponent->GetTransform()));
+
+	// TODO: do this with all components
+	GLMaterial mat = sphere->GetMaterial();
+	mat.SetDiffuse(GetColor());
+	sphere->SetMaterial(mat);
+
+	Resource shadRes("Shaders\\BasicLightingUntex.prog");
+	shared_ptr<ResHandle> handle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shadRes);
+	sphere->SetShader(handle);
 	return sphere;
 }
 

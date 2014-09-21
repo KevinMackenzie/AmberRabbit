@@ -142,6 +142,7 @@ shared_ptr<ResHandle> SceneNode::GetShader()
 //
 HRESULT SceneNode::VPreRender(Scene *pScene)
 {
+	//SetPosition(glm::vec3(0, 0, -50));
 	pScene->PushAndSetMatrix(m_Props.m_ToWorld);
 
 
@@ -159,11 +160,11 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 	//set the shader in this method, because this will render all children who have this as null
 	
 	GLUFProgramPtr prog = static_pointer_cast<GLProgramResourceExtraData>(GetShader()->GetExtra())->GetProgram();
-	if (m_pShader)
-	{
+	//if (m_pShader)
+	//{
 		//this is always safe to do
 		GLUFSHADERMANAGER.UseProgram(prog);
-	}
+	//}
 
 
 	//apply the uniforms
@@ -202,33 +203,46 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 	//these are the material uniforms
 	GLMaterial mat = m_Props.m_Material;
 
-	it = uniformLocations.find("mat_diffuse");
-	if (it != uniformLocations.end())
-		glUniform4fv(it->second, 1, &GLUFColorToFloat(mat.GetDiffuse())[0]);
+	Color3f tmpColor;
 
-	it = uniformLocations.find("mat_ambient");
+	it = uniformLocations.find("m_diff");
 	if (it != uniformLocations.end())
-		glUniform4fv(it->second, 1, &GLUFColorToFloat(mat.GetAmbient())[0]);
-
+	{
+		tmpColor = GLUFColorToFloat3(mat.GetDiffuse());
+		glUniform3fv(it->second, 1, &tmpColor[0]);
+	}
+	it = uniformLocations.find("m_amb");
+	if (it != uniformLocations.end())
+	{
+		tmpColor = GLUFColorToFloat3(mat.GetAmbient());
+		glUniform3fv(it->second, 1, &tmpColor[0]);
+	}
 
 	Color specular;
 	GLfloat power;
 	mat.GetSpecular(specular, power);
 
-	it = uniformLocations.find("mat_specular");
+	it = uniformLocations.find("m_spec");
 	if (it != uniformLocations.end())
-		glUniform4fv(it->second, 1, &GLUFColorToFloat(specular)[0]);
-
-	it = uniformLocations.find("mat_power");
+	{
+		tmpColor = GLUFColorToFloat3(specular);
+		glUniform3fv(it->second, 1, &tmpColor[0]);
+	}
+	it = uniformLocations.find("m_pow");
 	if (it != uniformLocations.end())
 		glUniform1f(it->second, power);
 
-	it = uniformLocations.find("mat_tex0");
+	it = uniformLocations.find("m_tex0");
 	if (it != uniformLocations.end() && mat.GetTexture())//make sure the there is a sampler, and we have a texture
 	{
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, static_pointer_cast<GLTextureResourceExtraData>(mat.GetTexture()->GetExtra())->GetTexture());
 		glUniform1i(it->second, 0);
+	}
+	else
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	return S_OK;
@@ -339,11 +353,11 @@ HRESULT SceneNode::VRenderChildren(Scene *pScene)
 			if ((*i)->VIsVisible(pScene))
 			{
 				float alpha = (*i)->VGet()->m_Material.GetAlpha();
-				if (alpha == fOPAQUE)
+				if (alpha == u8OPAQUE)
 				{
 					(*i)->VRender(pScene);
 				}
-				else if (alpha != fTRANSPARENT)
+				else if (alpha != u8TRANSPARENT)
 				{
 					// The object isn't totally transparent...
 					AlphaSceneNode *asn = QSE_NEW AlphaSceneNode;
