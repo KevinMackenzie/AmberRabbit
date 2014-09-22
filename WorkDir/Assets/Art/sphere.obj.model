@@ -5,8 +5,8 @@
 # object Sphere001
 #
 
-mtllib art\sphere.mtl
-usemtl Sphere
+#mtllib art\sphere.mtl
+#usemtl Sphere
 
 v  0.00000 10.00000 -0.00000
 v  -0.00000 9.80785 -1.95090

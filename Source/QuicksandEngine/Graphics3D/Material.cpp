@@ -12,45 +12,146 @@
 // class GLMaterial						- Chapter 14, page 486
 ////////////////////////////////////////////////////
 
-GLMaterial::GLMaterial()
+GLMaterialResourceExtraData::GLMaterialResourceExtraData()
 {
 	m_Diffuse = g_White;
-	m_Ambient = Color(0.10f, 0.10f, 0.10f, 1.0f);
+	m_Ambient = Color(25, 25, 25, 255);
 	m_Specular = g_White;
 	m_Emissive = g_Black;
 }
 
-void GLMaterial::SetAmbient(const Color &color)
+void GLMaterialResourceExtraData::SetAmbient(const Color &color)
 {
 	m_Ambient = color;
 }
 
-void GLMaterial::SetDiffuse(const Color &color)
+void GLMaterialResourceExtraData::SetDiffuse(const Color &color)
 {
 	m_Diffuse = color;
 }
 
-void GLMaterial::SetSpecular(const Color &color, const float power)
+void GLMaterialResourceExtraData::SetSpecular(const Color &color, const float power)
 {
 	m_Specular = color;
 	m_Power = power;
 }
 
-void GLMaterial::SetEmissive(const Color &color)
+void GLMaterialResourceExtraData::SetEmissive(const Color &color)
 {
 	m_Emissive = color;
 }
 
-void GLMaterial::SetAlpha(char alpha)
+void GLMaterialResourceExtraData::SetAlpha(char alpha)
 {
 	m_Diffuse.a = alpha;
 }
 
-void GLMaterial::GLUse()
-{
-	//TODO;
-}
 
+bool GLMaterialResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
+{
+	shared_ptr<GLMaterialResourceExtraData> extra = shared_ptr<GLMaterialResourceExtraData>(QSE_NEW GLMaterialResourceExtraData());
+
+	extra->ParseXml(rawBuffer, rawSize);
+
+	tinyxml2::XMLElement* pRoot = extra->GetRoot();
+
+	if (!pRoot)
+		return false;
+
+	if (!strcmp(pRoot->Name(), "Material"))
+		return false;
+
+	//Diffuse Element
+	tinyxml2::XMLElement* pDiffuseElement = pRoot->FirstChildElement("Diffuse");
+	if (pDiffuseElement)
+	{
+		//Color
+		tinyxml2::XMLElement* pColor = pDiffuseElement->FirstChildElement("Color");
+		if (pColor)
+		{
+			Color col;
+			col.a = 255;
+			col.r = std::stoi(pColor->Attribute("r"));
+			col.g = std::stoi(pColor->Attribute("g"));
+			col.b = std::stoi(pColor->Attribute("b"));
+
+			extra->SetDiffuse(col);
+		}
+
+		//set the alpha second so the color does not overwrite it
+		const char* pHasAlpha = pDiffuseElement->Attribute("hasAlpha");
+		if (pHasAlpha)
+		{
+			if (strcmp(pHasAlpha, "true"))
+			{
+				const char* pAlpha = pDiffuseElement->Attribute("alpha");
+				if (pAlpha)
+					extra->SetAlpha(std::stoi(pAlpha));
+			}
+		}
+
+		//Texture
+		tinyxml2::XMLElement* pTextureElement = pDiffuseElement->FirstChildElement("Texture");
+		if (pTextureElement)
+		{
+			const char* texPath = pTextureElement->Attribute("path");
+			if (texPath)
+			{
+				Resource res(texPath);
+				extra->SetTexture(QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res));//if this fails it will be null anyway
+			}
+		}
+	}
+
+	//Ambient Element
+	tinyxml2::XMLElement* pAmbientElement = pRoot->FirstChildElement("Ambient");
+	if (pAmbientElement)
+	{
+		//Color
+		tinyxml2::XMLElement* pColor = pAmbientElement->FirstChildElement("Color");
+		if (pColor)
+		{
+			Color col;
+			col.a = 255;
+			col.r = std::stoi(pColor->Attribute("r"));
+			col.g = std::stoi(pColor->Attribute("g"));
+			col.b = std::stoi(pColor->Attribute("b"));
+
+			extra->SetAmbient(col);
+		}
+	}
+
+	//Specular Element
+	tinyxml2::XMLElement* pSpecularElement = pRoot->FirstChildElement("Specular");
+	if (pSpecularElement)
+	{
+		//Power
+		const char* power = pSpecularElement->Attribute("power");
+		float fPower = 50;
+		if (power)
+		{
+			fPower = std::stof(power);
+		}
+
+		//Color
+		tinyxml2::XMLElement* pColor = pSpecularElement->FirstChildElement("Color");
+		if (pColor)
+		{
+			Color col;
+			col.a = 255;
+			col.r = std::stoi(pColor->Attribute("r"));
+			col.g = std::stoi(pColor->Attribute("g"));
+			col.b = std::stoi(pColor->Attribute("b"));
+
+			extra->SetSpecular(col, fPower);
+		}
+	}
+
+
+	handle->SetExtra(extra);
+
+	return true;
+}
 
 //
 // class DdsResourceLoader					- creates an interface with the Resource cache to load DDS files

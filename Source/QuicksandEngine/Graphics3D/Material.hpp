@@ -5,7 +5,7 @@
 #include "Geometry.hpp"
 #include "../ResourceCache/ResCache.hpp"
 
-class GLMaterial
+class GLMaterialResourceExtraData : public XmlResourceExtraData
 {
 	Color m_Diffuse, m_Ambient, m_Specular, m_Emissive;			// This structure stores diffuse, ambient, specular, emissive, and power.
 	float m_Power;
@@ -13,7 +13,7 @@ class GLMaterial
 	std::string m_MaterialName;
 	shared_ptr<ResHandle> m_pTexture;
 public:
-	GLMaterial();
+	GLMaterialResourceExtraData();
 	void SetAmbient(const Color &color);
 	const Color GetAmbient() { return m_Ambient; }
 
@@ -40,7 +40,17 @@ public:
 	bool HasAlpha() const { return GetAlpha() != u8OPAQUE; }
 	float GetAlpha() const { return m_Diffuse.a; }
 
-	void GLUse();
+	virtual std::string VToString() { return "GLMaterialResourceExtraData"; }
+};
+
+class GLMaterialResourceLoader : public IResourceLoader
+{
+public:
+	virtual bool VUseRawFile() { return false; }
+	virtual bool VDiscardRawBufferAfterLoad() { return true; }
+	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize){ return rawSize; }
+	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
+	virtual string VGetPattern(){ return "*.qmtl"; }
 };
 
 

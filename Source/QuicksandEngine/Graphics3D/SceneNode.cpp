@@ -30,6 +30,8 @@ SceneNodeProperties::SceneNodeProperties(void)
 	m_Radius = 0;
 	m_RenderPass = RenderPass_0;
 	m_AlphaType = AlphaOpaque;
+
+	m_Material = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
 }
 
 
@@ -77,7 +79,7 @@ SceneNode::~SceneNode()
 HRESULT SceneNode::VOnRestore(Scene *pScene)
 {
 	Color color = (m_RenderComponent) ? m_RenderComponent->GetColor() : g_White;
-	m_Props.m_Material.SetDiffuse(color);
+	m_Props.GetMaterial()->SetDiffuse(color);
 
 	// This is meant to be called from any class
 	// that inherits from SceneNode and overloads
@@ -201,26 +203,26 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 
 
 	//these are the material uniforms
-	GLMaterial mat = m_Props.m_Material;
+	shared_ptr<GLMaterialResourceExtraData> mat = m_Props.GetMaterial();
 
 	Color3f tmpColor;
 
 	it = uniformLocations.find("m_diff");
 	if (it != uniformLocations.end())
 	{
-		tmpColor = GLUFColorToFloat3(mat.GetDiffuse());
+		tmpColor = GLUFColorToFloat3(mat->GetDiffuse());
 		glUniform3fv(it->second, 1, &tmpColor[0]);
 	}
 	it = uniformLocations.find("m_amb");
 	if (it != uniformLocations.end())
 	{
-		tmpColor = GLUFColorToFloat3(mat.GetAmbient());
+		tmpColor = GLUFColorToFloat3(mat->GetAmbient());
 		glUniform3fv(it->second, 1, &tmpColor[0]);
 	}
 
 	Color specular;
 	GLfloat power;
-	mat.GetSpecular(specular, power);
+	mat->GetSpecular(specular, power);
 
 	it = uniformLocations.find("m_spec");
 	if (it != uniformLocations.end())
@@ -233,10 +235,10 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 		glUniform1f(it->second, power);
 
 	it = uniformLocations.find("m_tex0");
-	if (it != uniformLocations.end() && mat.GetTexture())//make sure the there is a sampler, and we have a texture
+	if (it != uniformLocations.end() && mat->GetTexture())//make sure the there is a sampler, and we have a texture
 	{
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, static_pointer_cast<GLTextureResourceExtraData>(mat.GetTexture()->GetExtra())->GetTexture());
+		glBindTexture(GL_TEXTURE_2D, static_pointer_cast<GLTextureResourceExtraData>(mat->GetTexture()->GetExtra())->GetTexture());
 		glUniform1i(it->second, 0);
 	}
 	else
@@ -352,7 +354,7 @@ HRESULT SceneNode::VRenderChildren(Scene *pScene)
 			// Don't render this node if you can't see it
 			if ((*i)->VIsVisible(pScene))
 			{
-				float alpha = (*i)->VGet()->m_Material.GetAlpha();
+				float alpha = (*i)->VGet()->GetMaterial()->GetAlpha();
 				if (alpha == u8OPAQUE)
 				{
 					(*i)->VRender(pScene);
@@ -671,8 +673,8 @@ GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int 
 	: SceneNode(actorId, renderComponent, RenderPass_Static, pMatrix), m_Squares(GL_LINES, GL_DYNAMIC_DRAW)//, m_nSideLength(squares), m_fSquareLength(squareSize)
 {
 
-	GLMaterial material = m_Props.GetMaterial();
-	material.SetDiffuse(diffuseColor);
+	shared_ptr<GLMaterialResourceExtraData> material = m_Props.GetMaterial();
+	material->SetDiffuse(diffuseColor);
 	SetMaterial(material);
 
 	//m_bTextureHasAlpha = false;
@@ -729,7 +731,7 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 	//read everything from the game logic
 	int squares = grc->GetDivision();
-	int sideLen = sqrt(squares);
+	int sideLen = (int)sqrt(squares);
 	float unitLen = grc->GetUnitLength();
 
 	GLuint positionLocation = 0;

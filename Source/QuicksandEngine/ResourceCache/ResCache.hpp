@@ -173,6 +173,15 @@ public:
 
 	shared_ptr<ResHandle> GetHandle(Resource * r);
 
+	//this is used to create a "file" that does not exist on the disk
+	template<typename T>
+	shared_ptr<ResHandle> CreateDummy()
+	{
+		shared_ptr<ResHandle> handle = shared_ptr<ResHandle>(QSE_NEW ResHandle(Resource(""), nullptr, 0, this));
+		handle->SetExtra(shared_ptr<T>(QSE_NEW T()));
+		return handle;
+	}
+
 	int Preload(const string pattern, void (*progressCallback)(int, bool &));
 	std::vector<string> Match(const string pattern);
 

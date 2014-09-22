@@ -30,14 +30,21 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 	//create the vertex array pointer (empty)
 	//extraData->mData = GLUFBUFFERMANAGER.CreateVertexArray();
 
-	if (scene->HasMeshes() == true && scene->HasMaterials() == true)
+	if (scene->HasMeshes() && scene->HasMaterials())
 	{
 		
 
 		extraData->m_pArray = LoadVertexArrayFromScene(scene);
+		extraData->m_pMaterial = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
+
+		/*extraData->m_pMaterial = new GLMaterial();
+		extraData->m_pMaterial->SetDiffuse(g_Black);
+		extraData->m_pMaterial->SetAmbient(Color(25, 25, 25, 255));
+		extraData->m_pMaterial->SetSpecular(g_Gray25, 15);*/
+
 
 		//now load the material (singular)
-		aiMaterial* pMat = scene->mMaterials[0];
+		/*aiMaterial* pMat = scene->mMaterials[0];
 		extraData->m_pMaterial = new GLMaterial();
 
 		//load the file name of the texture if it exists
@@ -73,7 +80,7 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		//SPECULAR
 		if (AI_SUCCESS == aiGetMaterialColor(pMat, AI_MATKEY_COLOR_SPECULAR, &tempColor))
 			extraData->m_pMaterial->SetSpecular(AssimpToGlm4_3u8(tempColor), power);
-
+		*/
 
 		/*
 		if (scene->mNumMeshes > 1)
@@ -181,9 +188,9 @@ GLMeshNode::GLMeshNode(const ActorId actorId,
 	Resource res(FileName);
 	m_Data = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
 
-	GLMaterial* mat = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetMaterial();
+	shared_ptr<ResHandle> mat = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetMaterial();
 	if (mat)
-		SetMaterial(*mat);
+		SetMaterial(mat);
 
 	Resource shaderResource("Shaders\\BasicLighting.prog");
 	m_pBasicShading = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shaderResource);

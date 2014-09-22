@@ -5,8 +5,20 @@
 
     <StaticActors>
       <Actor resource="actors\sphere.xml">
+		<SphereRenderComponent>
+			<Color r="0" g="0" b="0" a="255"/>
+		</SphereRenderComponent>
 		<TransformComponent>
-			<Position x="-10" y="0" z="-50"/>
+			<Position x="-15" y="0" z="-50"/>
+		</TransformComponent>
+	  </Actor>
+	  
+	  <Actor resource="actors\sphere.xml">
+		<SphereRenderComponent>
+			<Color r="0" g="0" b="0" a="255"/>
+		</SphereRenderComponent>
+		<TransformComponent>
+			<Position x="15" y="0" z="-50"/>
 		</TransformComponent>
 	  </Actor>
 	  

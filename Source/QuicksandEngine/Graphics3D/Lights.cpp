@@ -14,7 +14,7 @@ HRESULT GLLightNode::VOnUpdate(Scene *, double const fEllapsed)
 {
 	// light color can change anytime! Check the BaseRenderComponent!
 	LightRenderComponent* lrc = static_cast<LightRenderComponent*>(m_RenderComponent);
-	m_Props.GetMaterial().SetDiffuse(lrc->GetColor());
+	m_Props.GetMaterial()->SetDiffuse(lrc->GetColor());
 	return S_OK;
 }
 
@@ -37,13 +37,13 @@ void LightManager::CalcLighting(Scene *pScene)
 		if (count == 0)
 		{
 			// Light 0 is the only one we use for ambient lighting. The rest are ignored in the simple shaders used for GameCode4.
-			Color ambient = light->VGet()->GetMaterial().GetAmbient();
+			Color ambient = light->VGet()->GetMaterial()->GetAmbient();
 			m_vLightAmbient = glm::vec4(ambient.r, ambient.g, ambient.b, 1.0f);
 		}
 
 		glm::vec3 lightDir = light->GetDirection();
 		m_vLightDir[count] = glm::vec4(lightDir.x, lightDir.y, lightDir.z, 1.0f);
-		m_vLightDiffuse[count] = light->VGet()->GetMaterial().GetDiffuse();
+		m_vLightDiffuse[count] = light->VGet()->GetMaterial()->GetDiffuse();
 	}
 }
 

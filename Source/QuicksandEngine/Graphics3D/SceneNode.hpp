@@ -58,12 +58,12 @@ protected:
 	glm::mat4					m_ToWorld, m_FromWorld;
 	float					m_Radius;
 	RenderPass				m_RenderPass;
-	GLMaterial				m_Material;
+	shared_ptr<ResHandle>	m_Material;
 	AlphaType				m_AlphaType;
 
 	void SetAlpha(glm::u8 alpha)
 	{
-		m_AlphaType = AlphaMaterial; m_Material.SetAlpha(alpha);
+		m_AlphaType = AlphaMaterial; GetMaterial()->SetAlpha(alpha);
 	}
 
 public:
@@ -75,14 +75,15 @@ public:
 
 	const char * Name() const { return m_Name.c_str(); }
 
-	bool HasAlpha() const { return m_Material.HasAlpha(); }
-	float Alpha() const { return m_Material.GetAlpha(); }
+	bool HasAlpha() const { return GetMaterial()->HasAlpha(); }
+	float Alpha() const { return GetMaterial()->GetAlpha(); }
 	AlphaType AlphaType() const { return m_AlphaType; }
 
 	RenderPass RenderPass() const { return m_RenderPass; }
 	float Radius() const { return m_Radius; }
 
-	GLMaterial GetMaterial() const { return m_Material; }
+	shared_ptr<GLMaterialResourceExtraData> GetMaterial() const { return static_pointer_cast<GLMaterialResourceExtraData>(m_Material->GetExtra()); }
+	void SetMaterial(shared_ptr<ResHandle> mat){ m_Material = mat; }
 };
 
 //////////////////////////////////////////////////////////////
@@ -162,8 +163,9 @@ public:
 	glm::mat4 GetToWorld() const { return m_Props.m_ToWorld; }
 
 	void SetRadius(const float radius) { m_Props.m_Radius = radius; }
-	void SetMaterial(const GLMaterial &mat) { m_Props.m_Material = mat; }
-	GLMaterial GetMaterial(void){ return m_Props.m_Material; }
+	void SetMaterial(shared_ptr<GLMaterialResourceExtraData> mat) { m_Props.m_Material->SetExtra(mat); }
+	void SetMaterial(shared_ptr<ResHandle> mat) { m_Props.m_Material = mat; }
+	shared_ptr<GLMaterialResourceExtraData> GetMaterial(void){ return m_Props.GetMaterial(); }
 };
 
 //

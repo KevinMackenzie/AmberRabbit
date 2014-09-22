@@ -47,14 +47,14 @@ public:
 	virtual ~GLObjMeshResourceExtraData(){}
 	virtual std::string VToString() { return "GLObjMeshResourceExtraData"; }
 
-	GLMaterial* GetMaterial(){ return m_pMaterial; }
+	shared_ptr<ResHandle> GetMaterial(){ return m_pMaterial; }
 	GLUFVertexArray* GetVertexArray(){ return m_pArray; }
 
 protected:
 
 	GLUFVertexArray* m_pArray;
 
-	GLMaterial *m_pMaterial;
+	shared_ptr<ResHandle> m_pMaterial;
 
 	// m_pTextureResource;
 

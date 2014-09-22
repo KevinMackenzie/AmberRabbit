@@ -1,0 +1,16 @@
+<Material>
+	<Diffuse hasAlpha = "false" <!-- alpha="255" -->>
+		<Texture path="Art\defaultTex.dds" />
+		<Color r="13" g="13" b="13" />
+	</Diffuse>
+	<Ambient>
+		<Color r="13" g="13" b="13" />
+	</Ambient>
+	<Specular power="10">
+		<Color r="13" g="13" b="13" />
+	</Specular>
+	<!-- NYI -->
+	<Emissive>
+		<Color r="13" g="13" b="13" />
+	</Emissive>
+</Material>

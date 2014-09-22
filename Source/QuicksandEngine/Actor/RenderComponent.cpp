@@ -103,8 +103,6 @@ void MeshRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *)
     LOG_ERROR("MeshRenderComponent::VGenerateSubclassXml() not implemented");
 }
 
-
-
 //---------------------------------------------------------------------------------------------------------------------
 // SphereRenderComponent
 //---------------------------------------------------------------------------------------------------------------------
@@ -116,12 +114,16 @@ SphereRenderComponent::SphereRenderComponent(void)
 bool SphereRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
     tinyxml2::XMLElement* pMesh = pData->FirstChildElement("Sphere");
-    int segments = 50;
-	double radius = 1.0;
-	radius = std::stod(pMesh->Attribute("radius"));
-    segments = std::stoi(pMesh->Attribute("segments"));
-	m_radius = (float)radius;
-    m_segments = (unsigned int)segments;
+	if (pMesh)
+	{
+		const char* radText = pMesh->Attribute("radius");
+		if (radText)
+			m_radius = std::stof(radText);
+
+		const char* segText = pMesh->Attribute("segments");
+		if (segText)
+			m_segments = std::stoi(segText);
+	}
 
     return true;
 }
@@ -140,9 +142,11 @@ shared_ptr<SceneNode> SphereRenderComponent::VCreateSceneNode(void)
 	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.obj.model", RenderPass_Actor, &pTransformComponent->GetTransform()));
 
 	// TODO: do this with all components
-	GLMaterial mat = sphere->GetMaterial();
-	mat.SetDiffuse(GetColor());
-	sphere->SetMaterial(mat);
+	shared_ptr<GLMaterialResourceExtraData> mat = sphere->GetMaterial();
+	mat->SetDiffuse(GetColor());
+	mat->SetAmbient(Color(100, 100, 100, 255));
+	mat->SetSpecular(Color(255, 255, 255, 255), 15);
+	//sphere->SetMaterial(mat);
 
 	Resource shadRes("Shaders\\BasicLightingUntex.prog");
 	shared_ptr<ResHandle> handle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shadRes);
