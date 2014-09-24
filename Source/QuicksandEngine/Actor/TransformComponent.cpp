@@ -76,7 +76,7 @@ bool TransformComponent::VInit(tinyxml2::XMLElement* pData)
     }
 	**/
 
-	m_transform = glm::translate(rotation, position);
+	m_transform = glm::translate(glm::mat4(), position) * rotation;
 
     
     return true;

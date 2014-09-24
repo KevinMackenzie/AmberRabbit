@@ -1396,6 +1396,11 @@ void GLUFVertexArrayBase::BufferIndices(GLuint* indices, unsigned int count)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * count, indices, mUsageType);
 }
 
+void GLUFVertexArrayBase::BufferIndices(std::vector<glm::u32vec2> indices)
+{
+	BufferIndices(&indices[0][0], indices.size() * 2);
+}
+
 void GLUFVertexArrayBase::Draw()
 {
 	BindVertexArray();

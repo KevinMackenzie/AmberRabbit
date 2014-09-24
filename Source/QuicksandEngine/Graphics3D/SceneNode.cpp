@@ -675,7 +675,6 @@ GLGrid::GLGrid(ActorId actorId, WeakBaseRenderComponentPtr renderComponent, int 
 
 	shared_ptr<GLMaterialResourceExtraData> material = m_Props.GetMaterial();
 	material->SetDiffuse(diffuseColor);
-	SetMaterial(material);
 
 	//m_bTextureHasAlpha = false;
 	//m_pVerts = NULL;
@@ -775,6 +774,8 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 	//GLUFVAOData dat = GLUFBUFFERMANAGER.MapVertexArray(m_VertexArray);
 	
+	//get the initial x/z offset of the vertices to center the grid on the position
+	float fInitial = -(sideLen * unitLen) / 2.0f;
 
 	//this takes one row of the grid, and then expands by the length
 	std::vector<glm::vec3> baseVertices;
@@ -783,7 +784,7 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 	//yes, i do want it to go one past, because there is one more set of vertices than sides
 	for (int i = 0; i <= sideLen; ++i)
 	{
-		baseVertices.push_back(glm::vec3(0.0f, 0.0f, i * unitLen));
+		baseVertices.push_back(glm::vec3(fInitial, 0.0f, fInitial + i * unitLen));
 	}
 
 	//fill the vertex array by 'extruding' this line
@@ -819,14 +820,14 @@ HRESULT GLGrid::VOnRestore(Scene *pScene)
 
 	
 	//center this
-	glm::vec3 pos = GetPosition();
-	this->SetPosition(pos + glm::vec3(-(unitLen * sideLen) / 2, 0.0f, -(unitLen * sideLen) / 2));
+	//glm::vec3 pos = GetPosition();
+	//this->SetPosition(pos - glm::vec3((unitLen * sideLen) / 2, 0.0f, (unitLen * sideLen) / 2));
 
 
 	//buffer the data
-	m_Squares.BufferData(positionLocation, vertices.size(), &vertices[0]);
+	m_Squares.BufferData(positionLocation, vertices.size(), &vertices[0][0]);
 
-	m_Squares.BufferIndices(&Lines[0][0], Lines.size());
+	m_Squares.BufferIndices(Lines);//I cought a sneaky bug here where I forgot to multiply the size of the line buffer by 2
 
 	return S_OK;
 }
@@ -886,6 +887,17 @@ HRESULT GLGrid::VRender(Scene *pScene)
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_LIGHTING, oldLightMode);
 	//DXUTGetD3D9Device()->SetRenderState(D3DRS_CULLMODE, oldCullMode);
 	
+	/*float ratio = QuicksandEngine::g_pApp->GetScreenSize().x / QuicksandEngine::g_pApp->GetScreenSize().y;
+	glm::mat4 view = pScene->GetCamera()->GetView();
+	glm::mat4 proj = pScene->GetCamera()->GetProjection();
+	//glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -10.0f)) * glm::toMat4(glm::quat(glm::vec3(GLUF_PI_F / 2, 0.0f, 0.0f)));
+	glm::vec3 eulers(90, 0, 0);
+	glm::quat tmpQuat = glm::quat(glm::vec3((float)DEGREES_TO_RADIANS(eulers.x), (float)DEGREES_TO_RADIANS(eulers.y), (float)DEGREES_TO_RADIANS(eulers.z)));
+	glm::mat4 model = glm::toMat4(tmpQuat);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
+	glm::mat4 MVP = proj * view * model;*/
+	//glUniformMatrix4fv(0, 1, GL_FALSE, &MVP[0][0]);
+
 	//this is GREATLY simplified
 	m_Squares.Draw();
 

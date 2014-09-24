@@ -542,6 +542,7 @@ public:
 	void DrawInstanced(GLuint instances);
 
 	void BufferIndices(GLuint* indices, unsigned int Count);
+	void BufferIndices(std::vector<glm::u32vec2> indices);
 	//void BufferFaces(GLuint* indices, unsigned int FaceCount);
 
 	virtual void EnableVertexAttributes();

@@ -104,6 +104,7 @@ public:
 	GLMeshNode(const ActorId actorId,
 		WeakBaseRenderComponentPtr renderComponent,
 		std::string FileName,
+		std::string ShaderName,
 		RenderPass renderPass,
 		const glm::mat4 *t);
 

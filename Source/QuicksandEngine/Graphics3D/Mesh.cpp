@@ -182,6 +182,7 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 GLMeshNode::GLMeshNode(const ActorId actorId,
 	WeakBaseRenderComponentPtr renderComponent,
 	std::string FileName,
+	std::string ShaderName,
 	RenderPass renderPass,
 	const glm::mat4 *t) : SceneNode(actorId, renderComponent, renderPass, t)
 {
@@ -192,7 +193,12 @@ GLMeshNode::GLMeshNode(const ActorId actorId,
 	if (mat)
 		SetMaterial(mat);
 
-	Resource shaderResource("Shaders\\BasicLighting.prog");
+	if (ShaderName == "")
+	{
+		ShaderName = "Shaders\\BasicLighting.prog";
+	}
+
+	Resource shaderResource(ShaderName);
 	m_pBasicShading = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shaderResource);
 	SetShader(m_pBasicShading);
 }

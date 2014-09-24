@@ -80,8 +80,8 @@ Color BaseRenderComponent::LoadColor(tinyxml2::XMLElement* pData)
 	glm::u8 a = 255;
 
     r = (glm::u8)std::stoi(pData->Attribute("r"));
-	b = (glm::u8)std::stoi(pData->Attribute("g"));
-	g = (glm::u8)std::stoi(pData->Attribute("b"));
+	g = (glm::u8)std::stoi(pData->Attribute("g"));
+	b = (glm::u8)std::stoi(pData->Attribute("b"));
 	a = (glm::u8)std::stoi(pData->Attribute("a"));
 
 	color = Color(r, g, b, a);
@@ -139,18 +139,19 @@ shared_ptr<SceneNode> SphereRenderComponent::VCreateSceneNode(void)
     }
 
 	WeakBaseRenderComponentPtr wbrcp(this);
-	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.obj.model", RenderPass_Actor, &pTransformComponent->GetTransform()));
+	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.obj.model", "Shaders\\BasicLightingUntex.prog", RenderPass_Actor, &pTransformComponent->GetTransform()));
 
 	// TODO: do this with all components
-	shared_ptr<GLMaterialResourceExtraData> mat = sphere->GetMaterial();
+	shared_ptr<ResHandle> blankRes = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
+	shared_ptr<GLMaterialResourceExtraData> mat = static_pointer_cast<GLMaterialResourceExtraData>(blankRes->GetExtra());// = sphere->GetMaterial();
 	mat->SetDiffuse(GetColor());
 	mat->SetAmbient(Color(100, 100, 100, 255));
 	mat->SetSpecular(Color(255, 255, 255, 255), 15);
-	//sphere->SetMaterial(mat);
+	sphere->SetMaterial(blankRes);
 
-	Resource shadRes("Shaders\\BasicLightingUntex.prog");
+	/*Resource shadRes();
 	shared_ptr<ResHandle> handle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shadRes);
-	sphere->SetShader(handle);
+	sphere->SetShader(handle);*/
 	return sphere;
 }
 
@@ -162,7 +163,7 @@ void SphereRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement* pB
     pBaseElement->LinkEndChild(pBaseElement);
 }
 
-/*
+
 //---------------------------------------------------------------------------------------------------------------------
 // TeapotRenderComponent
 //---------------------------------------------------------------------------------------------------------------------
@@ -174,19 +175,7 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
     {
 		WeakBaseRenderComponentPtr weakThis(this);
 
-		switch (GameCodeApp::GetRendererImpl())
-		{
-			case GameCodeApp::Renderer_D3D9: 
-				return shared_ptr<SceneNode>(QSE_NEW GLTeapod(m_pOwner->GetId(), weakThis, "Effects\\GameCode4.fx", RenderPass_Actor, &pTransformComponent->GetTransform()));
-
-			case GameCodeApp::Renderer_D3D11: 
-			{
-				glm::mat4 rot90;
-				rot90.BuildRotationY(-AR_PI/2.0f);
-				shared_ptr<SceneNode> parent(QSE_NEW SceneNode(m_pOwner->GetId(), weakThis, RenderPass_Actor, &pTransformComponent->GetTransform()));
-				shared_ptr<SceneNode> teapot(QSE_NEW D3DTeapotMeshNode11(INVALID_ACTOR_ID, weakThis, RenderPass_Actor, &rot90));
-				parent->VAddChild(teapot);
-				return parent;
+		return shared_ptr<SceneNode>(QSE_NEW GLMeshNode(m_pOwner->GetId(), weakThis, "Art\\Teapot.obj.model", "Shaders\\BasicLightingUntex.prog", RenderPass_Actor, &pTransformComponent->GetTransform()));
     }
 
     return shared_ptr<SceneNode>();
@@ -195,7 +184,7 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
 void TeapotRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *)
 {
 }
-*/
+
 
 //---------------------------------------------------------------------------------------------------------------------
 // GridRenderComponent
@@ -209,11 +198,11 @@ GridRenderComponent::GridRenderComponent(void)
 
 bool GridRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
-    tinyxml2::XMLElement* pTexture = pData->FirstChildElement("Texture");
+    /*tinyxml2::XMLElement* pTexture = pData->FirstChildElement("Texture");
     if (pTexture)
 	{
 		m_textureResource = pTexture->FirstChild()->Value();
-	}
+	}*/
 
     tinyxml2::XMLElement* pDivision = pData->FirstChildElement("Division");
     if (pDivision)
