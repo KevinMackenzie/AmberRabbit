@@ -101,7 +101,6 @@ protected:
 //---------------------------------------------------------------------------------------------------------------------
 class  GridRenderComponent : public BaseRenderComponent
 {
-    string m_textureResource;
     int m_squares;
 	float m_fsquareLen;
 
@@ -110,7 +109,7 @@ public:
 	virtual const char *VGetName() const { return g_Name; }
 
     GridRenderComponent(void);
-	const char* GetTextureResource() { return m_textureResource.c_str(); }
+	//const char* GetTextureResource() { return m_textureResource.c_str(); }
 	const int GetDivision() { return m_squares; }
 	const float GetUnitLength(){ return m_fsquareLen; }
 

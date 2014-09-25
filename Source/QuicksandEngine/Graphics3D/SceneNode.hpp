@@ -83,6 +83,7 @@ public:
 	float Radius() const { return m_Radius; }
 
 	shared_ptr<GLMaterialResourceExtraData> GetMaterial() const { return static_pointer_cast<GLMaterialResourceExtraData>(m_Material->GetExtra()); }
+	shared_ptr<ResHandle> GetMaterialResource() const { return m_Material; }
 	void SetMaterial(shared_ptr<ResHandle> mat){ m_Material = mat; }
 };
 
@@ -166,6 +167,7 @@ public:
 	void SetMaterial(shared_ptr<GLMaterialResourceExtraData> mat) { m_Props.m_Material->SetExtra(mat); }
 	void SetMaterial(shared_ptr<ResHandle> mat) { m_Props.m_Material = mat; }
 	shared_ptr<GLMaterialResourceExtraData> GetMaterial(void){ return m_Props.GetMaterial(); }
+	shared_ptr<ResHandle> GetMaterialResource(void){ return m_Props.GetMaterialResource(); }
 };
 
 //

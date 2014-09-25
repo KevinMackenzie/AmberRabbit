@@ -12,7 +12,7 @@
 
 const char* MeshRenderComponent::g_Name = "MeshRenderComponent";
 const char* SphereRenderComponent::g_Name = "SphereRenderComponent";
-//const char* TeapotRenderComponent::g_Name = "TeapotRenderComponent";
+const char* TeapotRenderComponent::g_Name = "TeapotRenderComponent";
 const char* GridRenderComponent::g_Name = "GridRenderComponent";
 const char* LightRenderComponent::g_Name = "LightRenderComponent";
 const char* SkyRenderComponent::g_Name = "SkyRenderComponent";
@@ -171,14 +171,19 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
 {
     // get the transform component
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_Name));
-    if (pTransformComponent)
-    {
-		WeakBaseRenderComponentPtr weakThis(this);
+	if (!pTransformComponent)
+	{
+		return shared_ptr<SceneNode>();
+	}
+	WeakBaseRenderComponentPtr weakThis(this);
 
-		return shared_ptr<SceneNode>(QSE_NEW GLMeshNode(m_pOwner->GetId(), weakThis, "Art\\Teapot.obj.model", "Shaders\\BasicLightingUntex.prog", RenderPass_Actor, &pTransformComponent->GetTransform()));
-    }
+	shared_ptr<SceneNode> teapot =  shared_ptr<SceneNode>(QSE_NEW GLMeshNode(m_pOwner->GetId(), weakThis, "Art\\teapot.obj.model", "Shaders\\BasicLightingUntex.prog", RenderPass_Actor, &pTransformComponent->GetTransform()));
 
-    return shared_ptr<SceneNode>();
+	shared_ptr<ResHandle> teapotRes = teapot->GetMaterialResource();
+	shared_ptr<GLMaterialResourceExtraData> mat = static_pointer_cast<GLMaterialResourceExtraData>(teapotRes->GetExtra());// = sphere->GetMaterial();
+	mat->SetDiffuse(GetColor());
+
+	return teapot;
 }
 
 void TeapotRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *)
@@ -191,7 +196,6 @@ void TeapotRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *)
 //---------------------------------------------------------------------------------------------------------------------
 GridRenderComponent::GridRenderComponent(void)
 {
-    m_textureResource = "";
     m_squares = 0;
 	m_fsquareLen = 0.5f;
 }
@@ -213,7 +217,7 @@ bool GridRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 	tinyxml2::XMLElement* pSquareLen = pData->FirstChildElement("UnitLength");
 	if (pSquareLen)
 	{
-		m_fsquareLen = atof(pSquareLen->FirstChild()->Value());
+		m_fsquareLen = (float)atof(pSquareLen->FirstChild()->Value());
 	}
 
     return true;
@@ -234,8 +238,8 @@ shared_ptr<SceneNode> GridRenderComponent::VCreateSceneNode(void)
 
 void GridRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *pBaseElement)
 {
-    tinyxml2::XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
-	tinyxml2::XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
+    tinyxml2::XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("UnitLength");
+	tinyxml2::XMLText* pTextureText = pTextureNode->ToDocument()->NewText(ToStr(m_fsquareLen).c_str());
     pTextureNode->LinkEndChild(pTextureText);
     pBaseElement->LinkEndChild(pTextureNode);
 

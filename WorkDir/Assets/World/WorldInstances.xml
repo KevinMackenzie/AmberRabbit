@@ -4,20 +4,20 @@
     level geometry.-->
 
     <StaticActors>
-      <Actor resource="actors\grid.xml">
+      <!-- <Actor resource="actors\grid.xml">
 		<GridRenderComponent>
-			<Color r="0.4" g="0.4" b="0.4" a="1.0"/>
+			<Color r="100" g="100" b="100" a="255"/>
 			<Division>100</Division>
 		</GridRenderComponent>
-	  </Actor>
+	  </Actor> -->
       <Actor resource="actors\grid.xml">
 		<TransformComponent>
 			<Position x="-10" y="-2" z="-10"/>
-			<YawPitchRoll x="0" y="90" z="-15"/>
+			<YawPitchRoll x="90" y="0" z="-15"/>
 		</TransformComponent>
 		<GridRenderComponent>
-			<Color r="0.2" g="0.8" b="0.2" a="1.0"/>
-			<Division>10</Division>
+			<Color r="50" g="200" b="50" a="100"/>
+			<Division>25</Division>
 		</GridRenderComponent>
 		<PhysicsComponent>
 			<RigidBodyTransform>

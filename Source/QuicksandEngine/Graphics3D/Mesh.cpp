@@ -37,6 +37,14 @@ bool GLObjMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSiz
 		extraData->m_pArray = LoadVertexArrayFromScene(scene);
 		extraData->m_pMaterial = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
 
+
+		shared_ptr<ResHandle> blankRes = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
+		shared_ptr<GLMaterialResourceExtraData> mat = static_pointer_cast<GLMaterialResourceExtraData>(blankRes->GetExtra());// = sphere->GetMaterial();
+		mat->SetDiffuse(Color(255, 255, 0, 255));
+		mat->SetAmbient(Color(100, 100, 100, 255));
+		mat->SetSpecular(Color(255, 255, 255, 255), 15);
+		extraData->m_pMaterial = blankRes;
+
 		/*extraData->m_pMaterial = new GLMaterial();
 		extraData->m_pMaterial->SetDiffuse(g_Black);
 		extraData->m_pMaterial->SetAmbient(Color(25, 25, 25, 255));
@@ -232,16 +240,6 @@ HRESULT GLMeshNode::VRender(Scene* pScene)
 	//prerender does all of the work;
 	GLUFVertexArray* data = static_pointer_cast<GLObjMeshResourceExtraData>(m_Data->GetExtra())->GetVertexArray();
 
-	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
-
-	// Cull triangles which normal is not towards the camera
-	glEnable(GL_CULL_FACE);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//GLUFProgramPtr prog = static_pointer_cast<GLProgramResourceExtraData>(m_pBasicShading->GetExtra())->GetProgram();
 	//GLUFSHADERMANAGER.UseProgram((prog));

@@ -247,6 +247,17 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
+
+	// Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	return S_OK;
 }
 
