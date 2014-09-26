@@ -158,6 +158,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateObjMeshResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateScriptResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateQMTLResourceLoader();
 
 	// Note - register these in order from least specific to most specific! They get pushed onto a list.
 	// RegisterLoader is discussed in Chapter 5, page 142
@@ -177,6 +178,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->RegisterLoader(CreateXmlResourceLoader());
 	m_ResCache->RegisterLoader(CreateObjMeshResourceLoader());
 	m_ResCache->RegisterLoader(CreateScriptResourceLoader());
+	m_ResCache->RegisterLoader(CreateQMTLResourceLoader());
 
 	if (!LoadStrings("en_US"))
 	{
@@ -301,6 +303,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->Preload("*.prog", NULL);
 	m_ResCache->Preload("*.obj.model", NULL);
 	m_ResCache->Preload("*.font", NULL);
+	m_ResCache->Preload("*.qmtl", NULL);
 
 	CheckForJoystick(GetHwnd());
 

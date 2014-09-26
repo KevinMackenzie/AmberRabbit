@@ -1,0 +1,11 @@
+<Material>
+	<Diffuse hasAlpha="false">
+		<Color r="255" g="0" b="0" />
+	</Diffuse>
+	<Ambient>
+		<Color r="100" g="100" b="10" />
+	</Ambient>
+	<Specular power="10">
+		<Color r="255" g="255" b="255" />
+	</Specular>
+</Material>

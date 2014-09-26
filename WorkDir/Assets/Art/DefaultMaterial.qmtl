@@ -1,5 +1,5 @@
 <Material>
-	<Diffuse hasAlpha = "false" <!-- alpha="255" -->>
+	<Diffuse hasAlpha="false" alpha="255">
 		<Texture path="Art\defaultTex.dds" />
 		<Color r="13" g="13" b="13" />
 	</Diffuse>

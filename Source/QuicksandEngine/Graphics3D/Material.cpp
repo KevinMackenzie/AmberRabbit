@@ -15,7 +15,7 @@
 GLMaterialResourceExtraData::GLMaterialResourceExtraData()
 {
 	m_Diffuse = g_White;
-	m_Ambient = Color(25, 25, 25, 255);
+	m_Ambient = Color(50, 50, 50, 255);
 	m_Specular = g_White;
 	m_Emissive = g_Black;
 }
@@ -58,7 +58,7 @@ bool GLMaterialResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSi
 	if (!pRoot)
 		return false;
 
-	if (!strcmp(pRoot->Name(), "Material"))
+	if (strcmp(pRoot->Name(), "Material") != 0)
 		return false;
 
 	//Diffuse Element
@@ -151,6 +151,11 @@ bool GLMaterialResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSi
 	handle->SetExtra(extra);
 
 	return true;
+}
+
+shared_ptr<IResourceLoader> CreateQMTLResourceLoader()
+{
+	return shared_ptr<IResourceLoader>(QSE_NEW GLMaterialResourceLoader);
 }
 
 //

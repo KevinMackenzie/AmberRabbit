@@ -155,7 +155,7 @@ MainMenuUI::MainMenuUI()
 
 	m_SampleUI.AddStatic(CID_NUM_PLAYER_LABEL, L"", nX, nY, nWidth, nHeight);
 	m_SampleUI.AddSlider(CID_NUM_PLAYER_SLIDER, nX2, nY, nWidth, nHeight);
-	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(0, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
+	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetRange(1, GET_CONFIG_ELEMENT_UC("MAX_PLAYERS"));
 	m_SampleUI.GetSlider( CID_NUM_PLAYER_SLIDER )->SetValue(m_NumPlayers);  // should be player options default
 	nY += nLineHeight;
 

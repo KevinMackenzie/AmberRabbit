@@ -16,6 +16,7 @@ const char* TeapotRenderComponent::g_Name = "TeapotRenderComponent";
 const char* GridRenderComponent::g_Name = "GridRenderComponent";
 const char* LightRenderComponent::g_Name = "LightRenderComponent";
 const char* SkyRenderComponent::g_Name = "SkyRenderComponent";
+const char* MaterialRenderComponent::g_Name = "MaterialComponent";
 
 //---------------------------------------------------------------------------------------------------------------------
 // RenderComponent
@@ -137,17 +138,23 @@ shared_ptr<SceneNode> SphereRenderComponent::VCreateSceneNode(void)
         // can't render without a transform
         return shared_ptr<SceneNode>();
     }
+	
+	//get the material component
+	shared_ptr<MaterialRenderComponent> pMaterialComponent = MakeStrongPtr(m_pOwner->GetComponent<MaterialRenderComponent>(MaterialRenderComponent::g_Name));
+	shared_ptr<ResHandle> material;
+	if (!pMaterialComponent)
+	{
+		material = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>(); 
+	}
+	else
+	{
+		material = pMaterialComponent->GetMaterial();
+	}
 
 	WeakBaseRenderComponentPtr wbrcp(this);
 	shared_ptr<SceneNode> sphere(QSE_NEW GLMeshNode(m_pOwner->GetId(), wbrcp, "art\\sphere.obj.model", "Shaders\\BasicLightingUntex.prog", RenderPass_Actor, &pTransformComponent->GetTransform()));
-
-	// TODO: do this with all components
-	shared_ptr<ResHandle> blankRes = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
-	shared_ptr<GLMaterialResourceExtraData> mat = static_pointer_cast<GLMaterialResourceExtraData>(blankRes->GetExtra());// = sphere->GetMaterial();
-	mat->SetDiffuse(GetColor());
-	mat->SetAmbient(Color(100, 100, 100, 255));
-	mat->SetSpecular(Color(255, 255, 255, 255), 15);
-	sphere->SetMaterial(blankRes);
+		
+	sphere->SetMaterial(material);
 
 	/*Resource shadRes();
 	shared_ptr<ResHandle> handle = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&shadRes);
@@ -175,13 +182,26 @@ shared_ptr<SceneNode> TeapotRenderComponent::VCreateSceneNode(void)
 	{
 		return shared_ptr<SceneNode>();
 	}
+
+	//get the material component
+	shared_ptr<MaterialRenderComponent> pMaterialComponent = MakeStrongPtr(m_pOwner->GetComponent<MaterialRenderComponent>(MaterialRenderComponent::g_Name));
+	shared_ptr<ResHandle> material;
+	if (!pMaterialComponent)
+	{
+		material = QuicksandEngine::g_pApp->m_ResCache->CreateDummy<GLMaterialResourceExtraData>();
+	}
+	else
+	{
+		material = pMaterialComponent->GetMaterial();
+	}
+
 	WeakBaseRenderComponentPtr weakThis(this);
 
 	shared_ptr<SceneNode> teapot =  shared_ptr<SceneNode>(QSE_NEW GLMeshNode(m_pOwner->GetId(), weakThis, "Art\\teapot.obj.model", "Shaders\\BasicLightingUntex.prog", RenderPass_Actor, &pTransformComponent->GetTransform()));
-
-	shared_ptr<ResHandle> teapotRes = teapot->GetMaterialResource();
-	shared_ptr<GLMaterialResourceExtraData> mat = static_pointer_cast<GLMaterialResourceExtraData>(teapotRes->GetExtra());// = sphere->GetMaterial();
-	mat->SetDiffuse(GetColor());
+	teapot->SetMaterial(material);
+	//shared_ptr<ResHandle> teapotRes = teapot->GetMaterialResource();
+	//shared_ptr<GLMaterialResourceExtraData> mat = static_pointer_cast<GLMaterialResourceExtraData>(teapotRes->GetExtra());// = sphere->GetMaterial();
+	//mat->SetDiffuse(GetColor());
 
 	return teapot;
 }
@@ -249,6 +269,48 @@ void GridRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *pBas
     pBaseElement->LinkEndChild(pDivisionNode);
 }
 
+
+//---------------------------------------------------------------------------------------------------------------------
+// MaterialRenderComponent
+//---------------------------------------------------------------------------------------------------------------------
+MaterialRenderComponent::MaterialRenderComponent(void)
+{
+	m_Material = nullptr;
+}
+
+const shared_ptr<ResHandle> MaterialRenderComponent::GetMaterial()
+{
+	return m_Material;
+}
+
+bool MaterialRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
+{
+	string mtlLocation = pData->Attribute("path");
+	if (mtlLocation == "")
+		mtlLocation = "art\\defaultmaterial.qmtl";
+
+	Resource res(mtlLocation);
+	m_Material = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
+
+	if (!m_Material)
+		return false;
+
+	return true;
+}
+
+void MaterialRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement)
+{
+	string path = "art\\defaultmaterial.qmtl";
+	if (m_Material)
+		path = m_Material->GetName();
+
+	pBaseElement->SetAttribute("path", path.c_str());
+}
+
+shared_ptr<SceneNode> MaterialRenderComponent::VCreateSceneNode(void)
+{
+	return nullptr;
+}
 
 //---------------------------------------------------------------------------------------------------------------------
 // LightRenderComponent

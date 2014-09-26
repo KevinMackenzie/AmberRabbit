@@ -4,7 +4,8 @@
 		<Position x="10" y="1.1" z="10"/>
 		<YawPitchRoll x="0" y="0" z="0"/>
 	</TransformComponent>
-
+	
+	<MaterialComponent path="art\teapotmaterial.qmtl" />
 
     <PhysicsComponent>
         <Shape>Box</Shape>

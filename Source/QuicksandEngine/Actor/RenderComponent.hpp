@@ -123,6 +123,31 @@ protected:
 
 
 //---------------------------------------------------------------------------------------------------------------------
+// Material, which meshes get
+//---------------------------------------------------------------------------------------------------------------------
+class MaterialRenderComponent : public BaseRenderComponent
+{
+	shared_ptr<ResHandle> m_Material;
+
+public:
+	static const char* g_Name;
+	virtual const char* VGetName() const{ return g_Name; }
+
+	virtual void VPostInit(void) override{};
+	virtual void VOnChanged(void) override{};
+
+	MaterialRenderComponent(void);
+	const shared_ptr<ResHandle> GetMaterial();
+
+protected:
+	virtual bool VDelegateInit(tinyxml2::XMLElement* pData) override;
+	virtual shared_ptr<SceneNode> VCreateSceneNode(void) override;
+
+	// editor stuff
+	virtual void VCreateInheritedXmlElements(tinyxml2::XMLElement* pBaseElement);
+};
+
+//---------------------------------------------------------------------------------------------------------------------
 // Lights
 //---------------------------------------------------------------------------------------------------------------------
 class  LightRenderComponent : public BaseRenderComponent

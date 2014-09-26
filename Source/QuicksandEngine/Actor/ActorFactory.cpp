@@ -29,6 +29,7 @@ ActorFactory::ActorFactory(void)
     m_componentFactory.Register<LightRenderComponent>(ActorComponent::GetIdFromName(LightRenderComponent::g_Name));
     m_componentFactory.Register<SkyRenderComponent>(ActorComponent::GetIdFromName(SkyRenderComponent::g_Name));
     m_componentFactory.Register<AudioComponent>(ActorComponent::GetIdFromName(AudioComponent::g_Name));
+	m_componentFactory.Register<MaterialRenderComponent>(ActorComponent::GetIdFromName(MaterialRenderComponent::g_Name));
 
 	// FUTURE WORK - certainly don't need to do this now, but the following stuff should be in a TeapotWarsActorFactory, eh?
 	m_componentFactory.Register<AmmoPickup>(ActorComponent::GetIdFromName(AmmoPickup::g_Name));

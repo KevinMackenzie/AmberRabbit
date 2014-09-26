@@ -656,7 +656,7 @@ glm::vec3 GetVectorFromYRotation(float angleRadians)
 //-------------------------------------------------------------------------------------------------------------------
 float GetYRotationFromVector(const glm::vec3& lookAt)
 {
-	glm::vec3 zUnit(0.f,0.f,1.f);  // 0 orientation means staring down the positive Z axis
+	glm::vec3 zUnit(0.f,0.f,-1.f);  // 0 orientation means staring down the positive Z axis
     float angle = (atan2(lookAt.z,-lookAt.x) - atan2(zUnit.z,zUnit.x));
 	return Wrap2Pi(angle);
 }

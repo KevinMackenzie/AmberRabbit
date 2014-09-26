@@ -4842,7 +4842,7 @@ GLUFSlider::GLUFSlider( GLUFDialog* pDialog)
 
 	m_nMin = 0;
 	m_nMax = 100;
-	m_nValue = long(0.5f * (float)m_nMax);
+	m_nValue = 0;
 	m_bPressed = false;
 }
 
@@ -4864,7 +4864,7 @@ void GLUFSlider::UpdateRects()
 	m_rcButton.right = m_rcButton.left + GLUFRectHeight(m_rcButton);
 	GLUFOffsetRect(m_rcButton, -GLUFRectWidth(m_rcButton) / 2, 0);
 
-	m_nButtonX = (int)((m_nValue - m_nMin) * (float)GLUFRectWidth(m_rcBoundingBox) / (m_nMax - m_nMin));
+	m_nButtonX = (int)((float(m_nValue - m_nMin) / float(m_nMax - m_nMin)) * GLUFRectWidth(m_rcBoundingBox));
 	GLUFOffsetRect(m_rcButton, m_nButtonX, 0);
 }
 
@@ -4872,9 +4872,8 @@ void GLUFSlider::UpdateRects()
 //--------------------------------------------------------------------------------------
 int GLUFSlider::ValueFromPos(long x)
 {
-	//this name is not accurate
 	float fValuePerPixel = (float)(m_nMax - m_nMin) / GLUFRectWidth(m_rcBoundingBox);
-	return (int)(0.5f + m_nMin + fValuePerPixel * (x - m_rcBoundingBox.left));
+	return (int)((x - m_x) * fValuePerPixel) + m_nMin;
 }
 
 
@@ -5157,14 +5156,13 @@ void GLUFSlider::SetRange(int nMin, int nMax)
 void GLUFSlider::SetValueInternal(int nValue, bool bFromInput)
 {
 	// Clamp to range
-	nValue = std::max(m_nMin, nValue);
-	nValue = std::min(m_nMax, nValue);
+	nValue = std::clamp(nValue, m_nMin, m_nMax);
 
 
 	if (nValue == m_nValue)
 		return;
 
-	//m_nValue = nValue;
+	m_nValue = nValue;
 
 	UpdateRects();
 
@@ -7974,7 +7972,7 @@ void GLUFEditBox::Render( float fElapsedTime)
 	GLUFFontNode* pFontNode = m_pDialog->GetManager()->GetFontNode(m_Elements[0]->iFont);
 	if (pElement)
 	{
-		if (/*m_bHasFocus && */m_bCaretOn && !s_bHideCaret)
+		if (m_bHasFocus && m_bCaretOn && !s_bHideCaret)
 		{
 			// Start the rectangle with insert mode caret
 			GLUFRect rcCaret;

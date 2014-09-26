@@ -453,7 +453,7 @@ void ScriptExports::Register(void)
     // math
     LuaPlus::LuaObject mathTable = globals.GetByName("GccMath");
     LOG_ASSERT(mathTable.IsTable());
-    mathTable.RegisterDirect("GetYRotationFromvector", &InternalScriptExports::GetYRotationFromvector);
+    mathTable.RegisterDirect("GetYRotationFromVector", &InternalScriptExports::GetYRotationFromvector);
     mathTable.RegisterDirect("WrapPi", &InternalScriptExports::WrapPi);
     mathTable.RegisterDirect("GetvectorFromRotation", &InternalScriptExports::GetvectorFromRotation);
 	

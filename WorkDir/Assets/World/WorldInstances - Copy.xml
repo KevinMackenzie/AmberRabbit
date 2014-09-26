@@ -24,13 +24,13 @@
 	  
       <Actor resource="actors\grid.xml">
 		<TransformComponent>
-			<Position x="0" y="0" z="-10"/>
+			<Position x="0" y="0" z="-80"/>
 			<YawPitchRoll x="90" y="0" z="0"/>
 		</TransformComponent>
 		<GridRenderComponent>
 			<Color r="0" g="255" b="255" a="255"/>
 			<Division>100</Division>
-			<UnitLength>1.0</UnitLength>
+			<UnitLength>5.0</UnitLength>
 		</GridRenderComponent>	
 	  </Actor>
 	  

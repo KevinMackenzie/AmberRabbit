@@ -5,6 +5,8 @@
 		<YawPitchRoll x="0" y="0" z="0"/>
 	</TransformComponent>
 		
+	<MaterialComponent path="art\remote_teapotmaterial.qmtl" />
+	
     <PhysicsComponent>
         <Shape>Box</Shape>
         <Density>glass</Density>
