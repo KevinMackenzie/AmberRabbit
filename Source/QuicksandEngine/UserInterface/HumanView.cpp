@@ -98,11 +98,6 @@ void HumanView::VOnRender(double fTime, double fElapsedTime )
 
             VRenderText();
 
-			//TODO: is this right?
-			if (m_pScene)
-				if (m_pScene->VIsVisible())
-					m_pScene->OnRender();
-
 			// Let the console render.
 			m_Console.Render();
 
@@ -210,7 +205,7 @@ LRESULT HumanView::VOnMsgProc( AppMsg msg )
 	switch (msg.m_Event) 
 	{
         case GM_KEY:
-			if (msg.param3 == GLFW_KEY_DOWN)
+			if (msg.param3 == GLFW_PRESS)
 			{
 				if (m_Console.IsActive())
 				{
@@ -222,7 +217,7 @@ LRESULT HumanView::VOnMsgProc( AppMsg msg )
 					result = m_KeyboardHandler->VOnKeyDown(static_cast<const BYTE>(msg.param1));
 				}
 			}
-			else if (msg.param3 == GLFW_KEY_UP)
+			else if (msg.param3 == GLFW_RELEASE)
 			{
 				if (m_Console.IsActive())
 				{

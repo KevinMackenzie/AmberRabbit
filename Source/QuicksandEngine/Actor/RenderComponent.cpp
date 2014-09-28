@@ -399,22 +399,26 @@ SkyRenderComponent::SkyRenderComponent(void)
 bool SkyRenderComponent::VDelegateInit(tinyxml2::XMLElement* pData)
 {
     tinyxml2::XMLElement* pTexture = pData->FirstChildElement("Texture");
+	string resName = "art\\afternoon_sky.cubemap.dds";
     if (pTexture)
 	{
-		m_textureResource = pTexture->FirstChild()->Value();
+		resName = pTexture->GetText();
 	}
+
+	Resource res(resName);
+	m_Cubemap = QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res);
 	return true;
 }
 
 shared_ptr<SceneNode> SkyRenderComponent::VCreateSceneNode(void)
 {
-	return shared_ptr<SkyNode>(QSE_NEW GLSkyNode(m_textureResource.c_str() ));
+	return shared_ptr<SkyNode>(QSE_NEW GLSkyNode(m_Cubemap));
 }
 
 void SkyRenderComponent::VCreateInheritedXmlElements(tinyxml2::XMLElement *pBaseElement)
 {
     tinyxml2::XMLElement* pTextureNode = pBaseElement->ToDocument()->NewElement("Texture");
-    tinyxml2::XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_textureResource.c_str());
+	tinyxml2::XMLText* pTextureText = pTextureNode->ToDocument()->NewText(m_Cubemap->GetName().c_str());
     pTextureNode->LinkEndChild(pTextureText);
     pBaseElement->LinkEndChild(pTextureNode);
 }

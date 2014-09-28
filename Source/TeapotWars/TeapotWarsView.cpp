@@ -598,7 +598,7 @@ void TeapotWarsHumanView::VRenderText()
 
 	if( m_bShowUI )
 	{
-		// Output statistics... TODO:
+		// Output statistics...
 		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(5, 200));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 255, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(GLUF::GLUFGetFrameStats());
@@ -658,14 +658,13 @@ void TeapotWarsHumanView::VRenderText()
 
 		//Help text.  Right justified, lower right of screen.
 		GLUFRect helpRect;
-		helpRect.left = 0;
-		helpRect.right = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
-		helpRect.top = QuicksandEngine::g_pApp->GetScreenSize().y + 15 * 8;
-		helpRect.bottom = QuicksandEngine::g_pApp->GetScreenSize().y;
+		helpRect.right = helpRect.left = QuicksandEngine::g_pApp->GetScreenSize().x - 10;
+		helpRect.top = /*QuicksandEngine::g_pApp->GetScreenSize().y +*/ 15 * 8;
+		helpRect.bottom = 0;
 		GLRenderer_Base::g_pTextHelper->SetInsertionPos(GLUFPoint(helpRect.right, helpRect.top));
 		GLRenderer_Base::g_pTextHelper->SetForegroundColor(Color(255, 192, 0, 255));
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, GT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str());
-		helpRect.top = QuicksandEngine::g_pApp->GetScreenSize().y + 15 * 7;
+		helpRect.top = /*QuicksandEngine::g_pApp->GetScreenSize().y +*/ 15 * 7;
 		GLRenderer_Base::g_pTextHelper->DrawTextLine(helpRect, GT_RIGHT, QuicksandEngine::g_pApp->GetString(_T("IDS_CONTROLS")).c_str());
 		//...Help
 	}//end if (m_bShowUI)

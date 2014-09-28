@@ -1,6 +1,6 @@
 <Actor type="Sky" resource="actors\afternoon_sky.xml">
     <SkyRenderComponent>
         <Color r="255" g="255" b="255" a="255"/>
-        <Texture>art\sky2_n.JPG</Texture>
+        <Texture>art\afternoon_sky.cubemap.dds</Texture>
     </SkyRenderComponent>
 </Actor>

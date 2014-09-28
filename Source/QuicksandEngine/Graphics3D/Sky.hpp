@@ -23,14 +23,14 @@ class SkyNode : public SceneNode
 protected:
 	DWORD					m_numVerts;
 	DWORD					m_sides;
-	const char *			m_textureBaseName;
+	shared_ptr<ResHandle>   m_Cubemap;
 	shared_ptr<CameraNode>	m_camera;
 	bool					m_bActive;
 
-	std::string GetTextureName(const int side);
+	//std::string GetTextureName(const int side);
 
 public:
-	SkyNode(const char *textureFile);
+	SkyNode(shared_ptr<ResHandle> cubemap);
 	virtual ~SkyNode() { }
 	HRESULT VPreRender(Scene *pScene);
 	bool VIsVisible(Scene *pScene) const { return m_bActive; }
@@ -39,11 +39,12 @@ public:
 class GLSkyNode : public SkyNode
 {
 public:
-	GLSkyNode(const char *pTextureBaseName);
+	GLSkyNode(shared_ptr<ResHandle> cubemap);
 	virtual ~GLSkyNode();
 	HRESULT VOnRestore(Scene *pScene);
 	virtual HRESULT VPreRender(Scene* pScene);
 	HRESULT VRender(Scene *pScene);
+	virtual HRESULT VPostRender(Scene* pScene);
 
 protected:
 

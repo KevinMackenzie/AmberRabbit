@@ -1,9 +1,10 @@
 #version 120 
+#extension GL_NV_shadow_samplers_cube : enable 
 
-varying vec2 UV;
-uniform sampler2D mat_tex0;
+varying vec3 UVW;
+uniform samplerCube m_tex0;
 
 void main(void)
 {
-	gl_FragColor = texture2D(mat_tex0, UV);
+	gl_FragColor = textureCube(m_tex0, UVW);
 }

@@ -146,6 +146,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateMP3ResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateDDSResourceLoader();
+	extern shared_ptr<IResourceLoader> CreateCubemapResourceLoader();
 	extern shared_ptr<IResourceLoader> CreatePNGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateTTFResourceLoader();
@@ -166,6 +167,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	m_ResCache->RegisterLoader(CreateOGGResourceLoader());
 	m_ResCache->RegisterLoader(CreateMP3ResourceLoader());
 	m_ResCache->RegisterLoader(CreateDDSResourceLoader());
+	m_ResCache->RegisterLoader(CreateCubemapResourceLoader());
 	m_ResCache->RegisterLoader(CreatePNGResourceLoader());
 	m_ResCache->RegisterLoader(CreateJPGResourceLoader());
 	m_ResCache->RegisterLoader(CreateTTFResourceLoader());
@@ -298,6 +300,7 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	//    Preload calls are discussed in Chapter 5, page 148
 	m_ResCache->Preload("*.ogg", NULL);
 	m_ResCache->Preload("*.dds", NULL);
+	m_ResCache->Preload("*.cubemap.dds", NULL);
 	m_ResCache->Preload("*.png", NULL);
 	m_ResCache->Preload("*.jpg", NULL);
 	m_ResCache->Preload("*.prog", NULL);

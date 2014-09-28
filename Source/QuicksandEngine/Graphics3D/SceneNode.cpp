@@ -250,7 +250,7 @@ HRESULT SceneNode::VPreRender(Scene *pScene)
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
+	glDepthFunc(GL_LEQUAL);
 
 	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
@@ -643,7 +643,7 @@ HRESULT CameraNode::SetViewTransform(Scene *pScene)
 		::SetPosition(mat, pos);
 		VSetTransform(&mat);
 	}
-
+	
 	m_View = VGet()->FromWorld();
 
 	//pScene->GetRenderer()->VSetViewTransform(&m_View);

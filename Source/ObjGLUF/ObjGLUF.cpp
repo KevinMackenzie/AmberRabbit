@@ -634,6 +634,133 @@ GLuint LoadTextureDDS(char* rawData, unsigned int size)
 	return textureID;
 }
 
+GLuint LoadTextureCubemapDDS(char* rawData, unsigned int length)
+{
+	unsigned char header[124];
+
+
+	/* verify the type of file */
+	char filecode[4];
+	memcpy(filecode, rawData, 4);
+	if (strncmp(filecode, "DDS ", 4) != 0)
+	{
+		//fclose(fp);
+		return 0;
+	}
+
+	/* get the surface desc */
+	memcpy(header, rawData + 4/*don't forget to add the offset*/, 124);
+
+	//this is all the data I need, but I just need to load it properly to opengl
+	unsigned int height = *(unsigned int*)&(header[8]);
+	unsigned int width = *(unsigned int*)&(header[12]);
+	unsigned int linearSize = *(unsigned int*)&(header[16]);
+	unsigned int mipMapCount = *(unsigned int*)&(header[24]);
+	unsigned int flags = *(unsigned int*)&(header[76]);
+	unsigned int fourCC = *(unsigned int*)&(header[80]);
+	unsigned int RGBBitCount = *(unsigned int*)&(header[84]);
+	unsigned int RBitMask = *(unsigned int*)&(header[88]);
+	unsigned int GBitMask = *(unsigned int*)&(header[92]);
+	unsigned int BBitMask = *(unsigned int*)&(header[96]);
+	unsigned int ABitMask = *(unsigned int*)&(header[100]);
+
+
+	char * buffer;
+	unsigned int bufsize;
+	/* how big is it going to be including all mipmaps? */
+	bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
+	buffer = rawData + 128;
+	//memcpy(buffer, rawData + 128/*header size + filecode size*/, bufsize);
+
+	unsigned int components = (fourCC == FOURCC_DXT1) ? 3 : 4;
+	unsigned int compressedFormat;
+	switch (fourCC)
+	{
+	case FOURCC_DXT1:
+		compressedFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+		break;
+	case FOURCC_DXT3:
+		compressedFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+		break;
+	case FOURCC_DXT5:
+		compressedFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+		break;
+	default:
+		compressedFormat = 0;//uncompressed
+	}
+
+	// Create one OpenGL texture
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);//REMEMBER it is max mip, NOT mip count
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_R, GL_RED);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_G, GL_GREEN);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_B, GL_BLUE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_A, GL_ALPHA);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	//this method is not the prettyest, but it is the easiest to load
+	if (compressedFormat != 0)
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		unsigned int blockSize = (compressedFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
+		unsigned int offset = 0;
+
+		unsigned int pertexSize = width;
+
+		unsigned int mipSize = ((pertexSize + 3) / 4)*((pertexSize + 3) / 4)*blockSize;
+		glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, compressedFormat, pertexSize, pertexSize,
+			0, mipSize, buffer + offset);
+		offset += mipSize;
+		glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, compressedFormat, pertexSize, pertexSize,
+			0, mipSize, buffer + offset);
+		offset += mipSize;
+		glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, compressedFormat, pertexSize, pertexSize,
+			0, mipSize, buffer + offset);
+		offset += mipSize;
+		glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, compressedFormat, pertexSize, pertexSize,
+			0, mipSize, buffer + offset);
+		offset += mipSize;
+		glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, compressedFormat, pertexSize, pertexSize,
+			0, mipSize, buffer + offset);
+		offset += mipSize;
+		glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, compressedFormat, pertexSize, pertexSize,
+			0, mipSize, buffer + offset);
+
+	}
+	else
+	{
+		unsigned int offset = 0;
+		unsigned int pertexSize = width;
+		unsigned int mipSize = (pertexSize * pertexSize * 4);
+
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, pertexSize, pertexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer + offset);
+		offset += mipSize;
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, pertexSize, pertexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer + offset);
+		offset += mipSize;
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, pertexSize, pertexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer + offset);
+		offset += mipSize;
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, pertexSize, pertexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer + offset);
+		offset += mipSize;
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, pertexSize, pertexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer + offset);
+		offset += mipSize;
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, pertexSize, pertexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer + offset);
+	}
+
+
+	return textureID;
+}
+
 GLuint LoadTextureFromFile(std::wstring filePath, GLUFTextureFileFormat format)
 {
 	unsigned long rawSize = 0;
@@ -652,6 +779,8 @@ GLuint LoadTextureFromMemory(char* data, unsigned int length, GLUFTextureFileFor
 	{
 	case TFF_DDS:
 		return LoadTextureDDS(data, length);
+	case TTF_DDS_CUBEMAP:
+		return LoadTextureCubemapDDS(data, length);
 	}
 
 	return 0;
@@ -1399,6 +1528,11 @@ void GLUFVertexArrayBase::BufferIndices(GLuint* indices, unsigned int count)
 void GLUFVertexArrayBase::BufferIndices(std::vector<glm::u32vec2> indices)
 {
 	BufferIndices(&indices[0][0], indices.size() * 2);
+}
+
+void GLUFVertexArrayBase::BufferIndices(std::vector<glm::u32vec3> indices)
+{
+	BufferIndices(&indices[0][0], indices.size() * 3);
 }
 
 void GLUFVertexArrayBase::Draw()

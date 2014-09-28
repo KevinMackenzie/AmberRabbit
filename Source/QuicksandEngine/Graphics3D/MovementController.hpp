@@ -56,8 +56,14 @@ public:
 	bool VOnPointerButtonDown(const Point &mousePos, const int radius, const std::string &buttonName);
 	bool VOnPointerButtonUp(const Point &mousePos, const int radius, const std::string &buttonName);
 
-	bool VOnKeyDown(const BYTE c) { m_bKey[c] = true; return true; }
-	bool VOnKeyUp(const BYTE c) { m_bKey[c] = false; return true; }
+	bool VOnKeyDown(const BYTE c) 
+	{ 
+		m_bKey[c] = true; return true; 
+	}
+	bool VOnKeyUp(const BYTE c) 
+	{ 
+		m_bKey[c] = false; return true; 
+	}
 
 	const glm::mat4 *GetToWorld() { return &m_matToWorld; }
 	const glm::mat4 *GetFromWorld() { return &m_matFromWorld; }

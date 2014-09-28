@@ -171,7 +171,7 @@ protected:
 
 class  SkyRenderComponent : public BaseRenderComponent
 {
-	string m_textureResource;
+	shared_ptr<ResHandle> m_Cubemap;
 
 public:
 	static const char *g_Name;

@@ -174,6 +174,21 @@ shared_ptr<IResourceLoader> CreateDDSResourceLoader()
 }
 
 //
+// class CubemapResourceLoader					- creates an interface with the Resource cache to load DDS files
+//
+class CubemapResourceLoader : public TextureResourceLoader
+{
+public:
+	virtual std::string VGetPattern(){ return "*.cubemap.dds"; }
+	virtual bool VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
+};
+
+shared_ptr<IResourceLoader> CreateCubemapResourceLoader()
+{
+	return shared_ptr<IResourceLoader>(QSE_NEW CubemapResourceLoader());
+}
+
+//
 // class JpgResourceLoader					- creates an interface with the Resource cache to load JPG files
 //
 class JpgResourceLoader : public TextureResourceLoader
@@ -539,7 +554,6 @@ bool JpgResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, shared_ptr<ResHandle> handle)
 {
 	auto extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
-	//GLI only does .dds's
 
 	extra->m_pTexture = GLUF::LoadTextureFromMemory(rawData, rawSize, GLUF::TFF_DDS);
 
@@ -547,3 +561,13 @@ bool DdsResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, share
 	return true;
 }
 
+bool CubemapResourceLoader::VLoadResource(char* rawData, unsigned int rawSize, shared_ptr<ResHandle> handle)
+{
+	//TODO: DO THIS NOW
+	auto extra = shared_ptr<GLTextureResourceExtraData>(QSE_NEW GLTextureResourceExtraData());
+
+	extra->m_pTexture = GLUF::LoadTextureFromMemory(rawData, rawSize, GLUF::TTF_DDS_CUBEMAP);
+
+	handle->SetExtra(extra);
+	return true;
+}

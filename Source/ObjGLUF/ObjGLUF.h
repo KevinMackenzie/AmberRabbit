@@ -478,6 +478,7 @@ GLUFShaderPtr shad = CreateShader("shader.glsl", ST_VERTEX_SHADER);
 enum GLUFTextureFileFormat
 {
 	TFF_DDS = 0,//we will ONLY support dds's, because they are flexible enough, AND have mipmaps
+	TTF_DDS_CUBEMAP = 1
 };
 
 
@@ -543,6 +544,7 @@ public:
 
 	void BufferIndices(GLuint* indices, unsigned int Count);
 	void BufferIndices(std::vector<glm::u32vec2> indices);
+	void BufferIndices(std::vector<glm::u32vec3> indices);
 	//void BufferFaces(GLuint* indices, unsigned int FaceCount);
 
 	virtual void EnableVertexAttributes();

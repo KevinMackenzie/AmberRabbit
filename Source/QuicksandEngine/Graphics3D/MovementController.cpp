@@ -175,7 +175,7 @@ void MovementController::OnUpdate(double const fEllapsed)
 		// The secret formula!!! Don't give it away!
 		//If you are seeing this now, then you must be some kind of elite hacker!
 		m_fYaw += (m_fTargetYaw - m_fYaw) * (.35f);
-		m_fTargetPitch = MAX(-90, MIN(90, m_fTargetPitch));
+		m_fTargetPitch = std::clamp(m_fTargetPitch, -90.0f, 90.0f);
 		m_fPitch += (m_fTargetPitch - m_fPitch) * (.35f);
 
 		// Calculate the new rotation matrix from the camera

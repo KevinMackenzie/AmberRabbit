@@ -64,6 +64,7 @@ class GLTextureResourceExtraData : public IResourceExtraData
 	friend class DdsResourceLoader;
 	friend class PngResourceLoader;
 	friend class JpgResourceLoader;
+	friend class CubemapResourceLoader;
 
 public:
 	GLTextureResourceExtraData();

@@ -4873,7 +4873,8 @@ void GLUFSlider::UpdateRects()
 int GLUFSlider::ValueFromPos(long x)
 {
 	float fValuePerPixel = (float)(m_nMax - m_nMin) / GLUFRectWidth(m_rcBoundingBox);
-	return (int)((x - m_x) * fValuePerPixel) + m_nMin;
+	float fPixelPerValue2 = 1.0f / (2.0f * fValuePerPixel);//use this to get it to change locations at the half way mark instead of using truncate int methods
+	return int(((x - m_x + fPixelPerValue2) * fValuePerPixel) + m_nMin);
 }
 
 

@@ -20,11 +20,10 @@ shared_ptr<ResHandle> GLSkyNode::m_pSkyProgram(nullptr);
 //
 // SkyNode::SkyNode						- Chapter 16, page 554
 //
-SkyNode::SkyNode(const char *pTextureBaseName)
+SkyNode::SkyNode(shared_ptr<ResHandle> cubemap)
 	: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_Sky, &glm::mat4())
-	, m_bActive(true)
+	, m_bActive(true), m_Cubemap(cubemap)
 {
-	m_textureBaseName = pTextureBaseName;
 }
 
 //
@@ -47,8 +46,8 @@ HRESULT SkyNode::VPreRender(Scene *pScene)
 //
 // GLSkyNode::GLSkyNode					- Chapter 16, page 555
 //
-GLSkyNode::GLSkyNode(const char *pTextureBaseName)
-	: SkyNode(pTextureBaseName)
+GLSkyNode::GLSkyNode(shared_ptr<ResHandle> cubemap)
+	: SkyNode(cubemap), m_pVertexArray(GL_TRIANGLES, GL_STATIC_DRAW)
 {
 	if (!m_pSkyProgram)
 	{
@@ -71,13 +70,6 @@ GLSkyNode::GLSkyNode(const char *pTextureBaseName)
 		mPositionLoc = it->second;
 	}
 
-	it = attribLocations.find("_uv0");
-	if (it != attribLocations.end())
-	{
-		m_pVertexArray.AddVertexAttrib(GLUFVertAttrib(it->second, 4, 2, GL_FLOAT));
-		mUVLoc = it->second;
-	}
-
 }
 
 //
@@ -92,16 +84,10 @@ GLSkyNode::~GLSkyNode()
 // GLSkyNode::VOnRestore						- Chapter 16, page 556
 //
 
-struct SkyVertices
-{
-	Vec3Array mPositions;
-	Vec2Array mUVCoords;
-	IndexArray mIndices;
-};
 
 HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 {
-	HRESULT hr;
+	/*HRESULT hr;
 
 	V_RETURN(SceneNode::VOnRestore(pScene));
 
@@ -109,7 +95,7 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 
 	//TODO: onRestore for shader classes
 	/*V_RETURN(m_pShaderProgram.OnRestore(pScene));
-	V_RETURN(m_PixelShader.OnRestore(pScene));*/
+	V_RETURN(m_PixelShader.OnRestore(pScene));
 
 	m_numVerts = 20;
 
@@ -205,7 +191,7 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	glBindBuffer(GL_VERTEX_ARRAY, m_TextureVertBuffer);
 	glBufferStorage(GL_VERTEX_ARRAY, m_TextureVertBufferData.size() * 2 * sizeof(GLfloat), m_TextureVertBufferData.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_VERTEX_ARRAY, 0);
-	*/	
+	
 	
 	// Loop through the grid squares and calc the values
 	// of each index. Each grid square has two triangles:
@@ -237,12 +223,149 @@ HRESULT GLSkyNode::VOnRestore(Scene *pScene)
 	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
 	glBufferStorage(GL_ELEMENT_ARRAY_BUFFER, m_sides * 2 * 3 * sizeof(GLfloat), m_IndexBufferData.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	SAFE_DELETE_ARRAY(pIndices);*/
+	SAFE_DELETE_ARRAY(pIndices);
 
 	//buffer the data
 	m_pVertexArray.BufferData(mPositionLoc, data.mPositions.size(), &data.mPositions[0]);
 	m_pVertexArray.BufferData(mUVLoc, data.mUVCoords.size(), &data.mPositions[0]);
 	m_pVertexArray.BufferIndices(pIndices, m_sides * 2 * 3);
+	*/
+
+	
+	Vec3Array verts;
+	float val = 1.0f;
+
+
+	float depth = val;
+	m_sides = 6;
+
+	//float N = 1.0f / sqrt(3.0f);
+
+	//north
+	/*verts.push_back(glm::vec3(-val, -val, depth));
+	verts.push_back(glm::vec3(val, -val, depth));
+	verts.push_back(glm::vec3(val, val, depth));
+	verts.push_back(glm::vec3(-val, val, depth));
+	
+	//uvws.push_back(glm::vec3(-N, -N, N));
+	//uvws.push_back(glm::vec3(N, -N, N));
+	//uvws.push_back(glm::vec3(N, N, N));
+	//uvws.push_back(glm::vec3(-N, N, N));
+
+	//south
+	verts.push_back(glm::vec3(val, -val, -depth));
+	verts.push_back(glm::vec3(-val, -val, -depth));
+	verts.push_back(glm::vec3(-val, val, -depth));
+	verts.push_back(glm::vec3(val, val, -depth));
+
+	//uvws.push_back(glm::vec3(N, -N, -N));
+	//uvws.push_back(glm::vec3(-N, -N, -N));
+	//uvws.push_back(glm::vec3(-N, N, -N));
+	//uvws.push_back(glm::vec3(N, N, -N));
+
+
+	//east
+	verts.push_back(glm::vec3(-val, -val, -depth));
+	verts.push_back(glm::vec3(-val, -val, depth));
+	verts.push_back(glm::vec3(-val, val, depth));
+	verts.push_back(glm::vec3(-val, val, -depth));
+
+	//uvws.push_back(glm::vec3(-N, -N, -N));
+	//uvws.push_back(glm::vec3(-N, -N, N));
+	//uvws.push_back(glm::vec3(-N, N, N));
+	//uvws.push_back(glm::vec3(-N, N, -N));
+
+	//west
+	verts.push_back(glm::vec3(val, -val, depth));
+	verts.push_back(glm::vec3(val, -val, -depth));
+	verts.push_back(glm::vec3(val, val, -depth));
+	verts.push_back(glm::vec3(val, val, depth));
+
+	//uvws.push_back(glm::vec3(N, -N, N));
+	//uvws.push_back(glm::vec3(N, -N, -N));
+	//uvws.push_back(glm::vec3(N, N, -N));
+	//uvws.push_back(glm::vec3(N, N, N));
+
+
+	//top
+	verts.push_back(glm::vec3(-val, val, depth));
+	verts.push_back(glm::vec3(val, val, depth));
+	verts.push_back(glm::vec3(val, val, -depth));
+	verts.push_back(glm::vec3(-val, val, -depth));
+
+	//uvws.push_back(glm::vec3(-N, N, N));
+	//uvws.push_back(glm::vec3(N, N, N));
+	//uvws.push_back(glm::vec3(N, N, -N));
+	//uvws.push_back(glm::vec3(-N, N, -N));
+
+	//bottom
+	verts.push_back(glm::vec3(-val, -val, -depth));
+	verts.push_back(glm::vec3(val, -val, -depth));
+	verts.push_back(glm::vec3(val, -val, depth));
+	verts.push_back(glm::vec3(-val, -val, depth));*/
+
+
+	//new plan, just 8 vertices
+
+	//back
+	verts.push_back(glm::vec3(val, -val, -depth));
+	verts.push_back(glm::vec3(-val, -val, -depth));
+	verts.push_back(glm::vec3(-val, val, -depth));
+	verts.push_back(glm::vec3(val, val, -depth));
+
+	//front
+	verts.push_back(glm::vec3(-val, -val, depth));
+	verts.push_back(glm::vec3(val, -val, depth));
+	verts.push_back(glm::vec3(val, val, depth));
+	verts.push_back(glm::vec3(-val, val, depth));
+
+	/*// Loop through the grid squares and calc the values
+	// of each index. Each grid square has two triangles:
+	//
+	//		D - C
+	//		| / |
+	//		A - B
+
+
+	//two triangles per face
+	for (unsigned int i = 0; i < m_sides; ++i)
+	{
+		unsigned int base = i * 4;
+		//triangle ABC
+		mTriangles.push_back(glm::u32vec3(base, base + 1, base + 2));
+
+		//triangle CDA
+		mTriangles.push_back(glm::u32vec3(base + 2, base + 3, base));
+	}*/
+
+	std::vector<glm::u32vec3> mTriangles;
+
+	//north
+	mTriangles.push_back(glm::u32vec3(4, 5, 6));
+	mTriangles.push_back(glm::u32vec3(6, 7, 4));
+
+	//south
+	mTriangles.push_back(glm::u32vec3(0, 1, 2));
+	mTriangles.push_back(glm::u32vec3(2, 3, 0));
+
+	//east
+	mTriangles.push_back(glm::u32vec3(1, 4, 7));
+	mTriangles.push_back(glm::u32vec3(7, 2, 1));
+
+	//west
+	mTriangles.push_back(glm::u32vec3(5, 0, 3));
+	mTriangles.push_back(glm::u32vec3(3, 6, 5));
+
+	//top
+	mTriangles.push_back(glm::u32vec3(7, 6, 3));
+	mTriangles.push_back(glm::u32vec3(3, 2, 7));
+
+	//bottom
+	mTriangles.push_back(glm::u32vec3(1, 0, 5));
+	mTriangles.push_back(glm::u32vec3(5, 4, 1));
+
+	m_pVertexArray.BufferData(mPositionLoc, verts.size(), &verts[0][0]);
+	m_pVertexArray.BufferIndices(mTriangles);
 
 
 	return S_OK;
@@ -253,9 +376,47 @@ HRESULT GLSkyNode::VPreRender(Scene* pScene)
 {
 	//the position should always be 0, so offset by the opposit of the camera position
 	//doing this in the prerender stage make sure the position is correct BEFORE applying the transforms
-	this->SetPosition(-pScene->GetCamera()->GetPosition());
+	this->SetPosition(pScene->GetCamera()->GetPosition());
+	pScene->PushAndSetMatrix(this->GetToWorld());
 
-	return SceneNode::VPreRender(pScene);
+	GLUFProgramPtr prog = static_pointer_cast<GLProgramResourceExtraData>(GetShader()->GetExtra())->GetProgram();
+	//if (m_pShader)
+	//{
+	//this is always safe to do
+	GLUFSHADERMANAGER.UseProgram(prog);
+	//}
+
+
+	//apply the uniforms
+	glm::mat4 model = pScene->GetTopMatrix() * glm::scale(glm::mat4(), glm::vec3(40, 40, 40));
+	glm::mat4 view = pScene->GetCamera()->GetView();
+	glm::mat4 proj = pScene->GetCamera()->GetProjection();
+
+	glm::mat4 model_view_proj = proj * view * model;
+
+
+	GLUFVariableLocMap uniformLocations = GLUFSHADERMANAGER.GetShaderUniformLocations(prog);
+	
+	GLUFVariableLocMap::iterator it = uniformLocations.find("_mvp");
+	if (it != uniformLocations.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, &model_view_proj[0][0]);
+
+	shared_ptr<GLTextureResourceExtraData> cubMap = static_pointer_cast<GLTextureResourceExtraData>(m_Cubemap->GetExtra());
+
+	it = uniformLocations.find("m_tex0");
+	if (it != uniformLocations.end())//make sure the there is a sampler, and we have a texture
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubMap->GetTexture());
+		glUniform1i(it->second, 0);
+	}
+
+	// disable depth test
+	//glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	glDisable(GL_CULL_FACE);
+
+	return S_OK;
 }
 
 //
@@ -263,6 +424,7 @@ HRESULT GLSkyNode::VPreRender(Scene* pScene)
 //
 HRESULT GLSkyNode::VRender(Scene *pScene)
 {
+
 	//TODO:
 	//V_RETURN(m_VertexShader.SetupRender(pScene, this));
 	//V_RETURN(m_PixelShader.SetupRender(pScene, this));
@@ -279,8 +441,9 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 	DXUTGetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	*/
 
-	for (DWORD side = 0; side < m_sides; side++)
-	{
+	
+	//for (DWORD side = 0; side < m_sides; side++)
+	//{
 		// FUTURTE WORK: A good optimization would be to transform the camera's
 		// world look vector into local space, and do a dot product. If the
 		// result is positive, we shouldn't draw the side since it has to be
@@ -293,28 +456,28 @@ HRESULT GLSkyNode::VRender(Scene *pScene)
 		const char *suffix[] = { "_n.jpg", "_e.jpg",  "_s.jpg",  "_w.jpg",  "_u.jpg" };
 		name += suffix[side];
 		****/
-
-		Resource res(GetTextureName(side));
-		shared_ptr<GLTextureResourceExtraData> tex = static_pointer_cast<GLTextureResourceExtraData>(QuicksandEngine::g_pApp->m_ResCache->GetHandle(&res)->GetExtra());
 		
 		//TODO: setup with cube map
 		//bind the texture, but the uniform for the texture is already set up
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tex->GetTexture());
-
-		m_pVertexArray.DrawRange(side * 6, 6);
-
+		m_pVertexArray.Draw();
 		/*
 		std::string name = GetTextureName(side);
 		m_PixelShader.SetTexture(name.c_str());
 
 		DXUTGetD3D11DeviceContext()->DrawIndexed(6, side * 6, 0);*/
-	}
+	//}
 	return S_OK;
 }
 
+HRESULT GLSkyNode::VPostRender(Scene* pScene)
+{
+	glEnable(GL_CULL_FACE);
+	glDepthMask(GL_TRUE);
+	return SceneNode::VPostRender(pScene);
+}
 
-std::string SkyNode::GetTextureName(const int side)
+
+/*std::string SkyNode::GetTextureName(const int side)
 {
 	std::string name = m_textureBaseName;
 	char *letters[] = { "n", "e", "s", "w", "u" };
@@ -326,6 +489,6 @@ std::string SkyNode::GetTextureName(const int side)
 	}
 	return name;
 }
-
+*/
 
 
