@@ -1,4 +1,4 @@
-#include "../Stdafx.hpp"
+﻿#include "../Stdafx.hpp"
 #include <shlobj.h>
 #include <direct.h>
 
@@ -231,6 +231,10 @@ bool QuicksandEngineApp::InitInstance(HINSTANCE hInstance, LPSTR lpCmdLine, HWND
 	
 	if (!GLUFInitOpenGLExtentions())
 		return false;
+
+	const char* seemlesscubemapsupported = (const char*)glGetString(GL_ARB_seamless_cube_map);
+	if (seemlesscubemapsupported)
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	Resource ctrlRes("Art\\" + GET_CONFIG_ELEMENT_STR("CONTROL_TEXTURE"));
 	shared_ptr<ResHandle> pCtrlHandle = m_ResCache->GetHandle(&ctrlRes);
