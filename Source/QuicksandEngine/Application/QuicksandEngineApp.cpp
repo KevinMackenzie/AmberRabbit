@@ -731,10 +731,11 @@ bool QuicksandEngineApp::OnClose()
 
 	SAFE_DELETE(m_pBaseSocketManager);
 
+	//TODO: deleting this here causing an assertion error...
 	SAFE_DELETE(m_pEventManager);
 
 	BaseScriptComponent::UnregisterScriptFunctions();
-	ScriptExports::Unregister();
+	ScriptExports::Unregister();//...here
 	LuaStateManager::Destroy();
 
 	SAFE_DELETE(m_ResCache);

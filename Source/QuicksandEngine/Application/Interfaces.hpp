@@ -223,7 +223,7 @@ enum RenderPass
 	RenderPass_Sky = 0,//render the sky first, until i can render it last
 	RenderPass_Static = RenderPass_Sky + 1,
 	RenderPass_Actor = RenderPass_Static + 1,
-	RenderPass_NotRendered = RenderPass_Sky	+ 1,
+	RenderPass_NotRendered = RenderPass_Actor + 1,
 	RenderPass_Last = RenderPass_NotRendered + 1
 };
 
